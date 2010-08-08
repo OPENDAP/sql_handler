@@ -119,6 +119,19 @@ public:
 	}
 
 	/**
+	 * @brief copy constructor
+	 * @param const reference to an SQLErrorFactory type object
+	 */
+	SQLErrorFactory(const SQLErrorFactory<ERROR_TYPE,MSG_TYPE,OUT> &ef):
+		SQLActionFactory<ERROR_TYPE,MSG_TYPE,OUT>(),
+		_getActions(ef._getActions),
+		_stop(ef._stop),
+		_connector(ef._connector)
+	{
+TESTDEBUG(SQL_NAME,"COPIED: SQLErrorFactory"<<endl);
+	}
+
+	/**
 	 * @brief constructor
 	 * @param connector is the connector used to get data
 	 * @param getErrors_function is a GETACTIONS function pointer used
@@ -133,16 +146,16 @@ public:
 		_getActions(getActions_function),
 		_stop(stop_function),
 		_connector(connector)
-		{
+	{
 		if (!_getActions)
 			throw SQLInternalFatalError(
 				"Could not build an ErrorFactory using a NULL pointer for GETACTION",
 				__FILE__,__LINE__);
-TESTDEBUG(SQL_NAME,"CREATED: STATIC ERROR FACTORY"<<endl);
+TESTDEBUG(SQL_NAME,"CREATING: SQLErrorFactory"<<endl);
 	}
 
 	virtual ~SQLErrorFactory(){
-TESTDEBUG(SQL_NAME,"DELETED: STATIC ERROR FACTORY"<<endl);
+TESTDEBUG(SQL_NAME,"DELETING: SQLErrorFactory"<<endl);
 	}
 
 	SQLErrorConnector<ERROR_TYPE,MSG_TYPE> & getConnector(){

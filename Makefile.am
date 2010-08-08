@@ -33,21 +33,21 @@ SQL_HDRS = \
 		container/SQLDataHandlerInterface.h \
 		container/SQLQuery.h container/SQLQueryDefinitions.h \
 		container/SQLTextContainer.h container/SQLTextDefinitions.h \
-utils/SharedPtr.h utils/SmartList.h utils/SmartMap.h \
+		utils/SharedPtr.h utils/SmartList.h utils/SmartMap.h \
 		utils/SmartCheck.h utils/SmartCast.h \
 		utils/Delete.h utils/Clone.h \
 		utils/StringMatch.h \
-handler/SQLBuildDAS.h \
-	handler/SQLBuildDDS.h \
-	handler/SQLBuildDATA.h \
+		handler/SQLBuildDAS.h \
+		handler/SQLBuildDDS.h \
+		handler/SQLBuildDATA.h \
 		handler/connector/SQLCloseAction.h \
 		handler/connector/SQLConnectAction.h \
 		handler/connector/SQLQueryAction.h \
 		handler/connector/SQLNextTypeAction.h \
-connector/SQLConnector.h connector/SQLSimpleConnector.h \
+		connector/SQLConnector.h connector/SQLSimpleConnector.h \
 		connector/SQLTypeConnector.h connector/SQLErrorConnector.h \
 		connector/SQLHandleConnector.h \
-DTM/SQLBaseType.h DTM/SQLCastAction.h \
+		DTM/SQLBaseType.h DTM/SQLCastAction.h \
 		DTM/SQLComplexType.h DTM/SQLDummySimpleType.h \
 		DTM/SQLDynamicTypeFactory.h \
 		DTM/SQLObjectTypeFactory.h \
@@ -55,11 +55,12 @@ DTM/SQLBaseType.h DTM/SQLCastAction.h \
 		DTM/SQLSimpleType.h \
 		DTM/SQLTypeFactoryComponent.h \
 		DTM/SQLTypeManager.h \
-DEM/SQLErrorManager.h DEM/SQLCheckPoint.h \
+		DEM/SQLErrorManager.h DEM/SQLCheckPoint.h \
 		DEM/SQLInternalError.h DEM/SQLInternalFatalError.h \
 		DEM/SQLDefaultErrorAction.h DEM/SQLErrorFactory.h \
-action/SQLAction.h action/SQLObjectAction.h \
-		action/SQLActionList.h action/SQLActionFactory.h action/SQLActionManager.h \
+		action/SQLAction.h action/SQLObjectAction.h \
+		action/SQLActionList.h action/SQLActionFactory.h \
+		action/SQLActionManager.h \
 		action/SQLDynamicActionFactory.h action/SQLDynamicActionList.h \
 		action/SQLObjectActionFactory.h action/SQLObjectActionList.h \
 		action/SQLStaticAction.h action/SQLStaticActionList.h

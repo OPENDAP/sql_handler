@@ -1,7 +1,7 @@
 #-----------------------DATASET v0.4-------------------------
 # 0
 # rows starting with '#' are comments
-# blank lines are permitted
+# blank lines are accepted
 
 # 1
 # The sections order is used to perform
@@ -81,25 +81,27 @@
 # api=APINAME
 # server=SERVER_NAME
 # [select]
-# #sql string for select clause
+# sql string for select clause
 # [from]
-# #valid and complete SQL 'from' clause
+# valid and complete SQL 'from' clause
 
 # 6
 # Note that you DO NOT have to specify:
 # - 'SELECT' in select clause since it's
 # handled by the driver.
+# - 'FROM' in from clause
+# - 'WHERE' in where predicate
+# - ';' at the end of the query
+#
 # This is to avoid dangerous SQL injection
 # like 'insert' or 'delete'.
+#
 # Each column name HAVE TO BE UNIQUE so
 # you are encouraged to use alias like:
 # table1.attribute attr1
 # table.attribute as attr2
 # attribute AS attr3
 #
-# - 'FROM' in from clause
-# - 'WHERE' in where predicate
-# - ';' at the end of the query
 
 # 7
 # Optionally each section may contain:
@@ -123,12 +125,61 @@
 # parameters or sql query string. 
 # See API documentation.
 # ---------- EXAMPLE ---------------
+# Declaring variables:
+# the following declared variables
+# can be used somewhere in this file
 
 define $USER$=postgres
 define $PASS$=postgres
 define $HOST$=SHAREDHOST
 define $FROM$=table1 join table2
 
+#------------EXAMPLE---------------
+# USING unixODBC default SQLPlugin:
+# If you have a service configured
+# with name 'MySQL_DSN' user 'user'
+# and a pass stored into ODBC
+# configuration you only need:
+
+[section]
+# API indicate the SQLPlugin to use
+# 'odbc' is a reserved key indicating
+# to use the unixODBC bundled SQLPlugin
+api=odbc
+
+# This is the name of the 
+# configured DSN
+# (http://www.unixodbc.org)
+server=MySQL_DSN
+user=user
+
+[select]
+# The attribute list to query
+# NOTE: the order used here
+# will be keep in the results
+name, address, phone
+
+[from]
+# The table to use
+# can be a complex FROM clause
+actor
+
+[where]
+# this is optional constraint
+# which will be applied to
+# ALL the query of this section
+# can be used to limit the
+# shared data
+id_actor<100
+
+[other]
+# No need since this is a standard
+# comparator substitution
+~==LIKE
+# No need since this is a standard
+# comparator substitution
+!==<>
+#------------EXAMPLE---------------
 [section]
 api=mysql
 user=$USER$
@@ -148,21 +199,21 @@ dbname=ProGM_2
 # query errors.
 *
 
-
 [from]
 $FROM$
 
+#------------EXAMPLE---------------
 [section]
 api=pg
 dbname=ProGM
 server=localhost
 port=5432
-user=postgres
-pass=postgres
+user=$USER$
+pass=$PASS$
 
 [select]
-column_1, column_2,
-column_3 as 444
+column_1, table_1.column_2,
+table_2.column_2 as column_3
 
 [from]
 # natural join
@@ -173,35 +224,16 @@ table_1 join table_2
 [where]
 # omitting AND will break
 # the SQL predicate list!
-table_1.column_1 < '1000' OR
+# This should be a valid where
+# predicate.
+table_1.column_1 < '1000' AND
 table_2.column_2 <> '0'
 
 [other]
 order=order by 'table_1'
-#NOTE SQL syntax (dialect) can be
+# NOTE SQL syntax (dialect) can be
 # relative to the driver in use!
-
-# If you have a service configured
-# with name 'MySQL_DSN' user 'user'
-# and a pass stored into ODBC
-# configuration you only need:
-[section]
-api=odbc
-server=PostgreSQL2
-user=$USER$
-
-[select]
-nome
-[from]
-attore
-[where]
-id_attore<10
-[other]
-#No need since this is default
-~==LIKE
-#No need since this is default
-!==<>
-
+#------------EXAMPLE---------------
 [section]
 api=odbc
 server=SQLH
@@ -220,7 +252,8 @@ user=postgres
 pass=postgres
 
 [select]
-attore.nome as name,cognome ,attore.id_attore id_actor
+attore.nome as name,cognome ,
+attore.id_attore id_actor
 [from]
 attore
 

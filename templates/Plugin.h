@@ -36,7 +36,7 @@ class SQLPlugin;
  *  TypeFactory
 #COMPLETE#
  *  ErrorFactory
-#COMPLETE
+#COMPLETE#
  */
 #include "action/SQLActionFactory.h"
 

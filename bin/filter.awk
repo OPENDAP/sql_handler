@@ -44,8 +44,8 @@ BEGIN{
 		s=0;
 	}
 # substitution
-	toupper($CLASS);
-	tolower($TYPE);
+	CLASS=toupper(CLASS);
+	TYPE=tolower(TYPE);
 	
 # All the rows flag
 	rest=1;

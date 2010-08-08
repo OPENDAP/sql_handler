@@ -95,8 +95,8 @@ OPENDAP_CLASSPlugin::build_das( SQLDataHandlerInterface &dhi ){
 	 * Here we use a StaticErrorFactory.
 	 * @see OPENDAP_CLASSErrorFactoryComponent
 	 */
-	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef=
-			OPENDAP_CLASSErrorFactoryComponent(conn);
+	OPENDAP_CLASSErrorFactoryComponent efc(conn);
+	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef=efc;
 
 	/**
 	 * Set the error factory into the OPENDAP_CLASSConnector for internal
@@ -151,8 +151,8 @@ OPENDAP_CLASSPlugin::build_dds( SQLDataHandlerInterface &dhi ){
 	 * Here we use a StaticErrorFactory.
 	 * @see OPENDAP_CLASSErrorFactoryComponent
 	 */
-	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef=
-			OPENDAP_CLASSErrorFactoryComponent(*conn);
+	OPENDAP_CLASSErrorFactoryComponent efc(*conn);
+	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef=efc;
 	/**
 	 * Set the error factory into the OPENDAP_CLASSConnector for internal
 	 * use.
@@ -203,8 +203,8 @@ OPENDAP_CLASSPlugin::build_data( SQLDataHandlerInterface &dhi ){
 	 * Here we use a StaticErrorFactory.
 	 * @see OPENDAP_CLASSErrorFactoryComponent
 	 */
-	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef=
-			OPENDAP_CLASSErrorFactoryComponent(*conn);
+	OPENDAP_CLASSErrorFactoryComponent efc(*conn);
+	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef=efc;
 	/**
 	 * Set the error factory into the OPENDAP_CLASSConnector for internal
 	 * use.
