@@ -1,0 +1,65 @@
+#---------------OPeNDAP BES DAP Module Configuration file---------------#
+#                                                                       #
+#       National Center for Atmospheric Research (NCAR)                 #
+#       High Altitude Observatory (HAO)                                 #
+#       Key entries for OPeNDAP BES DAP Module                          #
+#                                                                       #
+#-----------------------------------------------------------------------#
+
+#-----------------------------------------------------------------------#
+# Require dap configuration to be loaded first                          #
+#-----------------------------------------------------------------------#
+# NOTE: this is commented out due to incompatibility with old BES
+#		version. You may un-comment this if you are running BES >3.8.4
+
+BES.Include=sql.conf
+
+#-----------------------------------------------------------------------#
+# modules to load, includes data modules and command modules            #
+#-----------------------------------------------------------------------#
+
+BES.modules+=OPENDAP_TYPE
+BES.module.OPENDAP_TYPE=@bes_modules_dir@/libOPENDAP_TYPE_module.so
+
+#-----------------------------------------------------------------------#
+# Setting the data information
+#-----------------------------------------------------------------------#
+
+# The TypeMatch should NEVER be set for SQLPlugin handler
+
+#-----------------------------------------------------------------------#
+# SQL handler specific parameters
+#-----------------------------------------------------------------------#
+
+# ----------------------------------------------------------------------#
+# 		CheckPoint:
+# ----------------------------------------------------------------------#
+# There are 6 check points that you can activate:
+# _SQLH_ON_CONNECT	=	1
+# _SQLH_ON_CLOSE	=	2
+# _SQLH_ON_QUERY	=	3
+# _SQLH_ON_GET_NEXT	=	4
+# _SQLH_ON_NEXT_ROW	=	5
+# _SQLH_ON_CUSTOM	=	6
+# Each check point correspond to a SQL phase in which handlers can perform
+# Actions.
+# Commons actions are (used by unixODBC): 
+#  - print out debug info
+#  - throw a Fatal error if connection status is bad
+#  - throw a (recoverable) InternalError on get next object
+# Others actions could be:
+#  - mail me on error
+#  - dump on file
+#  - whatever you want
+# Each registered SQLPlugin module can register and use its list
+# of actions which will be activated or not depending on this option:
+# SQL.CheckPoint=1,2,3,4
+
+SQL.CheckPoint=1,2,3,4,5
+
+# You could also concatenate this setup to force deeper check detail
+# in your's SQLPlugin configuration file.
+
+# SQL.CheckPoint+=5
+
+# NOTE: this list affect ALL the registered SQL plugin modules.

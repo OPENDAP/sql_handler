@@ -1,0 +1,174 @@
+#!/bin/bash
+AWK_FILTER=@bindir@/filter.awk
+TEMPLATE_DIR=@datadir@/sql/templates
+if [ ! -d ${TEMPLATE_DIR} ]
+then
+    echo "the templates directory does not exist."
+    echo "It contains template files for use by your new server"
+    exit 1
+fi
+
+echo "Enter server type, e.g. mysql, postgres, oracle: "
+read serverType
+if [ "$serverType" = "" ]
+then
+    echo "you must enter a server type"
+    exit 1
+fi
+
+echo "Do you want a simple or complete (default) module: "
+read complete
+if [[ -z "$complete" ]]; then
+	complete="complete"
+elif [[ "$complete" != "complete" && "$complete" != "simple" ]]; then
+	echo "you must enter: 'simple' or 'complete'"
+    exit 1
+fi
+
+echo "Enter C++ class prefix, RESERVED[odbc, sql]. E.g.: Mysql, Pg, Oracle: "
+read classPrefix
+if [[ -z "$classPrefix" || "$classPrefix" = "odbc" || "$classPrefix" = "sql" ]]; then
+    echo "you must enter a class prefix"
+    exit 1
+fi
+classPrefix=`echo "$classPrefix" | tr '[:lower:]' '[:upper:]'`
+
+DEFAULT_RESPONSE="das dds data"
+echo "Enter response types handled by this server (space separated) E.g.: "das dds data":"
+echo "(version is added for you, no need to include it here)"
+read responseTypes
+if [[ -z "$responseTypes" ]]; then
+    responseTypes=${DEFAULT_RESPONSE}
+else
+    if [ "$responseTypes" != "none" ]
+    then
+		responseTypes=${responseTypes}
+    else
+		responseTypes=""
+    fi
+fi
+
+_DAS=0;_DDS=0;_DATA=0;
+if [[ "$responseTypes" =~ "das" ]]; then
+	_DAS=1; echo "BUILD DAS";
+fi;
+if [[ "$responseTypes" =~ "dds" ]]; then
+	_DDS=1; echo "BUILD DDS";
+fi;
+if [[ "$responseTypes" =~ "data" ]]; then
+	_DATA=1; echo "BUILD DATA";
+fi;
+
+for i in `ls ${TEMPLATE_DIR}/*.cpp`; do
+	if [[ ${complete} == "simple" ]]; then
+		if [[ $i =~ "Connector.cpp" ]]; then
+			fout=${classPrefix}Simple${i##/*/}
+		elif [[ $i =~ "Error" ]]; then
+			continue;
+		else
+			fout=$classPrefix${i##/*/};
+		fi
+	else
+		fout=$classPrefix${i##/*/}
+	fi	
+	echo -e "\t\tCREATING ->$fout"
+	cat $i | \
+		awk -v DAS="$_DAS" -v DDS="$_DDS" -v DATA="$_DATA"\
+			-v COMPLETE="${complete}" -v CLASS="${classPrefix}" -v TYPE="${serverType}" \
+		-f ${AWK_FILTER} > ./$fout;
+done
+for i in `ls ${TEMPLATE_DIR}/*.h`; do
+	if [[ ${complete} == "simple" ]]; then
+		if [[ $i =~ "Connector.h" ]]; then
+			fout=${classPrefix}Simple${i##/*/};
+		elif [[ $i =~ "Error" ]]; then
+			continue;
+		else
+			fout=$classPrefix${i##/*/};
+		fi
+	else
+		fout=$classPrefix${i##/*/};
+	fi
+	echo -e "\t\tCREATING ->$fout"
+	cat $i | \
+		awk -v DAS="$_DAS" -v DDS="$_DDS" -v DATA="$_DATA" \
+			-v COMPLETE="${complete}" -v CLASS="${classPrefix}" -v TYPE="${serverType}" \
+		-f ${AWK_FILTER} > ./$fout;
+done
+
+echo -e "\t\tCREATING ->./Makefile.am"
+cat ${TEMPLATE_DIR}/Makefile.am.template | \
+	awk -v CLASS="${classPrefix}" -v COMPLETE="${complete}" -v TYPE="${serverType}" \
+	-f ${AWK_FILTER} > ./Makefile.am
+
+echo -e "\t\tCREATING ->./configure.ac"
+cat ${TEMPLATE_DIR}/configure.ac | \
+	awk -v CLASS="${classPrefix}" -v TYPE="${serverType}" \
+	-f ${AWK_FILTER} > ./configure.ac
+
+fout="${serverType}.conf.in"
+echo -e "\t\tCREATING ->./$fout"
+cat ${TEMPLATE_DIR}/.conf.in.template | \
+	awk -v CLASS="${classPrefix}" -v TYPE="${serverType}" \
+	-f ${AWK_FILTER} > ./$fout
+
+fout="module.spec";
+echo -e "\t\tCREATING ->./$fout"
+cat ${TEMPLATE_DIR}/module.spec.template | \
+	awk -v CLASS="${classPrefix}" -v TYPE="${serverType}" \
+	-f ${AWK_FILTER} > ./$fout
+
+echo -e "\t\tCOPING SAMPLE DATA TO ->./data"
+/bin/mkdir data
+/bin/cp -R ${TEMPLATE_DIR}/data/* data/
+
+echo ""
+/bin/mkdir conf
+/bin/cp ${TEMPLATE_DIR}/conf/* conf/
+
+echo "*******************************************************"
+echo "*                                                     *"
+echo "* Creating your configuration script                  *"
+echo "*                                                     *"
+echo "*******************************************************"
+autoreconf --force --install -v
+if [ $? != 0 ]
+then
+    echo "FAILED"
+    exit 1
+fi
+
+echo "*******************************************************"
+echo "*                                                     *"
+echo "* Running your configuration script                   *"
+echo "*                                                     *"
+echo "*******************************************************"
+./configure --prefix=@prefix@
+if [ $? != 0 ]
+then
+    echo "FAILED"
+    exit 1
+fi
+
+echo "*******************************************************"
+echo "*                                                     *"
+echo "* Building your server                                *"
+echo "*                                                     *"
+echo "*******************************************************"
+make -j
+if [ $? != 0 ]
+then
+    echo "FAILED"
+    exit 1
+fi
+
+echo "*******************************************************"
+echo "*                                                     *"
+echo "* Your ${classPrefix} files have been created         *"
+echo "*                                                     *"
+echo "* You will need to make modifications to some of the  *"
+echo "* code created here. Please refer to the document     *"
+echo "* SQLHandler for Developer for more information       *"
+echo "*                                                     *"
+echo "*******************************************************"
+

@@ -1,0 +1,19 @@
+
+[MY_TEST]
+Description         = SQLHandler test for POSTGRES
+Driver              = /opt/unixodbc/lib/libodbcpsql.so
+Trace               = Yes
+TraceFile           = sql.log
+Database            = ProGM
+Servername          = localhost
+UserName            = postgres
+Password            = postgres
+Port                = 5432
+Protocol            = 6.4
+ReadOnly            = No
+RowVersioning       = No
+ShowSystemTables    = No
+ShowOidColumn       = No
+FakeOidIndex        = No
+ConnSettings        =
+
