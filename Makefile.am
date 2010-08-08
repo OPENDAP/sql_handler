@@ -91,11 +91,11 @@ EXTRA_PROGRAMS =
 CLEANFILES = *~ sql.conf 
 
 libsql_module_la_SOURCES = $(SQL_SRCS) $(BES_SRCS) $(ODBC_SRCS) $(SQL_HDRS) $(BES_HDRS) $(ODBC_HDRS)
-libsql_module_la_CPPFLAGS =  $(BES_CPPFLAGS)
+libsql_module_la_CPPFLAGS =  $(BES_CPPFLAGS) $(ODBC_CPPFLAGS)
 #-D __TESTS__=1 
 libsql_module_la_LDFLAGS = -avoid-version -shared -module -lodbc
 # -D __TESTS__=1  -D __CLONE__=0
-libsql_module_la_LIBADD = $(BES_DAP_LIBS)
+libsql_module_la_LIBADD = $(BES_DAP_LIBS) $(ODBC_LIBS)
 
 ## EXPORTING HEADERS
 

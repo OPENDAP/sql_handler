@@ -48,11 +48,18 @@ AC_CHECK_BES([3.8.3],
 
 OPENDAP_DEBUG_OPTION
 
+AC_CHECK_ODBC([2.3.0],
+[
+],
+[ AC_MSG_ERROR([Could not find UnixODBC library and headers])
+])
+
 AM_PATH_CPPUNIT(1.12.0,
 	[AM_CONDITIONAL([CPPUNIT], [true])],
 	[AM_CONDITIONAL([CPPUNIT], [false])])
 	
 AC_CONFIG_FILES([Makefile
-				bin/Makefile
-				templates/Makefile])
+		 bin/Makefile
+		 templates/Makefile])
 AC_OUTPUT
+

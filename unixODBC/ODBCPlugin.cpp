@@ -87,8 +87,8 @@ ODBCPlugin::build_das( SQLDataHandlerInterface &dhi ){
 	 * Here we use a StaticErrorFactory.
 	 * @see ODBCErrorFactoryComponent
 	 */
-	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef=
-			ODBCErrorFactoryComponent(conn);
+	ODBCErrorFactoryComponent efc(conn);
+	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef = efc ;
 
 	/**
 	 * Set the error factory into the ODBCConnector for internal
@@ -129,8 +129,8 @@ ODBCPlugin::build_dds( SQLDataHandlerInterface &dhi ){
 	 * Here we use a StaticErrorFactory.
 	 * @see ODBCErrorFactoryComponent
 	 */
-	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef=
-			ODBCErrorFactoryComponent(*conn);
+	ODBCErrorFactoryComponent efc(*conn);
+	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef= efc ;
 	/**
 	 * Set the error factory into the ODBCConnector for internal
 	 * use.
@@ -166,8 +166,8 @@ ODBCPlugin::build_data( SQLDataHandlerInterface &dhi ){
 	 * Here we use a StaticErrorFactory.
 	 * @see ODBCErrorFactoryComponent
 	 */
-	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef=
-			ODBCErrorFactoryComponent(*conn);
+	ODBCErrorFactoryComponent efc(*conn);
+	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef= efc ;
 	/**
 	 * Set the error factory into the ODBCConnector for internal
 	 * use.
