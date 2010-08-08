@@ -84,11 +84,11 @@ BES_SRCS = \
 BES_HDRS = \
 		SQLModule.h
 
-EXTRA_DIST = doc data COPYRIGHT COPYING sql_handler.spec sql.conf.in
+EXTRA_DIST = data doxy.conf COPYRIGHT COPYING sql_handler.spec sql.conf.in
 
 EXTRA_PROGRAMS = 
 
-CLEANFILES = *~ sql.conf 
+CLEANFILES = *~ sql.conf sql_config.h _configs.sed
 
 libsql_module_la_SOURCES = $(SQL_SRCS) $(BES_SRCS) $(ODBC_SRCS) $(SQL_HDRS) $(BES_HDRS) $(ODBC_HDRS)
 libsql_module_la_CPPFLAGS =  $(BES_CPPFLAGS) $(ODBC_CPPFLAGS)
@@ -121,6 +121,29 @@ uninstall-local:
 
 sql.conf: sql.conf.in config.status
 		sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > sql.conf
+
+#########################################################################
+
+# docs
+
+.PHONY: docs
+docs:
+	srcdir=$(srcdir) doxygen $(srcdir)/doxy.conf
+	(cd docs && tar -czf html.tar.gz html)
+
+###########################################################################
+
+# Fortify targets.
+
+.PHONY: fortify
+fortify:
+	sourceanalyzer -b @PACKAGE@ $(MAKE)
+	sourceanalyzer -b @PACKAGE@ -scan -f @PACKAGE@-@PACKAGE_VERSION@.fpr
+
+# Use this to clean the fortify project.
+.PHONY: fortifyclean
+fortifyclean:
+	sourceanalyzer -b @PACKAGE@ -clean
 
 ###########################################################################
 #

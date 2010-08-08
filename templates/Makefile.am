@@ -6,7 +6,7 @@
 
 AUTOMAKE_OPTIONS = foreign check-news
 
-pkgdata_templatesdir = $(datadir)/sql/templates
+pkgdata_templatesdir = $(pkgdatadir)/templates
 pkgdata_templates_DATA = \
 		Module.cpp Plugin.cpp \
 		Connector.cpp \
@@ -21,14 +21,14 @@ pkgdata_templates_DATA = \
 		module.spec.template COPYRIGHT \
 		.conf.in.template Makefile.am.template configure.ac 
 		
-pkgdata_templatesconfdir = $(datadir)/sql/templates/conf
+pkgdata_templatesconfdir = $(pkgdatadir)/templates/conf
 pkgdata_templatesconf_DATA = conf/acinclude.m4 conf/bes.m4 \
 		conf/libdap.m4 conf/pkg.m4
 
-sample_datadir = $(datadir)/sql/templates/data
+sample_datadir = $(pkgdatadir)/templates/data
 sample_data_DATA = data/test_full.sql
 
-EXTRA_DIST = Module.cpp Plugin.cpp \
+EXTRA_DIST = data Module.cpp Plugin.cpp \
 		Connector.cpp \
 		TypeFactoryComponent.cpp \
 		ErrorFactoryComponent.cpp \
@@ -42,7 +42,4 @@ EXTRA_DIST = Module.cpp Plugin.cpp \
 		Makefile.am.template configure.ac conf/acinclude.m4 \
 		conf/bes.m4 conf/libdap.m4 conf/pkg.m4 \
 		module.spec.template
-		
-		
-uninstall-local:
-	rm -rdf $(datadir)/sql/
+

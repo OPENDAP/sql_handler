@@ -1,6 +1,6 @@
 #!/bin/bash
 AWK_FILTER=@bindir@/filter.awk
-TEMPLATE_DIR=@datadir@/sql/templates
+TEMPLATE_DIR=@pkgdatadir@/templates
 if [ ! -d ${TEMPLATE_DIR} ]
 then
     echo "the templates directory does not exist."
