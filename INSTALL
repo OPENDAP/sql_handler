@@ -1,0 +1,57 @@
+INSTALLATION HOW-TO:
+
+Directories:
+$BES_DIR -> Directory where BES is installed to
+$BES_DATA_DIR -> Directory where BES search datasets
+
+----------INSTALLATION-----------
+
+$ cd sql_handler
+$ autoreconf --force --verbose --install
+$ ./configure --prefix=$BES_DIR
+$ make -j
+Then as root (or bes admin):
+# make install
+
+----------INSTALLATION TESTS---------
+
+To run an install test do:
+As root:
+
+# cd sql_handler/install/
+# sh ./isql.h
+
+And follow instructions...
+
+---------------DEVELOPER------------------
+
+If you want to develop a new SQLPlugin try to use:
+
+#besCreateSQLPlugin
+
+It is installed in the BES binary directory:
+
+$BES_DIR/bin/besCreateSQLPlugin
+
+---------------DATASET--------------------
+For information on how to build a dataset
+read the dataset rules found in:
+
+sql_handler/data/test_full.sql
+
+which will be installed in:
+
+$BES_DATA_DIR/data/sql/test_full.sql
+
+-------------CONTACTS----------------
+OPeNDAP
+ <support@opendap.org>
+site:
+ http://opendap.org/resources/contact.html
+Developer:
+Dr. Carlo Cancellieri
+ <ccancellieri@hotmail.com>
+ <ccancellieri@gmail.com>
+Sorrento (Na), Italy
+Site:
+ http://sourceforge.net/projects/sqlh/

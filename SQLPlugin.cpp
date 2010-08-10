@@ -25,35 +25,25 @@
  */
 
 #include "SQLPlugin.h"
-
-SQLPluginList *SQLPlugin::rh=SQLPlugin::findTheList();
+#if 0
+/**
+ * static -> no sense:
+ * SQPlugin should be unique instance for each package
+ */
+SQLPluginList *SQLPlugin::_pl=SQLPlugin::findTheList();
+#endif
 
 SQLPlugin::~SQLPlugin( void )
 {
 #if 0
 	// THIS IS DONE BY THE SQLRequestHandler::remove_sql_handler
-	if (!_handler_list.empty()){
-#if 0
-		// rh is Member of this class now
-		if (rh=SQLPlugin::find_RequestHandler()){
-#endif
-		if (rh){
-			Handler_iter i=_handler_list.begin();
-			while (i!=_handler_list.end()){
-				remove_handler((*i++).first);
-			}
-		}
-		else
-			throw BESInternalFatalError(
-				"The base SQLRequestHandler is not loaded into the List!",
-				__FILE__,__LINE__);
-	}
+	remove_handlers();
 #endif
 }
 
 void SQLPlugin::remove_handlers(){
 	if (!_handler_list.empty()){
-		if (rh){
+		if (_pl){
 			Handler_iter i=_handler_list.begin();
 			while (i!=_handler_list.end()){
 				remove_handler((*i++).first);
@@ -77,8 +67,8 @@ SQLPlugin::add_handler( const string &command,
     	 *  if no wrapper method is called add
     	 *  one.
     	 */
-		if (rh) {
-			if (rh->add_sql_wrapper(command)) {
+		if (_pl) {
+			if (_pl->add_sql_wrapper(command)) {
 				_handler_list[command] = handler_method ;
 			}
 			else {
@@ -110,13 +100,13 @@ SQLPlugin::remove_handler( const string &command)
 		 * removed.
 		 */
 #if 0
-    	// rh is Member of this class now
-    	if (!rh)
-    		rh=SQLPlugin::find_RequestHandler();
+    	// _pl is Member of this class now
+    	if (!_pl)
+    		_pl=SQLPlugin::find_RequestHandler();
 #endif
-    	if (rh) {
+    	if (_pl) {
         	//update the SQLRequestHandler wrapper usage counter
-			if (!rh->remove_sql_wrapper(command)){
+			if (!_pl->remove_sql_wrapper(command)){
 				// report the error but can be a not fatal error
 				BESDEBUG(SQL_NAME,"This command was not correctly wrapped!"<<endl);
 			}
@@ -195,16 +185,16 @@ SQLPlugin::findTheList()
 #if 0
 	// NOT SAFE instance can be deleted by SQLRequestHandler dtor
 	// try cached position
-	if (rh){
-TESTDEBUG(SQL_NAME,"SQLPlugin: returning cached version: "<<rh<<endl);
-		return rh;
+	if (_pl){
+TESTDEBUG(SQL_NAME,"SQLPlugin: returning cached version: "<<_pl<<endl);
+		return _pl;
 	}
 #endif
 	// search for the SQLRequestHandler
-	BESRequestHandler *bes_rh=
+	BESRequestHandler *bes_pl=
 			BESRequestHandlerList::TheList()->find_handler(SQL_NAME);
 
-    if( bes_rh )
+    if( bes_pl )
     {
     	/**
     	 * @todo: check: THIS IS DANGEROUS!!!
@@ -217,10 +207,9 @@ TESTDEBUG(SQL_NAME,"SQLPlugin: returning cached version: "<<rh<<endl);
     	 * @note the first option need to add the flag to:
     	 * BESPlugin.h:123
     	 */
-TESTDEBUG(SQL_NAME,"SQLPlugin: SQLRequestHandler found has ptr: "<<bes_rh<<endl);
-//dynamic_cast<SQLPluginList*>(bes_rh)->dump(std::cerr);
-TESTDEBUG(SQL_NAME,"SQLPlugin: SQLRequestHandler found has ptr: "<<bes_rh<<endl);
-    	SQLLinker *l=static_cast<SQLLinker*>(bes_rh);
+TESTDEBUG(SQL_NAME,"SQLPlugin: SQLRequestHandler found has ptr: "<<bes_pl<<endl);
+//dynamic_cast<SQLPluginList*>(bes__pl)->dump(std::cerr);
+    	SQLLinker *l=static_cast<SQLLinker*>(bes_pl);
     	if (l){
 TESTDEBUG(SQL_NAME,"SQLPlugin: SQLRequestHandler THE LINK WORKS!!"<<endl);
     		return l->theLink();
@@ -229,7 +218,7 @@ TESTDEBUG(SQL_NAME,"SQLPlugin: SQLRequestHandler THE LINK WORKS!!"<<endl);
 TESTDEBUG(SQL_NAME,"SQLPlugin: SQLRequestHandler THE LINK <<DO NOT>> WORKS!!"<<endl);
     		return NULL;
     	}
-    	//return dynamic_cast<SQLPluginList*>(bes_rh);
+    	//return dynamic_cast<SQLPluginList*>(bes_pl);
     }
     else
     	return NULL;

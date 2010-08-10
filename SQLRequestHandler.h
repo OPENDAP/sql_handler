@@ -62,13 +62,14 @@ class SQLPlugin;
 
 #include <pthread.h>
 
-// instance_mutex is used to ensure that only one instance is created.
-// That is, it protects the body of the HTTPCache::instance() method. This
-// mutex is initialized from within the static function once_init_routine()
-// and the call to that takes place using pthread_once_init() where the mutex
-// once_block is used to protect that call. All of this ensures that no matter
-// how many threads call the instance() method, only one instance is ever
-// made.
+/**
+ * instance_mutex is used to ensure that only one instance is created.
+ * It protects the body of the theXXX methods. This mutex is initialized
+ * from within the static function once_init_routine() and the call to
+ * that takes place using pthread_once_init() where the mutex once_block
+ * is used to protect that call. All of this ensures that no matter how
+ * many threads call the instance() method, only one instance is ever made.
+ */
 static pthread_mutex_t _mutex;
 static pthread_once_t _block = PTHREAD_ONCE_INIT;
 
@@ -85,22 +86,38 @@ once_init_routine(){
 }
 
 /**
+ * @brief type definition of the list of SQLPlugin
+ */
+typedef smart::SmartValueMap<const string,SQLPlugin> sql_handler_map;
+
+/**
+ * @brief type definition of the list of wrapped functions
+ */
+typedef std::map<string,size_t> sql_wrap_count_map;
+
+/**
  * @brief SQLHandler base RequestHandler which is the main SQL
  * request handler.
  * <br>This RequestHandler act as a wrapper for all the SQL type requests.
  * <br>It uses its functions to search and run loaded SQLPlugin
  * which effectively implements Components and methods to build
  * DDS, DAS, DATA ... objects.
+ * @implements the SQLLinker abstract class
+ * @note implement a multiple (lazy safe) singleton of its members and
+ * itself.
+ * @see SQLLinker
+ * @see SQLPluginList
+ * @see BESRequestHandler
  * @see SQLPlugin
  */
-class SQLRequestHandler :public SQLLinker, public SQLPluginList {
+class SQLRequestHandler :public SQLLinker {
 private:
 	/**
 	 *  self referred to implement the Singleton pattern)
 	 */
 	static SQLRequestHandler *_rh;
 
-	typedef smart::SmartValueMap<const string,SQLPlugin> sql_handler_map;
+
 	typedef sql_handler_map::iterator SQLHandler_iterator;
 	typedef sql_handler_map::const_iterator	SQLHandler_citer;
 
@@ -109,7 +126,6 @@ private:
 	 */
 	static sql_handler_map *_theList;
 
-	typedef std::map<string,size_t> sql_wrap_count_map;
 	/**
 	 *  track how many (value) SQLPlugins are using a
      *  wrap function (the key is the command name).
@@ -125,9 +141,8 @@ private:
      * @return true only if the function handler
      * (named 'name') should be deleted.
      */
-	bool
-    update_wrap_count(const string & name, bool add)
-    throw (BESInternalFatalError);
+	bool update_wrap_count(const string & name, bool add)
+			throw (BESInternalFatalError);
 
 	/**
 	 * @brief function used to implement recursive calls through
@@ -146,8 +161,7 @@ private:
 	 *  @return bool true if response object is correctly built,
 	 *  false otherwise.
 	 */
-	bool
-	lastChanceRunner(SQLDataHandlerInterface &dhi, const string &command);
+	bool lastChanceRunner(SQLDataHandlerInterface &dhi, const string &command);
 
 	/**
 	 * @brief search into the BESRequestHandler list the SQLPlugin
@@ -157,9 +171,7 @@ private:
 	 * as c.getApi() returned string or NULL pointer if not found.
 	 *
 	 */
-//	static
-	SQLPlugin *
-	find_sql_plugin(SQLContainer &c);
+	SQLPlugin *	find_sql_plugin(SQLContainer &c);
 
 
 	/**
@@ -169,21 +181,7 @@ private:
 	 * BESRequestHandler plugin).
 	 * @param name the name of this handler
 	 */
-	SQLRequestHandler(const string &name) :
-		SQLLinker(name),
-		SQLPluginList()
-	{
-		/**
-		 * initialize unique instance of the block mutex
-		 */
-		if (pthread_once(&_block,once_init_routine)!=0)
-			throw BESInternalError(
-				"Could not initialize mutex. Exiting.",__FILE__, __LINE__);
-
-		add_handler(VERS_RESPONSE,SQLRequestHandler::version);
-		add_handler(HELP_RESPONSE,SQLRequestHandler::help);
-TESTDEBUG(SQL_NAME,"CREATED: SQLRequestHandler"<<endl);
-	}
+	SQLRequestHandler(const string &name);
 
 	SQLRequestHandler(const SQLRequestHandler &); // not defined
 	SQLRequestHandler & operator=(const SQLRequestHandler &); // not defined
@@ -194,89 +192,33 @@ public:
 	 * @return the singleton sql_handler_map
 	 * @note: thread safe
 	 */
-	static sql_handler_map &
-	theList(){
-		LOCK(&_mutex);
-		try {
-			if (!SQLRequestHandler::_theList){
-TESTDEBUG(SQL_NAME,"SQLRequestHandler: _theList was NULL:"<<
-	_theList<<" creating new one"<<endl);
-				SQLRequestHandler::_theList=new sql_handler_map();
-			}
-		}catch(...)
-		{
-			UNLOCK(&_mutex);
-			throw;
-		}
-		UNLOCK(&_mutex);
-		return (*SQLRequestHandler::_rh->_theList);
-	}
+	static sql_handler_map & theList();
 
 	/**
 	 * @brief Lazy initialization of _theWrapCount singleton
 	 * @return the singleton sql_wrap_count_map
 	 * @note: thread safe
 	 */
-	static sql_wrap_count_map &
-	theWrapCount(){
-		LOCK(&_mutex);
-		try{
-			if (!SQLRequestHandler::_theWrapCount){
-TESTDEBUG(SQL_NAME,"SQLRequestHandler: _theWrapCount was NULL:"<<
-	_theWrapCount<<" creating new one"<<endl);
-				SQLRequestHandler::_theWrapCount=new sql_wrap_count_map();
-			}
-		}catch(...)
-		{
-			UNLOCK(&_mutex);
-			throw;
-		}
-		UNLOCK(&_mutex);
-		return (*SQLRequestHandler::_rh->_theWrapCount);
-	}
+	static sql_wrap_count_map &	theWrapCount();
 
-	static SQLRequestHandler *
-	theSQLRequestHandler(const string &name){
-		LOCK(&_mutex);
-		try{
-			if (!SQLRequestHandler::_rh){
-TESTDEBUG(SQL_NAME,"SQLRequestHandler: _rh was NULL:"<<
-	SQLRequestHandler::_rh<<" creating new one"<<endl);
-				SQLRequestHandler::_rh=new SQLRequestHandler(name);
-			}
-		}catch(...)
-		{
-			UNLOCK(&_mutex);
-			throw;
-		}
-		UNLOCK(&_mutex);
-TESTDEBUG(SQL_NAME,"SQLRequestHandler: _rh on addr: "<<
-	SQLRequestHandler::_rh<<endl);
-		return (SQLRequestHandler::_rh);
-	}
+	/**
+	 * @brief Lazy initialization of the class
+	 * @return the singleton of this class
+	 * @note: thread safe
+	 */
+	static SQLRequestHandler * theSQLRequestHandler(const string &name);
 
-    ~SQLRequestHandler(void) {
-    	/**
-    	 * remove all unregistered sql_handlers
-    	 * from the list
-    	 */
-    	remove_sql_handlers();
+	/**
+	 * @brief destructor
+	 * @note do not destruct this class, only its members,
+	 * you have to delete the SQLRequestHandler instance outside.
+	 */
+    ~SQLRequestHandler(void);
 
-    	if (_theList)
-			delete _theList;
-		_theList=0;
-		if (_theWrapCount)
-			delete _theWrapCount;
-		_theWrapCount=0;
-
-    	DESTROY(&_mutex);
-
-TESTDEBUG(SQL_NAME,"DELETED: SQLRequestHandler"<<endl);
-    };
-/**
- * @todo
- * @return
- */
+	/**
+	 * @brief Implementation of 'SQLLink' interface
+	 * @return pointer to the this instance (singleton)
+	 */
     virtual SQLPluginList *theLink(){
     	return theSQLRequestHandler(get_name());
     }
@@ -320,8 +262,7 @@ TESTDEBUG(SQL_NAME,"DELETED: SQLRequestHandler"<<endl);
      * @return a pointer to the found plugin or NULL
      * if no SQLPlugin is found.
      */
-    SQLPlugin*
-    find_sql_handler(const string& name);
+    SQLPlugin* find_sql_handler(const string& name);
 
     /**
      * @brief Remove an SQLPlugin from the list.
@@ -373,9 +314,6 @@ TESTDEBUG(SQL_NAME,"DELETED: SQLRequestHandler"<<endl);
      */
     bool
     remove_sql_wrapper(const string& command);
-
-
-
 };
 
 #endif // SQLRequestHandler.h

@@ -66,8 +66,7 @@ private:
     string _name ;
 
     // Pointer to the SQLRequestHandler
-    //static SQLRequestHandler *rh; // do not delete
-    static SQLPluginList *rh; // do not delete
+    SQLPluginList *_pl; // do not delete
 
 public:
     typedef map< string, sql_request_handler >::const_iterator Handler_citer ;
@@ -126,15 +125,13 @@ public:
 	 */
 	SQLPlugin( const string & name):
 		_handler_list(),
-		_name( name )//,
-//		rh(SQLPlugin::find_RequestHandler())
+		_name( name ),
+		_pl(SQLPlugin::findTheList())
     {
-#if 0
-		if (!rh)
+		if (!_pl)
 			throw BESInternalFatalError(
 				"Unable to locate SQLRequestHandler",
 				__FILE__,__LINE__);
-#endif
 	};
 
 	/**
@@ -142,15 +139,13 @@ public:
 	 */
 	SQLPlugin( const SQLPlugin & p):
 		_handler_list(p._handler_list),
-		_name( p._name )//,
-//		rh(p.rh)
+		_name( p._name ),
+		_pl(p._pl)
     {
-#if 0
-		if (!rh)
+		if (!_pl)
 			throw BESInternalFatalError(
 				"Unable to locate SQLRequestHandler",
 				__FILE__,__LINE__);
-#endif
 	};
 
 	/**

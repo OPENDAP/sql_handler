@@ -26,13 +26,103 @@
 
 #include "SQLRequestHandler.h"
 
-
-//SQLRequestHandler SQLRequestHandler::not_locked=true;
 SQLRequestHandler *SQLRequestHandler::_rh=NULL;
 
-SQLRequestHandler::sql_handler_map *SQLRequestHandler::_theList=NULL;
+sql_handler_map *SQLRequestHandler::_theList=NULL;
 
-SQLRequestHandler::sql_wrap_count_map *SQLRequestHandler::_theWrapCount=NULL;
+sql_wrap_count_map *SQLRequestHandler::_theWrapCount=NULL;
+
+
+
+sql_handler_map &
+SQLRequestHandler::theList(){
+	LOCK(&_mutex);
+	try {
+		if (!SQLRequestHandler::_theList){
+TESTDEBUG(SQL_NAME,"SQLRequestHandler: _theList was NULL:"<<
+_theList<<" creating new one"<<endl);
+			SQLRequestHandler::_theList=new sql_handler_map();
+		}
+	}catch(...)
+	{
+		UNLOCK(&_mutex);
+		throw;
+	}
+	UNLOCK(&_mutex);
+	return (*SQLRequestHandler::_rh->_theList);
+}
+
+sql_wrap_count_map &
+SQLRequestHandler::theWrapCount(){
+	LOCK(&_mutex);
+	try{
+		if (!SQLRequestHandler::_theWrapCount){
+TESTDEBUG(SQL_NAME,"SQLRequestHandler: _theWrapCount was NULL:"<<
+_theWrapCount<<" creating new one"<<endl);
+			SQLRequestHandler::_theWrapCount=new sql_wrap_count_map();
+		}
+	}catch(...)
+	{
+		UNLOCK(&_mutex);
+		throw;
+	}
+	UNLOCK(&_mutex);
+	return (*SQLRequestHandler::_rh->_theWrapCount);
+}
+
+SQLRequestHandler *
+SQLRequestHandler::theSQLRequestHandler(const string &name){
+	LOCK(&_mutex);
+	try{
+		if (!SQLRequestHandler::_rh){
+TESTDEBUG(SQL_NAME,"SQLRequestHandler: _rh was NULL:"<<
+SQLRequestHandler::_rh<<" creating new one"<<endl);
+			SQLRequestHandler::_rh=new SQLRequestHandler(name);
+		}
+	}catch(...)
+	{
+		UNLOCK(&_mutex);
+		throw;
+	}
+	UNLOCK(&_mutex);
+TESTDEBUG(SQL_NAME,"SQLRequestHandler: _rh on addr: "<<
+SQLRequestHandler::_rh<<endl);
+	return (SQLRequestHandler::_rh);
+}
+
+SQLRequestHandler::SQLRequestHandler(const string &name) :
+	SQLLinker(name)
+{
+	/**
+	 * initialize unique instance of the block mutex
+	 */
+	if (pthread_once(&_block,once_init_routine)!=0)
+		throw BESInternalError(
+			"Could not initialize mutex. Exiting.",__FILE__, __LINE__);
+
+	add_handler(VERS_RESPONSE,SQLRequestHandler::version);
+	add_handler(HELP_RESPONSE,SQLRequestHandler::help);
+TESTDEBUG(SQL_NAME,"CREATED: SQLRequestHandler"<<endl);
+}
+
+SQLRequestHandler::~SQLRequestHandler(void) {
+	/**
+	 * remove all unregistered sql_handlers
+	 * from the list
+	 */
+	remove_sql_handlers();
+
+	if (_theList)
+		delete _theList;
+	_theList=0;
+	if (_theWrapCount)
+		delete _theWrapCount;
+	_theWrapCount=0;
+
+	DESTROY(&_mutex);
+
+TESTDEBUG(SQL_NAME,"DELETED: SQLRequestHandler"<<endl);
+}
 
 /**
  * @brief Run version on the Base handler
@@ -167,7 +257,7 @@ bool
 SQLRequestHandler::add_sql_handler(const string& name,	SQLPlugin* handler){
 	if (find_sql_handler(name)==NULL)
 	{
-TESTDEBUG(SQL_NAME,"SQLRequestHandler: _theList"<<endl);
+TESTDEBUG(SQL_NAME,"SQLRequestHandler: theList"<<endl);
 		theList().insert(name,handler);
 TESTDEBUG(SQL_NAME,"SQLRequestHandler: Total sql_handlers registered: "
 <<theList().size()<<endl);
