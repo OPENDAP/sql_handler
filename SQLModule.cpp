@@ -50,8 +50,9 @@ SQLContainerStorage *SQLModule::cs=NULL;
 
 SQLContainerFactory SQLModule::cf=SQLContainerFactory();
 
-SQLRequestHandler SQLModule::rh=SQLRequestHandler(SQL_NAME);
-
+SQLRequestHandler *SQLModule::rh=
+		SQLRequestHandler::theSQLRequestHandler(SQL_NAME);
+//SQLRequestHandler SQLModule::rh=SQLRequestHandler(SQL_NAME);
 
 void
 SQLModule::initialize( const string &modname )
@@ -158,27 +159,23 @@ SQLModule::initialize( const string &modname )
 	{
 		BESDEBUG( SQL_NAME, "    storage already exists, skipping" << endl ) ;
 	}
+#if 1
 	/**
 	 * adding BASE sql handler which will wrap all the
 	 * sql requests
 	 */
+	if (!rh)
+		rh=SQLRequestHandler::theSQLRequestHandler(SQL_NAME);
+#endif
+TESTDEBUG(SQL_NAME,"SQLModule: SQLRequestHandler found has ptr: "<<rh<<endl);
 	BESDEBUG( SQL_NAME, "    adding "<<SQL_NAME<< " request handler" << endl ) ;
-    BESRequestHandlerList::TheList()->add_handler(SQL_NAME, &rh);
+    BESRequestHandlerList::TheList()->add_handler(SQL_NAME, rh);
 
     BESDEBUG( SQL_NAME, modname << " handles dap services" << endl ) ;
     BESDapService::handle_dap_service( modname ) ;
 
-    /**
-	 * Add default ODBC SQL plugin to RequestHandlerList
-	 */
-    BESDEBUG( ODBC_NAME, "    using "<< ODBC_NAME
-        		<<" as DEFAULT SQL request handler" << endl ) ;
-    SQLRequestHandler::add_sql_handler(ODBC_NAME, new ODBCPlugin(ODBC_NAME));
-
     BESDEBUG( modname, "    adding sql debug context" << endl ) ;
     BESDebug::Register( SQL_NAME ) ;
-    BESDEBUG( modname, "    adding odbc debug context" << endl ) ;
-    BESDebug::Register( ODBC_NAME ) ;
 
     // INIT_END
     BESDEBUG( modname, "Done Initializing SQL Module "
@@ -190,13 +187,14 @@ SQLModule::terminate( const string &modname )
 {
     BESDEBUG( modname, "Cleaning SQL module " << modname << endl ) ;
 
-    BESDEBUG( modname,"    removing " << ODBC_NAME << " sql plugin handler" << endl ) ;
-    SQLRequestHandler::remove_sql_handler(ODBC_NAME);
-
     BESDEBUG( modname, "    removing " << SQL_NAME << " request handler" << endl ) ;
-    BESRequestHandlerList::TheList()->remove_handler( SQL_NAME ) ;
-
-	// READ COMMENTS IN INITIALIZE
+#if 0
+    BESRequestHandlerList::TheList()->remove_handler( SQL_NAME );
+#else
+    if (rh && BESRequestHandlerList::TheList()->remove_handler( SQL_NAME ))
+		delete rh;
+	rh=0;
+#endif
     BESDEBUG( SQL_NAME, "    removing sql storage container"
     		<< _SQLH_STORAGE << endl ) ;
     if (cs && !BESContainerStorageList::TheList()->deref_persistence( _SQLH_STORAGE ))
@@ -210,11 +208,6 @@ SQLModule::terminate( const string &modname )
 	BESDEBUG( SQL_NAME, "    removing " << _SQLH_CATALOG << " catalog" << endl) ;
 	BESCatalogList::TheCatalogList()->deref_catalog( _SQLH_CATALOG ) ;
 
-    // If new commands are needed, then let's declare this once here. If
-    // not, then you can remove this line.
-    //string cmd_name ;
-
-    // TERM_END
     BESDEBUG( modname, "Done Cleaning SQL module "
 		       << modname << endl ) ;
 }
@@ -223,7 +216,7 @@ extern "C"
 {
     BESAbstractModule *maker()
     {
-	return new SQLModule ;
+    	return new SQLModule;
     }
 }
 

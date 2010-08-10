@@ -26,7 +26,13 @@
 
 #include "SQLRequestHandler.h"
 
-smart::SmartValueMap<const string,SQLPlugin> SQLRequestHandler::_handlerList;
+
+//SQLRequestHandler SQLRequestHandler::not_locked=true;
+SQLRequestHandler *SQLRequestHandler::_rh=NULL;
+
+SQLRequestHandler::sql_handler_map *SQLRequestHandler::_theList=NULL;
+
+SQLRequestHandler::sql_wrap_count_map *SQLRequestHandler::_theWrapCount=NULL;
 
 /**
  * @brief Run version on the Base handler
@@ -37,11 +43,11 @@ SQLRequestHandler::version(BESDataHandlerInterface &dhi ) {
 	BESVersionInfo *info = dynamic_cast<BESVersionInfo *>(
 			dhi.response_handler->get_response_object() ) ;
 	info->add_module( SQL_MODULE_PACKAGE_NAME, SQL_MODULE_PACKAGE_VERSION ) ;
-	SQLRequestHandler::SQLHandler_citer iterator=_handlerList.begin();
+	SQLRequestHandler::SQLHandler_citer iterator=theList().begin();
 	SQLRequestHandler *plugin=NULL;
 	SQLDataHandlerInterface _dhi=SQLDataHandlerInterface(dhi);
 
-	while(iterator!=_handlerList.end()){
+	while(iterator!=theList().end()){
 		sql_request_handler rh=NULL;
 
 		if (rh=iterator->second->find_handler(VERS_RESPONSE)){
@@ -65,19 +71,19 @@ SQLRequestHandler::dump( ostream &strm ) const
 	BESRequestHandler::dump( strm ) ;
 	BESIndent::UnIndent() ;
 	BESIndent::Indent() ;
-	if( _handlerList.size())
+	if( theList().size())
 	{
 		strm << BESIndent::LMarg << "registered SQLPlugins:" << endl ;
 		BESIndent::Indent() ;
-		SQLHandler_citer i = _handlerList.begin() ;
-		SQLHandler_citer ie = _handlerList.end() ;
-	for( ; i != ie; i++ )
-	{
-		strm << BESIndent::LMarg << (*i).first << endl ;
-		BESIndent::Indent();
-		(*i).second->dump(strm);
-		BESIndent::UnIndent() ;
-	}
+		SQLHandler_citer i = theList().begin() ;
+		SQLHandler_citer ie = theList().end() ;
+		for( ; i != ie; i++ )
+		{
+			strm << BESIndent::LMarg << (*i).first << endl ;
+			BESIndent::Indent();
+			(*i).second->dump(strm);
+			BESIndent::UnIndent() ;
+		}
 	BESIndent::UnIndent() ;
 	}
 	else
@@ -113,8 +119,9 @@ SQLRequestHandler::help(BESDataHandlerInterface &dhi ) {
 
 SQLPlugin*
 SQLRequestHandler::find_sql_handler(const string& name){
-	SQLHandler_iterator i= _handlerList.find(name);
-	if (i!=_handlerList.end())
+TESTDEBUG( SQL_NAME,"SQLRequestHandler: searching into theList "<<endl);
+	SQLHandler_iterator i= theList().find(name);
+	if (i!=theList().end())
 		return (*i).second.get();
 	else
 		return NULL;
@@ -123,24 +130,47 @@ SQLRequestHandler::find_sql_handler(const string& name){
 bool
 SQLRequestHandler::remove_sql_handler( const string &name )
 {
-	SQLHandler_iterator i=	_handlerList.find( name ) ;
-    if( i != _handlerList.end() )
+TESTDEBUG( SQL_NAME,"SQLRequestHandler: removing "<<name<<" sql_handler"<<endl);
+	SQLHandler_iterator i=	theList().find( name ) ;
+    if( i != theList().end() )
     {
     	// remove all the handlers and setting wrappers_count
     	(*i).second->remove_handlers();
     	// erase the sql_handles
-    	_handlerList.erase(i) ;
+    	theList().erase(i) ;
 		return true ;
     }
     else
     	return false ;
 }
 
+void
+SQLRequestHandler::remove_sql_handlers()
+{
+TESTDEBUG( SQL_NAME,"SQLRequestHandler: Removing all ("<<
+		theList().size()<<") sql_handlers"<< endl );
+
+	SQLHandler_iterator i=	theList().begin();
+    while( i != theList().end() )
+    {
+TESTDEBUG(SQL_NAME,
+	"SQLRequestHandler: removing "<<(*i).second->get_name()<<" sql_handler"<<endl);
+    	// remove all the handlers and setting wrappers_count
+    	(*i).second->remove_handlers();
+    	// erase the sql_handles
+    	theList().erase(i) ;
+    	i++;
+    }
+}
+
 bool
 SQLRequestHandler::add_sql_handler(const string& name,	SQLPlugin* handler){
 	if (find_sql_handler(name)==NULL)
 	{
-		_handlerList.insert(name,handler);
+TESTDEBUG(SQL_NAME,"SQLRequestHandler: _theList"<<endl);
+		theList().insert(name,handler);
+TESTDEBUG(SQL_NAME,"SQLRequestHandler: Total sql_handlers registered: "
+<<theList().size()<<endl);
 		return true;
 	}
 	else
@@ -156,9 +186,8 @@ TESTDEBUG( SQL_NAME,"SQLRequestHandler: wrapper adding"<< endl );
 		// update the wrap count
 		update_wrap_count(command,true);
 		// add the command
-		SQLRequestHandler::add_handler(command,
-										SQLRequestHandler::wrapper);
-TESTDEBUG( SQL_NAME,"SQLRequestHandler: wrapper "<<command<<" added"<< endl );
+		add_handler(command,SQLRequestHandler::wrapper);
+TESTDEBUG(SQL_NAME,"SQLRequestHandler: wrapper "<<command<<" added"<<endl);
 		return true;
 	}
 	else
@@ -167,37 +196,39 @@ TESTDEBUG( SQL_NAME,"SQLRequestHandler: wrapper "<<command<<" added"<< endl );
 
 bool
 SQLRequestHandler::remove_sql_wrapper(const string& command){
-	if (find_sql_handler(command)==NULL)
+	if (find_sql_handler(command)!=NULL)
 	{
-TESTDEBUG( SQL_NAME,"SQLRequestHandler: wrapper "<<command<<" removing"<< endl );
+TESTDEBUG(SQL_NAME,"SQLRequestHandler: wrapper "<<command<<" removing"<<endl);
 		// update the wrap count
 		if (update_wrap_count(command,false)){
 			BESRequestHandler::remove_handler(command);
-TESTDEBUG( SQL_NAME,"SQLRequestHandler: wrapper "<<command<<" removed"<< endl );
+TESTDEBUG(SQL_NAME,"SQLRequestHandler: wrapper "<<command<<" removed"<<endl);
 		}
 		return true;
 	}
-	else
+	else{
+TESTDEBUG(SQL_NAME,"SQLRequestHandler: wrapper "<<command<<" already removed"<<endl);
 		return false;
+	}
 }
 
 bool
 SQLRequestHandler::update_wrap_count(const string & name, bool add)
 	throw (BESInternalFatalError)
 {
-	std::map<string,size_t>::iterator wi=_wrap_count.find(name);
-	if (wi!=_wrap_count.end()){
+	std::map<string,size_t>::iterator wi=theWrapCount().find(name);
+	if (wi!=theWrapCount().end()){
 		if (add) {
 			++((*wi).second);
 TESTDEBUG( SQL_NAME,
-"SQLRequestHandler: wrapper "<<name<<" use_count: "<<(*wi).second<< endl );
+"SQLRequestHandler: wrapper "<<name<<" use_count: "<<(*wi).second<<endl);
 		}
 		else { //add==false -> remove
 			if ((--((*wi).second))==0){
 TESTDEBUG( SQL_NAME,
 "SQLRequestHandler: wrapper "<<name<<
-" use_count: 1 and is going to be erased"<< endl );
-				_wrap_count.erase(wi);
+" use_count: 1 and is going to be erased"<<endl);
+				theWrapCount().erase(wi);
 				return true;
 			}
 		}
@@ -206,7 +237,7 @@ TESTDEBUG( SQL_NAME,
 		if (add) {
 TESTDEBUG( SQL_NAME,
 "SQLRequestHandler: wrapper "<<name<<" use_count: 1"<< endl );
-			_wrap_count.insert(std::make_pair(name,1));
+			theWrapCount().insert(std::make_pair(name,1));
 		}
 		else
 			throw BESInternalFatalError(

@@ -124,6 +124,7 @@
 # Here you can specify connection 
 # parameters or sql query string. 
 # See API documentation.
+
 # ---------- EXAMPLE ---------------
 # Declaring variables:
 # the following declared variables
@@ -179,6 +180,7 @@ id_actor<100
 # No need since this is a standard
 # comparator substitution
 !==<>
+
 #------------EXAMPLE---------------
 [section]
 api=mysql
@@ -233,6 +235,7 @@ table_2.column_2 <> '0'
 order=order by 'table_1'
 # NOTE SQL syntax (dialect) can be
 # relative to the driver in use!
+
 #------------EXAMPLE---------------
 [section]
 api=odbc

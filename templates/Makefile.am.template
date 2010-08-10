@@ -13,7 +13,8 @@ lib_besdir=$(libdir)/bes
 lib_bes_LTLIBRARIES = libOPENDAP_TYPE_module.la
 
 OPENDAP_CLASS_SRCS = \
-		OPENDAP_CLASSModule.cpp OPENDAP_CLASSPlugin.cpp \
+		OPENDAP_CLASSPluginLoader.cpp \
+		OPENDAP_CLASSPlugin.cpp \
 		#COMPLETE#
 		OPENDAP_CLASSConnector.cpp \
 		OPENDAP_CLASSErrorFactoryComponent.cpp \
@@ -22,9 +23,11 @@ OPENDAP_CLASS_SRCS = \
 		OPENDAP_CLASSSimpleConnector.cpp \
 		#SIMPLE#
 		OPENDAP_CLASSTypeFactoryComponent.cpp
+		
 OPENDAP_CLASS_HDRS = \
-		OPENDAP_CLASSModule.h OPENDAP_CLASSResponseNames.h \
+		OPENDAP_CLASSPluginLoader.h \
 		OPENDAP_CLASSPlugin.h \
+		OPENDAP_CLASSResponseNames.h \
 		OPENDAP_CLASSTypes.h \
 		#COMPLETE#
 		OPENDAP_CLASSConnector.h \
@@ -34,20 +37,14 @@ OPENDAP_CLASS_HDRS = \
 		OPENDAP_CLASSSimpleConnector.h \
 		#SIMPLE#
 		OPENDAP_CLASSTypeFactoryComponent.h
-		
-SQL_SRCS = 
-
-SQL_HDRS = \
-		OPENDAP_CLASSPlugin.h
-
 
 sample_datadir = $(datadir)/hyrax/data/OPENDAP_TYPE/
 sample_data_DATA = data/test_full.sql
 
-libOPENDAP_TYPE_module_la_SOURCES = $(SQL_SRCS) $(OPENDAP_CLASS_SRCS) $(SQL_HDRS) $(OPENDAP_CLASS_HDRS)
+libOPENDAP_TYPE_module_la_SOURCES = $(OPENDAP_CLASS_SRCS) $(OPENDAP_CLASS_HDRS)
 libOPENDAP_TYPE_module_la_CPPFLAGS = $(BES_CPPFLAGS) -I$(includedir)/sql
 #-D __TESTS__=1  -D __CLONE__=0
-libOPENDAP_TYPE_module_la_LDFLAGS = -avoid-version -module -L$(lib_besdir) -lsql_module 
+libOPENDAP_TYPE_module_la_LDFLAGS = -avoid-version -module -L$(lib_besdir) -lbes_sql
 libOPENDAP_TYPE_module_la_LIBADD = $(BES_LIBS)
 
 EXTRA_PROGRAMS = 

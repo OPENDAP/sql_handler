@@ -134,9 +134,9 @@ public:
 						 MSG_TYPE,			// SQLErrorFactory(ARG) && connector
 						 void>				// SQLErrorFactory(OUT)
 								DATABuilder;
-		/**
-		 * @brief Default constructor
-		 */
+	/**
+	 * @brief Default constructor
+	 */
 	ODBCPlugin(const string &name):	SQLPlugin(name){
 
 		SQLPlugin::add_handler(DAS_RESPONSE, ODBCPlugin::build_das ) ;

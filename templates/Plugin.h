@@ -29,9 +29,6 @@
 
 #include "config.h"
 
-#include "SQLPlugin.h"
-class SQLPlugin;
-
 /**
  *  TypeFactory
 #COMPLETE#
@@ -39,6 +36,10 @@ class SQLPlugin;
 #COMPLETE#
  */
 #include "action/SQLActionFactory.h"
+
+#include "SQLPlugin.h"
+
+#include "container/SQLContainer.h"
 
 #COMPLETE#
 #include "connector/SQLConnector.h"
@@ -56,7 +57,7 @@ class SQLPlugin;
 #include "OPENDAP_CLASSResponseNames.h"
 
 #include "SQLResponseNames.h"
-#include "container/SQLContainer.h"
+
 
 // POST CONSTRAINTS
 #include <BESDataNames.h>

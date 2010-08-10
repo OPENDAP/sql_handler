@@ -109,7 +109,7 @@ cat ${TEMPLATE_DIR}/configure.ac | \
 fout="${serverType}.conf.in"
 echo -e "\t\tCREATING ->./$fout"
 cat ${TEMPLATE_DIR}/.conf.in.template | \
-	awk -v CLASS="${classPrefix}" -v TYPE="${serverType}" \
+	awk -v CLASS="${classPrefix}" -v COMPLETE="${complete}" -v TYPE="${serverType}" \
 	-f ${AWK_FILTER} > ./$fout
 
 fout="module.spec";

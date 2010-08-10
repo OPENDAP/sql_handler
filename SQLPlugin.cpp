@@ -26,6 +26,8 @@
 
 #include "SQLPlugin.h"
 
+SQLPluginList *SQLPlugin::rh=SQLPlugin::findTheList();
+
 SQLPlugin::~SQLPlugin( void )
 {
 #if 0
@@ -70,11 +72,6 @@ SQLPlugin::add_handler( const string &command,
 {
     if( this->find_handler( command ) == NULL )
     {
-#if 0
-    	// rh is Member of this class now
-    	if (!rh)
-    		rh=SQLPlugin::find_RequestHandler();
-#endif
     	/**
     	 *  search into the wrapper for a caller
     	 *  if no wrapper method is called add
@@ -121,7 +118,7 @@ SQLPlugin::remove_handler( const string &command)
         	//update the SQLRequestHandler wrapper usage counter
 			if (!rh->remove_sql_wrapper(command)){
 				// report the error but can be a not fatal error
-				BESDEBUG(SQL_NAME,"This command was not correctly wrapped!");
+				BESDEBUG(SQL_NAME,"This command was not correctly wrapped!"<<endl);
 			}
 			// erase the function
 			this->_handler_list.erase( i ) ;
@@ -156,7 +153,7 @@ SQLPlugin::get_handler_names()
 void
 SQLPlugin::dump( ostream &strm ) const
 {
-    strm << BESIndent::LMarg << "BESRequestHandler::dump - ("
+    strm << BESIndent::LMarg << "SQLPlugin::dump - ("
 			     << (void *)this << ")" << endl ;
     BESIndent::Indent() ;
     strm << BESIndent::LMarg << "name: " << _name << endl ;
@@ -192,16 +189,47 @@ SQLPlugin::find_handler( const string &handler_name )
     	return NULL;
 }
 
-SQLRequestHandler *
-SQLPlugin::find_RequestHandler()
+SQLPluginList *
+SQLPlugin::findTheList()
 {
+#if 0
+	// NOT SAFE instance can be deleted by SQLRequestHandler dtor
+	// try cached position
+	if (rh){
+TESTDEBUG(SQL_NAME,"SQLPlugin: returning cached version: "<<rh<<endl);
+		return rh;
+	}
+#endif
 	// search for the SQLRequestHandler
 	BESRequestHandler *bes_rh=
 			BESRequestHandlerList::TheList()->find_handler(SQL_NAME);
 
     if( bes_rh )
     {
-    	return dynamic_cast<SQLRequestHandler*>(bes_rh);
+    	/**
+    	 * @todo: check: THIS IS DANGEROUS!!!
+    	 * The module is unable to 'dynamic_cast<SQLRequestHandler*>'
+    	 * from a BESRequestHandler, this is probably due this:
+    	 * <br>http://gcc.gnu.org/faq.html#dso
+    	 * <br>There are 2 different way to solve:
+    	 * - apply that modification (someone says that RTLD_GLOBAL is dangerous)
+    	 * - use a dangerous static_cast<> to make downcast.
+    	 * @note the first option need to add the flag to:
+    	 * BESPlugin.h:123
+    	 */
+TESTDEBUG(SQL_NAME,"SQLPlugin: SQLRequestHandler found has ptr: "<<bes_rh<<endl);
+//dynamic_cast<SQLPluginList*>(bes_rh)->dump(std::cerr);
+TESTDEBUG(SQL_NAME,"SQLPlugin: SQLRequestHandler found has ptr: "<<bes_rh<<endl);
+    	SQLLinker *l=static_cast<SQLLinker*>(bes_rh);
+    	if (l){
+TESTDEBUG(SQL_NAME,"SQLPlugin: SQLRequestHandler THE LINK WORKS!!"<<endl);
+    		return l->theLink();
+    	}
+    	else {
+TESTDEBUG(SQL_NAME,"SQLPlugin: SQLRequestHandler THE LINK <<DO NOT>> WORKS!!"<<endl);
+    		return NULL;
+    	}
+    	//return dynamic_cast<SQLPluginList*>(bes_rh);
     }
     else
     	return NULL;

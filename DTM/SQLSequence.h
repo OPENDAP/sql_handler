@@ -28,7 +28,6 @@
 #define SQLSEQUENCE_H_
 
 #include <BESDebug.h>
-#include "SQLRequestHandler.h"
 
 #include <Sequence.h>
 //auto_ptr

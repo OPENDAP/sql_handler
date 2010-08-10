@@ -30,7 +30,10 @@ BES.module.OPENDAP_TYPE=@bes_modules_dir@/libOPENDAP_TYPE_module.so
 #-----------------------------------------------------------------------#
 # SQL handler specific parameters
 #-----------------------------------------------------------------------#
-
+#SIMPLE#
+# No specific parameters for simple type SQLPlugin
+#SIMPLE#
+#COMPLETE#
 # ----------------------------------------------------------------------#
 # 		CheckPoint:
 # ----------------------------------------------------------------------#
@@ -63,3 +66,4 @@ SQL.CheckPoint=1,2,3,4,5
 # SQL.CheckPoint+=5
 
 # NOTE: this list affect ALL the registered SQL plugin modules.
+#COMPLETE#

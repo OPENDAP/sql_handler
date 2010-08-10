@@ -8,11 +8,13 @@ AUTOMAKE_OPTIONS = foreign check-news
 
 pkgdata_templatesdir = $(pkgdatadir)/templates
 pkgdata_templates_DATA = \
-		Module.cpp Plugin.cpp \
+		PluginLoader.cpp \
+		Plugin.cpp \
 		Connector.cpp \
 		TypeFactoryComponent.cpp \
 		ErrorFactoryComponent.cpp \
-		Module.h ResponseNames.h \
+		ResponseNames.h \
+		PluginLoader.h \
 		Plugin.h \
 		Types.h \
 		Connector.h \
@@ -28,11 +30,14 @@ pkgdata_templatesconf_DATA = conf/acinclude.m4 conf/bes.m4 \
 sample_datadir = $(pkgdatadir)/templates/data
 sample_data_DATA = data/test_full.sql
 
-EXTRA_DIST = data Module.cpp Plugin.cpp \
+EXTRA_DIST = data \
+		PluginLoader.cpp \
+		Plugin.cpp \
 		Connector.cpp \
 		TypeFactoryComponent.cpp \
 		ErrorFactoryComponent.cpp \
-		Module.h ResponseNames.h \
+		ResponseNames.h \
+		PluginLoader.h \
 		Plugin.h \
 		Types.h \
 		Connector.h \

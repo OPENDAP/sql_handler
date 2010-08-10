@@ -44,7 +44,7 @@ public:
 	 * It is build at the SQLModule load and deleted when
 	 * it is unloaded.
 	 */
-	static SQLRequestHandler rh;
+	static SQLRequestHandler *rh;
 
     /**
      *  load and update instances of SQLContainer(s)
@@ -74,7 +74,7 @@ public:
 	virtual	~SQLModule() {}
 	/**
 	 * @brief initialize BES components.
-	 * Register SQLHandler components from the BES environment
+	 * Register SQLHandler components into the BES environment
 	 */
     virtual void		initialize( const string &modname ) ;
     /**

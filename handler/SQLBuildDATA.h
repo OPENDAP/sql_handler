@@ -43,6 +43,7 @@
 #include "DTM/SQLTypeFactoryComponent.h"
 #include "DTM/SQLObjectTypeFactory.h"
 #include <BaseType.h>
+#include <BESDataDDSResponse.h>
 
 #include "SQLDefinitions.h"
 

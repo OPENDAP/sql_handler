@@ -39,6 +39,7 @@
 #include "DTM/SQLTypeManager.h"
 #include "DTM/SQLObjectTypeFactory.h"
 #include <BaseType.h>
+#include <BESDASResponse.h>
 
 #include "SQLDefinitions.h"
 

@@ -10,9 +10,6 @@ AUTOMAKE_OPTIONS = foreign check-news subdir-objects
 
 ACLOCAL_AMFLAGS = -I conf
 
-lib_besdir=$(libdir)/bes
-lib_bes_LTLIBRARIES = libsql_module.la
-
 SQL_SRCS = \
 		utils/StringMatch.cpp \
 		container/SQLContainerFactory.cpp \
@@ -22,9 +19,9 @@ SQL_SRCS = \
 		SQLPlugin.cpp \
 		DEM/SQLCheckPoint.cpp
 
-SQL_HDRS = \
+SQL_HDRS = SQLLinker.h \
 		sql_config.h SQLResponseNames.h SQLDefinitions.h \
-		SQLPlugin.h SQLRequestHandler.h \
+		SQLPlugin.h SQLPluginList.h \
 		container/SQLAttribute.h container/SQLConstraint.h \
 		container/SQLContainer.h container/SQLContainerDefinitions.h \
 		container/SQLContainerFactory.h \
@@ -66,12 +63,14 @@ SQL_HDRS = \
 		action/SQLStaticAction.h action/SQLStaticActionList.h
 
 ODBC_SRCS = \
+		unixODBC/ODBCPluginLoader.cpp \
 		unixODBC/ODBCPlugin.cpp \
 		unixODBC/ODBCConnector.cpp \
 		unixODBC/ODBCTypeFactoryComponent.cpp \
 		unixODBC/ODBCErrorFactoryComponent.cpp
 
 ODBC_HDRS = \
+		unixODBC/ODBCPluginLoader.h \
 		unixODBC/ODBCPlugin.h \
 		unixODBC/ODBCTypes.h \
 		unixODBC/ODBCConnector.h \
@@ -81,33 +80,50 @@ ODBC_HDRS = \
 BES_SRCS = \
 		SQLModule.cpp SQLRequestHandler.cpp
 
-
 BES_HDRS = \
-		SQLModule.h
+		SQLModule.h SQLRequestHandler.h SQLLinker.h
 
-EXTRA_DIST = data doxy.conf COPYRIGHT COPYING sql_handler.spec sql.conf.in
+EXTRA_DIST = data doxy.conf COPYRIGHT COPYING sql_handler.spec \
+		sql.conf.in odbc.conf.in
 
 EXTRA_PROGRAMS = 
 
 CLEANFILES = *~ sql.conf sql_config.h _configs.sed
 
-libsql_module_la_SOURCES = $(SQL_SRCS) $(BES_SRCS) $(ODBC_SRCS) $(SQL_HDRS) $(BES_HDRS) $(ODBC_HDRS)
-libsql_module_la_CPPFLAGS =  $(BES_CPPFLAGS) $(ODBC_CPPFLAGS)
-#-D __TESTS__=1 
-libsql_module_la_LDFLAGS = -avoid-version -shared -module -lodbc
+lib_LTLIBRARIES = libbes_sql.la
+lib_besdir=$(libdir)/bes
+lib_bes_LTLIBRARIES = libsql_module.la libodbc_module.la
+#############################################################################
+libbes_sql_la_SOURCES = $(SQL_SRCS) $(SQL_HDRS)
+libbes_sql_la_CPPFLAGS =  $(BES_CPPFLAGS) -D __TESTS__=1 
+# -D __TESTS__=1 
+libbes_sql_la_LDFLAGS =  -Wl,-Bsymbolic -shared
 # -D __TESTS__=1  -D __CLONE__=0
-libsql_module_la_LIBADD = $(BES_DAP_LIBS) $(ODBC_LIBS)
-
+libbes_sql_la_LIBADD = $(BES_DAP_LIBS)
+######################################################
+libsql_module_la_SOURCES = $(BES_SRCS) $(SQL_SRCS) $(BES_HDRS) $(SQL_HDRS)
+libsql_module_la_CPPFLAGS =  $(BES_CPPFLAGS) -D __TESTS__=1
+#   -D __TESTS__=1
+libsql_module_la_LDFLAGS =  -Wl,-Bsymbolic -shared -module
+# -D __TESTS__=1  -D __CLONE__=0   -Wl,-E
+libsql_module_la_LIBADD = $(BES_DAP_LIBS)
+######################################################
+libodbc_module_la_SOURCES = $(ODBC_SRCS) $(SQL_SRCS) $(ODBC_HDRS) $(SQL_HDRS)
+libodbc_module_la_CPPFLAGS =  $(BES_CPPFLAGS) $(ODBC_CPPFLAGS) -D __TESTS__=1
+libodbc_module_la_LDFLAGS = -Wl,-Bsymbolic -shared -module -lodbc
+# -D __TESTS__=1  -D __CLONE__=0   -Wl,-E
+libodbc_module_la_LIBADD = $(BES_DAP_LIBS) $(ODBC_LIBS)
+######################################################
 ## EXPORTING HEADERS
 
 #libsql_includedir=$(includedir)/sql/
 sqldir=$(includedir)/sql/
 nobase_sql_HEADERS=$(SQL_HDRS)
 
-##########################################################################
+###########################################################################
 sample_datadir = $(datadir)/hyrax/data/sql
 sample_data_DATA = data/test_full.sql data/test_full1.sql data/test_full2.sql
-
+###########################################################################
 install-data-local: sql.conf
 	@currdate=`date +"%y%m%d%H%M"`; \
 	test -d $(DESTDIR)$(sysconfdir)/bes || $(MKDIR_P) $(DESTDIR)$(sysconfdir)/bes; \
@@ -122,6 +138,21 @@ uninstall-local:
 
 sql.conf: sql.conf.in config.status
 		sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > sql.conf
+###########################################################################
+install-data-local: odbc.conf
+	@currdate=`date +"%y%m%d%H%M"`; \
+	test -d $(DESTDIR)$(sysconfdir)/bes || $(MKDIR_P) $(DESTDIR)$(sysconfdir)/bes; \
+	test -d $(DESTDIR)$(sysconfdir)/bes/modules || $(MKDIR_P) $(DESTDIR)$(sysconfdir)/bes/modules; \
+	test -f $(DESTDIR)$(sysconfdir)/bes/modules/odbc.conf && \
+	mv -f $(DESTDIR)$(sysconfdir)/bes/modules/odbc.conf \
+		$(DESTDIR)$(sysconfdir)/bes/modules/odbc.conf.$$currdate; \
+	$(INSTALL_DATA) odbc.conf $(DESTDIR)$(sysconfdir)/bes/modules/odbc.conf
+
+uninstall-local:
+		rm -f $(DESTDIR)$(sysconfdir)/bes/modules/odbc.conf
+		
+odbc.conf: odbc.conf.in config.status
+		sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > odbc.conf
 
 #########################################################################
 

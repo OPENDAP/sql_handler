@@ -44,6 +44,7 @@
 #include "DTM/SQLSimpleType.h"
 #include "DTM/SQLDummySimpleType.h"
 #include <BaseType.h>
+#include <BESDDSResponse.h>
 
 #include "SQLDefinitions.h"
 

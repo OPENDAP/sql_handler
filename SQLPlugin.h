@@ -27,8 +27,16 @@
 #ifndef SQLPLUGINREQUESTHANDLER_H
 #define SQLPLUGINREQUESTHANDLER_H
 
-#include "SQLRequestHandler.h"
-class SQLRequestHandler;
+#include <BESDapNames.h>
+#include <BESResponseNames.h>
+#include <BESRequestHandler.h>
+#include <BESServiceRegistry.h>
+#include <BESRequestHandlerList.h>
+#include <BESVersionInfo.h>
+
+#include "SQLLinker.h"
+#include "SQLPluginList.h"
+class SQLPluginList;
 
 #include "SQLResponseNames.h"
 //#include "container/SQLContainer.h"
@@ -58,26 +66,27 @@ private:
     string _name ;
 
     // Pointer to the SQLRequestHandler
-    SQLRequestHandler *rh; // do not delete
-
-    /**
-     * @brief Find the SQLRequestHandler instance that should be
-     * loaded into the BESRequestHandlerList.
-     * <br>It is used by add_handler and remove_handler to find
-     * the SQLRequestHandler instance to check for the wrapper
-     * function existence or update relative usage counter.
-     * @see SQLRequestHandler
-     *
-     * @return the located instance of the SQLRequestHandler or
-     * NULL if no instance is found.
-     */
-    static SQLRequestHandler * find_RequestHandler();
+    //static SQLRequestHandler *rh; // do not delete
+    static SQLPluginList *rh; // do not delete
 
 public:
     typedef map< string, sql_request_handler >::const_iterator Handler_citer ;
     typedef map< string, sql_request_handler >::iterator Handler_iter ;
 
     virtual const string &	get_name( ) const { return _name ; }
+
+    /**
+	 * @brief Find the SQLRequestHandler instance that should be
+	 * loaded into the BESRequestHandlerList.
+	 * <br>It is used by add_handler and remove_handler to find
+	 * the SQLRequestHandler instance to check for the wrapper
+	 * function existence or update relative usage counter.
+	 * @see SQLRequestHandler
+	 *
+	 * @return the located instance of the SQLRequestHandler or
+	 * NULL if no instance is found.
+	 */
+	static SQLPluginList * findTheList();
 
     /**
      * @brief find the method that can handle the specified response object type
@@ -117,13 +126,15 @@ public:
 	 */
 	SQLPlugin( const string & name):
 		_handler_list(),
-		_name( name ),
-		rh(SQLPlugin::find_RequestHandler())
+		_name( name )//,
+//		rh(SQLPlugin::find_RequestHandler())
     {
+#if 0
 		if (!rh)
 			throw BESInternalFatalError(
 				"Unable to locate SQLRequestHandler",
 				__FILE__,__LINE__);
+#endif
 	};
 
 	/**
@@ -131,13 +142,15 @@ public:
 	 */
 	SQLPlugin( const SQLPlugin & p):
 		_handler_list(p._handler_list),
-		_name( p._name ),
-		rh(p.rh)
+		_name( p._name )//,
+//		rh(p.rh)
     {
+#if 0
 		if (!rh)
 			throw BESInternalFatalError(
 				"Unable to locate SQLRequestHandler",
 				__FILE__,__LINE__);
+#endif
 	};
 
 	/**

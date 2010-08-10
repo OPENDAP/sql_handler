@@ -9,37 +9,23 @@
 #-----------------------------------------------------------------------#
 # Require dap configuration to be loaded first                          #
 #-----------------------------------------------------------------------#
-# NOTE: You may comment out this if you are running BES <3.8.4
+# NOTE: this is commented out due to incompatibility with old BES
+#		version. You may un-comment this if you are running BES >3.8.4
 
-BES.Include=dap.conf
+BES.Include=sql.conf
 
 #-----------------------------------------------------------------------#
 # modules to load, includes data modules and command modules            #
 #-----------------------------------------------------------------------#
 
-BES.modules+=sql
-BES.module.sql=@bes_modules_dir@/libsql_module.so
+BES.modules+=odbc
+BES.module.odbc=@bes_modules_dir@/libodbc_module.so
 
 #-----------------------------------------------------------------------#
 # Setting the data information
 #-----------------------------------------------------------------------#
 
-# The TypeMatch parameter is a list of handler/module names and a regular
-# expression separated by a colon. If the regular expression matches an item,
-# then the BES uses the associated handler/module. Each <handler>:<regular
-# expression> pair is followed by a semicolon. This is used when creating
-# containers in the BES (the 'set container' command). The example regular
-# expression says to use the 'h4' handler for any file with an extension of
-# 'hdf', 'HDF' or 'eos' which may also end in '.gz' or '.bz2'. In the latter
-# case the file will be treated as a compressed file.
-
-BES.Catalog.catalog.TypeMatch+=sql:.*\.(SQL|sql)$;
-
-# To test your TypeMatch regular expression you can use besregtest as
-# follows:
-
-# % besregtest type # "nc:.*\.nc$;nc:.*\.nc\.gz$;" fnoc1.nc
-# expression ".*\.(nc|NC)(\.gz|\.bz2|\.Z)?$" matches exactly, type = nc
+# The TypeMatch should NEVER be set for SQLPlugin handler
 
 #-----------------------------------------------------------------------#
 # SQL handler specific parameters
@@ -69,7 +55,7 @@ BES.Catalog.catalog.TypeMatch+=sql:.*\.(SQL|sql)$;
 # of actions which will be activated or not depending on this option:
 # SQL.CheckPoint=1,2,3,4
 
-SQL.CheckPoint=1,2,3,4,5
+# SQL.CheckPoint=1,2,3,4,5
 
 # You could also concatenate this setup to force deeper check detail
 # in your's SQLPlugin configuration file.
