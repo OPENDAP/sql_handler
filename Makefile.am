@@ -88,7 +88,9 @@ EXTRA_DIST = data doxy.conf COPYRIGHT COPYING sql_handler.spec \
 
 EXTRA_PROGRAMS = 
 
-CLEANFILES = *~ sql.conf _configs.sed
+CLEANFILES = *~ sql.conf odbc.conf _configs.sed
+
+DISTCLEANFILES = sql_config.h
 
 lib_LTLIBRARIES = libbes_sql.la
 lib_besdir=$(libdir)/bes
