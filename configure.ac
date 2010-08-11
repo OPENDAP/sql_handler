@@ -3,7 +3,7 @@
 # Configure script for OPeNDAP Sql data handler
 
 AC_PREREQ(2.59)
-AC_INIT([sql_module], [0.0.2], [ccancellieri@hotmail.com, dods-tech@unidata.ucar.edu])
+AC_INIT([sql_module], [0.0.3], [ccancellieri@hotmail.com, dods-tech@unidata.ucar.edu])
 AC_CONFIG_AUX_DIR([conf])
 
 AM_INIT_AUTOMAKE
@@ -12,6 +12,17 @@ AC_CONFIG_SRCDIR([SQLModule.h])
 #AC_CONFIG_HEADER([config.h])
 AM_CONFIG_HEADER(config.h)
 AX_PREFIX_CONFIG_H(sql_config.h)
+
+dnl library visioning: Update these when the interface changes. Generally,
+dnl assume that the interface tracks the major and minor release numbers.
+LIB_BES_SQL_CURRENT=1
+LIB_BES_SQL_AGE=0
+LIB_BES_SQL_REVISION=0
+AC_SUBST(LIB_BES_SQL_CURRENT)
+AC_SUBST(LIB_BES_SQL_AGE)
+AC_SUBST(LIB_BES_SQL_REVISION)
+LIBBES_SQL_VERSION="$LIB_BES_SQL_CURRENT:$LIB_BES_SQL_REVISION:$LIB_BES_SQL_AGE"
+AC_SUBST(LIBBES_SQL_VERSION)
 
 # Checks for programs.
 AC_PROG_CXX
