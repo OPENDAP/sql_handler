@@ -38,8 +38,6 @@ using std::endl ;
 #include "SQLResponseNames.h"
 #include "DEM/SQLCheckPoint.h"
 
-#include "unixODBC/ODBCPlugin.h"
-
 #include <BESDapService.h>
 #include <BESContainerStorageList.h>
 #include <BESContainerStorageCatalog.h>
@@ -75,6 +73,7 @@ SQLModule::initialize( const string &modname )
  * Anyway the StorageContainer is used as temporary storage
  * for SQLContainer(s).
  *
+ *NOW
  * The naming policy is actually defined by
  * SQLContainerFactory::getName(...)
  */
@@ -159,14 +158,12 @@ SQLModule::initialize( const string &modname )
 	{
 		BESDEBUG( SQL_NAME, "    storage already exists, skipping" << endl ) ;
 	}
-#if 1
 	/**
 	 * adding BASE sql handler which will wrap all the
 	 * sql requests
 	 */
 	if (!rh)
 		rh=SQLRequestHandler::theSQLRequestHandler(SQL_NAME);
-#endif
 TESTDEBUG(SQL_NAME,"SQLModule: SQLRequestHandler found has ptr: "<<rh<<endl);
 	BESDEBUG( SQL_NAME, "    adding "<<SQL_NAME<< " request handler" << endl ) ;
     BESRequestHandlerList::TheList()->add_handler(SQL_NAME, rh);
@@ -188,13 +185,11 @@ SQLModule::terminate( const string &modname )
     BESDEBUG( modname, "Cleaning SQL module " << modname << endl ) ;
 
     BESDEBUG( modname, "    removing " << SQL_NAME << " request handler" << endl ) ;
-#if 0
-    BESRequestHandlerList::TheList()->remove_handler( SQL_NAME );
-#else
+
     if (rh && BESRequestHandlerList::TheList()->remove_handler( SQL_NAME ))
 		delete rh;
 	rh=0;
-#endif
+
     BESDEBUG( SQL_NAME, "    removing sql storage container"
     		<< _SQLH_STORAGE << endl ) ;
     if (cs && !BESContainerStorageList::TheList()->deref_persistence( _SQLH_STORAGE ))

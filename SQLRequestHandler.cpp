@@ -286,7 +286,7 @@ TESTDEBUG(SQL_NAME,"SQLRequestHandler: wrapper "<<command<<" added"<<endl);
 
 bool
 SQLRequestHandler::remove_sql_wrapper(const string& command){
-	if (find_sql_handler(command)!=NULL)
+	if (find_handler(command)!=NULL)
 	{
 TESTDEBUG(SQL_NAME,"SQLRequestHandler: wrapper "<<command<<" removing"<<endl);
 		// update the wrap count
