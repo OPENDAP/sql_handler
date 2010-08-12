@@ -254,7 +254,7 @@ user=postgres
 pass=postgres
 
 [select]
-int i,real r,varchar v
+int i,real as r,varchar v
 [from]
 sqlh_table
 

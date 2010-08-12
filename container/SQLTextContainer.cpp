@@ -314,11 +314,38 @@ TESTDEBUG( SQL_NAME,"SQLTextContainer::constrToWhere mid: "<<buf<<endl );
 
 				// if found
 				if (ai!=q.getSelect().end()){
-					// substitute the attribute prefix
-					buf+=(*ai).getPrefix();
+					/**
+					 * substitute the attribute FullName.
+ * Why not use alias? It is not possible.
+ * How an SQL query gets evaluated. Note that this is a conceptual description;
+ * a good RDBMS will change the order of operation to optimize; as long
+ * as the results remain the same that is not a problem.
+ * Step 1: Evaluate FROM clause, build intermediate table from all rows in
+ * the tables used, joined together on the conditions given. If old style
+ * join syntax is used (with the ON conditions in the WHERE clause), this
+ * step will yield the full carthesian product of all tables used.
+ * Step 2: Evaluate WHERE clause, remove rows that don't match the criteria
+ * from intermediate table.
+ * Step 3: Evaluate GROUP BY clause, group rows together according to the
+ * specified arguments.
+ * Step 4: Evaluate HAVING clause, remove groups that don't match the
+ * criteria from intermediate table.
+ * Step 5: Evaluate SELECT clause, build result set to be returned from the
+ * data in the intermediate table.
+ * Step 6: Evaluate ORDER BY, perform sorting.
+ * Officially, columns that are not included in the SELECT clause are not
+ * available for sorting. Many products (like SQL Server) do allow this, but
+ * it is a non-standard extension of the ISO/ANSI SQL-92 specification (and I
+ * don't think that later SQL specifications included this).
+ * Since the alias of a columns or expression is only effective from step 5
+ * but the WHERE clause is evaluated as step 2, it is clear that an alias
+ * can't be used in the WHERE clause.
+ * @note: thanks to Mr. Hugo Kornelis
+					 */
+					buf+=(*ai).getFullName();
 				}
 				// append name
-				buf+=(*wi).getAttribute().getName();
+//				buf+=(*wi).getAttribute().getName();
 				// append comparator
 				if (!(*wi).getSubstitute().empty())
 					buf+=(*wi).getSubstitute();
