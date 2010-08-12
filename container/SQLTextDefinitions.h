@@ -34,18 +34,22 @@
 #include "SQLConstraint.h"
 
 /**
- * The dataset definition
+ * @brief The dataset definition
  */
 typedef struct dataset_section {
-	string api; // name of SQLPlugin
-	string server;
-	string port;
-	string dbname;
-	string user;
-	string pass;
-	SQLQuery query;
-	map<string,string> other; //optional rows
+	string api;		//!< name of the SQLPlugin
+	string server;	//!< server name or DSN
+	string port;	//!< server port
+	string dbname;	//!< database name
+	string user;	//!< user name
+	string pass;	//!< password
+	SQLQuery query; //!< SQLQuery object
+	map<string,string> other; //!< optional rows
 
+	/*
+	 * @brief copy constructor
+	 * @param reference to a const instance of this class
+	 */
 	dataset_section(const dataset_section &ds):
 		api(ds.api),server(ds.server),port(ds.port),
 		dbname(ds.dbname),user(ds.user),pass(ds.pass),
@@ -54,33 +58,41 @@ typedef struct dataset_section {
 TESTDEBUG(SQL_NAME,"CREATE: DATASET_SECTION"<<endl);
 	}
 
+	/**
+	 * @brief default constructor
+	 */
 	dataset_section(){
-TESTDEBUG(SQL_NAME,"CREATE: DATASET_SECTION"<<endl);
+TESTDEBUG(SQL_NAME,"CREATE: SQLH_DATASET_SECTION"<<endl);
 	}
+	/**
+	 * @brief dtor
+	 */
 	virtual ~dataset_section(){
-TESTDEBUG(SQL_NAME,"DELETE: DATASET_SECTION ->api: "<<api<<endl);
+TESTDEBUG(SQL_NAME,"DELETE: SQLH_DATASET_SECTION ->api: "<<api<<endl);
 	}
 
 }SQLH_DATASET_SECTION;
 
 /**
- *
- * To easily flag dataset parts completion
+ * @brief To easily flag dataset parts completion
  */
 typedef enum _dataset_parts {
-	section_tag=0,
-	api=1,
-	server=2,
-	port=3,
-	dbname=4,
-	user=5,
-	pass=6,
-	select_tag=7,
-	from_tag=8,
-	where_tag=9,
-	other_tag=10
+	section_tag=0,//!< section_tag [section]
+	api=1,        //!< api		key=val
+	server=2,     //!< server	key=val
+	port=3,       //!< port		key=val
+	dbname=4,     //!< dbname	key=val
+	user=5,       //!< user		key=val
+	pass=6,       //!< pass		key=val
+	select_tag=7, //!< select_tag	[select]
+	from_tag=8,   //!< from_tag		[from]
+	where_tag=9,  //!< where_tag	[where]
+	other_tag=10  //!< other_tag	[other]
 }_SQLH_DATASET_PARTS;
 
+/**
+ * @brief define count number of parts of a section
+ */
 #define _SQLH_DATASET_PARTS_NUM 11
 
 /**
@@ -105,7 +117,6 @@ typedef enum _dataset_parts {
  *
  * @todo: test change groups in text dataset regex.
  */
-
 // variable
 #define _SQLH_DATASET_REG_VAR "(\\$\\w+\\$)"
 // number of groups '()' in regex +1
@@ -193,8 +204,5 @@ typedef enum _dataset_parts {
 #define _SQLH_DATASET_FROM_TAG "[from]"
 #define _SQLH_DATASET_WHERE_TAG "[where]"
 #define _SQLH_DATASET_OTHER_TAG "[other]"
-
-// word line separator
-//#define DELIMITER ';'
 
 #endif /* SQLTEXTDEFINITIONS_H_ */

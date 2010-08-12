@@ -78,7 +78,7 @@ class SQLErrorConnector {
 		 * @see SQLHandleConnector::setReady()
 		 * @see SQLHandleConnector::isReady()
 		 */
-		virtual bool isReady()=0;
+		virtual const bool & isReady()const=0;
 
 		virtual ~SQLErrorConnector(){
 TESTDEBUG(SQL_NAME,"DELETING: SQLErrorConnector"<<endl);

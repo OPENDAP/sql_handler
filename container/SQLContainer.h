@@ -185,7 +185,8 @@ public:
 	 */
 
 	/**
-	 * reset the cursor to the first section
+	 * @brief reset the cursor to the first
+	 * section.
 	 * <br>In a list from 0 to (n-1)
 	 * - reset() put cursor to 0
 	 */
@@ -214,12 +215,12 @@ public:
 	virtual bool end()=0;
 
 	/**
-	 * Tell if the section list is empty.
+	 * @brief Tell if the section list is empty.
 	 */
 	virtual bool empty()=0;
 
 	/**
-	 * returns true if there is next section
+	 * @brief returns true if there is next section
 	 * in the list and set actual section to
 	 * the next one.
 	 * <br>In a list from 0 to (n-1)
@@ -257,28 +258,28 @@ public:
 		return _isReady;
 	}
 
-	bool & isReady(){
+	bool isReady() const{
 		return _isReady;
 	}
 
-	explicit SQLContainer(BESFileContainer *c);
+	explicit SQLContainer(const BESFileContainer *c);
 
 
-	explicit SQLContainer(BESContainer &c);
-
-	/**
-	 * @brief Resulting object will be a copy of the passed one,
-	 * which may be a not Ready object; You need to check and
-	 * eventually run init().
-	 */
-	explicit SQLContainer(SQLContainer *c);
+	explicit SQLContainer(const BESContainer &c);
 
 	/**
 	 * @brief Resulting object will be a copy of the passed one,
 	 * which may be a not Ready object; You need to check and
 	 * eventually run init().
 	 */
-	explicit SQLContainer(SQLContainer &c);
+	explicit SQLContainer(const SQLContainer *c);
+
+	/**
+	 * @brief Resulting object will be a copy of the passed one,
+	 * which may be a not Ready object; You need to check and
+	 * eventually run init().
+	 */
+	explicit SQLContainer(const SQLContainer &c);
 
 	/**
 	 * @brief constructor
@@ -316,7 +317,7 @@ private:
 	 * @return true if SQLContainer has same
 	 * timestamp of the file modification time.
 	 */
-	bool isUpToDate();
+	bool isUpToDate() const;
 
 	/**
 	 * store AGE info
@@ -332,7 +333,7 @@ private:
 	 * @brief clone private members, no
 	 * ready or upToDate check is performed
 	 */
-	void clone(SQLContainer &c);
+	void clone(const SQLContainer &c);
 
 };
 

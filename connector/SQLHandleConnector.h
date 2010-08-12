@@ -86,9 +86,9 @@ protected:
 	 * DB connection using parameters given
 	 * by the getParams().
 	 *
-	 * <br>NOTE: this may be never called directly
-	 * so leave it as protected/private.
+	 * note: this may be never called directly.
 	 * To connect use connect(SQLContainer) instead.
+	 *
 	 * @see connect(SQLContainer)
 	 */
 	virtual bool connect()=0;
@@ -105,9 +105,10 @@ public:
 	 * connect(SQLContainer) to build and
 	 * execute a valid (for the driver in use)
 	 * query.
-	 * <br>NOTE: this is also a good place to
-	 * update size limits using
-	 * setCols(nFiled) and setRows(nRows)
+	 * @note should set:
+	 * - isReady() flag
+	 * - size limits using setCols(nFiled)
+	 * and setRows(nRows)
 	 * @see SQLTypeConnector::setCols()
 	 * @see SQLTypeConnector::setRows()
 	 */
@@ -122,7 +123,7 @@ public:
 	 * @return true if connector is
 	 * ready, false otherwise
 	 */
-	virtual bool isReady(){
+	virtual const bool & isReady()const{
 		return _isReady;
 	}
 
@@ -152,8 +153,7 @@ public:
 			delete _container;
 #endif
 		_container=c;
-		setReady(connect());
-		return _isReady;
+		return connect();
 	}
 
 	virtual ~SQLHandleConnector(){

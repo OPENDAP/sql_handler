@@ -315,10 +315,9 @@ sql_build_dds( SQLDataHandlerInterface &dhi,
 		AttrTable &attr=dds->get_attr_table();
 
 		/**
-		 *  Reset index position
+		 *  Reset cursor position
 		 */
-		connector->resetCol();
-		connector->resetRow();
+		connector->reset();
 		/**
 		 * For each column get the mapped DAP_TYPE
 		 * NOTE: No value is read here, only DAP object build.
@@ -377,9 +376,8 @@ sql_build_dds( SQLDataHandlerInterface &dhi,
 			}
 		} // endfor col
 
-		// reset connector index position before start transfer
-		connector->resetCol(); // done by SQLSequence constructor
-		connector->resetRow(); // done by SQLSequence constructor
+		// reset connector cursor position before start transfer
+		connector->reset(); // done by SQLSequence constructor
 
 		if (seq){
 			BESDEBUG(SQL_NAME,"SQLBuildDDS: Adding variable to dds"<<endl);

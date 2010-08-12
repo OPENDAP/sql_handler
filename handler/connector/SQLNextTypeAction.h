@@ -176,7 +176,7 @@ TESTDEBUG(SQL_NAME,"SQLNextTypeAction: getting nextType"<<endl);
 					SQLErrorManager<OUT>::trigger(_SQLH_ON_ALWAYS,
 							*error_factory);
 				else {
-					if (rows<connector.getRows()){ // check end condition
+					if (connector.notEnd()){ // check end condition
 						// for each passed row
 						while (rows-->0) {
 							// test ON_NEXT_ROW trigger and do actions

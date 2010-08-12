@@ -114,21 +114,25 @@ public:
 	bool query();
 
 	/**
-	 * Returns a value of ODBC_TYPE type containing
-	 * the NEXT value in this result set.
-	 * It is pointed by the ACTUAL position registered by:
+	 * @brief Returns a value of ODBC_TYPE type containing
+	 * the next value in this result set.
+	 * <br>It is pointed by the ACTUAL position:
 	 * - column 	-> getCol()
 	 * - row		-> getRow()
-	 * In a Sequence the NEXT value should be:
-	 * The NEXT COLUMN value of the actual row
-	 * OR
-	 * The first value of the NEXT ROW
-	 *
-	 * This method should also update the ACTUAL
-	 * position calling:
-	 * setCol(size_t increment)
-	 * OR
-	 * resetCol() && setRow(size_t increment)
+	 * <br>In a Sequence the NEXT value should be:
+	 * - The NEXT COLUMN value of the actual row
+	 * <br>OR
+	 * - The first value of the NEXT ROW
+	 * @note This method should also update cursors to the
+	 * next position using setNext:
+	 * - setNext(size_t increment)
+	 * @note The first time it is called should return object in
+	 * position 0,0 and set cursors to col:1 and row:0 (or
+	 * row:1 if only 1 column), if limits are reached
+	 * (col==getCols() && row==getRows()) this method
+	 * can throw an exception or an
+	 * SQLInternalException
+	 * @note use notEnd to check end condition
 	 */
 	ODBC_TYPE * getNext(size_t next=1);
 
@@ -145,14 +149,14 @@ public:
 	OPENDAP_CLASSSimpleConnector():
 		SQLSimpleConnector<SQL_TYPE,ODBC_TYPE>(),
 #SIMPLE#
-		start(true),	// to check if it's the first time you call getNext
+		toFetchRows(0),
 #COMPLETE#
-		strMsg(new MSG_TYPE()),	// error message type
-		sef(NULL),		// error factory
+		strMsg(new MSG_TYPE()),	//!< error message type
+		sef(NULL),		//!< error factory
 #COMPLETE#
-		types(NULL),	// buffer (column type)
-		descs(NULL),	// buffer (column descriptions)
-		names(NULL)	// buffer (column name)
+		types(NULL),	//!< buffer (column type)
+		descs(NULL),	//!< buffer (column descriptions)
+		names(NULL)	//!< buffer (column name)
 		{
 	};
 #COMPLETE#
@@ -182,8 +186,7 @@ public:
 
 private:
 	void clean(){
-		// set status to NOT READY
-		setReady(false);
+		setReady(false); //!< set status to NOT READY
 
 		/**
 		 * @todo: add your clear code here
@@ -193,8 +196,7 @@ private:
 		 * ...
 		 */
 
-		resetCol();
-		resetRow();
+		reset();
 
 		if (types)
 			delete [] types;
@@ -228,12 +230,15 @@ private:
 #COMPLETE#
 	}
 	// status
-	bool start; // to check if it's the first time you call getNext
-
+	/**
+	 * this is optional and can be deleted if
+	 * your connector do not use it.
+	 */
+	size_t toFetchRows; //!<number of rows to fetch or skip
 	// errors
 #COMPLETE#
 	MSG_TYPE * strMsg;
-	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> *sef; //this is passed not rebuilt
+	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> *sef; //!<this is passed not rebuilt
 #COMPLETE#
 
 	// buffers

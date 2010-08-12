@@ -39,7 +39,7 @@
 template <class SQL_TYPE, class ODBC_TYPE>
 class SQLTypeConnector {
 private:
-	// actual position returned by getNext()
+	// actual cursors position
 	size_t _column_position;
 	size_t _row_position;
 
@@ -47,19 +47,58 @@ private:
 	size_t _columns;
 	// number of rows (Tuples)
 	size_t _rows;
+	// flag indicating the end condition
+	bool _not_end;
 
+	/**
+	 * @brief add 'increment' to the ACTUAL row position
+	 * if increment is greater to the maximum value,
+	 * last row will be indexed and _not_end is set
+	 * to false.
+	 * @param how much rows to skip
+	 * @return number of skipped rows or getRows() if
+	 * actual row+increment put cursor to the end
+	 */
+	size_t setRow(size_t increment=1){
+		size_t sum=_row_position+increment;
+#if 0
+		// size_t is unsigned
+		if (increment<0)
+			throw SQLInternalError(
+				"WARNING: row increment should be >= 0",__FILE__,__LINE__);
+#endif
+		if (sum<getRows()){
+			_row_position=sum;
+			return increment;
+		}
+		else {
+			// set to the last row +1
+			_row_position=getRows();
+			// set to the last col +1
+			_column_position=getCols();
+			// set the end condition
+			_not_end=false; //!< GLOBAL ENDING CONDITION
+
+TESTDEBUG(SQL_NAME,"--ENDING------> getRow: "<<getRow()
+<<" getCol:"<<getCol()<<endl);
+
+			//returning maximum for skipped rows
+			return getRows(); //!< FUNCTION ENDING CONDITION
+		}
+	}
 protected:
 
 	/**
 	 * @brief Set the row size resulting
 	 * from of the QUERY
 	 */
-	inline void setRows(size_t rows){ _rows=rows; }
+	inline void setRows(size_t rows){_rows=rows;}
+
 	/**
 	 * @brief Set the column size resulting
 	 * from of the QUERY
 	 */
-	inline void setCols(size_t columns){ _columns=columns; }
+	inline void setCols(size_t columns){_columns=columns;}
 
 	/**
 	 * @brief You should set READY status
@@ -89,20 +128,24 @@ public:
 
 	/**
 	 * @brief Returns a value of ODBC_TYPE type containing
-	 * the NEXT value in this result set.
-	 * It is pointed by the ACTUAL position registered by:
+	 * the next value in this result set.
+	 * <br>It is pointed by the ACTUAL position:
 	 * - column 	-> getCol()
 	 * - row		-> getRow()
-	 * In a Sequence the NEXT value should be:
-	 * The NEXT COLUMN value of the actual row
-	 * OR
-	 * The first value of the NEXT ROW
-	 *
-	 * This method should also update the ACTUAL
-	 * position calling:
-	 * setCol(size_t increment)
-	 * OR
-	 * resetCol() && setRow(size_t increment)
+	 * <br>In a Sequence the NEXT value should be:
+	 * - The NEXT COLUMN value of the actual row
+	 * <br>OR
+	 * - The first value of the NEXT ROW
+	 * @note This method should also update cursors to the
+	 * next position using setNext:
+	 * - setNext(size_t increment)
+	 * @note The first time it is called should return object in
+	 * position 0,0 and set cursors to col:1 and row:0 (or
+	 * row:1 if only 1 column), if limits are reached
+	 * (col==getCols() && row==getRows()) this method
+	 * can throw an BESInternalException or an
+	 * SQLInternalException
+	 * @note use notEnd to check end condition
 	 */
 	virtual ODBC_TYPE * getNext(size_t next=1)=0;
 
@@ -132,83 +175,73 @@ public:
 	virtual const string & getColDesc(const size_t & column)=0;
 
 	/**
-	 * NOTE: this method has its implementation
+	 * @brief return the status of this connector
+	 * indicating if it is ready to getNext().
+	 * @note this method has its implementation
 	 * in the SQLHandleConnector sister abstract class.
 	 * Anyway you may implement this method if you want
-	 * to implement separated Type and Handle Connector
+	 * to implement separately Type and Handle Connector
 	 */
-	virtual bool isReady()=0;
+	virtual const bool & isReady()const=0;
 
+	/**
+	 * @brief indicate the status of the cursors
+	 * @return false if the end is reached and no
+	 * more element are available.
+	 */
+	const bool & notEnd(){return _not_end;}
 
 	/**
 	 * returns the number of rows of the result set
 	 */
-	inline size_t getRows(){return _rows;};
+	const size_t & getRows(){return _rows;}
 
 	/**
 	 * @brief returns the position (column) of the getNext()
 	 * return value.
 	 * interval 0 to (getRows()-1)
 	 */
-	inline size_t getRow(){return _row_position;};
+	const size_t & getRow()const{return _row_position;}
 
 	/**
-	 * @brief add 'increment' to the ACTUAL row position
-	 * if increment is greater to the maximum value,
-	 * last row will be indexed
+	 * @brief reset cursor and notEnd status
+	 * @note should be used only if you don't have
+	 * used the getNext() since ODBC cursors (usually)
+	 * can't go back.
 	 */
-	size_t setRow(size_t increment=1){
-		size_t sum=_row_position+increment;
-#if 0
-		// size_t is unsigned
-		if (increment<0)
-			throw SQLInternalError(
-				"WARNING: row increment should be >= 0",__FILE__,__LINE__);
-#endif
-		if (sum<getRows()){
-			_row_position=sum;
-			return increment;
-		}
-		else {
-			// set to the last row +1
-			_row_position=getRows();
-			// set to the last col +1
-			_column_position=getCols();
-
-TESTDEBUG(SQL_NAME,"--ENDING------> getRow: "<<getRow()
-<<" getCol:"<<getCol()<<endl);
-
-
-			//ENDING CONDITION
-			return getRows();
-		}
-	};
-
-	/**
-	 * @brief provided only for special cases;
-	 * should be used only if connector is
-	 * buffered since cursors usually can't go back.
-	 */
-	inline void resetRow(){ _row_position=0; };
+	void reset(){
+		_row_position=0;
+		_column_position=0;
+		// check for end condition
+		if (getRows()==0 && getCols()==0)
+			_not_end=false;
+		else
+			_not_end=true;
+	}
 
 	/**
 	 * @brief returns the number of columns of the result set
 	 *
 	 */
-	inline size_t getCols(){return _columns;};
+	const size_t & getCols()const{return _columns;}
 
 	/**
 	 * @brief returns the position (row) of the getNext()
 	 * return value;
-	 * interval 0 to (getCols()-1)
+	 * @note interval 0 to (getCols()-1)
 	 */
-	inline size_t getCol(){return _column_position;};
+	const size_t & getCol()const{return _column_position;}
 
-
-	/**
-	 * reset the ACUTAL column position to '0'
+#if 0
+	/** DEPRECATED
+	 * @brief reset the ACUTAL column position to '0'
+	 * and notEnd status to true
+	 * @note should be used only if connector is
+	 * buffered or if you don't have used getNext()
+	 * since ODBC cursors usually can't go back.
 	 */
-	inline void resetCol(){ _column_position=0; };
+	void resetCol(){ _column_position=0; _not_end=true; }
+#endif
 
 	/**
 	 * @brief add 'increment' to the
@@ -216,9 +249,11 @@ TESTDEBUG(SQL_NAME,"--ENDING------> getRow: "<<getRow()
 	 * Setting number of column and rows
 	 * corresponding to the current
 	 * position + next.
+	 * If the getCols and getRows limit are
+	 * reached, sets the not_end flag to false.
 	 * @return number of skipped rows or getRows()
 	 * if limits are reached
-	 * NOTE: column start from 0 to getCols()-1
+	 * @note column start from 0 to getCols()-1
 	 */
 	size_t setNext(size_t increment=1){
 #if 0
@@ -241,11 +276,10 @@ TESTDEBUG(SQL_NAME,"--ENDING------> getRow: "<<getRow()
 		size_t sum=_column_position+increment;
 		if (sum<getCols()) { // same row
 			_column_position=sum;
-
 		}
 		else {
 			//next row
-			if (setRow(1)==getRows())
+			if (setRow(1)==getRows()) // !_not_end
 				return getRows();	// ENDING CONDITION
 			else
 				rows++;
@@ -260,27 +294,25 @@ TESTDEBUG(SQL_NAME,"-------------> rows: "<<rows
 <<" increment:"<<increment<<endl);
 
 		return rows;
-	};
+	}
 
 
 
 	virtual ~SQLTypeConnector(){
 TESTDEBUG(SQL_NAME,"DELETING: SQLTypeConnector"<<endl);
-	};
+	}
 
 	/**
 	 * @brief Constructor
-	 * @param an SQLContainer containing
-	 * ALL the information needed to establish
-	 * connections and to build the SQL query.
 	 */
 	SQLTypeConnector():
 		_column_position(0),
 		_row_position(0),
 		_columns(0),
-		_rows(0){
+		_rows(0),
+		_not_end(true){
 TESTDEBUG(SQL_NAME,"CREATING: SQLTypeConnector"<<endl);
-	};
+	}
 
 };
 

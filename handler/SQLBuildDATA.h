@@ -332,10 +332,9 @@ sql_build_data( SQLDataHandlerInterface &dhi,
 #endif
 		AttrTable &attr=dds->get_attr_table();
 		/**
-		 *  Reset index position
+		 *  Reset cursor position
 		 */
-		connector->resetCol();
-		connector->resetRow();
+		connector->reset();
 		/**
 		 * For each column get the mapped DAP_TYPE
 		 * @note No value is read here, only DAP object build.
@@ -369,16 +368,14 @@ sql_build_data( SQLDataHandlerInterface &dhi,
 				 * <br>reuse flag is false since the new operator
 				 * is used in the cast function dummy_reader.
 				 *
-				 * @todo: check this should fail on connection fail
-				 * since simpleType constructor use the connector
-				 * which HERE should fail.
+ * @todo: If connector fail to get column number
+ * setNext don't know how long to go...
 				 */
 				bt=new SQLDummySimpleType(_SQLH_DEFAULT_DAS_NAME,
 						dummy_cast,
 						false);
 				connector->setNext();
 				if (bt) {
-//					btr->push_back(bt);
 					seq->add_var(bt,nil);
 					delete bt;
 					bt=0;
@@ -394,8 +391,8 @@ sql_build_data( SQLDataHandlerInterface &dhi,
 		} // endfor col
 
 		// reset connector index position before start transfer
-		connector->resetCol(); // done by SQLSequence constructor
-		connector->resetRow(); // done by SQLSequence constructor
+		connector->reset();
+
 
 		if (seq){
 			BESDEBUG(SQL_NAME,"SQLBuildDATA: Adding variable to dds"<<endl);

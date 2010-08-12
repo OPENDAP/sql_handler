@@ -27,7 +27,17 @@
 #ifndef SQLATTRIBUTE_H_
 #define SQLATTRIBUTE_H_
 
-typedef enum _AttrSortMode {name=0, prefix=1, position=2, all=3} SQLAttrSortMode;
+#if 0
+/**
+ * NOT USED
+ * @brief attribute sort mode
+ */
+typedef enum _AttrSortMode {
+	_sql_attr_name_sort=0,		//!< _sql_attr_name_sort
+	_sql_attr_prefix_sort=1,              //!< _sql_attr_prefix_sort
+	_sql_attr_position_sort=2,            //!< _sql_attr_position_sort
+	_sql_attr_all_sort=3} SQLAttrSortMode;//!< _sql_attr_all_sort
+#endif
 
 using namespace std;
 #include <vector>
@@ -65,12 +75,14 @@ using namespace std;
 // number of groups '()' in regex +1
 #define _SQLH_ATTR_REG_GROUPS 9
 /**
- *  set the inteprefixing group (starts from 0)
+ *  set the group (starts from 0)
  *  table alias
  */
 #define _SQLH_ATTR_REG_PREFIX_GROUP_op1 1
 #define _SQLH_ATTR_REG_PREFIX_GROUP_op2 3
-//#define _SQLH_ATTR_REG_PREFIX_GROUP_op3 -1
+/**
+ * #define _SQLH_ATTR_REG_PREFIX_GROUP_op3 -1
+ */
 // attribute part
 #define _SQLH_ATTR_REG_ATTR_GROUP_op1 2
 #define _SQLH_ATTR_REG_ATTR_GROUP_op2 7
@@ -196,17 +208,11 @@ TESTDEBUG( SQL_NAME,"SQLAttribute::loadAttribute starting-> attr: "<<attr<<endl 
 		groups.set(_SQLH_ATTR_REG_ATTR_GROUP_op1,true);
 		groups.set(_SQLH_ATTR_REG_ATTR_GROUP_op2,true);
 		groups.set(_SQLH_ATTR_REG_ATTR_GROUP_op3,true);
-#if 0
-		std::vector<std::vector<string> > _match=
-				StringMatch::match(_SQLH_REG_ATTR,
-						_SQLH_ATTR_REG_GROUPS,groups,buf);
-#endif
 
 		std::list<matched<_SQLH_ATTR_REG_GROUPS> > _match=
 						StringMatch::match(_SQLH_REG_ATTR,groups,buf);
 
 		if (_match.size()==1){
-			// (table.),(attribute), position
 
 			std::list<matched<_SQLH_ATTR_REG_GROUPS> >::iterator i=
 					_match.begin();

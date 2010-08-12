@@ -97,10 +97,19 @@
 # like 'insert' or 'delete'.
 #
 # Each column name HAVE TO BE UNIQUE so
-# you are encouraged to use alias like:
+# you are encouraged to USE ALIAS like:
 # table1.attribute attr1
 # table.attribute as attr2
 # attribute AS attr3
+#
+# USE SAME ALIAS NAME for all of the
+# 'section' of the dataset
+# F.e.:
+# [section]
+# table.wind_c as wc
+# ...
+# [section]
+# table3.wind_chill as wc
 #
 
 # 7
@@ -214,8 +223,8 @@ user=$USER$
 pass=$PASS$
 
 [select]
-column_1, table_1.column_2,
-table_2.column_2 as column_3
+column_1 as i, table_1.column_2 as r,
+table_2.column_2 as v
 
 [from]
 # natural join
@@ -228,11 +237,12 @@ table_1 join table_2
 # the SQL predicate list!
 # This should be a valid where
 # predicate.
-table_1.column_1 < '1000' AND
-table_2.column_2 <> '0'
+# NOTE: USE ALIAS FOR CONSTRAINT
+i < '1000' AND
+r <> '0'
 
 [other]
-order=order by 'table_1'
+order=order by 'i'
 # NOTE SQL syntax (dialect) can be
 # relative to the driver in use!
 
@@ -244,7 +254,7 @@ user=postgres
 pass=postgres
 
 [select]
-int,real,varchar
+int i,real r,varchar v
 [from]
 sqlh_table
 
@@ -255,9 +265,8 @@ user=postgres
 pass=postgres
 
 [select]
-attore.nome as name,cognome ,
-attore.id_attore id_actor
+integer as i,float as r ,string as v
 [from]
-attore
+sqlh_table
 
 #-----------------------DATASET v0.4--(END)---------------------

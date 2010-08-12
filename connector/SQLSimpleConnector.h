@@ -74,7 +74,7 @@ public:
 	 * @return true if connector is
 	 * ready, false otherwise
 	 */
-	virtual bool isReady(){
+	virtual const bool & isReady()const{
 		return SQLHandleConnector::isReady();
 		/**
 		 * If you implement separately Type and Error

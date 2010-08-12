@@ -364,6 +364,7 @@ OPENDAP_CLASSConnector::query(){
 #SIMPLE#
 OPENDAP_CLASSSimpleConnector::query(){
 #SIMPLE#
+	bool status=true;//!< the return status
 	/**
 	 *  ready should be settled to true by query
 	 *  so if this happen here we have to clean
@@ -435,7 +436,6 @@ OPENDAP_CLASSSimpleConnector::query(){
 	BESDEBUG(OPENDAP_CLASS_NAME,"Setting columns number: "<<cols<<endl);
 	setCols(cols);
 
-	// fetch first row
 
 	/**
 	 *  Query SUCCEDED set READY status.
@@ -447,35 +447,34 @@ OPENDAP_CLASSSimpleConnector::query(){
 	 *  Do something like this:
 	 *   if (status==GOOD_STATUS())
 	 */
-	if (false){
-		// set status to ready
-		setReady();
-		start=true; //set start status
-		// return good status
-		return true;
-	}
-	else {
-		// return bad status
-		return false;
-	}
+
+	toFetchRows=1;//!< set number of rows to fetch.
+
+	reset();//!< reset cursors to start and check notEnd condition
+	setReady(status);//! set status
+	return status;//! return the status
 }
 
 /**
- * Returns a value of OPENDAP_CLASS_TYPE type containing
- * the NEXT value in this result set.
- * It is pointed by the ACTUAL position registered by:
+ * @brief Returns a value of ODBC_TYPE type containing
+ * the next value in this result set.
+ * <br>It is pointed by the ACTUAL position:
  * - column 	-> getCol()
  * - row		-> getRow()
- * In a Sequence the NEXT value should be:
- * The NEXT COLUMN value of the actual row
- * OR
- * The first value of the NEXT ROW
- *
- * This method should also update the ACTUAL
- * position calling:
- * setCol(size_t increment)
- * OR
- * resetCol() && setRow(size_t increment)
+ * <br>In a Sequence the NEXT value should be:
+ * - The NEXT COLUMN value of the actual row
+ * <br>OR
+ * - The first value of the NEXT ROW
+ * @note This method should also update cursors to the
+ * next position using setNext:
+ * - setNext(size_t increment)
+ * @note The first time it is called should return object in
+ * position 0,0 and set cursors to col:1 and row:0 (or
+ * row:1 if only 1 column), if limits are reached
+ * (col==getCols() && row==getRows()) this method
+ * can throw an exception or an
+ * SQLInternalException
+ * @note use notEnd to check end condition
  */
 ODBC_TYPE *
 #COMPLETE#
@@ -484,126 +483,82 @@ OPENDAP_CLASSConnector::getNext(size_t next){
 #SIMPLE#
 OPENDAP_CLASSSimpleConnector::getNext(size_t next){
 #SIMPLE#
-	if (!isReady())
+	if (!isReady() || !notEnd())
 		throw SQLInternalError(
-			"Unable to getNext() elemeny, connector: !isReady()",
+			"Unable to getNext() element, connector: !isReady() or end is reached",
 			__FILE__,__LINE__);
 	//@todo may we want to try to reconnect?
 
-	if (start){
-		BESDEBUG(OPENDAP_CLASS_NAME,"Getting FIRST element"<<endl);
-		start=false;
-		/**
-		 * @todo: use you ODBC API to return
-		 * the first element from the cursor
-		 * or (better) the buffer.
-		 * Do something like:
-		 *   return buf[getCol()];
-		 *  or
-		 *   return connector->getFromCursor(getCol());
-		 *
-		 *  @note: if you have used setCol or setRow
-		 *  to get tyoe or for other operation, you
-		 *  have to reset indexes doing:
-		 *   resetRow()
-		 *   resetCol()
-		 *  @note: deletion of this pointer object can
-		 *  be handled externally using DTM/SQLBaseType
-		 *  action called cast.
-		 *  You can return a local address or a new pointer
-		 *  and decide externally if perform delete (or free)
-		 *  or not.
-		 *  @see SQLCastAction
-		 *  @see SQLBaseType
-		 *  @see SQLTypeFactoryComponent
-		 */
-		return NULL;
-#COMPLETE#
-		/**
-		 * @todo remember to set the status of this
-		 * connector accordingly to the result of this
-		 * operation.
-		 * This can be stored into a member variable
-		 * or can be returned by an ODBC specific Api.
-		 * Anyway remember that this status should be
-		 * used into the ERROR_TYPE * getError()
-		 * member function to check the connector status.
-		 */
-#COMPLETE#
-	}
 	BESDEBUG(OPENDAP_CLASS_NAME,"Getting next element"<<endl);
-	//if col or row limit reached
-	size_t rows;
-	/*
-	 * Set number of column and rows
+
+	while (toFetchRows>0){ // while skip
+		/**
+		 * todo: If we are here a new
+		 * row should be read so prepare
+		 * your cursor to read next row
+		 * (if it is needed).
+		 *
+		 * @note formally you have to
+		 * do this for each skipped row
+		 * (usually 1).
+		 *
+		 * @note setNext automatically
+		 * set indexes (getRow() and
+		 * getCol()) to the right position
+		 * so you don't have to reset
+		 * manually columns.
+		 * No need to use setCol or setRow.
+		 */
+		toFetchRows--;
+	}
+
+	/**
+	 * todo: read the value using getCol() as index
+	 * and prepare the return pointer.
+	 */
+	ODBC_TYPE *ret=NULL;
+
+	/**
+	 * Set number of column and row
 	 * corresponding to the current
 	 * position + next.
 	 * Return the number of skipped rows
-	 * @note: next is usually 1 so skipped
-	 * rows are always 0 excepting (return 1)
-	 * when cols reaches its limit (getCols()).
+	 * which is stored for the next fetch
+	 * operation (if needed)
 	 */
-	// get number of skipped rows
-	// check ENDING CONDITION -> skipped==getRows()
-	// check ENDING CONDITION -> getRow==getRows
-	if ((rows=setNext(next))<getRows()){
-		while (rows>0){ // while skip
-			/**
-			 * todo: If we are here a new
-			 * row should be read so prepare
-			 * your cursor to read next row
-			 * (if it is needed).
-			 *
-			 * @note formally you have to
-			 * do this for each skipped row
-			 * (usually 1).
-			 *
-			 * @note setNext automatically
-			 * set indexes (getRow() and
-			 * getCol()) to the right position
-			 * so you don't have to reset
-			 * manually columns.
-			 * No need to use setCol or setRow.
-			 */
-			rows--;
-		}
-		/**
-		 * @todo: use you ODBC API to return
-		 * the first element from the cursor
-		 * or (better) the buffer.
-		 * Do something like:
-		 *   return buf[getCol()];
-		 *  or
-		 *   return connector->getFromCursor(getCol());
-		 *
-		 *  @note: deletion of this pointer object can
-		 *  be handled externally using DTM/SQLBaseType
-		 *  action called cast.
-		 *  You can return a local address or a new pointer
-		 *  and decide externally if perform delete (or free)
-		 *  or not.
-		 *  @see SQLCastAction
-		 *  @see SQLBaseType
-		 *  @see SQLTypeFactoryComponent
-		 */
-		return NULL;
+	toFetchRows=setNext(next);
 #COMPLETE#
-		/**
-		 * @todo remember to set the status of this
-		 * connector accordingly to the result of this
-		 * operation.
-		 * This can be stored into a member variable
-		 * or can be returned by an ODBC specific Api.
-		 * Anyway remember that this status should be
-		 * used into the ERROR_TYPE * getError()
-		 * member function to check the connector status.
-		 */
+	/**
+	 * @todo remember to set the status of this
+	 * connector accordingly to the result of this
+	 * operation.
+	 * This can be stored into a member variable
+	 * or can be returned by an ODBC specific Api.
+	 * Anyway remember that this status should be
+	 * used into the ERROR_TYPE * getError()
+	 * member function to check the connector status.
+	 */
 #COMPLETE#
-	}
-	else
-		// row limit reached (this may never happen)
-		throw SQLInternalError("ResultSet limits reached!",
-				__FILE__,__LINE__);
+	/**
+	 * @todo: use you ODBC API to return
+	 * the first element from the cursor
+	 * or (better) the buffer.
+	 * Do something like:
+	 *   return buf[getCol()];
+	 *  or
+	 *   return connector->getFromCursor(getCol());
+	 *
+	 *  @note: deletion of this pointer object can
+	 *  be handled externally using DTM/SQLBaseType
+	 *  action called cast.
+	 *  You can return a local address or a new pointer
+	 *  and decide externally if perform delete (or free)
+	 *  or not.
+	 *  @see SQLCastAction
+	 *  @see SQLBaseType
+	 *  @see SQLTypeFactoryComponent
+	 */
+	return ret;
 }
 
 #COMPLETE#

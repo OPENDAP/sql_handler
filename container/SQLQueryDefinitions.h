@@ -47,16 +47,6 @@
  *  CONSTRAINTS
  *  projection -> attributes
  */
-#if 0
-/**
- * OLD
- * @todo: actually we filter the first part of an
- * attribute:
- * table.attribute
- * this may limit SQL expressions
- */
-#endif
-
 
 /**
  * SQLAttributes:
@@ -136,26 +126,5 @@
 #define _SQLH_CONT_REG_CONSTR_BASE_VAL 5
 #define _SQLH_CONT_REG_CONSTR_BASE_JOIN " AND "
 
-#if 0
-/**
- * COMMENTED OUT SINCE BASE INTEGRATE STRING
- * 22 Jul 2010
- *
- *  todo: fix string regex
- *  anyway LIKE works, probably a more restrictive regex
- *  will be safer
- */
-#define _SQLH_CONT_REG_CONSTR_STRING \
-	"&(\\w+)(=|!=|~=)([\\',\\\",\\%,\\*]*\\w+[\\',\\\",\\%,\\*]*)"
-
-// number of groups '()' in regex +1
-#define _SQLH_CONT_REG_CONSTR_STRING_GROUPS 2
-// set the interesting group (starts from 0)
-#define _SQLH_CONT_REG_CONSTR_STR_KEY 1
-#define _SQLH_CONT_REG_CONSTR_STR_COMPARATOR 2
-#define _SQLH_CONT_REG_CONSTR_STR_VAL 3
-#define _SQLH_CONT_REG_CONSTR_STR_JOIN " LIKE " // LIKE
-#endif
-//|&(\\w+\\*\\w+))" // todo: url *
 
 #endif /* SQLQUERYDEFINITIONS_H_ */

@@ -45,7 +45,7 @@ libOPENDAP_TYPE_module_la_SOURCES = $(OPENDAP_CLASS_SRCS) $(OPENDAP_CLASS_HDRS)
 libOPENDAP_TYPE_module_la_CPPFLAGS = $(BES_CPPFLAGS) -I$(includedir)/sql
 #-D __TESTS__=1  -D __CLONE__=0
 libOPENDAP_TYPE_module_la_LDFLAGS = -avoid-version -module -L$(lib_besdir) -lbes_sql
-libOPENDAP_TYPE_module_la_LIBADD = $(BES_LIBS)
+libOPENDAP_TYPE_module_la_LIBADD = $(BES_DAP_LIBS)
 
 EXTRA_PROGRAMS = 
 

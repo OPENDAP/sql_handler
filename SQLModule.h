@@ -55,8 +55,6 @@ using std::endl ;
 #include "container/SQLContainerFactory.h"
 #include "container/SQLContainerStorage.h"
 
-//see below #include "DEM/SQLCheckPoint.h"
-
 /**
  * @brief The module of the SQLHandler it
  * load the main components of the handler.

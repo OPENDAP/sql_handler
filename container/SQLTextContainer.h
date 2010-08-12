@@ -69,20 +69,47 @@ class SQLTextContainer: public SQLContainer {
 						const string & real_name,
 						const string &type);
 
+	/**
+	 * @brief constructor
+	 * @param c reference to a BESContainer
+	 */
 	explicit
-	SQLTextContainer(BESContainer & c);
+	SQLTextContainer(const BESContainer & c);
 
+	/**
+	 * @brief copy constructor
+	 * @param c a const reference to the object instance
+	 * to copy
+	 */
 	explicit
-	SQLTextContainer(SQLTextContainer & c);
+	SQLTextContainer(const SQLTextContainer & c);
 
+	/**
+	 * @brief dtor
+	 */
 	virtual ~SQLTextContainer();
 
+	/**
+	 * @brief build the query string
+	 * @return the string containing a valid SQL query
+	 */
 	virtual string buildQuery();
 
+	/**
+	 * @brief return a reference to the actual section
+	 * SQLQuery object
+	 * @return a reference to the SQLQuery object
+	 */
 	virtual SQLQuery &getQuery(){
 		return (actual_section)->query;
 	}
 
+	/**
+	 * @see SQLContainer
+	 * @param buf string reference (is modified)
+	 * @return true if buf is found in the actual
+	 * section
+	 */
 	virtual bool getOther(string & buf){
 		std::map<string,string>::iterator it=
 				(actual_section)->other.find(buf);
@@ -94,45 +121,110 @@ class SQLTextContainer: public SQLContainer {
 			return false;
 	}
 
+	/**
+	 * @brief return the actual API
+	 * from the dataset's API list.
+	 * @see SQLContainer
+	 */
 	virtual string &getApi(){
 		return (actual_section)->api;
 	}
 
+	/**
+	 * @brief get the string representing
+	 * the user which should be used to access
+	 * to the actual selected DB
+	 * @return a string reference
+	 * @see SQLContainer
+	 */
 	virtual string &getUser(){
 		return (actual_section)->user;
 	}
 
+	/**
+	 * @brief get the string representing
+	 * the password which should be used to
+	 * access to the actual selected DB
+	 * @return a string reference
+	 * @see SQLContainer
+	 */
 	virtual string &getPass(){
 		return (actual_section)->pass;
 	}
 
+	/**
+	 * @brief get the string representing
+	 * the server which should be used to
+	 * access to the actual selected DB
+	 * @note for the odbc SQLPlugin this
+	 * represent the DSN name.
+	 * @see SQLContainer
+	 */
 	virtual string &getServer(){
 		return (actual_section)->server;
 	}
 
+	/**
+	 * @brief get the string representing
+	 * the database name which should be
+	 * used to access to the actual
+	 * selected DB
+	 * @return a string reference
+	 * @see SQLContainer
+	 */
 	virtual string &getDBName(){
 		return (actual_section)->dbname;
 	}
 
+	/**
+	 * @brief get the string representing
+	 * the password which should be used to
+	 * access to the actual selected DB
+	 * @return a string reference
+	 * @see SQLContainer
+	 */
 	virtual string &getPort(){
 		return (actual_section)->port;
 	}
 
+	/**
+	 * @brief reset the cursor to the first
+	 * section.
+	 * <br>In a list from 0 to (n-1)
+	 * - reset() put cursor to 0
+	 * @see SQLContainer
+	 */
 	virtual void reset(){
 		(actual_section)=_dataset->begin();
 	}
 
+	/**
+	 * Clear the internal structures used
+	 * to store data.
+	 * This is used when an update is needed
+	 * to clear storage before read() is
+	 * called again.
+	 * @see setup()
+	 * @see SQLContainer
+	 */
 	virtual void clear(){
 		if (_dataset)
 			delete _dataset;
 		_dataset=new DATASET();
 		actual_section=_dataset->begin();
-#if 0
-		_dataset.reset(new DATASET());
-		actual_section.reset(new DATASET::iterator());
-#endif
 	}
 
+	/**
+	 * Tell if the end of the list is reached.
+	 * In a list from 0 to (n-1):
+	 * <br>If the actual position of the cursor
+	 * points to n return true.
+	 * <br>Note: in a list from 0 to 0
+	 * - end() return true
+	 * - empty() return true
+	 * @see setNext()
+	 * @see SQLContainer
+	 */
 	virtual bool end(){
 		if ((actual_section)==_dataset->end())
 			return true;
@@ -140,6 +232,10 @@ class SQLTextContainer: public SQLContainer {
 			return false;
 	}
 
+	/**
+	 * @brief Tell if the section list is empty.
+	 * @see SQLContainer
+	 */
 	virtual bool empty(){
 		if (_dataset->empty())
 			return true;
@@ -147,6 +243,20 @@ class SQLTextContainer: public SQLContainer {
 			return false;
 	}
 
+	/**
+	 * @brief returns true if there is next section
+	 * in the list and set actual section to
+	 * the next one.
+	 * <br>In a list from 0 to (n-1)
+	 * - reset() put cursor to 0
+	 * - FIRST setNext() call set cursor to 1
+	 * - LAST setNext() call set cursor to n-1
+	 * returning true
+	 * - ALL the successive calls to the setNext()
+	 * must return false until reset() is call
+	 * @return boolean false if end is reached
+	 * @see SQLContainer
+	 */
 	virtual bool setNext(){
 		if (end()){
 			return false;
@@ -316,17 +426,17 @@ private:
 	 * Apply dataset rules if a KEY=VAL row is found
 	 * @param new_section pointer to the DATASET_SECTION to populate
 	 * @param required diary of what is required
-	 * @todo if api=name is found required can be modified applying
-	 * specific handler needs.
+ * @todo if api=name is found required can be modified applying
+ * specific handler needs.
 	 * @param complete diary of what is found into the reading dataset
 	 * @param reading_part the 'part' where key=value is found
 	 * @param key a regmatch_t indexing the KEY limits
 	 * @param val a regmatch_t indexing the VALUE limits
 	 * @see SQLTextDefinitions
-	 * @todo: we can implement a mechanism to ask to
-	 * handlers which minimum information are required
-	 * for a certain 'api', handler may respond with
-	 * a bitset initialized with minimum required information.
+ * @todo: we can implement a mechanism to ask to
+ * handlers which minimum information are required
+ * for a certain 'api', handler may respond with
+ * a bitset initialized with minimum required information.
 	 */
 	void addKeyValue(
 		//section to add to

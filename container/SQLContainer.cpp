@@ -56,7 +56,7 @@ SQLContainer::init(){
  * timestamp of the file modification time.
  */
 bool
-SQLContainer::isUpToDate(){
+SQLContainer::isUpToDate()const {
 	struct stat buf;
 	if (!stat(this->get_real_name().c_str(),&buf)){
 #if __TESTS__==1
@@ -110,7 +110,7 @@ SQLContainer::SQLContainer(const string &name,
  * implementing class to make this
  * container ready to use.
  */
-SQLContainer::SQLContainer(BESFileContainer *c):
+SQLContainer::SQLContainer(const BESFileContainer *c):
 		BESFileContainer(*c)
 {
 	TESTDEBUG(SQL_NAME,"CREATING: SQLContainer"<<endl);
@@ -132,7 +132,7 @@ SQLContainer::SQLContainer(BESFileContainer *c):
  * implementing class to make this
  * container ready to use.
  */
-SQLContainer::SQLContainer(BESContainer &c):
+SQLContainer::SQLContainer(const BESContainer &c):
 	BESFileContainer(c.get_symbolic_name(),
 					c.get_real_name(),
 					c.get_container_type())
@@ -149,7 +149,7 @@ SQLContainer::SQLContainer(BESContainer &c):
  * which may be a not Ready object; You need to check and
  * eventually run init().
  */
-SQLContainer::SQLContainer(SQLContainer *c):
+SQLContainer::SQLContainer(const SQLContainer *c):
 	BESFileContainer(*c)
 {
 	if (c) {
@@ -176,7 +176,7 @@ SQLContainer::SQLContainer(SQLContainer *c):
  * which may be a not Ready object; You need to check and
  * eventually run init().
  */
-SQLContainer::SQLContainer(SQLContainer &c):
+SQLContainer::SQLContainer(const SQLContainer &c):
 	BESFileContainer(c.get_symbolic_name(),
 					c.get_real_name(),
 					c.get_container_type())
@@ -205,7 +205,7 @@ SQLContainer::~SQLContainer(){
  * ready or upToDate check is performed
  */
 void
-SQLContainer::clone(SQLContainer &c){
+SQLContainer::clone(const SQLContainer &c){
 	//cloning
 	set_attributes(c.get_attributes());
 	set_constraint(c.get_constraint());

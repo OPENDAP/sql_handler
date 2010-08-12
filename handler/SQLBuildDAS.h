@@ -301,10 +301,9 @@ sql_build_das( SQLDataHandlerInterface &dhi ,
 		seq=das->add_table(dhi.getBesContainer()->get_symbolic_name(),new AttrTable());
 
 	/**
-	 *  Reset index position
+	 *  Reset cursor position
 	 */
-	connector.resetCol();
-	connector.resetRow();
+	connector.reset();
 	/**
 	 * For each column get the mapped DAP_TYPE
 	 * @note No value is read here, only DAP object build.

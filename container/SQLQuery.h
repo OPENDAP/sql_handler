@@ -73,21 +73,32 @@ private:
 	SQL_CONSTRAINT_SET where;
 
 public:
+	/**
+	 * @brief constructor
+	 */
 	SQLQuery():select(),from(),where(){
 TESTDEBUG( SQL_NAME,"CREATING: SQLQuery"<<endl );
-	};
-
+	}
+	/**
+	 * @brief copy constructor
+	 * @param q const reference to the SQLQuery to copy
+	 */
 	SQLQuery(const SQLQuery &q):
 		select(q.select),from(q.from),where(q.where)
 	{
 TESTDEBUG( SQL_NAME,"COPING: SQLQuery"<<endl );
-	};
+	}
 
+	/**
+	 * @brief dtor
+	 */
 	virtual ~SQLQuery(){
 TESTDEBUG( SQL_NAME,"DELETING: SQLQuery"<<endl );
-	};
+	}
 
-	// defines attribute iterator (ordered by attribute name)
+	/**
+	 * @brief defines attribute iterator (ordered by attribute name)
+	 */
 	typedef SQL_ATTRIBUTE_SET_BYNAME::iterator attrIterator;
 
 	/**
@@ -117,18 +128,23 @@ TESTDEBUG( SQL_NAME,"DELETING: SQLQuery"<<endl );
 	/**
 	 * @note: only append is done
 	 * you have to add join string
-	 * manyally
+	 * manually
 	 */
 	void addFrom(string s){
 		from.append(s);
 	}
+
 	virtual string &getFrom(){
 		return from;
 	}
+
 	void setFrom(string f){
 		from=f;
 	}
 
+	/**
+	 * @brief define the constraint iterator
+	 */
 	typedef SQL_CONSTRAINT_SET::iterator whereIterator;
 
 	SQL_CONSTRAINT_SET & getWhere(){

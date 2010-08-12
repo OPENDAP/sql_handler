@@ -35,7 +35,7 @@ SQLTextContainer::SQLTextContainer(const string &name,
 {
 TESTDEBUG(SQL_NAME,"CREATING: SQLTextContainer"<<endl);
 	/**
-	 * NOTE: this is already done by the SQLContainerFactory
+	 * @note this is already done by the SQLContainerFactory
 	 * this is here in the case you want to use this
 	 * constructor manually.
 	 */
@@ -47,14 +47,14 @@ TESTDEBUG(SQL_NAME,"CREATING: SQLTextContainer"<<endl);
 	}
 }
 
-SQLTextContainer::SQLTextContainer(BESContainer & c):
+SQLTextContainer::SQLTextContainer(const BESContainer & c):
 	SQLContainer(c),
 	_dataset(new DATASET()),
 	actual_section(_dataset->begin())
 {
 TESTDEBUG(SQL_NAME,"CREATING: SQLTextContainer from BESContainer"<<endl);
 	/**
-	 * NOTE: this is already done by the SQLContainerFactory
+	 * @note: this is already done by the SQLContainerFactory
 	 * this is here in the case you want to use this
 	 * constructor manually.
 	 */
@@ -67,7 +67,7 @@ TESTDEBUG(SQL_NAME,"CREATING: SQLTextContainer from BESContainer"<<endl);
 	}
 }
 
-SQLTextContainer::SQLTextContainer(SQLTextContainer & c):
+SQLTextContainer::SQLTextContainer(const SQLTextContainer & c):
 	SQLContainer(c),
 	_dataset(new DATASET(*c._dataset)),
 	actual_section(_dataset->begin())

@@ -17,7 +17,7 @@ dnl library visioning: Update these when the interface changes. Generally,
 dnl assume that the interface tracks the major and minor release numbers.
 LIB_BES_SQL_CURRENT=1
 LIB_BES_SQL_AGE=0
-LIB_BES_SQL_REVISION=0
+LIB_BES_SQL_REVISION=1
 AC_SUBST(LIB_BES_SQL_CURRENT)
 AC_SUBST(LIB_BES_SQL_AGE)
 AC_SUBST(LIB_BES_SQL_REVISION)

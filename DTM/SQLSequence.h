@@ -42,10 +42,6 @@
 template <	class SQL_TYPE,						//connector TypeFactory
 			class ODBC_TYPE>					//connector TypeFactory
 class SQLSequence: public Sequence {
-		// used to track the end condition
-		size_t _rows;
-		// used to track the end condition
-		size_t _cols;
 #if 0
 		/**
 		 * We use auto_ptr to make possible transfer the connector
@@ -75,10 +71,7 @@ public:
 	{
 		if (_conn) {
 			if (_conn->isReady()) {
-				_rows=(conn->getRows()-1);
-				_cols=(conn->getCols()-1);
-				_conn->resetCol();
-				_conn->resetRow();
+				_conn->reset();
 			}
 			else {
 				BESDEBUG(SQL_NAME,
@@ -107,10 +100,7 @@ TESTDEBUG( SQL_NAME,"CREATING: SQLSequence"<< endl );
 	{
 			if (_conn) {
 				if (_conn->isReady()) {
-					_rows=seq._rows;
-					_cols=seq._cols;
-					_conn->resetCol();
-					_conn->resetRow();
+					_conn->reset();
 				}
 				else {
 					BESDEBUG(SQL_NAME,
@@ -210,12 +200,23 @@ TESTDEBUG( SQL_NAME, "SQLSequence: SEQUENCE EMPTY or not READY"<< endl );
 				return false;
 			}
 
-			if (_conn->getRow()>=_rows && _conn->getCol()>=_cols)
-			{// End of sequence
-
-TESTDEBUG( SQL_NAME,"SQLSequence: STOP -> Row: "
-	<<_conn->getRows()<<" Cols: "<<_conn->getCols()<< endl );
-
+			if (_conn->notEnd())
+			{
+TESTDEBUG( SQL_NAME, "SQLSequence: READING SEQUENCE\nRow: "
+	<<_conn->getRow()<<" Cols: "<<_conn->getCol()<< endl );
+				for (Vars_iter p = var_begin(); p != var_end(); ++p) {
+					if ((*p)->send_p() || (*p)->is_in_selection()) {
+						(*p)->read();
+					}
+#if __TESTS__==1
+(*p)->dump(std::cerr);
+#endif
+				}
+				return true;
+			}
+			else {// End of sequence
+				TESTDEBUG( SQL_NAME,"SQLSequence: STOP -> Row: "
+				<<_conn->getRows()<<" Cols: "<<_conn->getCols()<< endl );
 				//set_read_p(true); // done by read_row
 				//set_send_p(true); // done by read_row
 
@@ -224,24 +225,12 @@ TESTDEBUG( SQL_NAME,"SQLSequence: STOP -> Row: "
 				return false;
 			}
 
-TESTDEBUG( SQL_NAME, "SQLSequence: READING SEQUENCE"<< endl );
-
-			for (Vars_iter p = var_begin(); p != var_end(); ++p) {
-				if ((*p)->send_p() || (*p)->is_in_selection()) {
-					(*p)->read();
-				}
-#if __TESTS__==1
-(*p)->dump(std::cerr);
-#endif
-			}
-
 		} //try
 		catch (BESError &e)
 		{
 			_conn->close();
 			throw SQLInternalError("SQLSequence: READ ERROR",__FILE__, __LINE__);
 		}
-
 		return true;
 	}
 

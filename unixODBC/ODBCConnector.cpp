@@ -211,7 +211,7 @@ ODBCConnector::getType(size_t column){
 		for (size_t col=0; col<getCols(); col++)
 		{
 			SQLLEN sql_type;
-			SQLColAttribute(stmt , col+1, SQL_DESC_CONCISE_TYPE,0, 0, 0, &sql_type);
+			rc=SQLColAttribute(stmt , col+1, SQL_DESC_CONCISE_TYPE,0, 0, 0, &sql_type);
 			BESDEBUG(ODBC_NAME,"ODBCConnector: Getting column type: "<<sql_type<<
 					" for column: "<<col<<" exit status: "<<rc<<endl);
 			/**
@@ -254,7 +254,7 @@ TESTDEBUG(SQL_NAME,"ODBCConnector::getColName() "
 		for (size_t col=0; col<getCols(); col++)
 		{
 			char name[_buf_size];
-			SQLColAttribute(stmt , col+1, SQL_DESC_NAME,&name, _buf_size, 0, 0);
+			rc=SQLColAttribute(stmt , col+1, SQL_DESC_NAME,&name, _buf_size, 0, 0);
 			BESDEBUG(ODBC_NAME,"ODBCConnector: Getting column name: "<<name<<
 					" for column: "<<col<<" exit status: "<<rc<<endl);
 			/**
@@ -415,9 +415,10 @@ ODBCConnector::getMsg(ERROR_TYPE * error_code){
 
 /**
  * @brief Query
- * NOTE: this is also a good place to
+ * @note this is also a good place to
  * update QUERY size limit using
  * setCols(nFiled) and setRows(nRows)
+ * @note should set isReady() flag
  */
 bool
 ODBCConnector::query(){
@@ -426,9 +427,9 @@ ODBCConnector::query(){
 	 *  so if this happen here we have to clean
 	 *  buffers.
 	 */
-	if (isReady()) {//todo TEST (actually never happen)
+	if (isReady()) {
 		// close(); no, simply reset vars
-		clean(); // clean the
+		clean(); //!< clean members
 		// connect(); no, simply execute new query
 	}
 	// Allocate a statement handle
@@ -491,85 +492,81 @@ TESTDEBUG(ODBC_NAME,"ODBCConnector: Binding info-> Status:"<<rc<<
 
 TESTDEBUG(ODBC_NAME,"ODBCConnector: Bind done. Status: "<<rc<<endl);
 
-	// fetch first row
 	// if resulting status SUCCEDED set READY status.
-	if (SQL_SUCCEEDED(rc=SQLFetch(stmt))){
-		// set status to ready
-		setReady();
-		start=true; //set start status
-		return true;
+	if (sef)
+		SQLErrorManager<void>::trigger(_SQLH_ON_ALWAYS,*sef);
 
-TESTDEBUG(ODBC_NAME,"ODBCConnector: First fetch exit status is: "<<rc<<endl);
-
-	}
-	else
-		// return the status
-		return false;
+	// set number of rows to fetch.
+	toFetchRows=1;
+	// set cursors to start and check notEnd condition
+	reset();
+	// set status
+	setReady(true);
+	// return the status
+	return true;
 }
 
 /**
- * Returns a value of ODBC_TYPE type containing
- * the NEXT value in this result set.
- * It is pointed by the ACTUAL position registered by:
+ * @brief Returns a value of ODBC_TYPE type containing
+ * the next value in this result set.
+ * <br>It is pointed by the ACTUAL position:
  * - column 	-> getCol()
  * - row		-> getRow()
- * In a Sequence the NEXT value should be:
- * The NEXT COLUMN value of the actual row
- * OR
- * The first value of the NEXT ROW
- *
- * This method should also update the ACTUAL
- * position calling:
- * setCol(size_t increment)
- * OR
- * resetCol() && setRow(size_t increment)
+ * <br>In a Sequence the NEXT value should be:
+ * - The NEXT COLUMN value of the actual row
+ * <br>OR
+ * - The first value of the NEXT ROW
+ * @note This method should also update cursors to the
+ * next position using setNext:
+ * - setNext(size_t increment)
+ * @note The first time it is called should return object in
+ * position 0,0 and set cursors to col:1 and row:0 (or
+ * row:1 if only 1 column), if limits are reached
+ * (col==getCols() && row==getRows()) this method
+ * can throw an exception or an
+ * SQLInternalException
+ * @note use notEnd to check end condition
  */
 ODBC_TYPE *
 ODBCConnector::getNext(size_t next){
-	if (!isReady())
+	if (!isReady() || !notEnd())
 		throw SQLInternalError(
-			"Unable to getNext() elemeny, connector: !isReady()",
+			"Unable to getNext() element, connector: !isReady() or end is reached",
 			__FILE__,__LINE__);
 	//@todo may we want to try to reconnect?
 
-	if (start){
-		BESDEBUG(ODBC_NAME,"ODBCConnector: Getting FIRST element"<<endl);
-		start=false;
-		return buf[getCol()];
+	/**
+	 * number of rows to fetch (skip or extract)
+	 */
+	while (toFetchRows>0){ // while skip
+TESTDEBUG(SQL_NAME,"--------setNext starting fetch"<<endl);
+TESTDEBUG(SQL_NAME,"--------setNext resulting-----> rows: "<<toFetchRows<<endl);
+		fetch(); // fetch next row
+		toFetchRows--;
 	}
-	BESDEBUG(ODBC_NAME,"ODBCConnector: Getting next element"<<endl);
-	//if col or row limit reached
-	size_t rows;
-	/*
+
+	// get the pointer
+	SQLCHAR *ret= buf[getCol()];
+
+	/**
 	 * Set number of column and rows
 	 * corresponding to the current
 	 * position + next.
 	 * Return the number of skipped rows
+	 * which is stored for the next fetch
+	 * operation
 	 */
-	// get number of skipped rows
-	// check ENDING CONDITION -> skipped==getRows()
-	// check ENDING CONDITION -> getRow==getRows
-	if ((rows=setNext(next))<getRows()){
-TESTDEBUG(SQL_NAME,"--------setNext resulting-----> rows: "<<rows<<endl);
-		while (rows>0){ // while skip
-TESTDEBUG(SQL_NAME,"--------setNext starting fetch"<<endl);
-			fetch(); // fetch next row
-			rows--;
-		}
-		return buf[getCol()];
-	}
-	else
-		// row limit reached (this may not happen)
-		throw SQLInternalError("ResultSet limits reached!",
-				__FILE__,__LINE__);
+	toFetchRows=setNext(next);
+
+	return ret;
 }
 
 void
 ODBCConnector::fetch(){
-	/**
+#if 0
+	/** ACTUALLY NOT NEEDED
 	 * clean buffer
 	 */
-#if 0
 	for (size_t c=0; c<getCols(); c++){
 TESTDEBUG(ODBC_NAME,"ODBCConnector: buf["<<c<<"]: \""<<buf[c]<<"\""<<endl);
 		//*buf[c]=0;
@@ -578,13 +575,18 @@ TESTDEBUG(ODBC_NAME,"ODBCConnector: buf["<<c<<"]: \""<<buf[c]<<"\""<<endl);
 	/**
 	 * fetch row
 	 */
-	rc = SQLFetch( stmt);
-	// if data is null set to '0'
+	rc=SQLFetch(stmt);
+
+	/**
+	 *  if some fetched data is null
+	 *  set it to '0'
+	 */
 	for (size_t c=0; c<getCols(); c++){
 		if (status[c]==SQL_NULL_DATA)
 			buf[c]=(SQLCHAR*)'0';
 TESTDEBUG(SQL_NAME," Col_status:"<<(status[c]==SQL_NULL_DATA)<<endl);
 	}
+
 #if __TESTS__==1
 	for (size_t c=0; c<getCols(); c++)
 		BESDEBUG(ODBC_NAME,
@@ -598,7 +600,7 @@ TESTDEBUG(SQL_NAME," Col_status:"<<(status[c]==SQL_NULL_DATA)<<endl);
  */
 void
 ODBCConnector::setErrorFactory(SQLErrorFactory<ERROR_TYPE,MSG_TYPE> &ef){
-	sef=&ef;	// DO NOT DELETE!
+	sef=&ef;	//!<DO NOT DELETE!
 }
 
 /**
@@ -622,11 +624,8 @@ ODBCConnector::close(){
 	SQLEndTran(SQL_HANDLE_ENV, env, SQL_ROLLBACK);
 	SQLFreeHandle(SQL_HANDLE_ENV, env);
 
-	// clean temporary members;
-	clean();
 
-	// set status to NOT READY
-	// setReady(false); // done by clean
+	clean();//!< clean temporary members;
 
 	BESDEBUG(ODBC_NAME,"ODBCConnector: Connection closed"<<endl);
 	return true;

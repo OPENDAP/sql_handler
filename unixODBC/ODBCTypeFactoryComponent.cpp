@@ -38,12 +38,10 @@ TESTDEBUG(SQL_NAME,"ODBCFactoryComponent: casting a VOID"<<endl);
 	/**
 	 * ODBC connector directly bind fields to
 	 * variables so no conversion is needed.
-	 * @note: val is reused since it is the
-	 * connector buffer so the SimpleType
-	 * constructor should be set to true
-	 * (as default).
-	 * Connector dtor will delete it when it
-	 * is no more required
+	 * @note: val is NOT reused since it is
+	 * a copy from the connector buffer so
+	 * the SimpleType constructor should be
+	 * set to false.
 	 *
 	 * @see ODBCConnector
 	 */
