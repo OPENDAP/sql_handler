@@ -28,8 +28,34 @@
 #ifndef I_SQLModule_H
 #define I_SQLModule_H 1
 
-#include "BESAbstractModule.h"
+#include <BESAbstractModule.h>
+
+#include <iostream>
+
+using std::endl ;
+
+#include <BESDebug.h>
+#include <BESDapService.h>
+#include <BESServiceRegistry.h>
+
+#include <BESRequestHandlerList.h>
+
+#include <BESResponseHandlerList.h>
+#include <BESResponseHandler.h>
+#include <BESResponseNames.h>
+
+
+#include <BESContainerStorageList.h>
+#include <BESContainerStorageCatalog.h>
+#include <BESCatalogDirectory.h>
+#include <BESCatalogList.h>
+
 #include "SQLRequestHandler.h"
+
+#include "container/SQLContainerFactory.h"
+#include "container/SQLContainerStorage.h"
+
+//see below #include "DEM/SQLCheckPoint.h"
 
 /**
  * @brief The module of the SQLHandler it

@@ -24,25 +24,7 @@
  * Author: carlo cancellieri
  *
  */
-
-#include <iostream>
-
-using std::endl ;
-
-#include "BESRequestHandlerList.h"
-#include "BESDebug.h"
-#include "BESResponseHandlerList.h"
-#include "BESResponseNames.h"
-
 #include "SQLModule.h"
-#include "SQLResponseNames.h"
-#include "DEM/SQLCheckPoint.h"
-
-#include <BESDapService.h>
-#include <BESContainerStorageList.h>
-#include <BESContainerStorageCatalog.h>
-#include <BESCatalogDirectory.h>
-#include <BESCatalogList.h>
 
 SQLContainerStorage *SQLModule::cs=NULL;
 
@@ -50,18 +32,23 @@ SQLContainerFactory SQLModule::cf=SQLContainerFactory();
 
 SQLRequestHandler *SQLModule::rh=
 		SQLRequestHandler::theSQLRequestHandler(SQL_NAME);
-//SQLRequestHandler SQLModule::rh=SQLRequestHandler(SQL_NAME);
 
 void
 SQLModule::initialize( const string &modname )
 {
     BESDEBUG( SQL_NAME, "Initializing SQL Module "
 		       << SQL_NAME << endl ) ;
+#if 0
+
     /**
+     * This should be done by SQLPlugins which
+     * implements SQLErrorConnector
+     *
 	 *  initialize check point reading
 	 *  configuration file.
 	 */
     SQLCheckPoint::init();
+#endif
 
 #if 0
 /**HYSTORY
@@ -76,6 +63,8 @@ SQLModule::initialize( const string &modname )
  *NOW
  * The naming policy is actually defined by
  * SQLContainerFactory::getName(...)
+ * so the StorageContainer can be safely registered into
+ * the StorageList
  */
 #endif
     BESDEBUG( SQL_NAME, "    adding " << _SQLH_STORAGE <<
