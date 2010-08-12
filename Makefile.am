@@ -107,7 +107,8 @@ libsql_module_la_LIBADD = $(BES_DAP_LIBS)
 ######################################################
 libodbc_module_la_SOURCES = $(ODBC_SRCS) $(SQL_SRCS) $(ODBC_HDRS) $(SQL_HDRS)
 libodbc_module_la_CPPFLAGS =  $(BES_CPPFLAGS) $(ODBC_CPPFLAGS)
-libodbc_module_la_LDFLAGS = -avoid-version -module 
+libodbc_module_la_LDFLAGS = -avoid-version -module -lodbc
+libodbc_module_la_LIBADD = $(BES_DAP_LIBS) 
 ######################################################
 ## EXPORTING HEADERS
 
