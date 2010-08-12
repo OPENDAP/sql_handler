@@ -55,11 +55,11 @@ BES.module.odbc=@bes_modules_dir@/libodbc_module.so
 # of actions which will be activated or not depending on this option:
 # SQL.CheckPoint=1,2,3,4
 
-# SQL.CheckPoint=1,2,3,4,5
+SQL.CheckPoint=1,2,3,4,5
 
 # You could also concatenate this setup to force deeper check detail
 # in your's SQLPlugin configuration file.
 
 # SQL.CheckPoint+=5
 
-# NOTE: this list affect ALL the registered SQL plugin modules.
+# NOTE: this list affect ALL the registered SQLPlugin modules.
