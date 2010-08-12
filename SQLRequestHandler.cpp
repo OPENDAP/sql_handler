@@ -32,7 +32,43 @@ sql_handler_map *SQLRequestHandler::_theList=NULL;
 
 sql_wrap_count_map *SQLRequestHandler::_theWrapCount=NULL;
 
+pthread_mutex_t SQLRequestHandler::_mutex;
 
+pthread_once_t SQLRequestHandler::_block = PTHREAD_ONCE_INIT;
+
+SQLRequestHandler::SQLRequestHandler(const string &name) :
+	SQLLinker(name)
+{
+	/**
+	 * initialize unique instance of the block mutex
+	 */
+	if (pthread_once(&_block,once_init_routine)!=0)
+		throw BESInternalError(
+			"Could not initialize mutex. Exiting.",__FILE__, __LINE__);
+
+	add_handler(VERS_RESPONSE,SQLRequestHandler::version);
+	add_handler(HELP_RESPONSE,SQLRequestHandler::help);
+TESTDEBUG(SQL_NAME,"CREATED: SQLRequestHandler"<<endl);
+}
+
+SQLRequestHandler::~SQLRequestHandler(void) {
+	/**
+	 * remove all unregistered sql_handlers
+	 * from the list
+	 */
+	remove_sql_handlers();
+
+	if (_theList)
+		delete _theList;
+	_theList=0;
+	if (_theWrapCount)
+		delete _theWrapCount;
+	_theWrapCount=0;
+
+	DESTROY(&_mutex);
+
+TESTDEBUG(SQL_NAME,"DELETED: SQLRequestHandler"<<endl);
+}
 
 sql_handler_map &
 SQLRequestHandler::theList(){
@@ -88,40 +124,6 @@ SQLRequestHandler::_rh<<" creating new one"<<endl);
 TESTDEBUG(SQL_NAME,"SQLRequestHandler: _rh on addr: "<<
 SQLRequestHandler::_rh<<endl);
 	return (SQLRequestHandler::_rh);
-}
-
-SQLRequestHandler::SQLRequestHandler(const string &name) :
-	SQLLinker(name)
-{
-	/**
-	 * initialize unique instance of the block mutex
-	 */
-	if (pthread_once(&_block,once_init_routine)!=0)
-		throw BESInternalError(
-			"Could not initialize mutex. Exiting.",__FILE__, __LINE__);
-
-	add_handler(VERS_RESPONSE,SQLRequestHandler::version);
-	add_handler(HELP_RESPONSE,SQLRequestHandler::help);
-TESTDEBUG(SQL_NAME,"CREATED: SQLRequestHandler"<<endl);
-}
-
-SQLRequestHandler::~SQLRequestHandler(void) {
-	/**
-	 * remove all unregistered sql_handlers
-	 * from the list
-	 */
-	remove_sql_handlers();
-
-	if (_theList)
-		delete _theList;
-	_theList=0;
-	if (_theWrapCount)
-		delete _theWrapCount;
-	_theWrapCount=0;
-
-	DESTROY(&_mutex);
-
-TESTDEBUG(SQL_NAME,"DELETED: SQLRequestHandler"<<endl);
 }
 
 /**

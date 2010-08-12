@@ -25,7 +25,6 @@
 
 #ifndef I_SQLRequestHandler_H
 #define I_SQLRequestHandler_H
-
 #include "sql_config.h"
 #include "SQLResponseNames.h"
 
@@ -37,53 +36,36 @@
 
 #include <BESContainerStorageList.h>
 #include <BESInternalFatalError.h>
-// inherit
-#include <BESRequestHandler.h>
+#include <BESInternalError.h>
 
-#include <BESResponseHandler.h>
-#include <BESResponseNames.h>
-#include <BESRequestHandlerList.h>
 #include <BESVersionInfo.h>
 #include <BESTextInfo.h>
 #include <BESDapNames.h>
+
+#include "utils/SmartMap.h"
+
+#include "SQLLinker.h"
+
 #include <BESDataDDSResponse.h>
 #include <BESDDSResponse.h>
 #include <BESDASResponse.h>
+#include <BESResponseHandler.h>
+#include <BESResponseNames.h>
+#include <BESRequestHandlerList.h>
 #include <BESConstraintFuncs.h>
 #include <BESServiceRegistry.h>
 #include <BESUtil.h>
-#if 1
-#include "utils/SmartMap.h"
-//using smart::SmartValueMap;
-#endif
-#include "SQLLinker.h"
-#include "SQLPluginList.h"
-class SQLPlugin;
-
 #include <pthread.h>
-
-/**
- * instance_mutex is used to ensure that only one instance is created.
- * It protects the body of the theXXX methods. This mutex is initialized
- * from within the static function once_init_routine() and the call to
- * that takes place using pthread_once_init() where the mutex once_block
- * is used to protect that call. All of this ensures that no matter how
- * many threads call the instance() method, only one instance is ever made.
- */
-static pthread_mutex_t _mutex;
-static pthread_once_t _block = PTHREAD_ONCE_INIT;
-
+// get the lock
 #define LOCK(m) pthread_mutex_lock((m))
+// test the lock
 #define TRYLOCK(m) pthread_mutex_trylock((m))
+// unlock
 #define UNLOCK(m) pthread_mutex_unlock((m))
+// initialize the mytex
 #define INIT(m) pthread_mutex_init((m), 0)
+// destroy the mutex
 #define DESTROY(m) pthread_mutex_destroy((m))
-static void
-once_init_routine(){
-	if (INIT(&_mutex)!= 0)
-		throw BESInternalError(
-			"Could not initialize mutex. Exiting.",__FILE__, __LINE__);
-}
 
 /**
  * @brief type definition of the list of SQLPlugin
@@ -113,6 +95,28 @@ typedef std::map<string,size_t> sql_wrap_count_map;
 class SQLRequestHandler :public SQLLinker {
 private:
 	/**
+	 * instance_mutex is used to ensure that only one instance is created.
+	 * It protects the body of the theXXX methods. This mutex is initialized
+	 * from within the static function once_init_routine() and the call to
+	 * that takes place using pthread_once_init() where the mutex once_block
+	 * is used to protect that call. All of this ensures that no matter how
+	 * many threads call the instance() method, only one instance is ever made.
+	 */
+	static pthread_mutex_t _mutex;
+	static pthread_once_t _block;
+
+
+	/**
+	 * @brief mutex initialization routine
+	 */
+	static void
+	once_init_routine(){
+		if (INIT(&_mutex)!= 0)
+			throw BESInternalError(
+				"Could not initialize mutex. Exiting.",__FILE__, __LINE__);
+	}
+
+	/**
 	 *  self referred to implement the Singleton pattern)
 	 */
 	static SQLRequestHandler *_rh;
@@ -122,6 +126,7 @@ private:
 	typedef sql_handler_map::const_iterator	SQLHandler_citer;
 
 	/**
+	 * list of loaded SQLPlugin
 	 *  implements the Singleton pattern
 	 */
 	static sql_handler_map *_theList;
