@@ -206,17 +206,17 @@ TESTDEBUG(SQL_NAME,"SQLNextTypeAction: getting nextType"<<endl);
 		}
 		catch(BESError &e){
 			connector.close();
-			throw SQLInternalError(e.get_message(),
+			throw SQLInternalFatalError(e.get_message(),
 					e.get_file(),e.get_line());
 		}
 		catch(exception &e){
 			connector.close();
-			throw SQLInternalError(e.what(),
+			throw SQLInternalFatalError(e.what(),
 					__FILE__,__LINE__);
 		}
 		catch(...){
 			connector.close();
-			throw SQLInternalError(
+			throw SQLInternalFatalError(
 				"SQLNextTypeAction: Unknow error while connecting",
 				__FILE__,__LINE__);
 		}

@@ -80,19 +80,19 @@ class SQLErrorConnector {
 		 */
 		virtual const bool & isReady()const=0;
 
+		/**
+		 * @brief dtor
+		 */
 		virtual ~SQLErrorConnector(){
 TESTDEBUG(SQL_NAME,"DELETING: SQLErrorConnector"<<endl);
-		};
+		}
 
 		/**
 		 * @brief Constructor
-		 * @param an SQLContainer containing
-		 * ALL the information needed to establish
-		 * connections and to build the SQL query.
 		 */
 		SQLErrorConnector(){
 TESTDEBUG(SQL_NAME,"CREATING: SQLErrorConnector"<<endl);
-		};
+		}
 	};
 
 #endif /* SQLERRORCONNECTOR_H_ */

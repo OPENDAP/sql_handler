@@ -164,10 +164,12 @@ private:
 	 * 4 SQL_ERROR,
 	 * 5 SQL_INVALID_HANDLE.
 	 */
+#if 0
+	// fatalAction also print to debug
 
 	// common error ActionList
 	static _list_type _error[];
-
+#endif
 	// 1 SQL_SUCCESS,
 	static SQLStaticActionList<MSG_TYPE,void> success;
 

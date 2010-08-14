@@ -27,7 +27,6 @@
 #ifndef SQLBUILDDAS_H_
 #define SQLBUILDDAS_H_
 
-
 #include "connector/SQLConnector.h"
 
 #include "handler/connector/SQLConnectAction.h"

@@ -173,25 +173,25 @@ public:
 			 *  This exception here (applied to connect) should be fatal.
 			 *  It will be throw as fatal.
 			 */
-			throw SQLInternalError(ie.get_message(),
+			throw SQLInternalFatalError(ie.get_message(),
 					ie.get_file(),ie.get_line());
 		}
 		catch(BESError &e){
 			// don't forget to close the connector
 			connector.close();
-			throw SQLInternalError(e.get_message(),
+			throw SQLInternalFatalError(e.get_message(),
 					e.get_file(),e.get_line());
 		}
 		catch(exception &e){
 			// don't forget to close the connector
 			connector.close();
-			throw SQLInternalError(e.what(),
+			throw SQLInternalFatalError(e.what(),
 					__FILE__,__LINE__);
 		}
 		catch(...){
 			// don't forget to close the connector
 			connector.close();
-			throw SQLInternalError(
+			throw SQLInternalFatalError(
 				"SQLConnectAction: Unknow error while connecting",
 				__FILE__,__LINE__);
 		}

@@ -166,12 +166,11 @@ public:
 		}
 		catch(SQLInternalError &ie){
 			connector.close();
-			throw SQLInternalError(ie.get_message(),ie.get_file(),
-														ie.get_line());
+			throw;
 		}
 		catch(SQLInternalFatalError &ie){
 			connector.close();
-			throw SQLInternalError(ie.get_message(),ie.get_file(),
+			throw SQLInternalFatalError(ie.get_message(),ie.get_file(),
 														ie.get_line());
 		}
 		catch(exception &e){
@@ -179,7 +178,7 @@ public:
 			/**
 			 *  Generic exception here is fatal.
 			 */
-			throw SQLInternalError(e.what(),__FILE__,__LINE__);
+			throw SQLInternalFatalError(e.what(),__FILE__,__LINE__);
 		}
 		catch(...){
 			throw SQLInternalFatalError(

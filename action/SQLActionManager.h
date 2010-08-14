@@ -32,6 +32,8 @@
 #include <BESError.h>
 #include <BESInternalError.h>
 #include <BESInternalFatalError.h>
+#include "DEM/SQLInternalError.h"
+#include "DEM/SQLInternalFatalError.h"
 
 /**
  * @brief A manager for ActionFactory objects.
@@ -160,23 +162,28 @@ TESTDEBUG(SQL_NAME,"ActionManager: Starting actions"<<std::endl);
 #endif
 				// Used to initialize first time 'args'
 				bool first_time=true;
-
 				/**
-				 * NOTE '*args' could be a null
-				 * argument so no check is performed
+				 * handle SQLInternalError as not fatal error
+				 * returning control to the SQLActionManager
+				 * to search for the next CODE.
 				 */
-				ARGS_TYPE *args=NULL;
-				while(actions.hasNext()){
-					// multiple_args || first_time == true?
-					if (multiple_args)
-						args=_af.getArgs(code);
-					else if (first_time){
-						first_time=false;
-						args=_af.getArgs(code);
-					}
+				try {
+					/**
+					 * NOTE '*args' could be a null
+					 * argument so no check is performed
+					 */
+					ARGS_TYPE *args=NULL;
+					while(actions.hasNext()){
+						// multiple_args || first_time == true?
+						if (multiple_args)
+							args=_af.getArgs(code);
+						else if (first_time){
+							first_time=false;
+							args=_af.getArgs(code);
+						}
 
-					// tryNext action and merge results
-					_merge=merge_f(_merge,tryNext(actions,args));
+						// tryNext action and merge results
+						_merge=merge_f(_merge,tryNext(actions,args));
 
 #if __TESTS__==1
 					if (_merge)
@@ -185,6 +192,10 @@ TESTDEBUG(SQL_NAME,"ActionManager: Starting actions"<<std::endl);
 						BESDEBUG(SQL_NAME,"ActionManager: MERGEisNULL"<<std::endl);
 #endif
 
+					}
+				}
+				catch(SQLInternalError &ie){
+					BESDEBUG(SQL_NAME,"SQLInternalError handled"<<endl);
 				}
 			} // if code
 			else // ERROR_TYPE *code==NULL

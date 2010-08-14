@@ -38,9 +38,12 @@ SQLStaticActionList<MSG_TYPE,void> ODBCErrorFactoryComponent::info=
 SQLStaticActionList<MSG_TYPE,void> ODBCErrorFactoryComponent::no_data=
 	SQLStaticActionList<MSG_TYPE,void>(SQLDefaultErrorAction<MSG_TYPE>::debugMethod);
 
+#if 0
+// fatalAction also print to debug
 ODBCErrorFactoryComponent::_list_type ODBCErrorFactoryComponent::_error[2]=
 	{	SQLDefaultErrorAction<MSG_TYPE>::debugMethod,
-		SQLDefaultErrorAction<MSG_TYPE>::exceptionMethod };
+		SQLDefaultErrorAction<MSG_TYPE>::fatalMethod };
+#endif
 
 #if 0
 // SQL_NO_DATA
@@ -50,11 +53,11 @@ SQLStaticActionList<MSG_TYPE,void> ODBCErrorFactoryComponent::no_data=
 
 // SQL_ERROR
 SQLStaticActionList<MSG_TYPE,void> ODBCErrorFactoryComponent::error=
-	SQLStaticActionList<MSG_TYPE,void>(ODBCErrorFactoryComponent::_error,2);
+		SQLStaticActionList<MSG_TYPE,void>(SQLDefaultErrorAction<MSG_TYPE>::fatalMethod);
 
 // SQL_INVALID_HANDLE
 SQLStaticActionList<MSG_TYPE,void> ODBCErrorFactoryComponent::invalid=
-	SQLStaticActionList<MSG_TYPE,void>(ODBCErrorFactoryComponent::_error,2);
+		SQLStaticActionList<MSG_TYPE,void>(SQLDefaultErrorAction<MSG_TYPE>::fatalMethod);
 
 SQLActionList<MSG_TYPE,void>&
 ODBCErrorFactoryComponent::_getActions(ERROR_TYPE *error)

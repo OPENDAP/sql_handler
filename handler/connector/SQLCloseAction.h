@@ -165,20 +165,20 @@ public:
 			 *  This exception here (applied to close) should be fatal.
 			 *  It will be throw as Fatal Error.
 			 */
-			throw SQLInternalError(ie.get_message(),
+			throw SQLInternalFatalError(ie.get_message(),
 										ie.get_file(),
 										ie.get_line());
 		}
 		catch(BESError &e){
-			throw SQLInternalError(e.get_message(),
+			throw SQLInternalFatalError(e.get_message(),
 					e.get_file(),e.get_line());
 		}
 		catch(exception &e){
-			throw SQLInternalError(e.what(),
+			throw SQLInternalFatalError(e.what(),
 					__FILE__,__LINE__);
 		}
 		catch(...){
-			throw SQLInternalError(
+			throw SQLInternalFatalError(
 				"SQLCloseAction: Unknow error while connecting",
 				__FILE__,__LINE__);
 		}
