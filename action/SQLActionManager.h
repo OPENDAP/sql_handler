@@ -75,15 +75,17 @@ protected:
 	 * This function should delete actual pointer if
 	 * not used.
 	 * @return the previous _JOIN status (NULL)
-	 * <br> NOTE: do not delete actual.
+	 * <br>@note: do not delete actual.
 	 *
 	 */
 	typedef _JOIN * (*JOIN)(_JOIN *,_MERGE *);
 	static _JOIN * join(_JOIN * previous, _MERGE * actual){
 		return previous;
 		// no modification to previous
-// commented out to permit void _MERGE==void
-//		smart::Delete::smartDelete<_MERGE*>(actual);
+#if 0
+		// commented out to permit void _MERGE==void
+		// smart::Delete::smartDelete<_MERGE*>(actual);
+#endif
 	}
 
 	/**
@@ -94,14 +96,16 @@ protected:
 	 * This function should delete actual pointer if
 	 * not used.
 	 * @return the previous _MERGE status (NULL)
-	 * <br> NOTE: do not delete actual.
+	 * <br>@note: do not delete actual.
 	 */
 	typedef _MERGE * (*MERGE)(_MERGE *, OUT_TYPE *);
 	static _MERGE * merge(_MERGE * previous, OUT_TYPE * actual){
 		return previous;
 		// no modification to previous
-// commented out to permit OUT_TYPE == void
-//		smart::Delete::smartDelete<OUT_TYPE*>(actual);
+#if 0
+		// commented out to permit OUT_TYPE == void
+		// smart::Delete::smartDelete<OUT_TYPE*>(actual);
+#endif
 	}
 public:
 
@@ -128,7 +132,7 @@ public:
 	 * (true) or only one time (false) as for getCode. This
 	 * mean that ALL the action in the selected ActionList
 	 * will run using same argument.
-	 * @throws @see tryNext()
+	 * @throw SQLInternalFatalError
 	 * @see join(), merge()
 	 *
 	 */
@@ -148,18 +152,13 @@ TESTDEBUG(SQL_NAME,"ActionManager: Starting actions"<<std::endl);
 		// do actions
 		do {
 			_MERGE *_merge=NULL;
-#if __TESTS__==1
-			BESDEBUG(SQL_NAME,"ActionManager: Getting code"<<std::endl);
-#endif
+TESTDEBUG(SQL_NAME,"ActionManager: Getting code"<<std::endl);
 			// get next code
 			if ((code=_af.getCode())){
 				// do actions for that code
-
 				SQLActionList<ARGS_TYPE,OUT_TYPE> &actions=
 					_af.getActions(code);
-#if __TESTS__==1
-				BESDEBUG(SQL_NAME,"ActionManager: ActionList size: "<<(actions).getSize()<<endl);
-#endif
+TESTDEBUG(SQL_NAME,"ActionManager: ActionList size: "<<(actions).getSize()<<endl);
 				// Used to initialize first time 'args'
 				bool first_time=true;
 				/**
@@ -216,7 +215,7 @@ TESTDEBUG(SQL_NAME,"ActionManager: Starting actions"<<std::endl);
 
 
 		// while NOT stop
-		}while (!_af.stop(code));//(!stop(code));//
+		}while (!_af.stop(code));//(!stop(code));
 
 		return _join;
 	} // doActions
@@ -230,22 +229,28 @@ private:
 	 * @param the action list to use
 	 * @param the args pointer to pass to the action
 	 * @return the output pointer of the action to run
-	 * @throws SQLInternalFatalError,
+	 * @throw SQLInternalFatalError,
 	 * SQLInternalError, BESInternalFatalError
 	 */
 	template <class ARGS_TYPE>
 	static OUT_TYPE * tryNext(SQLActionList<ARGS_TYPE,OUT_TYPE> &actions,
 		ARGS_TYPE *args)
-			throw (SQLInternalFatalError,
-					SQLInternalError,
-					BESInternalFatalError) {
+#if 0
+		// useful?
+		throw (SQLInternalFatalError,
+				SQLInternalError,
+				BESInternalFatalError)
+#endif
+		{
 		try {
 			return actions.doNext(args);
 		}
+#if 0
 		catch (SQLInternalError &ie){
 			// this error shouldn't be filtered!
 			throw;
 		}
+#endif
 		catch (SQLInternalFatalError &ife){
 			// this error shouldn't be filtered!
 			BESDEBUG(SQL_NAME,ife.get_message());
@@ -256,7 +261,7 @@ private:
 		 * so default operation is DEBUG only.
 		 */
 		catch (BESInternalError &e){
-			/*
+			/**
 			 * This is commented out to avoid the use
 			 * of CONTINUE action.
 			 * If you make this error throwable here
@@ -282,10 +287,11 @@ private:
 				"SQLActionManager: running ACTIONs-> "
 					+e.get_message(),e.get_file(),e.get_line());
 		}
-		/*
-		 * ALL other errors aren't actually filtered
+#if 0
+		// ALL other errors aren't actually filtered
 		catch (...){
-		}*/
+		}
+#endif
 		return NULL; //to avoid warning
 	}
 
