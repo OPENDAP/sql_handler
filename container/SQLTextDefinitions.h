@@ -32,6 +32,7 @@
 #define SQLTEXTDEFINITIONS_H_
 
 #include "SQLConstraint.h"
+#include "SQLQuery.h"
 
 /**
  * @brief The dataset definition

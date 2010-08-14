@@ -38,22 +38,23 @@
 #include <BESInternalError.h>
 #include <BESInternalFatalError.h>
 
-// members
-#include <string>
-
 // timing
 #include <sys/stat.h>
 #include <time.h>
 #include <math.h>
+
 // _SQLH_CONT_TIME_DIF && regex
 #include "SQLContainerDefinitions.h"
+#if 0
+// FREE SQLContainer by the SQLQuery
+#include <string>
 #include "SQLAttribute.h"
 #include "SQLConstraint.h"
-#include "SQLQuery.h"
-
 #include <set>
 #include <bitset>
 #include <vector>
+#include "SQLQuery.h"
+#endif
 
 #include <utils/Clone.h>
 /**
@@ -105,13 +106,21 @@ public:
 	virtual SQLContainer* create()throw (std::bad_alloc){
 		return ptr_duplicate();
 	}
-
+#if 0
 	/**
+ * moved into the SQLTextContainer Implementation
+ * to free the interface from the SQLQuery
+ * @todo Otherwise we may FIX SQLQuery and define
+ * SQLAttribute, FROM and SQLConstraint interfaces.
+ * this is to keep SQLContainer free from template parameters
+ * @todo discuss about this.
+ * @todo if you do this change comments into template accordingly
+	 *
 	 * @brief return a reference to a SQLQuery object
 	 * representing the actual dataset query
 	 */
-	virtual SQLQuery& getQuery()=0;
-
+	virtual SQLQuery & getQuery()=0;
+#endif
 	/**
 	 * @brief effectively build the query string
 	 *
@@ -262,9 +271,16 @@ public:
 		return _isReady;
 	}
 
+	/**
+	 * @brief Constructor
+	 * @param c a BESFileContainer pointer to copy
+	 */
 	explicit SQLContainer(const BESFileContainer *c);
 
-
+	/**
+	 * @brief Constructor
+	 * @param c a BESContainer to copy
+	 */
 	explicit SQLContainer(const BESContainer &c);
 
 	/**

@@ -79,6 +79,7 @@ public:
 	SQLQuery():select(),from(),where(){
 TESTDEBUG( SQL_NAME,"CREATING: SQLQuery"<<endl );
 	}
+
 	/**
 	 * @brief copy constructor
 	 * @param q const reference to the SQLQuery to copy
@@ -119,7 +120,7 @@ TESTDEBUG( SQL_NAME,"DELETING: SQLQuery"<<endl );
 	}
 	/**
 	 * @brief set the select clause as parameter.
-	 * @param s an SQLAttribute ordered by attribute rest+name
+	 * @param s an SQLAttribute ordered by attribute
 	 */
 	void setSelect(SQL_ATTRIBUTE_SET_BYNAME & s){
 		select=s;

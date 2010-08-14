@@ -49,7 +49,9 @@
 #include <fstream>
 #include "SQLTextDefinitions.h"
 
-// buildQuery
+// getQuery
+#include "SQLQuery.h"
+
 //auto_ptr
 #include <memory>
 
