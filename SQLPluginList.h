@@ -28,12 +28,12 @@
 #define SQLPLUGINLIST_H_
 
 #include <string>
+#include <BESInternalFatalError.h>
+
 #include "SQLDefinitions.h"
-#include "BESInternalFatalError.h"
 #include "SQLPlugin.h"
 class SQLPlugin;
 
-#include <BESRequestHandler.h>
 class SQLPluginList{
 public:
     SQLPluginList(){};

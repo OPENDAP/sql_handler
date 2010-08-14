@@ -29,7 +29,6 @@
 #define I_SQLModule_H 1
 
 #include <BESAbstractModule.h>
-
 #include <iostream>
 
 using std::endl ;
@@ -51,9 +50,9 @@ using std::endl ;
 #include <BESCatalogList.h>
 
 #include "SQLRequestHandler.h"
-
 #include "container/SQLContainerFactory.h"
 #include "container/SQLContainerStorage.h"
+
 
 /**
  * @brief The module of the SQLHandler it

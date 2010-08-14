@@ -117,7 +117,7 @@ private:
 	}
 
 	/**
-	 *  self referred to implement the Singleton pattern)
+	 * @brief self referred to implement the Singleton pattern
 	 */
 	static SQLRequestHandler *_rh;
 
@@ -126,20 +126,20 @@ private:
 	typedef sql_handler_map::const_iterator	SQLHandler_citer;
 
 	/**
-	 * list of loaded SQLPlugin
+	 * @brief list of loaded SQLPlugin
 	 *  implements the Singleton pattern
 	 */
 	static sql_handler_map *_theList;
 
 	/**
-	 *  track how many (value) SQLPlugins are using a
-     *  wrap function (the key is the command name).
-	 *  @note: implements the Singleton pattern)
+	 * @brief track how many (value) SQLPlugins are using a
+     * wrap function (the key is the command name).
+	 * @note: implements the Singleton pattern)
 	 */
     static sql_wrap_count_map *_theWrapCount;
 
     /**
-     * update the wrap_count and return
+     * @brief Update the wrap_count and return
      * @param name the name of the function handler
      * @oaram add set to true if the counter should be
      * increased or to false if should be decreased.
@@ -150,6 +150,19 @@ private:
 			throw (BESInternalFatalError);
 
 	/**
+ * @todo when an incoming request fails due to bad query, the
+ * same constraints are applied to the next section of the dataset
+ * which may has (probably) different column and tables names
+ * so constraints will not match and all the query to the following
+ * sections will fail.
+ * <br>This not happen when constraints are empty
+ * <br>SOLUTIONs:
+ * <br>Administrator: can set homogeneous views with same columns
+ * and attributes for each database used by this dataset.
+ * <br>Coding: we can add some specification to dataset which
+ * tells if sections are homogeneous or not, in this case (not
+ * homogeneous) we use only the fist 'working' (can connect) section.
+ *
 	 * @brief function used to implement recursive calls through
 	 * available servers listed into the dataset.
 	 * This function look at the actual container in the 'dhi' and
@@ -178,7 +191,6 @@ private:
 	 */
 	SQLPlugin *	find_sql_plugin(SQLContainer &c);
 
-
 	/**
 	 * @brief default constructor
 	 * This constructor uses add_handler to add default command handler
@@ -193,12 +205,21 @@ private:
 
 public:
 	/**
+	 * @brief destructor
+	 * @note do not destruct this class, only its members,
+	 * you have to delete the SQLRequestHandler instance outside.
+	 */
+    ~SQLRequestHandler(void);
+
+// SINGLETON
+	/**
 	 * @brief Lazy initialization of _theList singleton
 	 * @return the singleton sql_handler_map
 	 * @note: thread safe
 	 */
 	static sql_handler_map & theList();
 
+// SINGLETON
 	/**
 	 * @brief Lazy initialization of _theWrapCount singleton
 	 * @return the singleton sql_wrap_count_map
@@ -206,6 +227,7 @@ public:
 	 */
 	static sql_wrap_count_map &	theWrapCount();
 
+// SINGLETON
 	/**
 	 * @brief Lazy initialization of the class
 	 * @return the singleton of this class
@@ -213,13 +235,8 @@ public:
 	 */
 	static SQLRequestHandler * theSQLRequestHandler(const string &name);
 
-	/**
-	 * @brief destructor
-	 * @note do not destruct this class, only its members,
-	 * you have to delete the SQLRequestHandler instance outside.
-	 */
-    ~SQLRequestHandler(void);
 
+// The SQLLink interface implementation
 	/**
 	 * @brief Implementation of 'SQLLink' interface
 	 * @return pointer to the this instance (singleton)
@@ -228,6 +245,8 @@ public:
     	return theSQLRequestHandler(get_name());
     }
 
+
+// SQLRequestHandler specific method
     /**
      * @brief a generic wrapper used by SQLPlugin
      *  to add method wrapper.
@@ -241,27 +260,29 @@ public:
     	return theSQLRequestHandler(SQL_NAME)->
     			lastChanceRunner(sql_dhi,dhi.action);
     };
-
 	/**
 	 * @brief Run version on the Base handler
 	 * and on all the SQLPlugins registered
 	 */
     static bool version(BESDataHandlerInterface &dhi );
-
-    /**
-     * @brief Dump a text representation of this handler
-     * and all registered SQLPlugin(s).
-     */
-    virtual void
-    dump( ostream &strm ) const;
-
     /**
      * @brief Run help version on the SQLRequestHandler
      * and on all the SQLPlugins registered
      */
     static bool help(BESDataHandlerInterface &dhi );
 
-    /**
+
+// BESRequestHandler override
+	/**
+	 * @brief Dump a text representation of this handler
+	 * and all registered SQLPlugin(s).
+	 */
+	virtual void
+	dump( ostream &strm ) const;
+
+
+//SQLPluginList methods implementation
+	/**
      * @brief Used to find an SQLPlugin into the list
      * @param name the name of the SQLPlugin to find
      * @return a pointer to the found plugin or NULL

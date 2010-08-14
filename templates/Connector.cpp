@@ -383,14 +383,6 @@ OPENDAP_CLASSSimpleConnector::query(){
 	 * Use your ODBC API to perform a query execution.
 	 * the query is found in:
 	 * string query=getParams().buildQuery();
-	 * Build a query can be very difficult anyway if you
-	 * whant to perform your own function you can find
-	 * all the extracted data (from dataset) in:
-	 *  getParams().getQuery()
-	 * You may also have to merge those parameter with
-	 * the 'on the fly' specified constraints which can
-	 * be foun here:
-	 *  getParams().get_constraints()
 	 * If you have added some string substitution to the
 	 * dataset you can get all the extracted variables
 	 * using getParams().getOther(&key_to_val)
