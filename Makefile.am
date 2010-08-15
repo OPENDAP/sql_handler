@@ -81,7 +81,7 @@ BES_SRCS = \
 		SQLModule.cpp SQLRequestHandler.cpp
 
 BES_HDRS = \
-		SQLModule.h SQLRequestHandler.h SQLLinker.h
+		SQLModule.h SQLRequestHandler.h
 
 EXTRA_DIST = data doxy.conf COPYRIGHT COPYING sql_handler.spec \
 		sql.conf.in odbc.conf.in
@@ -100,15 +100,15 @@ libbes_sql_la_SOURCES = $(SQL_SRCS) $(SQL_HDRS)
 libbes_sql_la_CPPFLAGS =  $(BES_CPPFLAGS)
 libbes_sql_la_LDFLAGS = -version-info $(LIBBES_SQL_VERSION)
 ######################################################
-libsql_module_la_SOURCES = $(BES_SRCS) $(SQL_SRCS) $(BES_HDRS) $(SQL_HDRS)
+libsql_module_la_SOURCES = $(BES_SRCS) $(SQL_SRCS) $(SQL_HDRS) $(BES_HDRS)
 libsql_module_la_CPPFLAGS =  $(BES_CPPFLAGS)
 libsql_module_la_LDFLAGS = -avoid-version -module 
 libsql_module_la_LIBADD = $(BES_DAP_LIBS)
 ######################################################
-libodbc_module_la_SOURCES = $(ODBC_SRCS) $(SQL_SRCS) $(ODBC_HDRS) $(SQL_HDRS)
+libodbc_module_la_SOURCES = $(ODBC_SRCS) $(SQL_SRCS) $(SQL_HDRS) $(ODBC_HDRS)
 libodbc_module_la_CPPFLAGS =  $(BES_CPPFLAGS) $(ODBC_CPPFLAGS)
-libodbc_module_la_LDFLAGS = -avoid-version -module -lodbc
-libodbc_module_la_LIBADD = $(BES_DAP_LIBS) 
+libodbc_module_la_LDFLAGS = -avoid-version -module -lodbc 
+libodbc_module_la_LIBADD = $(BES_DAP_LIBS)
 ######################################################
 ## EXPORTING HEADERS
 
@@ -145,12 +145,80 @@ odbc.conf: odbc.conf.in config.status
 
 #########################################################################
 
+
 # docs
+
+# docs-clean-ext delete all the OLD 
+# backup copy of the external folder
+#
+# select all the external backup files
+# skip removing last (in time) backup
+# delete too old backups (others)
+# delete html folder and backup since it can be generated
+
+.PHONY: docs-clean-ext
+docs-clean-ext: clean
+	srcdir=$(srcdir);
+	(cd docs; \
+	backup=`ls --sort=time external.*.tar.gz 2>/dev/null`; \
+	rm_backup=$${backup#*.tar.gz}; \
+	backup=$${backup%%.tar.gz*}; \
+	if [[ -n "$$rm_backup" ]]; then \
+		rm $$rm_backup; \
+	fi; if [[ -n "$$backup" ]]; then \
+		mv -f $$backup.tar.gz external.tar.gz; \
+	elif [[ ! -f "external.tar.gz" ]]; then \
+		echo "NO EXTERNAL DOCUMENTATION FOUND!"; \
+	fi; )
+
+# docs-clean-int delete the html folder
+# and html folder backups.
+
+.PHONY: docs-clean-int
+docs-clean-int: clean
+	srcdir=$(srcdir);
+	(cd docs; \
+	if [[ -d html ]]; then \
+		rm -rdf html; \
+	fi; \
+	if [[ -f html.tar.gz ]]; then \
+		rm html.tar.gz; \
+	fi;)
+		
+# This compress documentation and delete folders
+# this also call docs-clean leaving only the last
+# and the actual copy of the external documentation
+# backup
+# 
+.PHONY: docs-pkg
+docs-pkg:
+	srcdir=$(srcdir);
+	doxygen $(srcdir)/doxy.conf;
+	( cd docs; \
+	if [[ -d html ]];then \
+		tar -czf html.tar.gz html; \
+		rm -rdf html; \
+	fi;)
+	make docs-clean-ext;
+	( cd docs; \
+	if [[ -d external ]];then \
+		tar -czf "external.`date +"%y%m%d%H%M"`.tar.gz" external 2>/dev/null; \
+		rm -rdf external; \
+	fi; )
+
+# Extract external documentation and generate doxygen
+# internal documentation
 
 .PHONY: docs
 docs:
-	srcdir=$(srcdir) doxygen $(srcdir)/doxy.conf
-	(cd docs && tar -czf html.tar.gz html)
+	srcdir=$(srcdir) doxygen $(srcdir)/doxy.conf;
+	(cd docs; \
+	last=`ls --sort=time external*.tar.gz 2>/dev/null`; \
+	last=$${last%%.tar.gz*}; \
+	if [[ -n "$$last" ]];then \
+		tar -xvzf $$last.tar.gz 2>/dev/null; \
+	fi;)
+		
 
 ###########################################################################
 
