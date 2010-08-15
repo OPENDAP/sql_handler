@@ -199,12 +199,12 @@ docs-pkg:
 		tar -czf html.tar.gz html; \
 		rm -rdf html; \
 	fi;)
-	make docs-clean-ext;
 	( cd docs; \
 	if [[ -d external ]];then \
 		tar -czf "external.`date +"%y%m%d%H%M"`.tar.gz" external 2>/dev/null; \
 		rm -rdf external; \
 	fi; )
+	make docs-clean-ext;
 
 # Extract external documentation and generate doxygen
 # internal documentation

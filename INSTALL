@@ -43,6 +43,19 @@ which will be installed in:
 
 $BES_DATA_DIR/data/sql/test_full.sql
 
+--------------DOCUMENTATION--------------
+Look into docs/ for documentation:
+- external:
+ contains external documentation in ppt (97-2003)
+- html:
+ contains doxygen generated documentation
+ 
+ use:
+  - make docs:
+  to get uncompressed documentation into docs/
+  - make docs-clean
+  to clean docs/ documentation folder
+
 -------------CONTACTS----------------
 OPeNDAP
  <support@opendap.org>
