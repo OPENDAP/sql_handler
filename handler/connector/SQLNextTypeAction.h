@@ -38,6 +38,9 @@
 #include <exception>
 
 /**
+ * @todo add Manager template arguments and wrapper to pass
+ * merge and join functions.
+ *
  * @brief Implements the nextType action which
  * returns a BaseType* corresponding to the actual
  * (connector.getCol()) position.

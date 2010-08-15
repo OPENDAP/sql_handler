@@ -31,6 +31,9 @@
 #include "action/SQLAction.h"
 
 /**
+ * @todo add Manager template arguments and wrapper to pass
+ * merge and join functions.
+ *
  * @brief Implements the close action for the
  * connector.
  * <br>'ON_EVENT' actions are performed using the

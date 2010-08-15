@@ -36,6 +36,9 @@
 #include <exception>
 
 /**
+ * @todo add Manager template arguments and wrapper to pass
+ * merge and join functions.
+ *
  * @brief Implements the query action for the
  * connector.
  * <br>'ON_EVENT' actions are performed using the

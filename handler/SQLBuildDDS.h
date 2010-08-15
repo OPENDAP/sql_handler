@@ -50,7 +50,10 @@
 
 
 /**
- * Placeholder class which define:
+ * @todo add Manager template arguments and wrapper to pass
+ * merge and join functions.
+ *
+ * @brief Placeholder class which define:
  * - maximum number of template arguments which this class may specify.
  * - default arguments to simplify default SQLBuildDDS::sql_build_dds calls.
  * @see specializations for more info.
@@ -83,7 +86,10 @@ public:
 
 
 /**
- * SPECIALIZATION class of SQLBuildDAS which implement basic
+ * @todo add Manager template arguments and wrapper to pass
+ * merge and join functions. For Errors and Types!
+ *
+ * @brief SPECIALIZATION class of SQLBuildDAS which implement basic
  * functions to make this class usable.
  * It provide a group of public wrappers which simplify
  * calls to the main (private) function.
