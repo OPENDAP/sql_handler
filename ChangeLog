@@ -1,0 +1,337 @@
+2010-08-17  ccancellieri
+
+	the external/images folder is included in the external.tar.gz package
+
+2010-08-17  ccancellieri
+
+	- clean docs/external.tar.gz/.svn folder to save space
+
+2010-08-16  Patrick West <pwest@ucar.edu>
+
+	New version of documentation.
+	M    docs/external.tar.gz
+
+2010-08-15  ccancellieri
+
+	use cases documentation images
+
+2010-08-15  ccancellieri
+
+	- Fixed Makefile make docs-pkg
+	- Updated INSTALL file
+
+2010-08-14  ccancellieri
+
+	External ppt documentation as gzipped file.
+
+2010-08-14  ccancellieri
+
+	Added @todo tags to help future works/plans
+
+2010-08-14  ccancellieri
+
+	Added PHONY targets to control external documentation backup, clean and restore
+
+2010-08-13  ccancellieri
+
+	Fixing comments and optimizing exceptions handling
+
+2010-08-13  ccancellieri
+
+	fix to comments and imports
+
+2010-08-13  ccancellieri
+
+	Fixing SQLException handling
+
+2010-08-13  ccancellieri
+
+	keep out SQLContainer::getQuery() to free interface from the SQLQuery implementation. Moved to the SQLTextContainer.
+	SQLContainer::buildQuery() still remain.
+
+2010-08-12  ccancellieri
+
+	fixed comments and layout and examples
+
+2010-08-12  ccancellieri
+
+	Bug fix:
+	building constraint part of a query when specified constraint is in the form 'attribute alias':
+	- SQLAttribute badly used 'attribute alias'
+	Concept:
+	- can't use alias in WHERE clause
+
+2010-08-12  ccancellieri
+
+	- bug fix: tables 1x1 are not correctly returned.
+	- small changes to the connectors interfaces.
+	- fixed ODBCConnector
+	- fixed templates
+	- doxygen documentation update
+	- changed revision
+
+2010-08-12  ccancellieri
+
+	fix headers import
+
+2010-08-12  ccancellieri
+
+	make the mutex a private member
+
+2010-08-11  ccancellieri
+
+	Only 'complete' SQLPlugin(s) have to set CheckPoints
+
+2010-08-11  ccancellieri
+
+	libodbc_module need dap libs
+	libodbc_module need to link odbc library
+
+2010-08-10  Patrick West <pwest@ucar.edu>
+
+	Updated NEWS with version so distcheck builds. Added sql_config.h to
+	DISTCLEANFILES. Added odbc.conf to CLEANFILES.
+	M    NEWS
+	M    Makefile.am
+
+2010-08-10  Patrick West <pwest@ucar.edu>
+
+	Updated the version to 0.0.3. Added library version to bes_sql library.
+	Removed versioning from module libraries.
+	M    configure.ac
+	M    Makefile.am
+
+2010-08-10  Patrick West <pwest@ucar.edu>
+
+	For systems that don't have case sensitivity, renamed this directory to
+	install.dir.
+	A  + install.dir
+	D    install
+
+2010-08-10  ccancellieri
+
+	- fix to the SQLPlugin unloading (now works)
+	- minor fix to the code layout of SQLModule
+
+2010-08-10  ccancellieri
+
+	- fixed SQLRequestHandler inheritance
+	- fixed doxygen documentation
+	- (INSTALL) added
+
+2010-08-10  ccancellieri
+
+	- Workaround to:
+	 - (templates/PluginLoader) BES unload modules orded
+	 - (SQLPlugin) shared library dynamic symbol resolution
+	- fix to:
+	 - (Makefile.am) added odbc.conf
+	 - (templates/...)
+	 - DTM/SQLSequence no need to import SQLRequestHandler
+	 - SQLBuildXXX imports
+
+2010-08-08  Patrick West <pwest@ucar.edu>
+
+	Corrections to templates and test data.
+	M    bin/filter.awk
+	M    data/test_full.sql
+	M    templates/Plugin.cpp
+	M    templates/Plugin.h
+	M    templates/configure.ac
+	M    templates/data/test_full.sql
+	M    DEM/SQLErrorFactory.h
+	M    Makefile.am
+
+2010-08-08  Patrick West <pwest@ucar.edu>
+
+	Was putting things in share/sql, but that seems too generic. Using
+	pkgdatadir instead. Fixed issues with distcheck.
+	A  + sql_handler.spec
+	M    bin/besCreateSQLPlugin.in
+	D    sql_module.spec
+	M    templates/Makefile.am
+	M    doxy.conf
+	M    Makefile.am
+
+2010-08-07  Patrick West <pwest@ucar.edu>
+
+	Added m4 script to find unixodbc package install. Changed configure.ac
+	and Makefile.am for this. Was missing filter.awk, added. Changed
+	SQLhandler_doxygen to doxy.conf. Weird problem with ODBCPlugin.cpp. Just
+	had to break up a line. config.h config.h.in and sql_config.h are all
+	generated.
+	A    conf/m4_ax_prefix_config_h.m4
+	A    conf/odbc.m4
+	A    conf/acinclude.m4
+	M    configure.ac
+	A    bin/filter.awk
+	D    sql_config.h
+	D    SQLHandler_doxygen
+	D    config.h.in
+	A  + doxy.conf
+	M    Makefile.am
+	M    unixODBC/ODBCPlugin.cpp
+
+2010-08-07  Patrick West <pwest@ucar.edu>
+
+	First version of the sql handler
+	A    conf
+	A    conf/pkg.m4
+	A    conf/cppunit.m4
+	A    conf/bes.m4
+	A    conf/libdap.m4
+	A    SQLModule.cpp
+	A    sql.conf.in
+	A    docs
+	A    SQLRequestHandler.h
+	A    configure.ac
+	A    SQLPlugin.h
+	A    bin
+	A    bin/besCreateSQLPlugin.in
+	A    bin/Makefile.am
+	A    COPYRIGHT
+	A    COPYING
+	A    data
+	A    data/test_full.sql
+	A    data/test_full1.sql
+	A    data/test_full2.sql
+	A    data/test_int.sql
+	A    sql_config.h
+	A    NEWS
+	A    handler
+	A    handler/SQLBuildDATA.h
+	A    handler/SQLBuildDDS.h
+	A    handler/connector
+	A    handler/connector/SQLNextTypeAction.h
+	A    handler/connector/SQLCloseAction.h
+	A    handler/connector/SQLQueryAction.h
+	A    handler/connector/SQLConnectAction.h
+	A    handler/SQLBuildDAS.h
+	A    SQLDefinitions.h
+	A    container
+	A    container/SQLContainerFactory.h
+	A    container/SQLContainer.cpp
+	A    container/SQLContainerDefinitions.h
+	A    container/SQLTextDefinitions.h
+	A    container/SQLContainer.h
+	A    container/SQLTextContainer.cpp
+	A    container/SQLConstraint.h
+	A    container/SQLTextContainer.h
+	A    container/SQLDataHandlerInterface.h
+	A    container/SQLQuery.cpp
+	A    container/SQLQueryDefinitions.h
+	A    container/SQLContainerStorageVolatile.cpp
+	A    container/SQLAttribute.h
+	A    container/SQLContainerFactory.cpp
+	A    container/SQLQuery.h
+	A    container/SQLContainerStorageVolatile.h
+	A    container/SQLContainerStorage.h
+	A    DTM
+	A    DTM/SQLComplexType.h
+	A    DTM/SQLSimpleType.h
+	A    DTM/SQLBaseType.h
+	A    DTM/SQLTypeFactoryComponent.h
+	A    DTM/SQLTypeManager.h
+	A    DTM/SQLDynamicTypeFactory.h
+	A    DTM/SQLObjectTypeFactory.h
+	A    DTM/SQLDummySimpleType.h
+	A    DTM/SQLCastAction.h
+	A    DTM/SQLSequence.h
+	A    SQLRequestHandler.cpp
+	A    SQLResponseNames.h
+	A    bes.log
+	A    connector
+	A    connector/SQLConnector.h
+	A    connector/SQLTypeConnector.h
+	A    connector/SQLErrorConnector.h
+	A    connector/SQLSimpleConnector.h
+	A    connector/SQLHandleConnector.h
+	A    SQLHandler_doxygen
+	A    SQLModule.h
+	A    sql_module.spec
+	A    README
+	A    templates
+	A    templates/Plugin.cpp
+	A    templates/Connector.h
+	A    templates/TypeFactoryComponent.h
+	A    templates/.conf.in.template
+	A    templates/Makefile.am.template
+	A    templates/Plugin.h
+	A    templates/conf
+	A    templates/conf/pkg.m4
+	A    templates/conf/acinclude.m4
+	A    templates/conf/bes.m4
+	A    templates/conf/libdap.m4
+	A    templates/ErrorFactoryComponent.cpp
+	A    templates/module.spec.template
+	A    templates/Types.h
+	A    templates/ErrorFactoryComponent.h
+	A    templates/configure.ac
+	A    templates/Module.cpp
+	A    templates/ResponseNames.h
+	A    templates/COPYRIGHT
+	A    templates/Makefile.am
+	A    templates/data
+	A    templates/data/test_full.sql
+	A    templates/Module.h
+	A    templates/Connector.cpp
+	A    templates/TypeFactoryComponent.cpp
+	A    SQLPlugin.cpp
+	A    utils
+	A    utils/SharedPtr.h
+	A    utils/StringMatch.cpp
+	A    utils/Clone.h
+	A    utils/SmartCast.h
+	A    utils/Delete.h
+	A    utils/SmartList.h
+	A    utils/StringMatch.h
+	A    utils/SmartCheck.h
+	A    utils/SmartMap.h
+	A    config.h.in
+	A    DEM
+	A    DEM/SQLDefaultErrorAction.h
+	A    DEM/SQLInternalFatalError.h
+	A    DEM/SQLErrorFactory.h
+	A    DEM/SQLCheckPoint.cpp
+	A    DEM/SQLErrorManager.h
+	A    DEM/SQLInternalError.h
+	A    DEM/SQLCheckPoint.h
+	A    install
+	AM   install/isql.sh
+	A    install/postgres_template
+	A    install/odbc.TEMPLATES.ini
+	AM   install/template.sh
+	AM   install/sqlh.sql
+	A    install/bes.cmd
+	A    Makefile.am
+	A    unixODBC
+	A    unixODBC/ODBCErrorFactoryComponent.h
+	A    unixODBC/ODBCTypes.h
+	A    unixODBC/ODBCConnector.cpp
+	A    unixODBC/ODBCTypeFactoryComponent.cpp
+	A    unixODBC/ODBCPlugin.cpp
+	A    unixODBC/ODBCConnector.h
+	A    unixODBC/ODBCTypeFactoryComponent.h
+	A    unixODBC/ODBCPlugin.h
+	A    unixODBC/ODBCErrorFactoryComponent.cpp
+	A    action
+	A    action/SQLActionList.h
+	A    action/SQLDynamicActionFactory.h
+	A    action/SQLObjectActionFactory.h
+	A    action/SQLAction.h
+	A    action/SQLDynamicActionList.h
+	A    action/SQLObjectActionList.h
+	A    action/SQLStaticActionList.h
+	A    action/SQLObjectAction.h
+	A    action/SQLActionFactory.h
+	A    action/SQLStaticAction.h
+	A    action/SQLActionManager.h
+
+2010-08-07  Patrick West <pwest@ucar.edu>
+
+	New SQL Handler from Carlo Cancellieri <ccancellieri@hotmail.com>
+	A    http://scm.opendap.org/svn/trunk/sql_handler
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
