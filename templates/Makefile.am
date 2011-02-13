@@ -8,11 +8,11 @@ AUTOMAKE_OPTIONS = foreign check-news
 
 pkgdata_templatesdir = $(pkgdatadir)/templates
 pkgdata_templates_DATA = \
-		PluginLoader.cpp \
-		Plugin.cpp \
-		Connector.cpp \
-		TypeFactoryComponent.cpp \
-		ErrorFactoryComponent.cpp \
+		PluginLoader.cc \
+		Plugin.cc \
+		Connector.cc \
+		TypeFactoryComponent.cc \
+		ErrorFactoryComponent.cc \
 		ResponseNames.h \
 		PluginLoader.h \
 		Plugin.h \
@@ -31,11 +31,11 @@ sample_datadir = $(pkgdatadir)/templates/data
 sample_data_DATA = data/test_full.sql
 
 EXTRA_DIST = data \
-		PluginLoader.cpp \
-		Plugin.cpp \
-		Connector.cpp \
-		TypeFactoryComponent.cpp \
-		ErrorFactoryComponent.cpp \
+		PluginLoader.cc \
+		Plugin.cc \
+		Connector.cc \
+		TypeFactoryComponent.cc \
+		ErrorFactoryComponent.cc \
 		ResponseNames.h \
 		PluginLoader.h \
 		Plugin.h \
