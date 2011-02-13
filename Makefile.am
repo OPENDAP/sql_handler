@@ -11,13 +11,13 @@ AUTOMAKE_OPTIONS = foreign check-news subdir-objects
 ACLOCAL_AMFLAGS = -I conf
 
 SQL_SRCS = \
-		utils/StringMatch.cpp \
-		container/SQLContainerFactory.cpp \
-		container/SQLContainerStorageVolatile.cpp \
-		container/SQLQuery.cpp \
-		container/SQLContainer.cpp container/SQLTextContainer.cpp \
-		SQLPlugin.cpp \
-		DEM/SQLCheckPoint.cpp
+		utils/StringMatch.cc \
+		container/SQLContainerFactory.cc \
+		container/SQLContainerStorageVolatile.cc \
+		container/SQLQuery.cc \
+		container/SQLContainer.cc container/SQLTextContainer.cc \
+		SQLPlugin.cc \
+		DEM/SQLCheckPoint.cc
 
 SQL_HDRS = SQLLinker.h \
 		sql_config.h SQLResponseNames.h SQLDefinitions.h \
@@ -63,11 +63,11 @@ SQL_HDRS = SQLLinker.h \
 		action/SQLStaticAction.h action/SQLStaticActionList.h
 
 ODBC_SRCS = \
-		unixODBC/ODBCPluginLoader.cpp \
-		unixODBC/ODBCPlugin.cpp \
-		unixODBC/ODBCConnector.cpp \
-		unixODBC/ODBCTypeFactoryComponent.cpp \
-		unixODBC/ODBCErrorFactoryComponent.cpp
+		unixODBC/ODBCPluginLoader.cc \
+		unixODBC/ODBCPlugin.cc \
+		unixODBC/ODBCConnector.cc \
+		unixODBC/ODBCTypeFactoryComponent.cc \
+		unixODBC/ODBCErrorFactoryComponent.cc
 
 ODBC_HDRS = \
 		unixODBC/ODBCPluginLoader.h \
@@ -78,7 +78,7 @@ ODBC_HDRS = \
 		unixODBC/ODBCTypeFactoryComponent.h		
 
 BES_SRCS = \
-		SQLModule.cpp SQLRequestHandler.cpp
+		SQLModule.cc SQLRequestHandler.cc
 
 BES_HDRS = \
 		SQLModule.h SQLRequestHandler.h
@@ -251,7 +251,7 @@ rpm: dist
 #		Tests/SQLTests.h
 #		
 #SQL_check_SRCS = \
-#		Tests/SQLTests.cpp
+#		Tests/SQLTests.cc
 
 
 ## Dynamic Type Matching Check
