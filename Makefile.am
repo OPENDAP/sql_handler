@@ -83,7 +83,7 @@ BES_SRCS = \
 BES_HDRS = \
 		SQLModule.h SQLRequestHandler.h
 
-EXTRA_DIST = data doxy.conf COPYRIGHT COPYING sql_handler.spec \
+EXTRA_DIST = data doxy.conf COPYING sql_handler.spec \
 		sql.conf.in odbc.conf.in
 
 EXTRA_PROGRAMS = 
@@ -139,7 +139,7 @@ uninstall-local:
 
 sql.conf: sql.conf.in config.status
 		sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > sql.conf
-		
+
 odbc.conf: odbc.conf.in config.status
 		sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > odbc.conf
 
@@ -184,7 +184,7 @@ docs-clean-int: clean
 	if [[ -f html.tar.gz ]]; then \
 		rm html.tar.gz; \
 	fi;)
-		
+
 # This compress documentation and delete folders
 # this also call docs-clean leaving only the last
 # and the actual copy of the external documentation
@@ -218,7 +218,7 @@ docs:
 	if [[ -n "$$last" ]];then \
 		tar -xvzf $$last.tar.gz 2>/dev/null; \
 	fi;)
-		
+
 
 ###########################################################################
 
