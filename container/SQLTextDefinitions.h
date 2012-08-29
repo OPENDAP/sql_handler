@@ -119,14 +119,14 @@ typedef enum _dataset_parts {
  * @todo: test change groups in text dataset regex.
  */
 // variable
-#define _SQLH_DATASET_REG_VAR "(\\$\\w+\\$)"
+#define _SQLH_DATASET_REG_VAR "(\\$[A-z]*\\$)"
 // number of groups '()' in regex +1
 #define _SQLH_DATASET_REG_VAR_GROUPS 2
 // set the interesting group (starts from 0)
 #define _SQLH_DATASET_REG_VAR_GROUP 1
 // variable definition
 #define _SQLH_DATASET_REG_DEFVAR \
-	"[ ]*define[ ]+(\\$\\w+\\$)[ ]*=[ ]*([A-z,0-9,\\',\\\", ,\\,]+)"
+	"[ ]*define[ ]+(\\$[A-z,0-9,_]*\\$)[ ]*=[ ]*([A-z,0-9,\\',\\\", ,\\,]+)"
 // number of groups '()' in regex +1
 #define _SQLH_DATASET_REG_DEFVAR_GROUPS 3
 // set the interesting group (starts from 0)
@@ -139,7 +139,8 @@ typedef enum _dataset_parts {
 // set the interesting group (starts from 0)
 #define _SQLH_DATASET_REG_COMMENTS_GROUP 0;
 // tags
-#define _SQLH_DATASET_REG_TAGS "^[ ]*(\\[\\w+\\])[ ]*$"
+//#define _SQLH_DATASET_REG_TAGS "^[ ]*(\\[\\w+\\])[ ]*$"
+#define _SQLH_DATASET_REG_TAGS "^[ ]*(\\[[A-z,0-9,_]*\\])[ ]*$"
 // number of groups '()' in regex +1
 #define _SQLH_DATASET_REG_TAGS_GROUPS 2
 // set the interesting group (starts from 0)
@@ -147,7 +148,7 @@ typedef enum _dataset_parts {
 // key=value
 //@todo: check this
 #define _SQLH_DATASET_REG_KEY_VAL \
-	"^[ ]*(\\w+|!=|<=|>=|~=|\\*)[ ]*=[ ]*" \
+	"^[ ]*([A-z,0-9,_]*|!=|<=|>=|~=|\\*)[ ]*=[ ]*" \
 	"(==|>=|<=|~=|!=|[A-z,0-9,\\',\\\", ,\\,,\\*,\\%,<,>,!,~]+)"
 //NOTE: Start/End spaces in variable are stored
 /*
