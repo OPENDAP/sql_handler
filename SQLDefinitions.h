@@ -30,7 +30,7 @@
 // DEBUG
 #include "SQLResponseNames.h"
 #include <BESDebug.h>
-#if __TESTS__==1
+#ifdef __TESTS__
 #define TESTDEBUG(X,Y) BESDEBUG(X,Y)
 #else
 #define TESTDEBUG(X,Y)

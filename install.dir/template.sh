@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 #         template DSN DRIVER DB_TYPE DB_HOST DB_PORT DB USER PASS READ_ONLY OUT
 #sh ./template.sh $DSN $DRIVER $DB_TYPE $DB_HOST $DB_PORT $DB $USER $PASS $READ_ONLY OUT

@@ -58,23 +58,23 @@ using namespace std;
  * _SQLH_ON_GET_NEXT	=	4
  * _SQLH_ON_NEXT_ROW	=	5
  * _SQLH_ON_CUSTOM	=	6
- * <br>Each check point correspond to a SQL phase in which handlers can perform
+ * <br>Each check point corresponds to a SQL phase in which handlers can perform
  * Actions.
- * <br>Commons actions are (used by unixODBC):
+ * <br>Common actions are (used by unixODBC):
  * - print out debug info
- * - throw a Fatal error if connection status is bad
+ * - throw a Fatal error if the connection status is bad
  * - throw a (recoverable) InternalError on get next object
  * <br>Others actions could be:
  * - mail me on error
- * - dump on file
+ * - dump a file
  * - whatever you want
  * <br>Each registered SQLPlugin module can register and use its list
  * of actions which will be activated or not depending on this option:
  * SQL.CheckPoint=1,2,3,4
  * <br>You could also concatenate this setup to force deeper check detail
- * in your's SQLPlugin configuration file.
+ * in your SQLPlugin configuration file.
  * <br>SQL.CheckPoint+=5
- * <br>Note: This list affect ALL the registered SQL plugin modules.
+ * <br>Note: This list affects ALL the registered SQL plugin modules.
  * <br>The _SQLH_ON_ALWAYS is used to force the CheckPoint to always start.
  */
 class SQLCheckPoint{
@@ -96,7 +96,7 @@ public:
 	 * its static member reading from the
 	 * configuration file.
 	 * @return true
-	 * @throws BESError is something goes
+	 * @throws BESError if something goes
 	 * wrong
 	 */
 	static bool init() throw (BESError);
@@ -119,10 +119,10 @@ public:
 	 * implement this method to add
 	 * more custom check points.
 	 * NOTE: you need to use customCheck()
-	 * into your code.
+	 * in your code.
 	 * Before creating a new CHECK POINT:
 	 * use your own check points only if
-	 * standard doesn't logically fit
+	 * the standard ones don't logically fit
 	 * your check case
 	 */
 	virtual bool customCheck(){

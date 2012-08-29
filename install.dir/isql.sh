@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 #############TODO REMOVE ME#################
 #PATH="/opt/unixodbc/bin/:/opt/bes/bin/:$PATH"

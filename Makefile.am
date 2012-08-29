@@ -4,11 +4,13 @@
 #
 # $Id: Makefile.am 12972 2006-01-05 15:41:07Z pwest $
 
-SUBDIRS = bin templates
+SUBDIRS = bin templates tests
 
 AUTOMAKE_OPTIONS = foreign check-news subdir-objects
 
 ACLOCAL_AMFLAGS = -I conf
+
+AM_CXXFLAGS=-D__TESTS__
 
 SQL_SRCS = \
 		utils/StringMatch.cc \
