@@ -46,7 +46,7 @@ TESTDEBUG(ODBC_NAME,"ODBCConnector: Parameters:"
 
 	//@todo check this on MS ODBC
 	// jhrg 8/29/12" Changed SQL_OV_ODBC3 to SQL_OV_ODBC2 - hack for MyODBC MySQL driver.
-	rc = SQLSetEnvAttr(env, SQL_ATTR_ODBC_VERSION, (void*) SQL_OV_ODBC2, 0);
+	rc = SQLSetEnvAttr(env, SQL_ATTR_ODBC_VERSION, (void*) SQL_OV_ODBC3, 0);
 
 	// Allocate a connection handle
 	rc = SQLAllocHandle(SQL_HANDLE_DBC, env, &conn);
