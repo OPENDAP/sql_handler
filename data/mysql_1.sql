@@ -1,8 +1,9 @@
 
 [section]
 api=odbc
-server=myodbc5
-user=jimg
+server=test
+user=root
+pass=opendap
 
 [select]
 a, b, c
