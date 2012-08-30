@@ -87,7 +87,7 @@ public:
 		 */
 	}
 	virtual ~SQLConnector(){
-TESTDEBUG(SQL_NAME,"DELETING: SQLConnector"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLConnector"<<endl);
 	};
 	/**
 	 * @brief Constructor
@@ -98,7 +98,7 @@ TESTDEBUG(SQL_NAME,"DELETING: SQLConnector"<<endl);
 	SQLConnector():
 		SQLSimpleConnector<SQL_TYPE,ODBC_TYPE>(),
 		SQLErrorConnector<ERROR_TYPE,MSG_TYPE>(){
-TESTDEBUG(SQL_NAME,"CREATING: SQLConnector"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLConnector"<<endl);
 	};
 	/**
 	 * @brief Constructor
@@ -109,7 +109,7 @@ TESTDEBUG(SQL_NAME,"CREATING: SQLConnector"<<endl);
 	SQLConnector(SQLContainer *c):
 		SQLSimpleConnector<SQL_TYPE,ODBC_TYPE>(c),
 		SQLErrorConnector<ERROR_TYPE,MSG_TYPE>(){
-TESTDEBUG(SQL_NAME,"CREATING: SQLConnector"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLConnector"<<endl);
 	}
 };
 #endif /* SQLCONNECTOR_H_ */

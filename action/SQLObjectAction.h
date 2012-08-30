@@ -96,7 +96,7 @@ public :
 	 * only if the _reuse flag is set to 1
 	 */
 	virtual ~SQLObjectAction(){
-TESTDEBUG(SQL_NAME,"DELETING: SQLObjectAction"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLObjectAction"<<endl);
 		if (!_reuse)
 			freeValue();
 	};
@@ -134,7 +134,7 @@ TESTDEBUG(SQL_NAME,"DELETING: SQLObjectAction"<<endl);
 	void freeValue(){
 		if (_val)
 		{
-TESTDEBUG(SQL_NAME,"SQLObjectAction: deleting val"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLObjectAction: deleting val"<<endl);
 			delete(_val);
 			_val=0;
 		}
@@ -220,7 +220,7 @@ public :
 	 * only if the _reuse flag is set to 1
 	 */
 	virtual ~SQLObjectAction(){
-TESTDEBUG(SQL_NAME,"DELETING: SQLObjectAction"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLObjectAction"<<endl);
 		if (!_reuse)
 			freeValue();
 	};
@@ -244,7 +244,7 @@ TESTDEBUG(SQL_NAME,"DELETING: SQLObjectAction"<<endl);
 	void freeValue(){
 		if (_val)
 		{
-TESTDEBUG(SQL_NAME,"SQLObjectAction: freeing val"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLObjectAction: freeing val"<<endl);
 			free(_val);
 			_val=0;
 		}

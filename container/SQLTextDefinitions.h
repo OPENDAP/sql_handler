@@ -56,20 +56,20 @@ typedef struct dataset_section {
 		dbname(ds.dbname),user(ds.user),pass(ds.pass),
 		query(ds.query),other(ds.other)
 	{
-TESTDEBUG(SQL_NAME,"CREATE: DATASET_SECTION"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATE: DATASET_SECTION"<<endl);
 	}
 
 	/**
 	 * @brief default constructor
 	 */
 	dataset_section(){
-TESTDEBUG(SQL_NAME,"CREATE: SQLH_DATASET_SECTION"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATE: SQLH_DATASET_SECTION"<<endl);
 	}
 	/**
 	 * @brief dtor
 	 */
 	virtual ~dataset_section(){
-TESTDEBUG(SQL_NAME,"DELETE: SQLH_DATASET_SECTION ->api: "<<api<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETE: SQLH_DATASET_SECTION ->api: "<<api<<endl);
 	}
 
 }SQLH_DATASET_SECTION;

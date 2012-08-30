@@ -125,7 +125,7 @@ class SQLDynamicActionList:
 	};
 
 	virtual ~SQLDynamicActionList(){
-TESTDEBUG(SQL_NAME,"DELETING: SQLDynamicActionList"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLDynamicActionList"<<endl);
 	};
 
 private:

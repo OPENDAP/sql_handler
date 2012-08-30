@@ -153,7 +153,7 @@ SQLModule::initialize( const string &modname )
 	 */
 	if (!rh)
 		rh=SQLRequestHandler::theSQLRequestHandler(SQL_NAME);
-TESTDEBUG(SQL_NAME,"SQLModule: SQLRequestHandler found has ptr: "<<rh<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLModule: SQLRequestHandler found has ptr: "<<rh<<endl);
 	BESDEBUG( SQL_NAME, "    adding "<<SQL_NAME<< " request handler" << endl ) ;
     BESRequestHandlerList::TheList()->add_handler(SQL_NAME, rh);
 

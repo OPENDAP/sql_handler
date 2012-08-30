@@ -71,7 +71,7 @@ public:
 	SQLDataHandlerInterface(BESDataHandlerInterface &dhi):
 		_dhi(&dhi),
 		_sql_container(SQLContainerFactory::getContainer(dhi)){
-TESTDEBUG(SQL_NAME,"CREATING: SQLDataHandlerInterface"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLDataHandlerInterface"<<endl);
 	};
 
 #if 0
@@ -95,7 +95,7 @@ TESTDEBUG(SQL_NAME,"CREATING: SQLDataHandlerInterface"<<endl);
 				throw BESInternalFatalError(
 				"Unable to build SQLDataHandlerInterface with a NULL SQLContainer",
 				__FILE__,__LINE__)){
-TESTDEBUG(SQL_NAME,"CREATING: SQLDataHandlerInterface"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLDataHandlerInterface"<<endl);
 	};
 #endif
 
@@ -103,7 +103,7 @@ TESTDEBUG(SQL_NAME,"CREATING: SQLDataHandlerInterface"<<endl);
 		if (_sql_container)
 			delete _sql_container;
 		_sql_container=0;
-TESTDEBUG(SQL_NAME,"DELETING: SQLDataHandlerInterface"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLDataHandlerInterface"<<endl);
 	}
 
 	BESDataHandlerInterface &getBesHandler(){

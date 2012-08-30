@@ -186,7 +186,7 @@ SQLPlugin::findTheList()
 	// NOT SAFE instance can be deleted by SQLRequestHandler dtor
 	// try cached position
 	if (_pl){
-TESTDEBUG(SQL_NAME,"SQLPlugin: returning cached version: "<<_pl<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLPlugin: returning cached version: "<<_pl<<endl);
 		return _pl;
 	}
 #endif
@@ -207,15 +207,15 @@ TESTDEBUG(SQL_NAME,"SQLPlugin: returning cached version: "<<_pl<<endl);
     	 * @note the first option need to add the flag to:
     	 * BESPlugin.h:123
     	 */
-TESTDEBUG(SQL_NAME,"SQLPlugin: SQLRequestHandler found has ptr: "<<bes_pl<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLPlugin: SQLRequestHandler found has ptr: "<<bes_pl<<endl);
 //dynamic_cast<SQLPluginList*>(bes__pl)->dump(std::cerr);
     	SQLLinker *l=static_cast<SQLLinker*>(bes_pl);
     	if (l){
-TESTDEBUG(SQL_NAME,"SQLPlugin: SQLRequestHandler THE LINK WORKS!!"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLPlugin: SQLRequestHandler THE LINK WORKS!!"<<endl);
     		return l->theLink();
     	}
     	else {
-TESTDEBUG(SQL_NAME,"SQLPlugin: SQLRequestHandler THE LINK <<DO NOT>> WORKS!!"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLPlugin: SQLRequestHandler THE LINK <<DO NOT>> WORKS!!"<<endl);
     		return NULL;
     	}
     	//return dynamic_cast<SQLPluginList*>(bes_pl);

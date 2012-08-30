@@ -91,7 +91,7 @@ public:
 	virtual bool reset() =0;
 
 	virtual ~SQLActionList(){
-TESTDEBUG(SQL_NAME,"DELETING: ACTION LIST"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: ACTION LIST"<<endl);
 	};
 
 };

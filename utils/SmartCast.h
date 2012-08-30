@@ -49,7 +49,7 @@ namespace smart {
 	template <class T, class _CLONE=void>
 	struct SmartCast {
 		static T* getPtr(){
-TESTDEBUG(SQL_NAME, "SmartCast: &-CONSTRUCTOR:----"<<std::endl);
+TESTDEBUG(SQL_NAME_TEST, "SmartCast: &-CONSTRUCTOR:----"<<std::endl);
 			return new T();
 		}
 		/**
@@ -64,7 +64,7 @@ TESTDEBUG(SQL_NAME, "SmartCast: &-CONSTRUCTOR:----"<<std::endl);
 		 * delete i;
 		 */
 		static T* getPtr(T* k){
-TESTDEBUG(SQL_NAME,"SmartCast: *-CONSTRUCTOR----"<<std::endl);
+TESTDEBUG(SQL_NAME_TEST,"SmartCast: *-CONSTRUCTOR----"<<std::endl);
 			/**
 			 *  does T implement copy constructor?
 			 *  If so, which type?
@@ -96,7 +96,7 @@ TESTDEBUG(SQL_NAME,"SmartCast: *-CONSTRUCTOR----"<<std::endl);
 		 * delete i;
 		 */
 		static const T* getPtr(const T* k){
-TESTDEBUG(SQL_NAME,"SmartCast: *-CONST-CONSTRUCTOR----"<<std::endl);
+TESTDEBUG(SQL_NAME_TEST,"SmartCast: *-CONST-CONSTRUCTOR----"<<std::endl);
 			return k;
 		}
 
@@ -105,7 +105,7 @@ TESTDEBUG(SQL_NAME,"SmartCast: *-CONST-CONSTRUCTOR----"<<std::endl);
 		 * copy constructor
 		 */
 		static const T* getPtr(const T& k){
-TESTDEBUG(SQL_NAME,"SmartCast: &-CONST-CONSTRUCTOR----"<<std::endl);
+TESTDEBUG(SQL_NAME_TEST,"SmartCast: &-CONST-CONSTRUCTOR----"<<std::endl);
 			return new const T(k);
 		}
 
@@ -119,21 +119,21 @@ TESTDEBUG(SQL_NAME,"SmartCast: &-CONST-CONSTRUCTOR----"<<std::endl);
 	struct SmartCast < T, smart::Clone<T> > {
 
 		static T* getPtr(T* k){
-TESTDEBUG(SQL_NAME,"SmartCast: *-CLONE----"<<std::endl);
+TESTDEBUG(SQL_NAME_TEST,"SmartCast: *-CLONE----"<<std::endl);
 			return k->clone();
 		}
 
 		static T* getPtr(T& k){
-TESTDEBUG(SQL_NAME,"SmartCast: &-CLONE----"<<std::endl);
+TESTDEBUG(SQL_NAME_TEST,"SmartCast: &-CLONE----"<<std::endl);
 			return k.clone();
 		}
 
 		static const T* getPtr(const T* k){
-TESTDEBUG(SQL_NAME,"SmartCast: *-CLONE----"<<std::endl);
+TESTDEBUG(SQL_NAME_TEST,"SmartCast: *-CLONE----"<<std::endl);
 			return const_cast<const T*>(k->clone());
 		}
 		static const T* getPtr(const T& k){
-TESTDEBUG(SQL_NAME,"SmartCast: &-CLONE----"<<std::endl);
+TESTDEBUG(SQL_NAME_TEST,"SmartCast: &-CLONE----"<<std::endl);
 			return const_cast<const T*>(k->clone());
 		}
 

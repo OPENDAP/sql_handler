@@ -79,7 +79,7 @@ private:
 			// set the end condition
 			_not_end=false; //!< GLOBAL ENDING CONDITION
 
-TESTDEBUG(SQL_NAME,"--ENDING------> getRow: "<<getRow()
+TESTDEBUG(SQL_NAME_TEST,"--ENDING------> getRow: "<<getRow()
 <<" getCol:"<<getCol()<<endl);
 
 			//returning maximum for skipped rows
@@ -288,9 +288,9 @@ public:
 			_column_position=sum-getCols();
 		}
 
-TESTDEBUG(SQL_NAME,"-------------> getRow: "<<getRow()
+TESTDEBUG(SQL_NAME_TEST,"-------------> getRow: "<<getRow()
 <<" getCol:"<<getCol()<<endl);
-TESTDEBUG(SQL_NAME,"-------------> rows: "<<rows
+TESTDEBUG(SQL_NAME_TEST,"-------------> rows: "<<rows
 <<" increment:"<<increment<<endl);
 
 		return rows;
@@ -299,7 +299,7 @@ TESTDEBUG(SQL_NAME,"-------------> rows: "<<rows
 
 
 	virtual ~SQLTypeConnector(){
-TESTDEBUG(SQL_NAME,"DELETING: SQLTypeConnector"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLTypeConnector"<<endl);
 	}
 
 	/**
@@ -311,7 +311,7 @@ TESTDEBUG(SQL_NAME,"DELETING: SQLTypeConnector"<<endl);
 		_columns(0),
 		_rows(0),
 		_not_end(true){
-TESTDEBUG(SQL_NAME,"CREATING: SQLTypeConnector"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLTypeConnector"<<endl);
 	}
 
 };

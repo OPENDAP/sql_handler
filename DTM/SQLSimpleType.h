@@ -88,7 +88,7 @@ public:
 						cast_function,
 						reuse),
 		_reuse(reuse){
-TESTDEBUG(SQL_NAME,"CREATING: SQLSimpleType"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLSimpleType"<<endl);
 	};
 
 	virtual ~SQLSimpleType(){};
@@ -100,18 +100,18 @@ TESTDEBUG(SQL_NAME,"CREATING: SQLSimpleType"<<endl);
 	{
 	try {
 		if (this->read_p()){
-TESTDEBUG(SQL_NAME,"SQLSimpleType: skipping object"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: skipping object"<<endl);
 			return false;
 		}
 		else
 		{
-TESTDEBUG(SQL_NAME,"SQLSimpleType: reading object"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: reading object"<<endl);
 				this->set_value( *this->cast() );
 				//this->set_read_p(true); -> done by set_value()
 				if (!_reuse) {
 					this->getCast().freeValue(); // deleting casted value
 				}
-TESTDEBUG(SQL_NAME,"SQLSimpleType: object copied to the buffer"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: object copied to the buffer"<<endl);
 			return false;
 		}
 		}
@@ -136,7 +136,7 @@ TESTDEBUG(SQL_NAME,"SQLSimpleType: object copied to the buffer"<<endl);
 	SQLSimpleType(SQLSimpleType<SQL_TYPE,ODBC_TYPE,DAP_TYPE,OUT> &obj):
 			SQLBaseType<SQL_TYPE,ODBC_TYPE,DAP_TYPE,OUT>(obj),
 			_reuse(obj._reuse){
-	TESTDEBUG(SQL_NAME,"COPING: SQLSimpleType"<<endl);
+	TESTDEBUG(SQL_NAME_TEST,"COPING: SQLSimpleType"<<endl);
 		};
 };
 
@@ -195,16 +195,16 @@ public:
 	{
 	try {
 		if (this->read_p()){
-TESTDEBUG(SQL_NAME,"SQLSimpleType: skipping object"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: skipping object"<<endl);
 			return false;
 		}
 		else
 		{
-TESTDEBUG(SQL_NAME,"SQLSimpleType: reading object"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: reading object"<<endl);
 				this->val2buf(this->cast());// cast value to the new type
 				if (!_reuse)
 					this->getCast().freeValue(); // deleting casted value
-TESTDEBUG(SQL_NAME,"SQLSimpleType: object copied to the buffer"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: object copied to the buffer"<<endl);
 			// not usable!
 			// since we cannot know the argument type here
 			// this->set_value( this->doRead() );
@@ -234,7 +234,7 @@ TESTDEBUG(SQL_NAME,"SQLSimpleType: object copied to the buffer"<<endl);
 		SQLBaseType<SQL_TYPE,ODBC_TYPE,DAP_TYPE,void>(obj),
 		_reuse(obj._reuse)
 	{
-TESTDEBUG(SQL_NAME,"COPING: SQLSimpleType"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"COPING: SQLSimpleType"<<endl);
 	};
 };
 

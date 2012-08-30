@@ -48,7 +48,7 @@ SQLRequestHandler::SQLRequestHandler(const string &name) :
 
 	add_handler(VERS_RESPONSE,SQLRequestHandler::version);
 	add_handler(HELP_RESPONSE,SQLRequestHandler::help);
-TESTDEBUG(SQL_NAME,"CREATED: SQLRequestHandler"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATED: SQLRequestHandler"<<endl);
 }
 
 SQLRequestHandler::~SQLRequestHandler(void) {
@@ -67,7 +67,7 @@ SQLRequestHandler::~SQLRequestHandler(void) {
 
 	DESTROY(&_mutex);
 
-TESTDEBUG(SQL_NAME,"DELETED: SQLRequestHandler"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETED: SQLRequestHandler"<<endl);
 }
 
 sql_handler_map &
@@ -75,7 +75,7 @@ SQLRequestHandler::theList(){
 	LOCK(&_mutex);
 	try {
 		if (!SQLRequestHandler::_theList){
-TESTDEBUG(SQL_NAME,"SQLRequestHandler: _theList was NULL:"<<
+TESTDEBUG(SQL_NAME_TEST,"SQLRequestHandler: _theList was NULL:"<<
 _theList<<" creating new one"<<endl);
 			SQLRequestHandler::_theList=new sql_handler_map();
 		}
@@ -93,7 +93,7 @@ SQLRequestHandler::theWrapCount(){
 	LOCK(&_mutex);
 	try{
 		if (!SQLRequestHandler::_theWrapCount){
-TESTDEBUG(SQL_NAME,"SQLRequestHandler: _theWrapCount was NULL:"<<
+TESTDEBUG(SQL_NAME_TEST,"SQLRequestHandler: _theWrapCount was NULL:"<<
 _theWrapCount<<" creating new one"<<endl);
 			SQLRequestHandler::_theWrapCount=new sql_wrap_count_map();
 		}
@@ -111,7 +111,7 @@ SQLRequestHandler::theSQLRequestHandler(const string &name){
 	LOCK(&_mutex);
 	try{
 		if (!SQLRequestHandler::_rh){
-TESTDEBUG(SQL_NAME,"SQLRequestHandler: _rh was NULL:"<<
+TESTDEBUG(SQL_NAME_TEST,"SQLRequestHandler: _rh was NULL:"<<
 SQLRequestHandler::_rh<<" creating new one"<<endl);
 			SQLRequestHandler::_rh=new SQLRequestHandler(name);
 		}
@@ -121,7 +121,7 @@ SQLRequestHandler::_rh<<" creating new one"<<endl);
 		throw;
 	}
 	UNLOCK(&_mutex);
-TESTDEBUG(SQL_NAME,"SQLRequestHandler: _rh on addr: "<<
+TESTDEBUG(SQL_NAME_TEST,"SQLRequestHandler: _rh on addr: "<<
 SQLRequestHandler::_rh<<endl);
 	return (SQLRequestHandler::_rh);
 }
@@ -245,7 +245,7 @@ TESTDEBUG( SQL_NAME,"SQLRequestHandler: Removing all ("<<
 	SQLHandler_iterator i=	theList().begin();
     while( i != theList().end() )
     {
-TESTDEBUG(SQL_NAME,
+TESTDEBUG(SQL_NAME_TEST,
 	"SQLRequestHandler: removing "<<(*i).second->get_name()<<" sql_handler"<<endl);
     	// remove all the handlers and setting wrappers_count
     	(*i).second->remove_handlers();
@@ -259,9 +259,9 @@ bool
 SQLRequestHandler::add_sql_handler(const string& name,	SQLPlugin* handler){
 	if (find_sql_handler(name)==NULL)
 	{
-TESTDEBUG(SQL_NAME,"SQLRequestHandler: theList"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLRequestHandler: theList"<<endl);
 		theList().insert(name,handler);
-TESTDEBUG(SQL_NAME,"SQLRequestHandler: Total sql_handlers registered: "
+TESTDEBUG(SQL_NAME_TEST,"SQLRequestHandler: Total sql_handlers registered: "
 <<theList().size()<<endl);
 		return true;
 	}
@@ -279,7 +279,7 @@ TESTDEBUG( SQL_NAME,"SQLRequestHandler: wrapper adding"<< endl );
 		update_wrap_count(command,true);
 		// add the command
 		add_handler(command,SQLRequestHandler::wrapper);
-TESTDEBUG(SQL_NAME,"SQLRequestHandler: wrapper "<<command<<" added"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLRequestHandler: wrapper "<<command<<" added"<<endl);
 		return true;
 	}
 	else
@@ -290,16 +290,16 @@ bool
 SQLRequestHandler::remove_sql_wrapper(const string& command){
 	if (find_handler(command)!=NULL)
 	{
-TESTDEBUG(SQL_NAME,"SQLRequestHandler: wrapper "<<command<<" removing"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLRequestHandler: wrapper "<<command<<" removing"<<endl);
 		// update the wrap count
 		if (update_wrap_count(command,false)){
 			BESRequestHandler::remove_handler(command);
-TESTDEBUG(SQL_NAME,"SQLRequestHandler: wrapper "<<command<<" removed"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLRequestHandler: wrapper "<<command<<" removed"<<endl);
 		}
 		return true;
 	}
 	else{
-TESTDEBUG(SQL_NAME,"SQLRequestHandler: wrapper "<<command<<" already removed"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLRequestHandler: wrapper "<<command<<" already removed"<<endl);
 		return false;
 	}
 }

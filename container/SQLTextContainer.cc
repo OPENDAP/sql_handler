@@ -33,7 +33,7 @@ SQLTextContainer::SQLTextContainer(const string &name,
 	_dataset(new DATASET()),
 	actual_section(_dataset->begin())
 {
-TESTDEBUG(SQL_NAME,"CREATING: SQLTextContainer"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLTextContainer"<<endl);
 	/**
 	 * @note this is already done by the SQLContainerFactory
 	 * this is here in the case you want to use this
@@ -52,7 +52,7 @@ SQLTextContainer::SQLTextContainer(const BESContainer & c):
 	_dataset(new DATASET()),
 	actual_section(_dataset->begin())
 {
-TESTDEBUG(SQL_NAME,"CREATING: SQLTextContainer from BESContainer"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLTextContainer from BESContainer"<<endl);
 	/**
 	 * @note: this is already done by the SQLContainerFactory
 	 * this is here in the case you want to use this
@@ -72,7 +72,7 @@ SQLTextContainer::SQLTextContainer(const SQLTextContainer & c):
 	_dataset(new DATASET(*c._dataset)),
 	actual_section(_dataset->begin())
 {
-TESTDEBUG(SQL_NAME,"COPYING: SQLTextContainer"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"COPYING: SQLTextContainer"<<endl);
 }
 
 SQLTextContainer::~SQLTextContainer()
@@ -81,7 +81,7 @@ SQLTextContainer::~SQLTextContainer()
 		delete _dataset;
 	}
 	_dataset=0;
-TESTDEBUG(SQL_NAME,"DELETING: SQLTextContainer"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLTextContainer"<<endl);
 };
 
 
@@ -816,7 +816,7 @@ TESTDEBUG( SQL_NAME,"SQLTextContainer: push_back complete section->"<<new_sectio
 			_dataset->push_back(new_section);
 		}
 		else{
-			TESTDEBUG(SQL_NAME,
+			TESTDEBUG(SQL_NAME_TEST,
 				"SQLTextContainer: Unable to complete dataset scan. "
 				"\nNOTE: could be BigEndian or LittleEndian:"<<
 				"\nCOMPLETITION MAP: "<<complete.to_string()<<

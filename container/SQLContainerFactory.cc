@@ -112,7 +112,7 @@ if (dhi.container) {
 					 * NOTE: this will delete previous stored constraints
 					 */
 					SQLContainer *c=buildContainer(*dhi.container);
-TESTDEBUG(SQL_NAME,"SQLContainerFactory: Setup SQLContainer: Completed."<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLContainerFactory: Setup SQLContainer: Completed."<<endl);
 					/**
 					 * Add to the SQLContainerStorageVolatile list
 					 * - using add_container since object isReady

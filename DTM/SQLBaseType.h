@@ -161,7 +161,7 @@ public:
 		 * When the object is cloned cursor may be not on
 		 * that column!
 		 */
-TESTDEBUG(SQL_NAME,"COPING: SQLBaseType with:\n"
+TESTDEBUG(SQL_NAME_TEST,"COPING: SQLBaseType with:\n"
 		"\n using connector: "<<
 		"\n on column: "<<obj.getConnector().getCol()<<
 		"\n using passed position:"
@@ -192,7 +192,7 @@ TESTDEBUG(SQL_NAME,"COPING: SQLBaseType with:\n"
 		// check for type
 		check();
 
-TESTDEBUG(SQL_NAME,"SQLBaseType: CLONING ComplexObject with:\n"
+TESTDEBUG(SQL_NAME_TEST,"SQLBaseType: CLONING ComplexObject with:\n"
 	"\n name: "<<conn.getColName(_col)<<"\n on column: "<<_col<<endl);
 
 	};
@@ -216,12 +216,12 @@ TESTDEBUG(SQL_NAME,"SQLBaseType: CLONING ComplexObject with:\n"
 		// check for type
 		check();
 
-TESTDEBUG(SQL_NAME,"SQLBaseType: Creating SimpleObject with:\n name: "
+TESTDEBUG(SQL_NAME_TEST,"SQLBaseType: Creating SimpleObject with:\n name: "
 	<<conn.getColName(conn.getCol())<<"\n on column: "<<conn.getCol()<<endl);
 	};
 
 	virtual ~SQLBaseType(){
-TESTDEBUG(SQL_NAME,"DELETING: SQLBaseType"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLBaseType"<<endl);
 	}
 
 private:

@@ -125,11 +125,11 @@ public:
 		_getActions(getActions),
 		_stop(stop)
 	{
-TESTDEBUG(SQL_NAME,"CREATED: OBJECT TYPE FACTORY"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATED: OBJECT TYPE FACTORY"<<endl);
 	}
 
 	virtual ~SQLObjectTypeFactory(){
-TESTDEBUG(SQL_NAME,"DELETED: OBJECT TYPE FACTORY"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETED: OBJECT TYPE FACTORY"<<endl);
 	}
 
 	SQLConnector<CODE_TYPE,ARGS_TYPE,OUT_TYPE> & getConnector(){

@@ -84,14 +84,14 @@ class SQLErrorConnector {
 		 * @brief dtor
 		 */
 		virtual ~SQLErrorConnector(){
-TESTDEBUG(SQL_NAME,"DELETING: SQLErrorConnector"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLErrorConnector"<<endl);
 		}
 
 		/**
 		 * @brief Constructor
 		 */
 		SQLErrorConnector(){
-TESTDEBUG(SQL_NAME,"CREATING: SQLErrorConnector"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLErrorConnector"<<endl);
 		}
 	};
 

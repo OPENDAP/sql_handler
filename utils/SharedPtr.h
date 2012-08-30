@@ -143,9 +143,9 @@ namespace smart{
 			{};
 #endif
 		virtual ~SharedPtr(){
-TESTDEBUG(SQL_NAME,"SharedPtr: Use_count ->"<<this->use_count()<<endl);
-TESTDEBUG(SQL_NAME,"DELETING: SharedPtr:"<<typeid(this).name()<<std::endl);
-TESTDEBUG(SQL_NAME,"SharedPtr: Remain_count ->"<<this->use_count()-1<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SharedPtr: Use_count ->"<<this->use_count()<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SharedPtr:"<<typeid(this).name()<<std::endl);
+TESTDEBUG(SQL_NAME_TEST,"SharedPtr: Remain_count ->"<<this->use_count()-1<<endl);
 		};
 	};
 

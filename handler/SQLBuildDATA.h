@@ -418,9 +418,9 @@ sql_build_data( SQLDataHandlerInterface &dhi,
 			dds->filename(dhi.getBesContainer()->get_real_name());
 
 #if __TESTS__==1
-TESTDEBUG(SQL_NAME,"-----------DDS_DUMP-------------"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"-----------DDS_DUMP-------------"<<endl);
 dds->dump(std::cerr);
-TESTDEBUG(SQL_NAME,"------ATTR DUMP DONE------"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"------ATTR DUMP DONE------"<<endl);
 #endif
 		}
 		else

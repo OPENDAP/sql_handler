@@ -145,11 +145,11 @@ public:
 		SQLPlugin::add_handler(HELP_RESPONSE, ODBCPlugin::build_help ) ;
 		SQLPlugin::add_handler(VERS_RESPONSE, ODBCPlugin::build_vers ) ;
 
-TESTDEBUG(SQL_NAME,"CREATED: unixODBC Plugin"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATED: unixODBC Plugin"<<endl);
 	};
 
 	virtual ~ODBCPlugin(){
-TESTDEBUG(SQL_NAME,"DELETED: unixODBC PLUGIN"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETED: unixODBC PLUGIN"<<endl);
 	};
 
 	/**

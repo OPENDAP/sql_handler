@@ -34,7 +34,7 @@
  */
 static void*
 cast_func(void*val){
-TESTDEBUG(SQL_NAME,"ODBCFactoryComponent: casting a VOID"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"ODBCFactoryComponent: casting a VOID"<<endl);
 	/**
 	 * ODBC connector directly bind fields to
 	 * variables so no conversion is needed.
@@ -55,7 +55,7 @@ TESTDEBUG(SQL_NAME,"ODBCFactoryComponent: casting a VOID"<<endl);
  */
 static string*
 cast_string(void*val){
-TESTDEBUG(SQL_NAME,"ODBCFactoryComponent: casting a STRING"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"ODBCFactoryComponent: casting a STRING"<<endl);
 
 	string *ret=new string();
 	ret->assign(((char*)val));

@@ -61,7 +61,7 @@ public:
 	SQLContainerFactory(SQLContainerStorage *container_storage=NULL,
 						SELECT_CONTAINER select_function=&selectContainer)
 	{
-		TESTDEBUG(SQL_NAME,"CREATING: SQLContainerFactory"<<endl);
+		TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainerFactory"<<endl);
 		if (select_function)
 			_select_func=select_function;
 		else
@@ -77,7 +77,7 @@ public:
 	}
 
 	virtual ~SQLContainerFactory(){
-		TESTDEBUG(SQL_NAME,"DELETING: SQLContainerFactory"<<endl);
+		TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLContainerFactory"<<endl);
 	};
 
 	/**

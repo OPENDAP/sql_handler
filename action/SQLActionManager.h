@@ -146,19 +146,19 @@ public:
 			merge_f=&merge;
 		if (!join_f)
 			join_f=&join;
-TESTDEBUG(SQL_NAME,"ActionManager: Starting actions"<<std::endl);
+TESTDEBUG(SQL_NAME_TEST,"ActionManager: Starting actions"<<std::endl);
 		CODE_TYPE *code=NULL;
 		_JOIN *_join=NULL;
 		// do actions
 		do {
 			_MERGE *_merge=NULL;
-TESTDEBUG(SQL_NAME,"ActionManager: Getting code"<<std::endl);
+TESTDEBUG(SQL_NAME_TEST,"ActionManager: Getting code"<<std::endl);
 			// get next code
 			if ((code=_af.getCode())){
 				// do actions for that code
 				SQLActionList<ARGS_TYPE,OUT_TYPE> &actions=
 					_af.getActions(code);
-TESTDEBUG(SQL_NAME,"ActionManager: ActionList size: "<<(actions).getSize()<<endl);
+TESTDEBUG(SQL_NAME_TEST,"ActionManager: ActionList size: "<<(actions).getSize()<<endl);
 				// Used to initialize first time 'args'
 				bool first_time=true;
 				/**

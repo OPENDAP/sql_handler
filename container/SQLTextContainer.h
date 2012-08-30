@@ -280,7 +280,7 @@ class SQLTextContainer: public SQLContainer {
      */
     SQLTextContainer* ptr_duplicate( )
     {
-TESTDEBUG(SQL_NAME,"CLONING: SQLTextContainer"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CLONING: SQLTextContainer"<<endl);
     	return new SQLTextContainer(*this);
     }
 

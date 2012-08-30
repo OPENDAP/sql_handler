@@ -89,10 +89,10 @@ private:
 		if (_action_map) {
 			typename action_map::iterator i = (_action_map)->find(*code);
 
-TESTDEBUG(SQL_NAME,"SQLDynamicActionFactory: SEARCHING ACTION"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLDynamicActionFactory: SEARCHING ACTION"<<endl);
 
 			if (i!=(_action_map)->end()){
-TESTDEBUG(SQL_NAME,"SQLDynamicActionFactory: ACTION LOCATED"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLDynamicActionFactory: ACTION LOCATED"<<endl);
 				(*(i->second)).reset();
 				return (*(i->second));
 				// I can't print the error since I don't know its type!
@@ -130,7 +130,7 @@ public:
 		}
 		else {
 
-TESTDEBUG(SQL_NAME,
+TESTDEBUG(SQL_NAME_TEST,
 	"SQLDynamicActionFactory: INSERTING NEW DynamicActionList"<<endl);
 
 			SQLDynamicActionList<ARGS_TYPE,OUT_TYPE> *action_list=
@@ -142,7 +142,7 @@ TESTDEBUG(SQL_NAME,
 			_action_map->insert(code,action_list);
 
 
-TESTDEBUG(SQL_NAME,
+TESTDEBUG(SQL_NAME_TEST,
 	"SQLDynamicActionFactory: DynamicActionList successfully inserted"<<endl);
 		}
 	};
@@ -154,12 +154,12 @@ TESTDEBUG(SQL_NAME,
 			_action_map(new action_map()),
 			SQLActionFactory<CODE_TYPE,ARGS_TYPE,OUT_TYPE>()
 	{
-TESTDEBUG(SQL_NAME,"CREATING: DynamicActionFactory"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: DynamicActionFactory"<<endl);
 	};
 
 
 	virtual ~SQLDynamicActionFactory(){
-TESTDEBUG(SQL_NAME,"DELETING: SQLDynamicActionFactory"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLDynamicActionFactory"<<endl);
 	};
 };
 

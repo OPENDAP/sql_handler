@@ -96,7 +96,7 @@ public:
 					"SQLObjectTypeFactory: Unable to getType. "
 					"Check connector's READY status.",__FILE__,__LINE__);
 #endif
-TESTDEBUG(SQL_NAME,"DynamicTypeFactory: getCode() from connector for column "
+TESTDEBUG(SQL_NAME_TEST,"DynamicTypeFactory: getCode() from connector for column "
 		<<_connector.getCol()<<" row "<<_connector.getRow()<<endl);
 
 		return _connector.getType(_connector.getCol());
@@ -112,7 +112,7 @@ TESTDEBUG(SQL_NAME,"DynamicTypeFactory: getCode() from connector for column "
 	virtual bool stop(SQL_TYPE * code){
 #if 0
 // code may not be <<able
-TESTDEBUG(SQL_NAME,"SQLObjectTypeFactory: stop( "<<*code<<" ) == true"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLObjectTypeFactory: stop( "<<*code<<" ) == true"<<endl);
 #endif
 		return true;
 	}
@@ -124,14 +124,14 @@ TESTDEBUG(SQL_NAME,"SQLObjectTypeFactory: stop( "<<*code<<" ) == true"<<endl);
 		SQLDynamicActionFactory<SQL_TYPE,SQL_TYPE,libdap::BaseType>(),
 		_connector(connector)
 		{
-TESTDEBUG(SQL_NAME,"CREATED: DynamicTypeFactory"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATED: DynamicTypeFactory"<<endl);
 	}
 
 	/**
 	 * @brief dtor
 	 */
 	virtual ~SQLDynamicTypeFactory(){
-TESTDEBUG(SQL_NAME,"DELETED: DynamicTypeFactory"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETED: DynamicTypeFactory"<<endl);
 	}
 
 	/**

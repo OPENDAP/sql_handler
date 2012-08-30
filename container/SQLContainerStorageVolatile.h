@@ -51,7 +51,7 @@ public:
 			BESContainerStorageVolatile(name),
 			SQLContainerStorage()
 		{
-TESTDEBUG(SQL_NAME,"CREATING: SQLContainerStorageVolatile"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainerStorageVolatile"<<endl);
 		};
 
 		/**
@@ -97,7 +97,7 @@ TESTDEBUG(SQL_NAME,"CREATING: SQLContainerStorageVolatile"<<endl);
 		bool update(SQLContainer *c);
 
 		virtual ~SQLContainerStorageVolatile(){
-TESTDEBUG(SQL_NAME,"DELETING: SQLContainerStorageVolatile"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLContainerStorageVolatile"<<endl);
 			del_containers();
 		};
 

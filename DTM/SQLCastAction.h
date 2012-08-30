@@ -102,7 +102,7 @@ public :
 	 * @return a OUT* representing the casted value
 	 */
 	OUT * action (IN * val){
-TESTDEBUG(SQL_NAME,"SQLCastAction: casting object"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLCastAction: casting object"<<endl);
 		setVal((*_cast)(val));
 		return this->getVal();
 	}
@@ -121,7 +121,7 @@ TESTDEBUG(SQL_NAME,"SQLCastAction: casting object"<<endl);
 	 * only if the _reuse flag is set to 1
 	 */
 	virtual ~SQLCastAction(){
-TESTDEBUG(SQL_NAME,"SQLCastAction: deleting object"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLCastAction: deleting object"<<endl);
 	}
 
 private:

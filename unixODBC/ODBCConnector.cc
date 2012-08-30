@@ -235,7 +235,7 @@ ODBCConnector::getColName(const size_t &column){
 			return names[column];
 		}
 		else {
-TESTDEBUG(SQL_NAME,"ODBCConnector::getColName() "
+TESTDEBUG(SQL_NAME_TEST,"ODBCConnector::getColName() "
 		"\n on column: "<<column<<endl);
 			throw SQLInternalFatalError("Index provided exceeds the array limit!",
 					__FILE__,__LINE__);
@@ -540,8 +540,8 @@ ODBCConnector::getNext(size_t next){
 	 * number of rows to fetch (skip or extract)
 	 */
 	while (toFetchRows>0){ // while skip
-TESTDEBUG(SQL_NAME,"--------setNext starting fetch"<<endl);
-TESTDEBUG(SQL_NAME,"--------setNext resulting-----> rows: "<<toFetchRows<<endl);
+TESTDEBUG(SQL_NAME_TEST,"--------setNext starting fetch"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"--------setNext resulting-----> rows: "<<toFetchRows<<endl);
 		fetch(); // fetch next row
 		toFetchRows--;
 	}
@@ -585,7 +585,7 @@ TESTDEBUG(ODBC_NAME,"ODBCConnector: buf["<<c<<"]: \""<<buf[c]<<"\""<<endl);
 	for (size_t c=0; c<getCols(); c++){
 		if (status[c]==SQL_NULL_DATA)
 			buf[c]=(SQLCHAR*)'0';
-TESTDEBUG(SQL_NAME," Col_status:"<<(status[c]==SQL_NULL_DATA)<<endl);
+TESTDEBUG(SQL_NAME_TEST," Col_status:"<<(status[c]==SQL_NULL_DATA)<<endl);
 	}
 
 #if __TESTS__==1

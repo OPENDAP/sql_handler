@@ -86,7 +86,7 @@ public:
 	 * @see reset()
 	 */
 	virtual OUT_TYPE* doNext(ARGS_TYPE *in){
-TESTDEBUG(SQL_NAME,"ObjectActionList: doNext: "<<_iterator<<endl);
+TESTDEBUG(SQL_NAME_TEST,"ObjectActionList: doNext: "<<_iterator<<endl);
 		// return _list[_iterator++].action(in);
 		// using SQLAction operator()
 		return ((_list[_iterator++]))(in);
@@ -134,7 +134,7 @@ TESTDEBUG(SQL_NAME,"ObjectActionList: doNext: "<<_iterator<<endl);
 			throw SQLInternalFatalError("Unable to store a NULL ActionList",
 					__FILE__,__LINE__);
 
-TESTDEBUG(SQL_NAME,"CREATED: OBJECT ACTION LIST"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATED: OBJECT ACTION LIST"<<endl);
 	};
 
 	/**
@@ -153,7 +153,7 @@ TESTDEBUG(SQL_NAME,"CREATED: OBJECT ACTION LIST"<<endl);
 			if (_size>1)
 				delete [] _list;
 
-TESTDEBUG(SQL_NAME,"DELETED: OBJECT ACTION LIST"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETED: OBJECT ACTION LIST"<<endl);
 	};
 };
 #endif /* SQLOBJECTACTIONLIST_H_ */

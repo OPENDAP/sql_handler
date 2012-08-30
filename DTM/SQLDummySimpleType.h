@@ -53,7 +53,7 @@ public:
 					bool reuse):
 		Str(name),
 		_cast(cast_action, reuse){
-TESTDEBUG(SQL_NAME,"CREATING: SQLDummySimpleType"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLDummySimpleType"<<endl);
 	};
 
 	virtual ~SQLDummySimpleType(){};
@@ -65,17 +65,17 @@ TESTDEBUG(SQL_NAME,"CREATING: SQLDummySimpleType"<<endl);
 	{
 	try {
 		if (this->read_p()){
-TESTDEBUG(SQL_NAME,"SQLDummySimpleType: skipping object"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLDummySimpleType: skipping object"<<endl);
 			return false;
 		}
 		else
 		{
-TESTDEBUG(SQL_NAME,"SQLDummySimpleType: reading object"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLDummySimpleType: reading object"<<endl);
 				this->set_value( *(this->_cast.action(NULL)) ); //read dummy value
 				if (!_cast.reusable()) {
 					this->_cast.freeValue(); // deleting casted value
 				}
-TESTDEBUG(SQL_NAME,"SQLDummySimpleType: object copied to the buffer"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLDummySimpleType: object copied to the buffer"<<endl);
 			return false;
 		}
 	}
@@ -102,7 +102,7 @@ TESTDEBUG(SQL_NAME,"SQLDummySimpleType: object copied to the buffer"<<endl);
 		Str(obj->name()),
 		_cast(obj->_cast)
 	{
-TESTDEBUG(SQL_NAME,"COPING: SQLDummySimpleType"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"COPING: SQLDummySimpleType"<<endl);
 	};
 };
 

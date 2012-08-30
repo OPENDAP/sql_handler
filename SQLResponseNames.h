@@ -29,6 +29,7 @@
 
 // handler name
 #define SQL_NAME "sql"
+#define SQL_NAME_TEST "sql_test"
 
 // default plugin
 #define ODBC_NAME "odbc"

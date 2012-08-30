@@ -162,7 +162,7 @@ public:
 			SQLActionFactory<ERROR_TYPE,ARGS_TYPE,OUT> *error_factory,
 			bool force=false)
 	{
-TESTDEBUG(SQL_NAME,"SQLNextTypeAction: getting nextType"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLNextTypeAction: getting nextType"<<endl);
 	try{
 			libdap::BaseType *bt=SQLTypeManager::doActions(type_factory);
 

@@ -27,6 +27,7 @@
 #ifndef SQLDEFINITIONS_H_
 #define SQLDEFINITIONS_H_
 
+
 // DEBUG
 #include "SQLResponseNames.h"
 #include <BESDebug.h>

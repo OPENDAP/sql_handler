@@ -98,7 +98,7 @@ SQLContainer::SQLContainer(const string &name,
 							const string &type):
 	BESFileContainer(name,real_name,type)
 {
-	TESTDEBUG(SQL_NAME,"CREATING: SQLContainer"<<endl);
+	TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainer"<<endl);
 	// initialize members
 	_isReady=false; // you have to run setup()
 };
@@ -113,7 +113,7 @@ SQLContainer::SQLContainer(const string &name,
 SQLContainer::SQLContainer(const BESFileContainer *c):
 		BESFileContainer(*c)
 {
-	TESTDEBUG(SQL_NAME,"CREATING: SQLContainer"<<endl);
+	TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainer"<<endl);
 	if (c) {
 		// initialize members
 		set_attributes(c->get_attributes());
@@ -137,7 +137,7 @@ SQLContainer::SQLContainer(const BESContainer &c):
 					c.get_real_name(),
 					c.get_container_type())
 {
-	TESTDEBUG(SQL_NAME,"CREATING: SQLContainer"<<endl);
+	TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainer"<<endl);
 	// initialize members
 	set_constraint(c.get_constraint());
 	set_attributes(c.get_attributes());
@@ -154,7 +154,7 @@ SQLContainer::SQLContainer(const SQLContainer *c):
 {
 	if (c) {
 		if (c->isReady() && c->isUpToDate()){
-			TESTDEBUG(SQL_NAME,"COPYING: SQLContainer"<<endl);
+			TESTDEBUG(SQL_NAME_TEST,"COPYING: SQLContainer"<<endl);
 			clone(*c);
 			// status
 			_isReady=true;
@@ -182,7 +182,7 @@ SQLContainer::SQLContainer(const SQLContainer &c):
 					c.get_container_type())
 {
 	if (c.isReady() && c.isUpToDate()){
-		TESTDEBUG(SQL_NAME,"COPYING: SQLContainer"<<endl);
+		TESTDEBUG(SQL_NAME_TEST,"COPYING: SQLContainer"<<endl);
 		clone(c);
 		// status
 		_isReady=true;
@@ -197,7 +197,7 @@ SQLContainer::SQLContainer(const SQLContainer &c):
 };
 
 SQLContainer::~SQLContainer(){
-	TESTDEBUG(SQL_NAME,"DELETING: SQLContainer"<<endl);
+	TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLContainer"<<endl);
 };
 
 /**
