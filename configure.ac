@@ -59,7 +59,7 @@ AC_CHECK_BES([3.8.3],
 
 OPENDAP_DEBUG_OPTION
 
-AC_CHECK_ODBC([2.3.0],
+AC_CHECK_ODBC([2.2.14],
 [
 ],
 [ AC_MSG_ERROR([Could not find UnixODBC library and headers])
