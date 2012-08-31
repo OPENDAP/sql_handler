@@ -94,6 +94,13 @@ CLEANFILES = *~ sql.conf odbc.conf _configs.sed
 
 DISTCLEANFILES = sql_config.h
 
+# TODO jimg I added -Xlinker -export-dynamic to LDFLAGS for the two modules
+# determine if that was/is needed/enough to make the exceptions work across
+# modules. What about using RTLD_GLOBAL with dlopen in BESPlugin.h?
+# Also, why include SQL_SRCS/HDRS in both the sql_module and odbc_module?
+# Maybe because they are loaded with RTLD_LOCAL instead of ..._GLOBAL?
+# What about making just one module.
+
 lib_LTLIBRARIES = libbes_sql.la
 lib_besdir=$(libdir)/bes
 lib_bes_LTLIBRARIES = libsql_module.la libodbc_module.la
@@ -104,12 +111,12 @@ libbes_sql_la_LDFLAGS = -version-info $(LIBBES_SQL_VERSION)
 ######################################################
 libsql_module_la_SOURCES = $(BES_SRCS) $(SQL_SRCS) $(SQL_HDRS) $(BES_HDRS)
 libsql_module_la_CPPFLAGS =  $(BES_CPPFLAGS)
-libsql_module_la_LDFLAGS = -avoid-version -module 
+libsql_module_la_LDFLAGS = -avoid-version -module -Xlinker -export-dynamic
 libsql_module_la_LIBADD = $(BES_DAP_LIBS)
 ######################################################
 libodbc_module_la_SOURCES = $(ODBC_SRCS) $(SQL_SRCS) $(SQL_HDRS) $(ODBC_HDRS)
 libodbc_module_la_CPPFLAGS =  $(BES_CPPFLAGS) $(ODBC_CPPFLAGS)
-libodbc_module_la_LDFLAGS = -avoid-version -module -lodbc 
+libodbc_module_la_LDFLAGS = -avoid-version -module -Xlinker -export-dynamic -lodbc 
 libodbc_module_la_LIBADD = $(BES_DAP_LIBS)
 ######################################################
 ## EXPORTING HEADERS
