@@ -117,7 +117,7 @@ TESTDEBUG(ODBC_NAME,"ODBCConnector: Getting actual_col_size: "<<
 }
 
 SQL_TYPE
-ODBCConnector::getCType(SQLLEN & sql_type)
+ODBCConnector::getCType(SQLLEN /* jhrg &*/ sql_type)
 {
 	switch(sql_type){
 	case SQL_CHAR:
@@ -225,7 +225,10 @@ ODBCConnector::getType(size_t column){
 
 			types[col]=getCType(sql_type);
 		}
+#if 0
 		return getType(column);
+#endif
+		return &types[column];
 	}
 }
 

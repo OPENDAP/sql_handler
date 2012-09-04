@@ -293,20 +293,34 @@ protected:
 	 * carlo cancellieri 15 jun 2010
 	 *
 	 */
-	virtual void check()throw(BESError){
+	virtual void check()
+#if 0
+throw(BESError)
+#endif
+	{
 		try {
 			// NOTE:
 			// IF PARENT of DAP_TYPE is 'BaseType'
+#if 0
+		  // I think that the RTTI information may not be present in some
+		  // cases - some compiler/OS combinations. This seems to fail
+		  // on Linux. jhrg 9/4/12
+		  // FIXME
 			if (!typeid(BaseType).before(typeid(DAP_TYPE)))
 				throw BESInternalFatalError(
 					"Trying to instantiate a NOT BaseType derived object!",
 						__FILE__,__LINE__);
+#endif
 		}
 		catch (bad_typeid){
 			BESDEBUG(SQL_NAME,"BadTypeID");
 			throw BESInternalFatalError(
 				"Trying to instantiate a BadTypeID pointer!",
 					__FILE__,__LINE__);
+		}
+		catch (BESInternalFatalError &e){
+			BESDEBUG(SQL_NAME,"BESInternalFatalError");
+			throw e;
 		}
 		catch (...){
 			BESDEBUG(SQL_NAME,"Generic exception");

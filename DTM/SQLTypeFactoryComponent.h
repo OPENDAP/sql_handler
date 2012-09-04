@@ -117,9 +117,10 @@ public:
 	 * SQLTypeConnector::getNext()) and set it to the buffer on
 	 * BaseType::read() call.
 	 */
-	virtual libdap::BaseType * action(SQL_TYPE*)
+	virtual libdap::BaseType * action(SQL_TYPE*) = 0;
+#if 0
 		throw (SQLInternalError,SQLInternalFatalError)=0;
-
+#endif
 	/**
 	 * @brief dtor
 	 */

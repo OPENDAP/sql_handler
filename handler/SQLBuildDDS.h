@@ -328,13 +328,17 @@ sql_build_dds( SQLDataHandlerInterface &dhi,
 		 * For each column get the mapped DAP_TYPE
 		 * NOTE: No value is read here, only DAP object build.
 		 */
-		for (size_t i=0; i<connector->getCols(); i++){
+		for (size_t i=0; i<connector->getCols(); i++) {
 			BaseType *bt=NULL;
 
+			try {
 			BESDEBUG(SQL_NAME,"SQLBuildDDS: getting next object"<<endl);
 
 			bt=SQLNextTypeAction<SQL_TYPE,ODBC_TYPE,ERROR_TYPE,MSG_TYPE,OUT_TYPE1>::
 				nextType(*connector,type_factory,error_factory);
+
+			// TODO Remove jhrg
+			BESDEBUG(SQL_NAME,"SQLBuildDDS: past next type"<<endl);
 
 
 			if (bt){// if 'bt' is created
@@ -379,6 +383,17 @@ sql_build_dds( SQLDataHandlerInterface &dhi,
 					throw BESInternalError(
 						"SQLBuildDDS: Unable to allocate SQLObjects",
 						__FILE__,__LINE__);
+			}
+			} // end try
+			catch (BESError &e) {
+			  BESDEBUG(SQL_NAME, "SQLBuildDDS: Caught error: " << e.get_message() << endl);
+			  cerr << "SQLBuildDDS: Caught error: " << e.get_message() << endl;
+			  throw;
+			}
+			catch (...) {
+			  BESDEBUG(SQL_NAME, "SQLBuildDDS: Caught something" << endl);
+			  cerr << "caught something" << endl;
+			  throw;
 			}
 		} // endfor col
 

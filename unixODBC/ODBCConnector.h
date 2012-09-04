@@ -90,7 +90,7 @@ public:
 	void getSQLDataSources();
 #endif
 
-	SQL_TYPE getCType(SQLLEN & sql_type);
+	SQL_TYPE getCType(SQLLEN /* jhrg &*/ sql_type);
 
 	/**
 	 * should be usable with getCol() which returns:

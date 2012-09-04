@@ -10,7 +10,8 @@ AUTOMAKE_OPTIONS = foreign check-news subdir-objects
 
 ACLOCAL_AMFLAGS = -I conf
 
-AM_CXXFLAGS=-D__TESTS__
+AM_CXXFLAGS=
+# -D__TESTS__
 
 SQL_SRCS = \
 		utils/StringMatch.cc \
@@ -71,6 +72,8 @@ ODBC_SRCS = \
 		unixODBC/ODBCTypeFactoryComponent.cc \
 		unixODBC/ODBCErrorFactoryComponent.cc
 
+
+
 ODBC_HDRS = \
 		unixODBC/ODBCPluginLoader.h \
 		unixODBC/ODBCPlugin.h \
@@ -101,20 +104,23 @@ DISTCLEANFILES = sql_config.h
 # Maybe because they are loaded with RTLD_LOCAL instead of ..._GLOBAL?
 # What about making just one module.
 
-lib_LTLIBRARIES = libbes_sql.la
+# lib_LTLIBRARIES = libbes_sql.la
 lib_besdir=$(libdir)/bes
-lib_bes_LTLIBRARIES = libsql_module.la libodbc_module.la
+lib_bes_LTLIBRARIES = libsql_module.la  libodbc_module.la
 #############################################################################
-libbes_sql_la_SOURCES = $(SQL_SRCS) $(SQL_HDRS)
-libbes_sql_la_CPPFLAGS =  $(BES_CPPFLAGS)
-libbes_sql_la_LDFLAGS = -version-info $(LIBBES_SQL_VERSION)
+#libbes_sql_la_SOURCES = $(SQL_SRCS) $(SQL_HDRS)
+#libbes_sql_la_CPPFLAGS =  $(BES_CPPFLAGS)
+#libbes_sql_la_LDFLAGS = -version-info $(LIBBES_SQL_VERSION)
 ######################################################
-libsql_module_la_SOURCES = $(BES_SRCS) $(SQL_SRCS) $(SQL_HDRS) $(BES_HDRS)
+libsql_module_la_SOURCES = $(BES_SRCS) $(SQL_SRCS) $(SQL_HDRS) $(BES_HDRS) 
+# Combinng these sources did not work. jhrg 9/4/12
+# $(ODBC_SRCS) $(ODBC_HDRS)
 libsql_module_la_CPPFLAGS =  $(BES_CPPFLAGS)
 libsql_module_la_LDFLAGS = -avoid-version -module -Xlinker -export-dynamic
 libsql_module_la_LIBADD = $(BES_DAP_LIBS)
 ######################################################
-libodbc_module_la_SOURCES = $(ODBC_SRCS) $(SQL_SRCS) $(SQL_HDRS) $(ODBC_HDRS)
+libodbc_module_la_SOURCES = $(ODBC_SRCS) $(ODBC_HDRS)
+# $(SQL_SRCS) $(SQL_HDRS) Removed 9/4/12 jhrg
 libodbc_module_la_CPPFLAGS =  $(BES_CPPFLAGS) $(ODBC_CPPFLAGS)
 libodbc_module_la_LDFLAGS = -avoid-version -module -Xlinker -export-dynamic -lodbc 
 libodbc_module_la_LIBADD = $(BES_DAP_LIBS)

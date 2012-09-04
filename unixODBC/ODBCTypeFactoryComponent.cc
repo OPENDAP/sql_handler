@@ -76,7 +76,9 @@ TESTDEBUG(SQL_NAME_TEST,"ODBCFactoryComponent: casting a STRING"<<endl);
  */
 libdap::BaseType *
 ODBCTypeFactoryComponent::action(SQL_TYPE *type)
-//		throw (SQLInternalError,SQLInternalFatalError)
+#if 0
+		throw (SQLInternalError,SQLInternalFatalError)
+#endif
 {
 TESTDEBUG(ODBC_NAME,"Getting new object"<<endl);
 	switch(*type){
