@@ -62,7 +62,7 @@ class ODBCConnector :public SQLConnector<SQL_TYPE,ODBC_TYPE,ERROR_TYPE,MSG_TYPE>
 
 	/**
 	 * @brief Connect to DB
-	 * @returns true if status can be settled to isReady()
+	 * @returns true if d_status can be settled to isReady()
 	 */
 	bool connect();
 
@@ -155,15 +155,15 @@ public:
 		stmt(NULL),		//!< statement handle
 		env(NULL),		//!< environment handle
 		conn(NULL),		//!< connection handle
-		rc(0),			//!< status
+		rc(0),			//!< d_status
 		toFetchRows(0),	//!< number of rows to fetch
 		strMsg(new char[_buf_size]()),	//!< error message
 		msgEnvSeq(1),		//!< Env error sequence number // read API documentation
 		msgConnSeq(1),		//!< Conn error sequence number // read API documentation
 		msgStmtSeq(1),		//!< Stmt error sequence number // read API documentation
 		sef(NULL),		//!< error factory
-		buf(NULL),		//!< buffer
-//SQLLEN status[_buf_size];//[bufferRows];
+		d_buf(NULL),		//!< buffer
+//SQLLEN d_status[_buf_size];//[bufferRows];
 		types(NULL),	//!< buffer
 		sizes(NULL),	//!< buffer
 		row_size(0),	//!< buffer
@@ -190,7 +190,7 @@ TESTDEBUG(ODBC_NAME,"CREATING: ODBCConnector"<<endl);
 private:
 	void clean(){
 
-		// set status to NOT READY
+		// set d_status to NOT READY
 		setReady(false);
 
 		reset();
@@ -208,9 +208,9 @@ private:
 		if (names)
 			delete [] names;
 		names=0;
-		if (buf)
-			free(buf);
-		buf=0;
+		if (d_buf)
+			free(d_buf);
+		d_buf=0;
 #if 0
 		/**
 		 * we have an action 'close()' which
@@ -270,7 +270,7 @@ private:
 
 	SQLHDBC conn;//!< connection handle
 
-	SQLRETURN rc;//!< global status
+	SQLRETURN rc;//!< global d_status
 	size_t toFetchRows; //!<number of rows to fetch or skip
 
 	// errors
@@ -280,8 +280,8 @@ private:
 	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> *sef; //!<this is passed not rebuilt
 
 
-	SQLCHAR **buf;	//!< buffer
-	SQLLEN status[_buf_size];	//!< buffer status
+	SQLCHAR **d_buf;	//!< buffer
+	SQLLEN d_status[_buf_size];	//!< buffer d_status
 
 	// temporary vars
 	SQL_TYPE * types;//!< types buffer

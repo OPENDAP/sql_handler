@@ -94,9 +94,10 @@ public:
 	/**
 	 * @brief Provide action method implementation using DTM components.
 	 */
-	libdap::BaseType *
-	action(SQL_TYPE *type) throw (SQLInternalError,SQLInternalFatalError);
-
+	libdap::BaseType *action(SQL_TYPE *type);
+#if 0
+	// throw (SQLInternalError,SQLInternalFatalError);
+#endif
 };
 
 

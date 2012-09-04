@@ -63,6 +63,7 @@ TESTDEBUG(ODBC_NAME,"ODBCConnector: Parameters:"
 			SQL_NTS,(SQLCHAR*)getParams().getPass().c_str(),SQL_NTS);
 
 TESTDEBUG(ODBC_NAME,"ODBCConnector: Connection done with status: "<<rc<<endl);
+
 	return true;
 }
 
@@ -255,7 +256,7 @@ TESTDEBUG(SQL_NAME_TEST,"ODBCConnector::getColName() "
 		for (size_t col=0; col<getCols(); col++)
 		{
 			char name[_buf_size];
-			rc=SQLColAttribute(stmt , col+1, SQL_DESC_NAME,&name, _buf_size, 0, 0);
+			rc=SQLColAttribute(stmt , col+1, SQL_DESC_NAME, &name, _buf_size, 0, 0);
 			BESDEBUG(ODBC_NAME,"ODBCConnector: Getting column name: "<<name<<
 					" for column: "<<col<<" exit status: "<<rc<<endl);
 			/**
@@ -435,11 +436,12 @@ ODBCConnector::query(){
 	}
 	// Allocate a statement handle
 	SQLAllocHandle(SQL_HANDLE_STMT, conn, &stmt);
+
 	string query=getParams().buildQuery();
 TESTDEBUG(ODBC_NAME,"ODBCConnector: Executing (REALLY) query"<<endl);
 	rc=SQLExecDirect(stmt,(SQLCHAR *)query.c_str(),SQL_NTS);
 	BESDEBUG(ODBC_NAME,"ODBCConnector: Query \""<<query
-		<<"\" (REALLY) executed."<<endl);
+		<<"\" (REALLY) executed; rc=" << rc <<endl);
 
 	// rows
 	//size_t rows;
@@ -467,11 +469,11 @@ TESTDEBUG(ODBC_NAME,"ODBCConnector: Executing (REALLY) query"<<endl);
 
 	BESDEBUG(ODBC_NAME,"ODBCConnector: Calculating columns size"<<endl);
 
-	// NOTE if(buf) check is done by clear()
-	buf=(SQLCHAR**)calloc(cols,sizeof(SQLCHAR*));
+	// NOTE if(d_buf) check is done by clear()
+	d_buf=(SQLCHAR**)calloc(cols,sizeof(SQLCHAR*));
 	for (int c=0; c<cols; c++){
 		// check maximum sizeof
-		buf[c]=(SQLCHAR*)calloc(getColSize(c),sizeof(SQLCHAR));
+		d_buf[c]=(SQLCHAR*)calloc(getColSize(c),sizeof(SQLCHAR));
 
 TESTDEBUG(ODBC_NAME,"ODBCConnector: Calculated: "<<
 	getColSize(c)<<" for column: "<<c<<endl);
@@ -484,16 +486,16 @@ TESTDEBUG(ODBC_NAME,"ODBCConnector: Binding"<<endl);
 	/* local variables */
 	for (int i = 0; i < cols; i++) {
 		rc=SQLBindCol( stmt, i + 1, *getType(i),//SQL_C_CHAR,//bind to char
-				buf[ i ], getColSize(i), &status[ i ] );//sizeof( buf[i] )
+				d_buf[ i ], getColSize(i), &d_status[ i ] );//sizeof( d_buf[i] )
 
 TESTDEBUG(ODBC_NAME,"ODBCConnector: Binding info-> Status:"<<rc<<
 				" Type:"<<*getType(i)<<" size:"<<getColSize(i)<<
-				" Col_status:"<<(status[i]==SQL_NULL_DATA)<<endl);
+				" Col_status:"<<(d_status[i]==SQL_NULL_DATA)<<endl);
 	}
 
 TESTDEBUG(ODBC_NAME,"ODBCConnector: Bind done. Status: "<<rc<<endl);
 
-	// if resulting status SUCCEDED set READY status.
+	// if resulting d_status SUCCEDED set READY d_status.
 	if (sef)
 		SQLErrorManager<void>::trigger(_SQLH_ON_ALWAYS,*sef);
 
@@ -501,9 +503,9 @@ TESTDEBUG(ODBC_NAME,"ODBCConnector: Bind done. Status: "<<rc<<endl);
 	toFetchRows=1;
 	// set cursors to start and check notEnd condition
 	reset();
-	// set status
+	// set d_status
 	setReady(true);
-	// return the status
+	// return the d_status
 	return true;
 }
 
@@ -547,7 +549,7 @@ TESTDEBUG(SQL_NAME_TEST,"--------setNext resulting-----> rows: "<<toFetchRows<<e
 	}
 
 	// get the pointer
-	SQLCHAR *ret= buf[getCol()];
+	SQLCHAR *ret= d_buf[getCol()];
 
 	/**
 	 * Set number of column and rows
@@ -569,8 +571,8 @@ ODBCConnector::fetch(){
 	 * clean buffer
 	 */
 	for (size_t c=0; c<getCols(); c++){
-TESTDEBUG(ODBC_NAME,"ODBCConnector: buf["<<c<<"]: \""<<buf[c]<<"\""<<endl);
-		//*buf[c]=0;
+TESTDEBUG(ODBC_NAME,"ODBCConnector: buf["<<c<<"]: \""<<d_buf[c]<<"\""<<endl);
+		//*d_buf[c]=0;
 	}
 #endif
 	/**
@@ -583,15 +585,15 @@ TESTDEBUG(ODBC_NAME,"ODBCConnector: buf["<<c<<"]: \""<<buf[c]<<"\""<<endl);
 	 *  set it to '0'
 	 */
 	for (size_t c=0; c<getCols(); c++){
-		if (status[c]==SQL_NULL_DATA)
-			buf[c]=(SQLCHAR*)'0';
-TESTDEBUG(SQL_NAME_TEST," Col_status:"<<(status[c]==SQL_NULL_DATA)<<endl);
+		if (d_status[c]==SQL_NULL_DATA)
+			d_buf[c]=(SQLCHAR*)'0';
+TESTDEBUG(SQL_NAME_TEST," Col_status:"<<(d_status[c]==SQL_NULL_DATA)<<endl);
 	}
 
 #if __TESTS__==1
 	for (size_t c=0; c<getCols(); c++)
 		BESDEBUG(ODBC_NAME,
-				"ODBCConnector: new buffer value buf["<<c<<"]: ->\""<<buf[c]<<"\"<-"<<endl);
+				"ODBCConnector: new buffer value buf["<<c<<"]: ->\""<<d_buf[c]<<"\"<-"<<endl);
 	BESDEBUG(ODBC_NAME,"ODBCConnector: Fetch status: "<<rc<<endl);
 #endif
 }

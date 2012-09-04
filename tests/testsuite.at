@@ -67,4 +67,4 @@ AT_CLEANUP]
 AT_BESCMD_DAS_RESPONSE_TEST([mysql_1.das.bescmd], [pass])
 AT_BESCMD_DDS_RESPONSE_TEST([mysql_1.dds.bescmd], [pass])
 AT_BESCMD_DDX_RESPONSE_TEST([mysql_1.ddx.bescmd], [pass])
-dnl AT_BESCMD_BINARYDATA_RESPONSE_TEST([mysql_1.data.bescmd], [pass])
+AT_BESCMD_BINARYDATA_RESPONSE_TEST([mysql_1.data.bescmd], [pass])

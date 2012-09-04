@@ -245,9 +245,10 @@ private:
 		try {
 			return actions.doNext(args);
 		}
-#if 0
+#if 1
 		catch (SQLInternalError &ie){
 			// this error shouldn't be filtered!
+		    BESDEBUG(SQL_NAME,ie.get_message());
 			throw;
 		}
 #endif

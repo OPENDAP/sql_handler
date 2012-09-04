@@ -2,8 +2,7 @@
 [section]
 api=odbc
 server=test
-user=root
-pass=opendap
+user=jimg
 
 [select]
 a, b, c
