@@ -60,7 +60,6 @@
  *
  */
 
-
 /**
  * @brief exception thrown if internal error encountered
  * it can be throw by Action and is NOT intercepted
@@ -70,26 +69,27 @@
  * @see SQLAction
  * @see SQLErrorManager
  */
-class SQLInternalFatalError : public BESError
-{
+class SQLInternalFatalError: public BESError {
 protected:
-      			SQLInternalFatalError() {}
+    SQLInternalFatalError()
+    {
+    }
 public:
-      			SQLInternalFatalError( const string &msg,
-					  const string &file,
-					  unsigned int line )
-			    : BESError( msg, _SQLH_INTERNAL_FATAL_ERROR,
-			                file, line ) {}
-    virtual		~SQLInternalFatalError() {}
+    SQLInternalFatalError(const string &msg, const string &file, unsigned int line) :
+            BESError(msg, _SQLH_INTERNAL_FATAL_ERROR, file, line)
+    {
+    }
+    virtual ~SQLInternalFatalError()
+    {
+    }
 
-    virtual void	dump( ostream &strm ) const
-			{
-			    strm << "SQLInternalFatalError::dump - ("
-			         << (void *)this << ")" << endl ;
-			    BESIndent::Indent() ;
-			    BESError::dump( strm ) ;
-			    BESIndent::UnIndent() ;
-			}
+    virtual void dump(ostream &strm) const
+    {
+        strm << "SQLInternalFatalError::dump - (" << (void *) this << ")" << endl;
+        BESIndent::Indent();
+        BESError::dump(strm);
+        BESIndent::UnIndent();
+    }
 };
 
 #endif /* SQLINTERNALFATALERROR_H_ */

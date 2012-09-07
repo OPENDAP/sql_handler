@@ -69,26 +69,27 @@
  * @see SQLAction
  * @see SQLErrorManager
  */
-class SQLInternalError : public BESError
-{
+class SQLInternalError: public BESError {
 protected:
-      			SQLInternalError() {}
+    SQLInternalError()
+    {
+    }
 public:
-      			SQLInternalError( const string &msg,
-					  const string &file,
-					  unsigned int line )
-			    : BESError( msg, _SQLH_INTERNAL_ERROR,
-			                file, line ) {}
-    virtual		~SQLInternalError() {}
+    SQLInternalError(const string &msg, const string &file, unsigned int line) :
+            BESError(msg, _SQLH_INTERNAL_ERROR, file, line)
+    {
+    }
+    virtual ~SQLInternalError()
+    {
+    }
 
-    virtual void	dump( ostream &strm ) const
-			{
-			    strm << "SQLInternalError::dump - ("
-			         << (void *)this << ")" << endl ;
-			    BESIndent::Indent() ;
-			    BESError::dump( strm ) ;
-			    BESIndent::UnIndent() ;
-			}
+    virtual void dump(ostream &strm) const
+    {
+        strm << "SQLInternalError::dump - (" << (void *) this << ")" << endl;
+        BESIndent::Indent();
+        BESError::dump(strm);
+        BESIndent::UnIndent();
+    }
 };
 
 #endif /* SQLINTERNALERROR_H_ */

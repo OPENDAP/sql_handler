@@ -44,97 +44,95 @@
  * SQLActionList managed by this SQLActionManager.
  *
  */
-template <class JOIN=void>
-class SQLErrorManager: protected SQLActionManager<JOIN,JOIN,JOIN>{
+template<class JOIN = void>
+class SQLErrorManager: protected SQLActionManager<JOIN, JOIN, JOIN> {
 public:
 
-	SQLErrorManager():SQLActionManager<JOIN,JOIN,JOIN>(){
+    SQLErrorManager() :
+            SQLActionManager<JOIN, JOIN, JOIN>()
+    {
 #if 0
-		/**
-  		 *  This is done by the SQLModule::initialize
-  		 *
-		 *  initialize check point reading
-		 *  configuration file.
-		 */
-		//SQLCheckPoint::init();
+        /**
+         *  This is done by the SQLModule::initialize
+         *
+         *  initialize check point reading
+         *  configuration file.
+         */
+        //SQLCheckPoint::init();
 #endif
-	};
+    }
+    ;
 
-	/**
-	 * @brief Act as a trigger starting Actions only
-	 * if corresponding CheckPoint is active.
-	 * @param check @see SQLCheckPoint
-	 * @param error_factory
-	 * @return latest action result of JOIN type
-	 * @throw @see SQLActionManager::doActions
-	 */
-	 template <class ERROR_TYPE, class ARGS_TYPE>
-	 static JOIN *trigger(_SQLH_CHECKS check,
-			 SQLActionFactory<ERROR_TYPE,ARGS_TYPE,JOIN> &error_factory)
-	{
-		// trigger activation
-		if (check == _SQLH_ON_ALWAYS){
-			BESDEBUG(SQL_NAME,
-				"SQLErrorManager: This check point is forced, running error checks."<<endl);
-			/*
-			 *  run using:
-			 *  - passed error_factory
-			 *  - implemented merge result function
-			 *  - implemented join result function
-			 *  - do not call getArgs for each action of the list
-			 *  @see SQLActionManager doc
-			 */
-			return doActions(error_factory,&merge,&join,false);
-		}
-		else if (SQLCheckPoint::check(check))
-		{
-			BESDEBUG(SQL_NAME,
-				"SQLErrorManager: This check point is active, running error checks."<<endl);
-			/*
-			 *  run using:
-			 *  - passed error_factory
-			 *  - implemented merge result function
-			 *  - implemented join result function
-			 *  - do not call getArgs for each action of the list
-			 *  @see SQLActionManager doc
-			 */
-			return doActions(error_factory,&merge,&join,false);
-		}
-		else
-			BESDEBUG(SQL_NAME,
-				"SQLErrorManager: This check point isn't active"<<endl);
-		return NULL;
-	}
+    /**
+     * @brief Act as a trigger starting Actions only
+     * if corresponding CheckPoint is active.
+     * @param check @see SQLCheckPoint
+     * @param error_factory
+     * @return latest action result of JOIN type
+     * @throw @see SQLActionManager::doActions
+     */
+    template<class ERROR_TYPE, class ARGS_TYPE>
+    static JOIN *trigger(_SQLH_CHECKS check, SQLActionFactory<ERROR_TYPE, ARGS_TYPE, JOIN> &error_factory)
+    {
+        // trigger activation
+        if (check == _SQLH_ON_ALWAYS) {
+            BESDEBUG(SQL_NAME, "SQLErrorManager: This check point is forced, running error checks."<<endl);
+            /*
+             *  run using:
+             *  - passed error_factory
+             *  - implemented merge result function
+             *  - implemented join result function
+             *  - do not call getArgs for each action of the list
+             *  @see SQLActionManager doc
+             */
+            return doActions(error_factory, &merge, &join, false);
+        }
+        else if (SQLCheckPoint::check(check)) {
+            BESDEBUG(SQL_NAME, "SQLErrorManager: This check point is active, running error checks."<<endl);
+            /*
+             *  run using:
+             *  - passed error_factory
+             *  - implemented merge result function
+             *  - implemented join result function
+             *  - do not call getArgs for each action of the list
+             *  @see SQLActionManager doc
+             */
+            return doActions(error_factory, &merge, &join, false);
+        }
+        else
+            BESDEBUG(SQL_NAME, "SQLErrorManager: This check point isn't active"<<endl);
+        return NULL;
+    }
 
-	/**
-	 * @brief SQLActionManager<...>::JOIN type function
-	 */
-	static JOIN * join(JOIN * prev, JOIN * actual)
-		{
+    /**
+     * @brief SQLActionManager<...>::JOIN type function
+     */
+    static JOIN * join(JOIN * prev, JOIN * actual)
+    {
 #if __TESTS__==1
-	if (actual)
-		BESDEBUG(SQL_NAME,"_JOIN: "<<std::endl);
-	else
-		BESDEBUG(SQL_NAME,"!_JOIN: "<<std::endl);
+        if (actual)
+        BESDEBUG(SQL_NAME,"_JOIN: "<<std::endl);
+        else
+        BESDEBUG(SQL_NAME,"!_JOIN: "<<std::endl);
 #endif
-		return actual;
-		// no delete
-	}
+        return actual;
+        // no delete
+    }
 
-	/**
-	 * @brief SQLActionManager<libdap::BaseType>::MERGE type function
-	 */
-	static JOIN * merge(JOIN * prev, JOIN * actual)
-		{
+    /**
+     * @brief SQLActionManager<libdap::BaseType>::MERGE type function
+     */
+    static JOIN * merge(JOIN * prev, JOIN * actual)
+    {
 #if __TESTS__==1
-	if (actual)
-		BESDEBUG(SQL_NAME,"_MERGE: "<<std::endl);
-	else
-		BESDEBUG(SQL_NAME,"!_MERGE: "<<std::endl);
+        if (actual)
+        BESDEBUG(SQL_NAME,"_MERGE: "<<std::endl);
+        else
+        BESDEBUG(SQL_NAME,"!_MERGE: "<<std::endl);
 #endif
-		return actual;
-		// no delete
-	}
+        return actual;
+        // no delete
+    }
 };
 
 #endif /* SQLERRORMANAGER_H_ */
