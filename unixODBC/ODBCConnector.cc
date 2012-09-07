@@ -45,7 +45,6 @@ TESTDEBUG(ODBC_NAME,"ODBCConnector: Parameters:"
 	rc = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &env);
 
 	//@todo check this on MS ODBC
-	// jhrg 8/29/12" Changed SQL_OV_ODBC3 to SQL_OV_ODBC2 - hack for MyODBC MySQL driver.
 	rc = SQLSetEnvAttr(env, SQL_ATTR_ODBC_VERSION, (void*) SQL_OV_ODBC3, 0);
 
 	// Allocate a connection handle
@@ -58,9 +57,26 @@ TESTDEBUG(ODBC_NAME,"ODBCConnector: Parameters:"
 	 *
 	 */
 	//rc = SQLConnect(conn, ServerName, SQL_NTS, User, SQL_NTS, Password, SQL_NTS);
-	rc = SQLConnect(conn,(SQLCHAR*)getParams().getServer().c_str(),
-			SQL_NTS,(SQLCHAR*)getParams().getUser().c_str(),
-			SQL_NTS,(SQLCHAR*)getParams().getPass().c_str(),SQL_NTS);
+#if 0
+	rc = SQLConnect(conn,(SQLCHAR*)getParams().getServer().c_str(), SQL_NTS,
+			(SQLCHAR*)getParams().getUser().c_str(), SQL_NTS,
+			(SQLCHAR*)getParams().getPass().c_str(), SQL_NTS);
+#endif
+	// I'm not sure this is any better than the above code, but suggests
+	// a way to cut down on the dumplication of information that's held
+	// in the odbc.ini file (that has username and password info too).
+	// I added extra parameters to get the connection string because I'm
+	// chasing down memory errors and one is reported involoving this
+	// call. It neither helped nor hurt... The pointers can be replaced
+	// with NULL and the length with 0. jhrg 9/7/12
+	string dsn = "DSN=";
+	dsn.append(getParams().getServer());
+	vector<SQLCHAR> OutConnectionString(SQL_MAX_OPTION_STRING_LENGTH + 1);
+	SQLSMALLINT OutConnectionStringLength;
+	rc = SQLDriverConnect(conn, NULL,
+			      (SQLCHAR*)dsn.c_str(), SQL_NTS,
+			      &OutConnectionString[0], SQL_MAX_OPTION_STRING_LENGTH,
+			      &OutConnectionStringLength, SQL_DRIVER_NOPROMPT);
 
 TESTDEBUG(ODBC_NAME,"ODBCConnector: Connection done with status: "<<rc<<endl);
 
@@ -203,7 +219,6 @@ ODBCConnector::getType(size_t column){
 
 		if (getCols()>0){
 			types=new SQL_TYPE[getCols()]();
-			//(SQLLEN*)calloc(getCols(),sizeof(SQLLEN));
 		}
 		else
 			throw SQLInternalError(
@@ -212,8 +227,10 @@ ODBCConnector::getType(size_t column){
 
 		for (size_t col=0; col<getCols(); col++)
 		{
-			SQLLEN sql_type;
-			rc=SQLColAttribute(stmt , col+1, SQL_DESC_CONCISE_TYPE,0, 0, 0, &sql_type);
+		  // Added initialization; this quites an 'unitialized access' error
+		  // reported by valgrind. jhrg 9/7/12
+			SQLLEN sql_type = 0;
+			rc=SQLColAttribute(stmt , col+1, SQL_DESC_CONCISE_TYPE, 0, 0, 0, &sql_type);
 			BESDEBUG(ODBC_NAME,"ODBCConnector: Getting column type: "<<sql_type<<
 					" for column: "<<col<<" exit status: "<<rc<<endl);
 			/**
@@ -225,10 +242,8 @@ ODBCConnector::getType(size_t column){
 
 			types[col]=getCType(sql_type);
 		}
-#if 0
+
 		return getType(column);
-#endif
-		return &types[column];
 	}
 }
 
