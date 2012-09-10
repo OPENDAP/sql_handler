@@ -85,6 +85,9 @@
  * by the SELECT_CONTAINER function of the SQLContainerFactory.
  * @see SQLContainerFactory
  *
+ * @todo refactor and remove this abstract class, folding it's
+ * functionality into whatever concrete classes use it.
+ *
  */
 class SQLContainer :public BESFileContainer, smart::Clone<SQLContainer>{
 public:
