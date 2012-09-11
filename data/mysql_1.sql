@@ -1,11 +1,13 @@
 
+# Test variable definitions
+
+define $DSN$=test
+
 [section]
+
 api=odbc
-server=test
-user=jimg
-# No pass on OS/X
-# pass=
-# On Linux it's:
+server=$DSN$
+# The user and pass keywords are not needed 
 # user=root
 # pass=opendap
 

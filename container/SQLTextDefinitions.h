@@ -27,7 +27,6 @@
  *  DATASET v0.4. This is done by SQLTextContainer
  */
 
-
 #ifndef SQLTEXTDEFINITIONS_H_
 #define SQLTEXTDEFINITIONS_H_
 
@@ -38,58 +37,59 @@
  * @brief The dataset definition
  */
 typedef struct dataset_section {
-	string api;		//!< name of the SQLPlugin
-	string server;	//!< server name or DSN
-	string port;	//!< server port
-	string dbname;	//!< database name
-	string user;	//!< user name
-	string pass;	//!< password
-	SQLQuery query; //!< SQLQuery object
-	map<string,string> other; //!< optional rows
+    string api; //!< name of the SQLPlugin
+    string server; //!< server name or DSN
+    string port; //!< server port
+    string dbname; //!< database name
+    string user; //!< user name
+    string pass; //!< password
+    SQLQuery query; //!< SQLQuery object
+    map<string, string> other; //!< optional rows
 
-	/*
-	 * @brief copy constructor
-	 * @param reference to a const instance of this class
-	 */
-	dataset_section(const dataset_section &ds):
-		api(ds.api),server(ds.server),port(ds.port),
-		dbname(ds.dbname),user(ds.user),pass(ds.pass),
-		query(ds.query),other(ds.other)
-	{
-TESTDEBUG(SQL_NAME_TEST,"CREATE: DATASET_SECTION"<<endl);
-	}
+    /*
+     * @brief copy constructor
+     * @param reference to a const instance of this class
+     */
+    dataset_section(const dataset_section &ds) :
+            api(ds.api), server(ds.server), port(ds.port), dbname(ds.dbname), user(ds.user), pass(ds.pass), query(
+                    ds.query), other(ds.other)
+    {
+        TESTDEBUG(SQL_NAME_TEST,"CREATE: DATASET_SECTION"<<endl);
+    }
 
-	/**
-	 * @brief default constructor
-	 */
-	dataset_section(){
-TESTDEBUG(SQL_NAME_TEST,"CREATE: SQLH_DATASET_SECTION"<<endl);
-	}
-	/**
-	 * @brief dtor
-	 */
-	virtual ~dataset_section(){
-TESTDEBUG(SQL_NAME_TEST,"DELETE: SQLH_DATASET_SECTION ->api: "<<api<<endl);
-	}
+    /**
+     * @brief default constructor
+     */
+    dataset_section()
+    {
+        TESTDEBUG(SQL_NAME_TEST,"CREATE: SQLH_DATASET_SECTION"<<endl);
+    }
+    /**
+     * @brief dtor
+     */
+    virtual ~dataset_section()
+    {
+        TESTDEBUG(SQL_NAME_TEST,"DELETE: SQLH_DATASET_SECTION ->api: "<<api<<endl);
+    }
 
-}SQLH_DATASET_SECTION;
+} SQLH_DATASET_SECTION;
 
 /**
  * @brief To easily flag dataset parts completion
  */
 typedef enum _dataset_parts {
-	section_tag=0,//!< section_tag [section]
-	api=1,        //!< api		key=val
-	server=2,     //!< server	key=val
-	port=3,       //!< port		key=val
-	dbname=4,     //!< dbname	key=val
-	user=5,       //!< user		key=val
-	pass=6,       //!< pass		key=val
-	select_tag=7, //!< select_tag	[select]
-	from_tag=8,   //!< from_tag		[from]
-	where_tag=9,  //!< where_tag	[where]
-	other_tag=10  //!< other_tag	[other]
-}_SQLH_DATASET_PARTS;
+    section_tag = 0, //!< section_tag [section]
+    api = 1, //!< api		key=val
+    server = 2, //!< server	key=val
+    port = 3, //!< port		key=val
+    dbname = 4, //!< dbname	key=val
+    user = 5, //!< user		key=val
+    pass = 6, //!< pass		key=val
+    select_tag = 7, //!< select_tag	[select]
+    from_tag = 8, //!< from_tag		[from]
+    where_tag = 9, //!< where_tag	[where]
+    other_tag = 10 //!< other_tag	[other]
+} _SQLH_DATASET_PARTS;
 
 /**
  * @brief define count number of parts of a section
@@ -119,7 +119,7 @@ typedef enum _dataset_parts {
  * @todo: test change groups in text dataset regex.
  */
 // variable
-#define _SQLH_DATASET_REG_VAR "(\\$[A-z]*\\$)"
+#define _SQLH_DATASET_REG_VAR "(\\$[A-z,0-9]*\\$)"
 // number of groups '()' in regex +1
 #define _SQLH_DATASET_REG_VAR_GROUPS 2
 // set the interesting group (starts from 0)
@@ -152,7 +152,7 @@ typedef enum _dataset_parts {
 	"(==|>=|<=|~=|!=|[A-z,0-9,\\',\\\", ,\\,,\\*,\\%,<,>,!,~]+)"
 //NOTE: Start/End spaces in variable are stored
 /*
-* = 			Equal
+ * = 			Equal
  * <> 			Not equal
  * @todo: Note: In some versions of SQL the <> operator may be written as !=
  * > 			Greater than
@@ -162,7 +162,6 @@ typedef enum _dataset_parts {
  * LIKE 		Search for a pattern
  */
 //	"&(\\w+)(<|>|=|!=|<=|>=|~=)([\\',\\\",\\%,\\*]*\\w+[\\',\\\",\\%,\\*]*)"
-
 // number of groups '()' in regex +1
 #define _SQLH_DATASET_REG_KEY_VAL_GROUPS 3
 // set the interesting group for KEY
@@ -172,7 +171,6 @@ typedef enum _dataset_parts {
 
 // max number of groups '()' in regex +1
 #define _SQLH_DATASET_MAX_REG_GROUPS 3
-
 
 /**
  * SQLContainer
