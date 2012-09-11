@@ -45,86 +45,93 @@ class BESResponseHandler;
  * @see SQLContainerFactory::getContainer()
  * @see SQLContainer
  */
-class SQLDataHandlerInterface{
+class SQLDataHandlerInterface {
 private:
-	BESDataHandlerInterface *_dhi;
-	/**
-	 * This is a copy coming from the SQLContainerFactory
-	 * and is handled locally.
-	 * You'll never have to delete it.
-	 */
-	SQLContainer *_sql_container;
+    BESDataHandlerInterface *_dhi;
+    /**
+     * This is a copy coming from the SQLContainerFactory
+     * and is handled locally.
+     * You'll never have to delete it.
+     */
+    SQLContainer *_sql_container;
 #if 0
-	// working but dangerous
-	// see below
-	smart::SharedPtr<SQLContainer,smart::Clone<SQLContainer> > _sql_container;
+    // working but dangerous
+    // see below
+    smart::SharedPtr<SQLContainer,smart::Clone<SQLContainer> > _sql_container;
 #endif
 
-	SQLDataHandlerInterface():
-		_dhi(NULL),
-		_sql_container(NULL){};
+    SQLDataHandlerInterface() :
+            _dhi(NULL), _sql_container(NULL)
+    {
+    }
+    ;
 public:
 
-	/**
-	 * @brief Constructor
-	 */
-	SQLDataHandlerInterface(BESDataHandlerInterface &dhi):
-		_dhi(&dhi),
-		_sql_container(SQLContainerFactory::getContainer(dhi)){
-TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLDataHandlerInterface"<<endl);
-	};
+    /**
+     * @brief Constructor
+     */
+    SQLDataHandlerInterface(BESDataHandlerInterface &dhi) :
+            _dhi(&dhi), _sql_container(SQLContainerFactory::getContainer(dhi))
+    {
+        TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLDataHandlerInterface"<<endl);
+    }
+    ;
 
 #if 0
 
-	/**
-	 * WORKING BUT DANGEROUS
-	 * (with command "show version" BES set a null dhi.container
-	 * which make this constructor throw the error)
-	 *
-	 * @brief Constructor
-	 *
-	 * @note: the SharedPtr<> can't be loaded if
-	 * SQLContainerFactory::getContainer() returns a NULL
-	 * pointer. In that case a fatal error is thrown.
-	 */
-	SQLDataHandlerInterface(BESDataHandlerInterface &dhi):
-		_dhi(&dhi),
-		_sql_container(
-				SQLContainerFactory::getContainer(dhi)?
-				:
-				throw BESInternalFatalError(
-				"Unable to build SQLDataHandlerInterface with a NULL SQLContainer",
-				__FILE__,__LINE__)){
-TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLDataHandlerInterface"<<endl);
-	};
+    /**
+     * WORKING BUT DANGEROUS
+     * (with command "show version" BES set a null dhi.container
+     * which make this constructor throw the error)
+     *
+     * @brief Constructor
+     *
+     * @note: the SharedPtr<> can't be loaded if
+     * SQLContainerFactory::getContainer() returns a NULL
+     * pointer. In that case a fatal error is thrown.
+     */
+    SQLDataHandlerInterface(BESDataHandlerInterface &dhi):
+    _dhi(&dhi),
+    _sql_container(
+            SQLContainerFactory::getContainer(dhi)?
+            :
+            throw BESInternalFatalError(
+                    "Unable to build SQLDataHandlerInterface with a NULL SQLContainer",
+                    __FILE__,__LINE__)) {
+        TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLDataHandlerInterface"<<endl);
+    };
 #endif
 
-	virtual ~SQLDataHandlerInterface(){
-		if (_sql_container)
-			delete _sql_container;
-		_sql_container=0;
-TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLDataHandlerInterface"<<endl);
-	}
+    virtual ~SQLDataHandlerInterface()
+    {
+        if (_sql_container)
+            delete _sql_container;
+        _sql_container = 0;
+        TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLDataHandlerInterface"<<endl);
+    }
 
-	BESDataHandlerInterface &getBesHandler(){
-			return *_dhi;
-	}
+    BESDataHandlerInterface &getBesHandler()
+    {
+        return *_dhi;
+    }
 
-	BESContainer *getBesContainer(){
-		return _dhi->container;
-	}
+    BESContainer *getBesContainer()
+    {
+        return _dhi->container;
+    }
 
-	BESResponseObject *getResponseObject(){
-		return _dhi->response_handler->get_response_object();
-	}
+    BESResponseObject *getResponseObject()
+    {
+        return _dhi->response_handler->get_response_object();
+    }
 
-	/**
-	 * @brief returns the SQLContainer
-	 */
-	SQLContainer *getSQLContainer(){
-		return _sql_container;
-	}
-
+    /**
+     * @brief returns the SQLContainer
+     */
+    SQLContainer *getSQLContainer()
+    {
+        return _sql_container;
+    }
 
 };
 

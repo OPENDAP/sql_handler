@@ -227,7 +227,7 @@ ODBCConnector::getType(size_t column){
 
 		for (size_t col=0; col<getCols(); col++)
 		{
-		  // Added initialization; this quites an 'unitialized access' error
+		  // Added initialization; this quiets an 'uninitialized access' error
 		  // reported by valgrind. jhrg 9/7/12
 			SQLLEN sql_type = 0;
 			rc=SQLColAttribute(stmt , col+1, SQL_DESC_CONCISE_TYPE, 0, 0, 0, &sql_type);

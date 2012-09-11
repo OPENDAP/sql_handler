@@ -1,0 +1,5 @@
+
+The code in SQLTextContainer reads/parses the *.sql files that 
+hold the dataset definitions. That is, the [section], [select], ...
+lines that the handler uses to make the connection to the database.
+
