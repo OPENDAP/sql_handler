@@ -320,11 +320,20 @@ private:
             bt = SQLNextTypeAction<SQL_TYPE, ODBC_TYPE, ERROR_TYPE, MSG_TYPE, OUT_TYPE1>::nextType(connector,
                     type_factory, error_factory);
 
-            // FIXME connector.getColDesc(i) is not returning values that match
-            // The type of the variables.
             if (bt) { // if 'bt' is created
                 BESDEBUG(SQL_NAME, "SQLBuildDAS: done"<<endl);
-                seq->append_attr(bt->name(), bt->type_name(), connector.getColDesc(i));
+                // connector.getColDesc(i) returns a string that contains information
+                // about the value of the column. Since it has spaces, I think it
+                // needed double quotes. Below is the original code which was assigning
+                // these string attributes to numerical-type attributes in many cases.
+                // If it was the case that this information was always limited to the
+                // precision of the variables, it could be parsed and added as Int or
+                // Byte attributes. jhrg 9/13/12
+                //seq->append_attr(bt->name(), bt->type_name(), connector.getColDesc(i));
+                string attr("\"");
+                attr.append(connector.getColDesc(i));
+                attr.append("\"");
+                seq->append_attr(bt->name(), "String", attr);
                 //@todo : methods needed in connector?
                 delete bt;
                 bt = 0;

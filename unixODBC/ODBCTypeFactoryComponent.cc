@@ -27,6 +27,9 @@
 #include "ODBCTypeFactoryComponent.h"
 
 #include <BESInternalError.h>
+
+#include <util.h>
+
 /**
  * @brief The READ function used to
  * read from the Connector and
@@ -177,7 +180,7 @@ TESTDEBUG(ODBC_NAME,"Getting new object"<<endl);
 		return new SQLSimpleType<SQL_TYPE,ODBC_TYPE,Int32>(getConnector(),&cast_func,true);
 	default:
 		throw SQLInternalFatalError(
-			"SQLTypeFactory not recognized the SQL_TYPE is searching for",
+			"SQL Handler: The datatype read from the Data Source is not supported. The problem type code is: " + long_to_string(*type),
 				__FILE__,__LINE__);
 	}
 	return NULL; // to avoid warning
