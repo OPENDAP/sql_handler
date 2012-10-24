@@ -104,7 +104,7 @@ DISTCLEANFILES = sql_config.h
 # Maybe because they are loaded with RTLD_LOCAL instead of ..._GLOBAL?
 # What about making just one module.
 
-# lib_LTLIBRARIES = libbes_sql.la
+# Not needed. jhrg 9/4/12 lib_LTLIBRARIES = libbes_sql.la
 lib_besdir=$(libdir)/bes
 lib_bes_LTLIBRARIES = libsql_module.la  libodbc_module.la
 #############################################################################
@@ -112,17 +112,19 @@ lib_bes_LTLIBRARIES = libsql_module.la  libodbc_module.la
 #libbes_sql_la_CPPFLAGS =  $(BES_CPPFLAGS)
 #libbes_sql_la_LDFLAGS = -version-info $(LIBBES_SQL_VERSION)
 ######################################################
-libsql_module_la_SOURCES = $(BES_SRCS) $(SQL_SRCS) $(SQL_HDRS) $(BES_HDRS) 
+libsql_module_la_SOURCES = $(BES_SRCS) $(BES_HDRS) $(SQL_SRCS) $(SQL_HDRS)
 # Combinng these sources did not work. jhrg 9/4/12
 # $(ODBC_SRCS) $(ODBC_HDRS)
 libsql_module_la_CPPFLAGS =  $(BES_CPPFLAGS)
-libsql_module_la_LDFLAGS = -avoid-version -module -Xlinker -export-dynamic
+libsql_module_la_LDFLAGS = -avoid-version -module
+# -Wl,-export-dynamic
 libsql_module_la_LIBADD = $(BES_DAP_LIBS)
 ######################################################
 libodbc_module_la_SOURCES = $(ODBC_SRCS) $(ODBC_HDRS)
 # $(SQL_SRCS) $(SQL_HDRS) Removed 9/4/12 jhrg
 libodbc_module_la_CPPFLAGS =  $(BES_CPPFLAGS) $(ODBC_CPPFLAGS)
-libodbc_module_la_LDFLAGS = -avoid-version -module -Xlinker -export-dynamic -lodbc 
+libodbc_module_la_LDFLAGS = -avoid-version -module -lodbc
+# -Wl,-export-dynamic  
 libodbc_module_la_LIBADD = $(BES_DAP_LIBS)
 ######################################################
 ## EXPORTING HEADERS

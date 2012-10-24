@@ -57,13 +57,19 @@ AC_CHECK_BES([3.8.3],
 [ AC_MSG_ERROR([Could not find bes library and headers])
 ])
 
-OPENDAP_DEBUG_OPTION
+dnl OPENDAP_DEBUG_OPTION
 
-AC_CHECK_ODBC([2.2.14],
-[
-],
-[ AC_MSG_ERROR([Could not find UnixODBC library and headers])
-])
+dnl FIXME Will the code build against iODBC?
+dnl
+
+AC_PATH_PROG([iODBC_CONFIG], [iodbc-config], [no])
+ODBC_LIBS="`$iODBC_CONFIG --libs`"
+ODBC_CPPFLAGS="`$iODBC_CONFIG --cflags`"
+
+AC_SUBST([ODBC_LIBS])
+AC_SUBST([ODBC_CPPFLAGS])
+
+dnl AC_CHECK_ODBC([2.2.14], [], [AC_MSG_ERROR([Could not find UnixODBC library and headers])])
 
 AM_PATH_CPPUNIT(1.12.0,
 	[AM_CONDITIONAL([CPPUNIT], [true])],
