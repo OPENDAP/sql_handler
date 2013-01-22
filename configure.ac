@@ -4,8 +4,8 @@
 
 AC_PREREQ(2.59)
 AC_INIT([sql_module], [0.0.3], [ccancellieri@hotmail.com, dods-tech@unidata.ucar.edu])
-AC_CONFIG_AUX_DIR([conf])
-
+dnl Old. AC_CONFIG_AUX_DIR([conf])
+AC_CONFIG_MACRO_DIR([conf])
 AM_INIT_AUTOMAKE
 
 AC_CONFIG_SRCDIR([SQLModule.h])
