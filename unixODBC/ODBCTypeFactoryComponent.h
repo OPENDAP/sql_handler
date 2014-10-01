@@ -56,7 +56,7 @@
 #include <sqlext.h>
 
 
-using namespace libdap;
+// FIXME Removed jhrg 10/1/14 using namespace libdap;
 /**
  * @brief unixODBC implementation of the SQLTypeFactoryComponent
  */

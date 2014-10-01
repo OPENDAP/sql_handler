@@ -133,5 +133,6 @@ namespace smart {
 		}
 
 	};
-}
+
+} // namespace smart
 #endif /* SMARTCHECK_H_ */

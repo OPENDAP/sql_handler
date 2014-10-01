@@ -38,64 +38,57 @@
 
 #include "SQLDefinitions.h"
 
-bitset<_SQLH_CHECK_SIZE> SQLCheckPoint::function;
+std::bitset<_SQLH_CHECK_SIZE> SQLCheckPoint::function;
 unsigned long SQLCheckPoint::last_type_checked;
 bool SQLCheckPoint::last_status;
-bool SQLCheckPoint::isSet=false;
+bool SQLCheckPoint::isSet = false;
 
 //vector<std::string> SQLCheckPoint::_set_check_p;
 //bool SQLCheckPoint::isSet(false);
 
-bool
-SQLCheckPoint::init() throw (BESError){
-	if (!isSet)
-	{
-		last_status=false; // false by default
-		last_type_checked=_SQLH_CHECK_SIZE+1; // never checked
+bool SQLCheckPoint::init() throw (BESError)
+{
+	if (!isSet) {
+		last_status = false; // false by default
+		last_type_checked = _SQLH_CHECK_SIZE + 1; // never checked
 		vector<std::string> _set_check_p;
-		const string &key=string(_SQLH_CHECK_KEY);
-		bool found=false;
-		TheBESKeys::TheKeys()->get_values(key,_set_check_p,found);
+		const string &key = string(_SQLH_CHECK_KEY);
+		bool found = false;
+		TheBESKeys::TheKeys()->get_values(key, _set_check_p, found);
 		if (!found)
-			throw BESInternalError(
-					"Unable to find \""
-					+key+
-					"\" key into configuration file",__FILE__,__LINE__);
+			throw BESInternalError("Unable to find \"" + key + "\" key into configuration file", __FILE__, __LINE__);
 
-		for (vector<string>::iterator i=_set_check_p.begin();
-				i!=_set_check_p.end();
-				i++){
+		for (vector<string>::iterator i = _set_check_p.begin(); i != _set_check_p.end(); i++) {
 			list<std::string> tocheck;
-			BESUtil::explode(_SQLH_CHECK_SEPARATOR,i->c_str(),tocheck);
+			BESUtil::explode(_SQLH_CHECK_SEPARATOR, i->c_str(), tocheck);
 
-			for (list<string>::iterator j=tocheck.begin();
-					j!=tocheck.end();
-					j++)
-			{
-				int val=atoi((j->c_str()));
+			for (list<string>::iterator j = tocheck.begin(); j != tocheck.end(); j++) {
+				int val = atoi((j->c_str()));
 				if (val < _SQLH_CHECK_SIZE && val > 0)
-					function.set(val,true);
+					function.set(val, true);
 				else
-					throw BESInternalError(
-							"Bad value into \""
-							+string(_SQLH_CHECK_KEY)+
-							"\" key set.",__FILE__,__LINE__);
+					throw BESInternalError("Bad value into \"" + string(_SQLH_CHECK_KEY) + "\" key set.", __FILE__,
+							__LINE__);
 			}
 		}
-		isSet=true;
+		isSet = true;
 	} //if !isSet
+
+	// The docs say this always returns true; I think it could 'return' void
+	// but 'return true;' might be a better match for likely uses. jhrg 10/1/14
+	return true;
 }
 
-bool
-SQLCheckPoint::check(unsigned long type){
+bool SQLCheckPoint::check(unsigned long type)
+{
 	/**
 	 * class should be manually initialized!
 	 */
-	if (type==last_type_checked)
+	if (type == last_type_checked)
 		return last_status;
-	else{
-		last_type_checked=type;
-		return (last_status=function[type]);
+	else {
+		last_type_checked = type;
+		return (last_status = function[type]);
 	}
 
 }

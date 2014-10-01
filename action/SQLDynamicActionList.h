@@ -31,7 +31,7 @@
 #include "utils/SharedPtr.h"
 #include "SQLAction.h"
 
-using namespace smart;
+// FIXME Removed jhrg 10/1/14 using namespace smart;
 /**
  * This is a DynamicActionList which implement methods
  * defined by SQLActionList interface.

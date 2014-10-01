@@ -39,7 +39,7 @@
 
 #include <string>
 
-using namespace libdap;
+// FIXME Removed jhrg 10/1/14 using namespace libdap;
 //namespace SQL {
 
 /**
@@ -54,7 +54,7 @@ using namespace libdap;
  */
 template <	class SQL_TYPE,
 			class ODBC_TYPE = void,
-			class DAP_TYPE = BaseType, // inherit from
+			class DAP_TYPE = libdap::BaseType, // inherit from
 			class OUT = void > // the cast output type
 							// actually it is 'void' to use buf2val
 							// change this if you want to use set_val
@@ -124,7 +124,7 @@ TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: object copied to the buffer"<<endl);
 		}
 	};
 
-	virtual BaseType *ptr_duplicate()
+	virtual libdap::BaseType *ptr_duplicate()
 	{
 		return new SQLSimpleType<SQL_TYPE,ODBC_TYPE,DAP_TYPE,OUT>(*this);
 	};
@@ -221,7 +221,7 @@ TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: object copied to the buffer"<<endl);
 		}
 	};
 
-	virtual BaseType *ptr_duplicate()
+	virtual libdap::BaseType *ptr_duplicate()
 	{
 		return new SQLSimpleType<SQL_TYPE,ODBC_TYPE,DAP_TYPE,void>(*this);
 	};

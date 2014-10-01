@@ -185,7 +185,7 @@ public:
 			throw SQLInternalFatalError(e.get_message(),
 					e.get_file(),e.get_line());
 		}
-		catch(exception &e){
+		catch(std::exception &e){
 			// don't forget to close the connector
 			connector.close();
 			throw SQLInternalFatalError(e.what(),

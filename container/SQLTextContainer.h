@@ -340,7 +340,7 @@ private:
      * transform DAP comparator to standard SQL's one.
      * @param reference to a set of SQLConstraints
      */
-    void comparatorSubst(set<SQLConstraint>& where);
+    void comparatorSubst(std::set<SQLConstraint>& where);
 
     /**
      * Initialize all the object members reading

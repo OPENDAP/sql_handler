@@ -26,6 +26,8 @@
 
 #include "StringMatch.h"
 
+using namespace std;
+
 StringMatch::StringMatch() {}
 
 StringMatch::~StringMatch() {}

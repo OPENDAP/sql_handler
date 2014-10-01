@@ -45,7 +45,7 @@
  *
  */
 template<class JOIN = void>
-class SQLErrorManager: protected SQLActionManager<JOIN, JOIN, JOIN> {
+class SQLErrorManager: public /* Removed jhrg 10/1/14 protected */ SQLActionManager<JOIN, JOIN, JOIN> {
 public:
 
     SQLErrorManager() :
@@ -85,7 +85,7 @@ public:
              *  - do not call getArgs for each action of the list
              *  @see SQLActionManager doc
              */
-            return doActions(error_factory, &merge, &join, false);
+            return SQLActionManager<JOIN, JOIN, JOIN>::doActions(error_factory, &merge, &join, false);
         }
         else if (SQLCheckPoint::check(check)) {
             BESDEBUG(SQL_NAME, "SQLErrorManager: This check point is active, running error checks."<<endl);
@@ -97,7 +97,7 @@ public:
              *  - do not call getArgs for each action of the list
              *  @see SQLActionManager doc
              */
-            return doActions(error_factory, &merge, &join, false);
+            return SQLActionManager<JOIN, JOIN, JOIN>::doActions(error_factory, &merge, &join, false);
         }
         else
             BESDEBUG(SQL_NAME, "SQLErrorManager: This check point isn't active"<<endl);

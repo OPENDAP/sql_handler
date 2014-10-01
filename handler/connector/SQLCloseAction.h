@@ -176,7 +176,7 @@ public:
 			throw SQLInternalFatalError(e.get_message(),
 					e.get_file(),e.get_line());
 		}
-		catch(exception &e){
+		catch(std::exception &e){
 			throw SQLInternalFatalError(e.what(),
 					__FILE__,__LINE__);
 		}

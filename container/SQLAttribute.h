@@ -39,7 +39,7 @@ typedef enum _AttrSortMode {
 	_sql_attr_all_sort=3} SQLAttrSortMode;//!< _sql_attr_all_sort
 #endif
 
-using namespace std;
+	// FIXME Removed jhrg 10/1/14 using namespace std;
 #include <vector>
 #include "utils/StringMatch.h"
 #include <list>
@@ -195,7 +195,7 @@ TESTDEBUG( SQL_NAME,"SQLAttribute::loadAttribute starting-> attr: "<<attr<<endl 
 		// non const string
 		string buf=attr;
 		// filling groups to extract (see match())
-		bitset<_SQLH_ATTR_REG_GROUPS> groups;
+		std::bitset<_SQLH_ATTR_REG_GROUPS> groups;
 		/**
 		 * attribute -> table.attribute
 		 */
@@ -220,7 +220,7 @@ TESTDEBUG( SQL_NAME,"SQLAttribute::loadAttribute starting-> attr: "<<attr<<endl 
 
 			std::list<matched<_SQLH_ATTR_REG_GROUPS> >::iterator i=
 					_match.begin();
-			bitset<_SQLH_ATTR_REG_GROUPS> bs=(*i).getMap();
+			std::bitset<_SQLH_ATTR_REG_GROUPS> bs=(*i).getMap();
 			size_t i_matched=0;
 			if (bs.test(_SQLH_ATTR_REG_PREFIX_GROUP_op1))
 				this->setFullName((*i).getMatch(i_matched++));

@@ -38,18 +38,18 @@
 
 #include <string>
 #include <set>
-using namespace std;
+// FIXME Removed jhrg 10/1/14 using namespace std;
 
 // order type can be set in constructor
-typedef set<SQLAttribute,SQLAttrComp > SQL_ATTRIBUTE_SET;
+typedef std::set<SQLAttribute,SQLAttrComp > SQL_ATTRIBUTE_SET;
 // set ordered by Attribute rest+name
-typedef set<SQLAttribute,SQLAttrAttrComp> SQL_ATTRIBUTE_SET_BYATTR;
+typedef std::set<SQLAttribute,SQLAttrAttrComp> SQL_ATTRIBUTE_SET_BYATTR;
 // set ordered by Attribute name
-typedef set<SQLAttribute,SQLAttrNameComp> SQL_ATTRIBUTE_SET_BYNAME;
+typedef std::set<SQLAttribute,SQLAttrNameComp> SQL_ATTRIBUTE_SET_BYNAME;
 // set ordered by position
-typedef set<SQLAttribute,SQLAttrPosComp> SQL_ATTRIBUTE_SET_BYPOS;
+typedef std::set<SQLAttribute,SQLAttrPosComp> SQL_ATTRIBUTE_SET_BYPOS;
 
-typedef set<SQLConstraint> SQL_CONSTRAINT_SET;
+typedef std::set<SQLConstraint> SQL_CONSTRAINT_SET;
 /**
  * @brief Class which introduce a layer to take
  * SQL query manipulation separated by the SQLContainer.

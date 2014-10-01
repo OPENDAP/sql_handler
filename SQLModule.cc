@@ -84,7 +84,7 @@ SQLModule::initialize( const string &modname )
     	cs=new SQLContainerStorageVolatile(_SQLH_STORAGE);
 
     	BESContainerStorage *bcs=NULL;
-    	if (bcs=dynamic_cast<BESContainerStorage*>(cs))
+    	if ((bcs=dynamic_cast<BESContainerStorage*>(cs)))
     	{
 			if (!BESContainerStorageList::TheList()->add_persistence(bcs))
 			{

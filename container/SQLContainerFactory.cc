@@ -55,7 +55,7 @@ if (dhi.container) {
 		/**
 		 * Try to look if dhi.container is already an SQLContainer.
 		 */
-		if (c=dynamic_cast<SQLContainer*>(dhi.container)) {
+		if ((c=dynamic_cast<SQLContainer*>(dhi.container))) {
 			if (c->isReady()){
 				BESDEBUG(SQL_NAME,
 					"SQLContainerFactory: Container is already a READY SQLContainer"<<endl);
@@ -123,7 +123,7 @@ TESTDEBUG(SQL_NAME_TEST,"SQLContainerFactory: Setup SQLContainer: Completed."<<e
 					//return the same copy for local (to the caller) use
 					return c;
 				}
-				catch(exception &e){
+				catch(std::exception &e){
 					BESDEBUG(SQL_NAME,"SQLContainerFactory: Setup SQLContainer: ERROR->"<<e.what());
 					throw BESInternalError(e.what(),__FILE__,__LINE__);
 				}

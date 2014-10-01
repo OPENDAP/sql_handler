@@ -48,16 +48,16 @@
  * <br>
  * @note: CLONE is re-implemented to keep the CAST method
  */
-template <class IN, class OUT>
-class SQLCastAction : public SQLObjectAction<IN,OUT>{
-public :
+template<class IN, class OUT>
+class SQLCastAction: public SQLObjectAction<IN, OUT> {
+public:
 #if __CLONE__==1
 	/**
 	 * @brief This is the implementation of the
 	 * Clone interface.
 	 * @return a pointer to a clone of this object
 	 */
-	virtual SQLCastAction<IN,OUT>* create()throw (std::bad_alloc){
+	virtual SQLCastAction<IN,OUT>* create()throw (std::bad_alloc) {
 		return this->clone();
 	}
 
@@ -66,7 +66,7 @@ public :
 	 * Clone interface.
 	 * @return a pointer to a clone of this object
 	 */
-	virtual SQLCastAction<IN,OUT> *clone(){
+	virtual SQLCastAction<IN,OUT> *clone() {
 		return new SQLCastAction<IN,OUT>(*this);
 	}
 #endif
@@ -74,7 +74,7 @@ public :
 	/**
 	 * definition of the CAS action function
 	 */
-	typedef typename SQLAction<IN,OUT>::ACTION CAST;
+	typedef typename SQLAction<IN, OUT>::ACTION CAST;
 
 	/**
 	 * @brief Constructor
@@ -84,14 +84,11 @@ public :
 	 * pointer can be deleted (false) or is reused
 	 * (true as default)
 	 */
-	SQLCastAction(CAST cast_function,
-					bool reuse=true):
-		SQLObjectAction<IN,OUT>(reuse),
-		_cast(cast_function)
+	SQLCastAction(CAST cast_function, bool reuse = true) :
+			SQLObjectAction<IN, OUT>(reuse), _cast(cast_function)
 	{
-	if (!cast_function)
-		throw SQLInternalFatalError("SQLCastAction: CAST function is null",
-			__FILE__,__LINE__);
+		if (!cast_function) throw SQLInternalFatalError("SQLCastAction: CAST function is null",
+		__FILE__, __LINE__);
 	}
 
 	/**
@@ -101,9 +98,10 @@ public :
 	 * @param a pointer to the value to cast
 	 * @return a OUT* representing the casted value
 	 */
-	OUT * action (IN * val){
-TESTDEBUG(SQL_NAME_TEST,"SQLCastAction: casting object"<<endl);
-		setVal((*_cast)(val));
+	OUT *action(IN * val)
+	{
+		TESTDEBUG(SQL_NAME_TEST,"SQLCastAction: casting object"<<endl);
+		SQLObjectAction<IN,OUT>::setVal((*_cast)(val));
 		return this->getVal();
 	}
 
@@ -111,21 +109,25 @@ TESTDEBUG(SQL_NAME_TEST,"SQLCastAction: casting object"<<endl);
 	 * @brief COPY constructor
 	 * @param a reference to SQLCastAction
 	 */
-	SQLCastAction(SQLCastAction<IN,OUT> & ca):
-		SQLObjectAction<IN,OUT>(ca),
-		_cast(ca._cast)
-	{}
+	SQLCastAction(SQLCastAction<IN, OUT> & ca) :
+			SQLObjectAction<IN, OUT>(ca), _cast(ca._cast)
+	{
+	}
 
 	/**
 	 * @brief dtor which delete the casted pointer
 	 * only if the _reuse flag is set to 1
 	 */
-	virtual ~SQLCastAction(){
-TESTDEBUG(SQL_NAME_TEST,"SQLCastAction: deleting object"<<endl);
+	virtual ~SQLCastAction()
+	{
+		TESTDEBUG(SQL_NAME_TEST,"SQLCastAction: deleting object"<<endl);
 	}
 
 private:
 	CAST _cast;
-	SQLCastAction(){};
+	SQLCastAction()
+	{
+	}
+	;
 };
 #endif /* SQLCASTACTION_H_ */

@@ -48,7 +48,7 @@ _SQLH_ON_NEXT_ROW=5,
 _SQLH_ON_CUSTOM=6
 } _SQLH_CHECKS;
 
-using namespace std;
+// FIXME Removed jhrg 10/1/14 using namespace std;
 
 /**
  * @brief There are 6 check points that you can activate:
@@ -83,7 +83,7 @@ private:
 
 	// we use bitset instead of vector<bool>
 	// this should be faster and smaller
-	static bitset<_SQLH_CHECK_SIZE> function;
+	static std::bitset<_SQLH_CHECK_SIZE> function;
 
 protected:
 	// used to cache results

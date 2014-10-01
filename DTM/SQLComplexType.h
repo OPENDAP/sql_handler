@@ -34,7 +34,7 @@
 
 #include "SQLBaseType.h"
 
-using namespace libdap;
+// FIXME Removed jhrg 10/1/14 using namespace libdap;
 
 /**
  * @todo: make tests

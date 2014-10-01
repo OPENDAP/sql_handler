@@ -27,8 +27,8 @@
 #ifndef SQLOBJECTACTION_H_
 #define SQLOBJECTACTION_H_
 
-
 #include "action/SQLAction.h"
+
 // TESTDEBUG
 #if __TESTS__==1
 #include "SQLDefinitions.h"
@@ -47,16 +47,16 @@
  * @note: CLONE is re-implemented to keep the status of this
  * SQLAction
  */
-template <class IN, class OUT>
-class SQLObjectAction : public SQLAction<IN,OUT>{
-public :
+template<class IN, class OUT>
+class SQLObjectAction: public SQLAction<IN, OUT> {
+public:
 #if __CLONE__==1
 	/**
 	 * @brief This is the implementation of the
 	 * Clone interface.
 	 * @return a pointer to a clone of this object
 	 */
-	virtual SQLObjectAction<IN,OUT>* create()throw (std::bad_alloc){
+	virtual SQLObjectAction<IN,OUT>* create()throw (std::bad_alloc) {
 		return this->clone();
 	};
 
@@ -65,7 +65,7 @@ public :
 	 * Clone interface.
 	 * @return a pointer to a clone of this object
 	 */
-	virtual SQLObjectAction<IN,OUT> *clone(){
+	virtual SQLObjectAction<IN,OUT> *clone() {
 		return new SQLObjectAction<IN,OUT>(*this);
 	}
 #endif
@@ -76,43 +76,45 @@ public :
 	 * pointer can be deleted (false) or is reused
 	 * (true as default)
 	 */
-	SQLObjectAction(bool reuse=true):
-		SQLAction<IN,OUT>(),
-		_val(NULL),
-		_reuse(reuse)
-	{};
+	SQLObjectAction(bool reuse = true) :
+			SQLAction<IN, OUT>(), _val(NULL), _reuse(reuse)
+	{
+	}
+	;
 
 	/**
 	 * @brief COPY constructor
 	 * @param a reference to SQLObjectAction
 	 */
-	SQLObjectAction(const SQLObjectAction<IN,OUT> & oa):
-		SQLAction<IN,OUT>(),
-		_val(oa._val),
-		_reuse(oa._reuse){};
+	SQLObjectAction(const SQLObjectAction<IN, OUT> & oa) :
+			SQLAction<IN, OUT>(), _val(oa._val), _reuse(oa._reuse)
+	{
+	}
+	;
 
 	/**
 	 * @brief dtor which delete the casted pointer
 	 * only if the _reuse flag is set to 1
 	 */
-	virtual ~SQLObjectAction(){
-TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLObjectAction"<<endl);
-		if (!_reuse)
-			freeValue();
-	};
+	virtual ~SQLObjectAction()
+	{
+		TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLObjectAction"<<endl);
+		if (!_reuse) freeValue();
+	}
+	;
 
 	/**
 	 * @brief get a copy of the casted value
 	 * @return  the pointer (by value) if not null
 	 * @throws SQLInternalError is casted value is NULL
 	 */
-	OUT getCopy(){
+	OUT getCopy()
+	{
 		if (_val)
 			return *_val;
 		else
-			throw SQLInternalError(
-				"SQLObjectAction: Unable to return copy of NULL value",
-				__FILE__,__LINE__);
+			throw SQLInternalError("SQLObjectAction: Unable to return copy of NULL value",
+			__FILE__, __LINE__);
 	}
 
 	/**
@@ -120,7 +122,8 @@ TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLObjectAction"<<endl);
 	 * @return the stored pointer
 	 * or NULL if it is NULL
 	 */
-	OUT * getVal(){
+	OUT * getVal()
+	{
 		if (_val)
 			return _val;
 		else
@@ -131,12 +134,12 @@ TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLObjectAction"<<endl);
 	 * @brief delete val without check reuse flag
 	 * @note caution do not check the reuse flag
 	 */
-	void freeValue(){
-		if (_val)
-		{
-TESTDEBUG(SQL_NAME_TEST,"SQLObjectAction: deleting val"<<endl);
-			delete(_val);
-			_val=0;
+	void freeValue()
+	{
+		if (_val) {
+			TESTDEBUG(SQL_NAME_TEST,"SQLObjectAction: deleting val"<<endl);
+			delete (_val);
+			_val = 0;
 		}
 	}
 
@@ -144,21 +147,25 @@ TESTDEBUG(SQL_NAME_TEST,"SQLObjectAction: deleting val"<<endl);
 	 * @brief return a reference to the reuse flag
 	 * @note caution you can modify function behavior
 	 */
-	bool &reusable(){
+	bool &reusable()
+	{
 		return _reuse;
 	}
-protected:
-	void setVal(OUT* val){
-		if (this->_val && !this->_reuse)
-			delete(this->_val);
-		this->_val=val;
+// protected:
+	void setVal(OUT* val)
+	{
+		if (this->_val && !this->_reuse) delete (this->_val);
+		this->_val = val;
 	}
+
 private:
 	OUT *_val;
 	bool _reuse;
-	SQLObjectAction(){};
+	SQLObjectAction()
+	{
+	}
+	;
 };
-
 
 /**
  * @brief specialization used to handle void* deletion,
@@ -172,16 +179,16 @@ private:
  * <br>Note: CLONE is re-implemented to keep the status of this
  * SQLAction
  */
-template <class IN>
-class SQLObjectAction<IN,void> : public SQLAction<IN,void>{
-public :
+template<class IN>
+class SQLObjectAction<IN, void> : public SQLAction<IN, void> {
+public:
 #if __CLONE__==1
 	/**
 	 * @brief This is the implementation of the
 	 * Clone interface.
 	 * @return a pointer to a clone of this object
 	 */
-	virtual SQLObjectAction<IN,void>* create()throw (std::bad_alloc){
+	virtual SQLObjectAction<IN,void>* create()throw (std::bad_alloc) {
 		return this->clone();
 	};
 
@@ -190,7 +197,7 @@ public :
 	 * Clone interface.
 	 * @return a pointer to a clone of this object
 	 */
-	virtual SQLObjectAction<IN,void> *clone(){
+	virtual SQLObjectAction<IN,void> *clone() {
 		return new SQLObjectAction<IN,void>(*this);
 	}
 #endif
@@ -201,36 +208,39 @@ public :
 	 * pointer can be deleted (false) or is reused
 	 * (true as default)
 	 */
-	SQLObjectAction(bool reuse=true):
-		SQLAction<IN,void>(),
-		_val(NULL),
-		_reuse(reuse)
-	{};
+	SQLObjectAction(bool reuse = true) :
+			SQLAction<IN, void>(), _val(NULL), _reuse(reuse)
+	{
+	}
+	;
 
 	/**
 	 * @brief COPY constructor
 	 */
-	SQLObjectAction(const SQLObjectAction<IN,void> & oa):
-		SQLAction<IN,void>(),
-		_val(oa._val),
-		_reuse(oa._reuse){};
+	SQLObjectAction(const SQLObjectAction<IN, void> & oa) :
+			SQLAction<IN, void>(), _val(oa._val), _reuse(oa._reuse)
+	{
+	}
+	;
 
 	/**
 	 * @brief dtor which delete the pointer
 	 * only if the _reuse flag is set to 1
 	 */
-	virtual ~SQLObjectAction(){
-TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLObjectAction"<<endl);
-		if (!_reuse)
-			freeValue();
-	};
+	virtual ~SQLObjectAction()
+	{
+		TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLObjectAction"<<endl);
+		if (!_reuse) freeValue();
+	}
+	;
 
 	/**
 	 * @brief get the casted pointer
 	 * @return the stored pointer
 	 * or NULL if it is NULL
 	 */
-	void * getVal(){
+	void * getVal()
+	{
 		if (_val)
 			return _val;
 		else
@@ -241,12 +251,12 @@ TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLObjectAction"<<endl);
 	 * @brief delete val without check reuse flag
 	 * @note caution do not check the reuse flag
 	 */
-	void freeValue(){
-		if (_val)
-		{
-TESTDEBUG(SQL_NAME_TEST,"SQLObjectAction: freeing val"<<endl);
+	void freeValue()
+	{
+		if (_val) {
+			TESTDEBUG(SQL_NAME_TEST,"SQLObjectAction: freeing val"<<endl);
 			free(_val);
-			_val=0;
+			_val = 0;
 		}
 	}
 
@@ -254,20 +264,25 @@ TESTDEBUG(SQL_NAME_TEST,"SQLObjectAction: freeing val"<<endl);
 	 * @brief return a reference to the reuse flag
 	 * @note caution you can modify function behavior
 	 */
-	bool &reusable(){
+	bool &reusable()
+	{
 		return _reuse;
 	}
-protected:
-	void setVal(void* val){
-		if (this->_val && !this->_reuse)
-			free(this->_val);
-		this->_val=val;
+
+	// FIXME removed here and above 10/1/14 jhrg protected:
+	void setVal(void* val)
+	{
+		if (this->_val && !this->_reuse) free(this->_val);
+		this->_val = val;
 	}
+
 private:
 	void * _val;
 	bool _reuse;
-	SQLObjectAction(){};
+	SQLObjectAction()
+	{
+	}
+	;
 };
-
 
 #endif /* SQLOBJECTACTION_H_ */

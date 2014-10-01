@@ -26,6 +26,7 @@
 
 #ifndef CLONE_H_
 #define CLONE_H_
+
 #include <exception>
 
 namespace smart {
@@ -40,5 +41,6 @@ namespace smart {
 
 		virtual T* create()throw (std::bad_alloc)=0;
 	};
-}
+} // namespace smart
+
 #endif /* CLONE_H_ */

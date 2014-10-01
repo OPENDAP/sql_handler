@@ -197,7 +197,7 @@ string SQLTextContainer::buildQuery()
      * attributes ordered by position as
      * stored in the dataset
      */
-    auto_ptr<SQL_ATTRIBUTE_SET_BYPOS> attrs(q.attrToSelect(attributes));
+    std::auto_ptr<SQL_ATTRIBUTE_SET_BYPOS> attrs(q.attrToSelect(attributes));
     buf.clear();
     if (!attrs->empty()) {
         SQL_ATTRIBUTE_SET_BYPOS::iterator i = attrs->begin();

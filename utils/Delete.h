@@ -109,5 +109,7 @@ public:
 	}
 #endif
 };
-}
+
+} // namespace smart
+
 #endif /* DELETE_H_ */

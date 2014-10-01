@@ -27,7 +27,7 @@
 #ifndef SQLCONSTRAINT_H_
 #define SQLCONSTRAINT_H_
 
-using namespace std;
+// FIXME Removed jhrg 10/1/14 using namespace std;
 #include "SQLAttribute.h"
 
 class SQLConstraint {

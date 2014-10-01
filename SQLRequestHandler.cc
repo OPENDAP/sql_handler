@@ -142,7 +142,7 @@ SQLRequestHandler::version(BESDataHandlerInterface &dhi ) {
 	while(iterator!=theList().end()){
 		sql_request_handler rh=NULL;
 
-		if (rh=iterator->second->find_handler(VERS_RESPONSE)){
+		if ((rh=iterator->second->find_handler(VERS_RESPONSE))){
 /**
  * @todo: better layout...
  */
@@ -525,7 +525,7 @@ SQLRequestHandler::find_sql_plugin(SQLContainer &c){
 					<<" in the API list!"<<endl);
 			// continue; -> added 'else' before 'if (plugin...'
 		}
-		else if (plugin=SQLRequestHandler::find_sql_handler(api)){
+		else if ((plugin=SQLRequestHandler::find_sql_handler(api))){
 			return plugin;
 		}
 		c.setNext();

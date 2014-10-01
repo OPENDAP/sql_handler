@@ -64,7 +64,7 @@
 #if __CLONE__==1
 #include "utils/Clone.h"
 #endif
-using namespace libdap;
+// FIXME Removed jhrg 10/1/14 using namespace libdap;
 /**
  * @brief This class is used to inherit dap components
  * and to provide casting functionality to types.
@@ -84,7 +84,7 @@ using namespace libdap;
  */
 template <	class SQL_TYPE,
 			class ODBC_TYPE = void,
-			class DAP_TYPE = BaseType, // inherit from
+			class DAP_TYPE = libdap::BaseType, // inherit from
 			class OUT = void> // the cast output type
 							// default is 'void' which use buf2val
 							// change this if you want to use set_val
@@ -181,7 +181,7 @@ TESTDEBUG(SQL_NAME_TEST,"COPING: SQLBaseType with:\n"
 	 * @note this should be used to build complex or compound types
 	 */
 	SQLBaseType(SQLSimpleConnector<SQL_TYPE,ODBC_TYPE> &conn,
-				BaseType * obj,
+				libdap::BaseType * obj,
 				typename SQLCastAction<ODBC_TYPE,OUT>::CAST cast_function,
 				bool reuse=true):
 		DAP_TYPE(conn.getColName(conn.getCol()), obj),

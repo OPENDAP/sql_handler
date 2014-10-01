@@ -63,7 +63,7 @@
 
 
 #include <iostream>
-using namespace std;
+// FIXME Removed jhrg 10/1/14 using namespace std;
 
 namespace smart{
 

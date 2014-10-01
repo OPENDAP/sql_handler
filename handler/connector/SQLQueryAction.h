@@ -176,7 +176,7 @@ public:
 			throw SQLInternalFatalError(ie.get_message(),ie.get_file(),
 														ie.get_line());
 		}
-		catch(exception &e){
+		catch(std::exception &e){
 			connector.close();
 			/**
 			 *  Generic exception here is fatal.
