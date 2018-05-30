@@ -46,8 +46,8 @@ SQLRequestHandler::SQLRequestHandler(const string &name) :
 		throw BESInternalError(
 			"Could not initialize mutex. Exiting.",__FILE__, __LINE__);
 
-	add_handler(VERS_RESPONSE,SQLRequestHandler::version);
-	add_handler(HELP_RESPONSE,SQLRequestHandler::help);
+	add_method(VERS_RESPONSE,SQLRequestHandler::version);
+	add_method(HELP_RESPONSE,SQLRequestHandler::help);
 TESTDEBUG(SQL_NAME_TEST,"CREATED: SQLRequestHandler"<<endl);
 }
 
@@ -278,7 +278,7 @@ TESTDEBUG( SQL_NAME,"SQLRequestHandler: wrapper adding"<< endl );
 		// update the wrap count
 		update_wrap_count(command,true);
 		// add the command
-		add_handler(command,SQLRequestHandler::wrapper);
+		add_method(command,SQLRequestHandler::wrapper);
 TESTDEBUG(SQL_NAME_TEST,"SQLRequestHandler: wrapper "<<command<<" added"<<endl);
 		return true;
 	}
@@ -288,12 +288,12 @@ TESTDEBUG(SQL_NAME_TEST,"SQLRequestHandler: wrapper "<<command<<" added"<<endl);
 
 bool
 SQLRequestHandler::remove_sql_wrapper(const string& command){
-	if (find_handler(command)!=NULL)
+	if (find_method(command)!=NULL)
 	{
 TESTDEBUG(SQL_NAME_TEST,"SQLRequestHandler: wrapper "<<command<<" removing"<<endl);
 		// update the wrap count
 		if (update_wrap_count(command,false)){
-			BESRequestHandler::remove_handler(command);
+			BESRequestHandler::remove_method(command);
 TESTDEBUG(SQL_NAME_TEST,"SQLRequestHandler: wrapper "<<command<<" removed"<<endl);
 		}
 		return true;
