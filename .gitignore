@@ -1,0 +1,27 @@
+## directories
+.deps
+.libs
+.pydevproject
+.autotools
+autom4te.cache
+
+## files
+*~
+*.o
+*.lo
+*.output
+*.tab.cc
+*.tab.hh
+lex.*.cc
+*.la
+# Assuming there's a ...pc.in it's built from
+*.pc
+*.log
+*.trs
+*.Po
+
+## OS-X Finder spoo
+*.DS_Store
+
+Makefile
+Makefile.in
