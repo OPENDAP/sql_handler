@@ -42,6 +42,8 @@
 
 #include "SQLDefinitions.h"
 
+#include <DAS.h>
+
 /**
  * @todo add Manager template arguments and wrapper to pass
  * merge and join functions.
@@ -280,7 +282,7 @@ private:
 
         bdas->set_container(dhi.getBesContainer()->get_symbolic_name());
 
-        DAS *das = bdas->get_das();
+        libdap::DAS *das = bdas->get_das();
 
         BESDEBUG(SQL_NAME, "SQLBuildDAS: Connecting "<<endl);
         SQLConnectAction<ERROR_TYPE, MSG_TYPE, OUT_TYPE1>::connect(
@@ -300,9 +302,9 @@ private:
         // for the attribute table name. I changed the name of the Sequence
         // to connector->getParams().getServer() in SQLBuildDDS and ...Data,
         // so I changed the attribute table name here to match. 9/10/12 jhrg
-        AttrTable *seq = das->get_table(connector.getParams().getServer());
+        libdap::AttrTable *seq = das->get_table(connector.getParams().getServer());
         if (!seq)
-            seq = das->add_table(connector.getParams().getServer(), new AttrTable());
+            seq = das->add_table(connector.getParams().getServer(), new libdap::AttrTable());
 
         /**
          *  Reset cursor position
@@ -314,7 +316,7 @@ private:
          */
         for (size_t i = 0; i < connector.getCols(); i++) {
             BESDEBUG(SQL_NAME, "SQLBuildDAS: Doing actions on column: "<<i<< " of: "<<connector.getCols()<<endl);
-            BaseType *bt = NULL;
+            libdap::BaseType *bt = NULL;
 
             BESDEBUG(SQL_NAME, "SQLBuildDAS: getting next object"<<endl);
             bt = SQLNextTypeAction<SQL_TYPE, ODBC_TYPE, ERROR_TYPE, MSG_TYPE, OUT_TYPE1>::nextType(connector,

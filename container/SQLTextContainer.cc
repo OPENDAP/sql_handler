@@ -705,7 +705,7 @@ void SQLTextContainer::addNewSection(SQLH_DATASET_SECTION &new_section,
  * @param val a regmatch_t indexing the variable VALUE limits
  * @see SQLTextDefinitions
  */
-void SQLTextContainer::defineVariable(map<string, string> & vars, string & row,
+void SQLTextContainer::defineVariable(std::map<string, string> & vars, string & row,
                                       regmatch_t &key, regmatch_t &val)
 {
     BESDEBUG(SQL_NAME_TEST, "Storing variable definition: "<<row<<endl);
@@ -740,7 +740,7 @@ void SQLTextContainer::defineVariable(map<string, string> & vars, string & row,
  * @param key a regmatch_t indexing the variable
  * @see SQLTextDefinitions
  */
-void SQLTextContainer::variableSubstitution(map<string, string> & vars, string & row, regmatch_t &key)
+void SQLTextContainer::variableSubstitution(std::map<string, string> & vars, string & row, regmatch_t &key)
 {
     BESDEBUG(SQL_NAME_TEST, "Row before substitution: "<<row<<
 //		"\nstart: "<<indexes[0].rm_so<<" end: "<<indexes[0].rm_eo<<
@@ -751,7 +751,7 @@ void SQLTextContainer::variableSubstitution(map<string, string> & vars, string &
     }
     else
         throw BESInternalError("SQLTextContainer: row doesn't match->" + row, __FILE__, __LINE__);
-    map<string, string>::iterator i = vars.find(var);
+    std::map<string, string>::iterator i = vars.find(var);
     if (i != vars.end()) { // variable is defined
             //substitute
         string row_buf = row;

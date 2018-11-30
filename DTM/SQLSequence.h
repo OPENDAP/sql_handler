@@ -41,7 +41,7 @@
  */
 template <	class SQL_TYPE,						//connector TypeFactory
 			class ODBC_TYPE>					//connector TypeFactory
-class SQLSequence: public Sequence {
+class SQLSequence: public libdap::Sequence {
 #if 0
 		/**
 		 * We use auto_ptr to make possible transfer the connector

@@ -51,14 +51,14 @@ bool SQLCheckPoint::init() throw (BESError)
 	if (!isSet) {
 		last_status = false; // false by default
 		last_type_checked = _SQLH_CHECK_SIZE + 1; // never checked
-		vector<std::string> _set_check_p;
+		std::vector<std::string> _set_check_p;
 		const string &key = string(_SQLH_CHECK_KEY);
 		bool found = false;
 		TheBESKeys::TheKeys()->get_values(key, _set_check_p, found);
 		if (!found)
 			throw BESInternalError("Unable to find \"" + key + "\" key into configuration file", __FILE__, __LINE__);
 
-		for (vector<string>::iterator i = _set_check_p.begin(); i != _set_check_p.end(); i++) {
+		for (std::vector<string>::iterator i = _set_check_p.begin(); i != _set_check_p.end(); i++) {
 			list<std::string> tocheck;
 			BESUtil::explode(_SQLH_CHECK_SEPARATOR, i->c_str(), tocheck);
 

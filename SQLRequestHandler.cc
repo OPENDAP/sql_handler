@@ -430,7 +430,7 @@ SQLRequestHandler::lastChanceRunner(SQLDataHandlerInterface &dhi,
 			stack.push_back(buf);
 			BESDEBUG(SQL_NAME,buf<<endl);
 #endif
-			BESDEBUG(SQL_NAME,"SQLRequestHandler: Error: "<<e.get_error_type()
+			BESDEBUG(SQL_NAME,"SQLRequestHandler: Error: "<<e.get_bes_error_type()
 					<<" Message: "<<e.get_message()
 					<<" File: "<<e.get_file()<<" Line: "<<e.get_line()<<endl);
 		}

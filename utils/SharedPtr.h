@@ -38,7 +38,7 @@
 // IBM XL C++.
 //
 #elif defined (__xlC__)
-#if __xlC__ >= 0ž0900
+#if __xlC__ >= 0ï¿½0900
 #  define __IBMCPP_TR1__
 #  include <memory>
 #endif
@@ -51,7 +51,7 @@
 // Boost fall-back.
 //
 #else
-#  include <boost/tr1/memory.hpp>
+#  include <memory>
 #endif
 
 //#include <new>
@@ -80,7 +80,7 @@ namespace smart{
 				class CLONE=void,
 						//smart::Clone<T>,
 				// the shared_ptr impl
-				class SMART=std::tr1::shared_ptr<T> >
+				class SMART=std::shared_ptr<T> >
 	class SharedPtr : public SMART {
 		private:
 			/**
@@ -154,7 +154,7 @@ TESTDEBUG(SQL_NAME_TEST,"SharedPtr: Remain_count ->"<<this->use_count()-1<<endl)
 	 * @brief Please avoid using templates with & or *
 	 */
 	template <class T >
-	class SharedPtr < T& , std::tr1::shared_ptr< T& > >{
+	class SharedPtr < T& , std::shared_ptr< T& > >{
 	private:
 		SharedPtr(){};
 		explicit SharedPtr(T *t){};
@@ -168,7 +168,7 @@ TESTDEBUG(SQL_NAME_TEST,"SharedPtr: Remain_count ->"<<this->use_count()-1<<endl)
 	 * @brief Please avoid using templates with & or *
 	 */
 	template <class T >
-	class SharedPtr < T* , std::tr1::shared_ptr< T *> >{
+	class SharedPtr < T* , std::shared_ptr< T *> >{
 	private:
 		SharedPtr(){};
 		explicit SharedPtr(T &t){};
