@@ -139,31 +139,16 @@ sample_datadir = $(datadir)/hyrax/data/sql
 sample_data_DATA = data/test_full.sql data/test_full1.sql data/test_full2.sql
 ###########################################################################
 
-install-data-local: sql.conf odbc.conf
-	@currdate=`date +"%y%m%d%H%M"`; \
-	test -d $(DESTDIR)$(sysconfdir)/bes || $(MKDIR_P) $(DESTDIR)$(sysconfdir)/bes; \
-	test -d $(DESTDIR)$(sysconfdir)/bes/modules || $(MKDIR_P) $(DESTDIR)$(sysconfdir)/bes/modules; \
-	test -f $(DESTDIR)$(sysconfdir)/bes/modules/sql.conf && \
-	mv -f $(DESTDIR)$(sysconfdir)/bes/modules/sql.conf \
-		$(DESTDIR)$(sysconfdir)/bes/modules/sql.conf.$$currdate; \
-	$(INSTALL_DATA) sql.conf $(DESTDIR)$(sysconfdir)/bes/modules/sql.conf
-	test -f $(DESTDIR)$(sysconfdir)/bes/modules/odbc.conf && \
-	mv -f $(DESTDIR)$(sysconfdir)/bes/modules/odbc.conf \
-		$(DESTDIR)$(sysconfdir)/bes/modules/odbc.conf.$$currdate; \
-	$(INSTALL_DATA) odbc.conf $(DESTDIR)$(sysconfdir)/bes/modules/odbc.conf
-
-uninstall-local:
-		rm -f $(DESTDIR)$(sysconfdir)/bes/modules/sql.conf
-		rm -f $(DESTDIR)$(sysconfdir)/bes/modules/odbc.conf
+moduledir = $(DESTDIR)$(sysconfdir)/bes/modules
+module_DATA = sql.conf odbc.conf
 
 sql.conf: sql.conf.in config.status
-		sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > sql.conf
+	sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > sql.conf
 
 odbc.conf: odbc.conf.in config.status
-		sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > odbc.conf
+	sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > odbc.conf
 
 #########################################################################
-
 
 # docs
 

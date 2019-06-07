@@ -139,8 +139,8 @@ SQLModule::initialize( const string &modname )
 		<< _SQLH_CATALOG << endl ) ;
 	if( !BESContainerStorageList::TheList()->ref_persistence( _SQLH_CATALOG ) )
 	{
-		BESContainerStorageCatalog *csc =
-			new BESContainerStorageCatalog( _SQLH_CATALOG ) ;
+		BESFileContainerStorage *csc =
+			new BESFileContainerStorage( _SQLH_CATALOG ) ;
 		BESContainerStorageList::TheList()->add_persistence( csc ) ;
 	}
 	else
