@@ -223,21 +223,6 @@ docs:
 		tar -xvzf $$last.tar.gz 2>/dev/null; \
 	fi;)
 
-
-###########################################################################
-
-# Fortify targets.
-
-.PHONY: fortify
-fortify:
-	sourceanalyzer -b @PACKAGE@ $(MAKE)
-	sourceanalyzer -b @PACKAGE@ -scan -f @PACKAGE@-@PACKAGE_VERSION@.fpr
-
-# Use this to clean the fortify project.
-.PHONY: fortifyclean
-fortifyclean:
-	sourceanalyzer -b @PACKAGE@ -clean
-
 ###########################################################################
 #
 # Build linux RPMs
@@ -247,31 +232,6 @@ srpm: dist
 
 rpm: dist
 	rpmbuild -tb sql_module-@PACKAGE_VERSION@.tar.gz
-
-
-###########################################################################
-
-#SQL_check_HDRS = \
-#		Tests/SQLTests.h
-#		
-#SQL_check_SRCS = \
-#		Tests/SQLTests.cc
-
-
-## Dynamic Type Matching Check
-#CHECKS = dtmc
-#dtmcdir = tests/
-#bin_PROGRAMS=$(CHECKS)
-#dtmc_SOURCES = $(SQL_check_SRCS)
-#dtmc_CPPFLAGS = $(BES_CPPFLAGS) $(CPPUNIT_CFLAGS) -D __CLONE__=0
-#dtmc_LDFLAGS =$(CPPUNIT_LIBS)
-#dtmc_LDADD = $(BES_DAP_LIBS) libsql_module.la
-#dtmc_HEADERS = $(SQL_check_HDRS)
-#check:
-#	$(MAKE)
-
-
-###########################################################################
 
 # Build OS/X Packages.
 

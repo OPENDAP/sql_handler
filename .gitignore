@@ -25,3 +25,9 @@ lex.*.cc
 
 Makefile
 Makefile.in
+config.h
+config.h.in
+configure
+
+bin/Makefile.in
+conf/*
