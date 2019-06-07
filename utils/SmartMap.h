@@ -27,7 +27,12 @@
 #ifndef SMARTMAP_H_
 #define SMARTMAP_H_
 
+#include <memory>
+
+#if 0
 #include "SharedPtr.h"
+#endif
+
 #include "SmartCast.h"
 
 #include <map>
@@ -54,12 +59,12 @@ struct less: public std::binary_function<_St, _St, bool> {
  * If you want to use smart management only for
  * values, use SmartValueMap.
  * @implements if __CLONE__ is set to 1 smart::Clone
- * @see smart::SharedPtr
+ * @see std::shared_ptr
  * @see smart::Clone
  * @see smart::SmartList
  * @see smart::SmartValueMap
  */
-template<class K, class V, class T1 = smart::SharedPtr<K>, class T2 = smart::SharedPtr<V> >
+template<class K, class V, class T1 = std::shared_ptr<K>, class T2 = std::shared_ptr<V> >
 class SmartMap
 #if __CLONE__==1
 :public smart::Clone< smart::SmartMap<K,V,T1,T2> > {
@@ -235,7 +240,7 @@ protected:
  * @brief Please avoid using templates with & or *
  */
 template<class K, class V>
-class SmartMap<K&, V&, smart::SharedPtr<K&>, smart::SharedPtr<V&> > {
+class SmartMap<K&, V&, std::shared_ptr<K&>, std::shared_ptr<V&> > {
 	explicit SmartMap()
 	{
 	}
@@ -251,7 +256,7 @@ public:
  * @brief Please avoid using templates with & or *
  */
 template<class K, class V>
-class SmartMap<K&, V, smart::SharedPtr<K&>, smart::SharedPtr<V> > {
+class SmartMap<K&, V, std::shared_ptr<K&>, std::shared_ptr<V> > {
 	explicit SmartMap()
 	//		if (WhatIs::isPtr<V>())
 	//			throw new std::exception();
@@ -269,7 +274,7 @@ public:
  * @brief Please avoid using templates with & or *
  */
 template<class K, class V>
-class SmartMap<K, V&, smart::SharedPtr<K>, smart::SharedPtr<V&> > {
+class SmartMap<K, V&, std::shared_ptr<K>, std::shared_ptr<V&> > {
 	explicit SmartMap()
 	{
 	}
@@ -289,12 +294,12 @@ public:
  * speed up find searches and the resulting size of the
  * map is smaller than the SmartMap one.
  * @implements if __CLONE__ is set to 1 smart::Clone
- * @see smart::SharedPtr
+ * @see std::shared_ptr
  * @see smart::Clone
  * @see smart::SmartList
  * @see smart::SmartMap
  */
-template<class K, class V, class T = smart::SharedPtr<V> >
+template<class K, class V, class T = std::shared_ptr<V> >
 class SmartValueMap
 #if __CLONE__==1
 :public smart::Clone< smart::SmartValueMap<K,V,T> > {

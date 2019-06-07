@@ -27,7 +27,11 @@
 #ifndef SMARTLIST_H_
 #define SMARTLIST_H_
 
+#include <memory>
+#if 0
 #include "SharedPtr.h"
+#endif
+
 #include "SmartList.h"
 #include "Clone.h"
 
@@ -41,12 +45,12 @@ namespace smart {
  * Doing so you can safely store pointers into the
  * list without take care of their deletion.
  * @implements if __CLONE__ is set to 1 smart::Clone
- * @see smart::SharedPtr
+ * @see std::shared_ptr
  * @see smart::Clone
  * @see smart::SmartMap
  * @see smart::SmartValueMap
  */
-template<class K, class T = smart::SharedPtr<K> >
+template<class K, class T = std::shared_ptr<K> >
 class SmartList
 #if __CLONE__==1
 :public smart::Clone< smart::SmartList<K,T> > {
@@ -178,7 +182,7 @@ protected:
  * @brief Please avoid using templates with & or *
  */
 template<class K>
-class SmartList<K&, smart::SharedPtr<K&> > {
+class SmartList<K&, std::shared_ptr<K&> > {
 	SmartList();
 public:
 	virtual ~SmartList()
@@ -193,7 +197,7 @@ public:
  * @brief Please avoid using templates with & or *
  */
 template<class K>
-class SmartList<const K*, smart::SharedPtr<const K*> > {
+class SmartList<const K*, std::shared_ptr<const K*> > {
 	SmartList()
 	{
 	}

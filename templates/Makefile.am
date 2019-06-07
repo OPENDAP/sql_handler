@@ -22,7 +22,7 @@ pkgdata_templates_DATA = \
 		ErrorFactoryComponent.h \
 		module.spec.template COPYRIGHT \
 		.conf.in.template Makefile.am.template configure.ac 
-		
+
 pkgdata_templatesconfdir = $(pkgdatadir)/templates/conf
 pkgdata_templatesconf_DATA = conf/acinclude.m4 conf/bes.m4 \
 		conf/libdap.m4 conf/pkg.m4

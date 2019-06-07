@@ -27,8 +27,13 @@
 #ifndef SQLDYNAMICACTIONLIST_H_
 #define SQLDYNAMICACTIONLIST_H_
 
+#include <memory>
+
 #include "utils/SmartList.h"
+#if 0
 #include "utils/SharedPtr.h"
+#endif
+
 #include "SQLAction.h"
 
 // FIXME Removed jhrg 10/1/14 using namespace smart;
@@ -48,7 +53,7 @@ class SQLDynamicActionList:
 	public smart::SmartList<
 					SQLAction<ARGS_TYPE,OUT_TYPE>,
 					// override default SMART layer forcing to use the CLONE_LAYER
-					smart::SharedPtr<
+					std::shared_ptr<
 						SQLAction<ARGS_TYPE,OUT_TYPE> ,
 						typename SmartList<SQLAction<ARGS_TYPE,OUT_TYPE> >::CLONE_LIST_INT> >{
 	public:
@@ -65,20 +70,20 @@ class SQLDynamicActionList:
 		SQLDynamicActionList():
 			smart::SmartList<
 				SQLAction<ARGS_TYPE,OUT_TYPE> ,
-				smart::SharedPtr<
+				std::shared_ptr<
 					SQLAction<ARGS_TYPE,OUT_TYPE> ,
 					typename SmartList<	SQLAction<ARGS_TYPE,OUT_TYPE> >::CLONE_LIST_INT>  >(){};
 
 		SQLDynamicActionList(SQLDynamicActionList<ARGS_TYPE,OUT_TYPE > &list):
 						smart::SmartList<
 							SQLAction<ARGS_TYPE,OUT_TYPE> ,
-							smart::SharedPtr< SQLAction<ARGS_TYPE,OUT_TYPE> ,
+							std::shared_ptr< SQLAction<ARGS_TYPE,OUT_TYPE> ,
 							typename SmartList<SQLAction<ARGS_TYPE,OUT_TYPE> >::CLONE_LIST_INT>  >(list){};
 
 		SQLDynamicActionList(SQLDynamicActionList<ARGS_TYPE,OUT_TYPE > *list):
 						smart::SmartList<
 							SQLAction<ARGS_TYPE,OUT_TYPE> ,
-							smart::SharedPtr< SQLAction<ARGS_TYPE,OUT_TYPE> ,
+							std::shared_ptr< SQLAction<ARGS_TYPE,OUT_TYPE> ,
 							typename SmartList<SQLAction<ARGS_TYPE,OUT_TYPE> >::CLONE_LIST_INT> >(list){};
 #else
 

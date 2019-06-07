@@ -57,7 +57,7 @@ private:
 #if 0
     // working but dangerous
     // see below
-    smart::SharedPtr<SQLContainer,smart::Clone<SQLContainer> > _sql_container;
+    std::shared_ptr<SQLContainer,smart::Clone<SQLContainer> > _sql_container;
 #endif
 
     SQLDataHandlerInterface() :
