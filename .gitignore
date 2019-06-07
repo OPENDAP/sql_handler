@@ -4,6 +4,15 @@
 .pydevproject
 .autotools
 autom4te.cache
+Makefile
+Makefile.in
+config.h
+config.h.in
+configure
+config.status
+aclocal.m4
+libtool
+stamp-h*
 
 ## files
 *~
@@ -22,12 +31,6 @@ lex.*.cc
 
 ## OS-X Finder spoo
 *.DS_Store
-
-Makefile
-Makefile.in
-config.h
-config.h.in
-configure
 
 bin/Makefile.in
 conf/*
