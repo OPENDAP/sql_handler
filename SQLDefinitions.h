@@ -45,7 +45,7 @@
  * SQLModule::initialize
  * SQLModule::terminate
  */
-#define _SQLH_CATALOG "catalog"
+#define _SQLH_CATALOG "catalog" // FIXME jhrg 8/23/18
 #define _SQLH_STORAGE "sqlstorage"
 
 #if 0

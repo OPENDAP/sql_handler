@@ -30,16 +30,16 @@ BES.module.odbc=@abs_top_builddir@/.libs/libodbc_module.so
 # Setting the data location
 #-----------------------------------------------------------------------#
 
-BES.Catalog.catalog.RootDirectory=@abs_top_srcdir@
+BES.Catalog.default.RootDirectory=@abs_top_srcdir@
 BES.Data.RootDirectory=/dev/null
 
-BES.Catalog.catalog.TypeMatch+=sql:.*\.(SQL|sql)$;
+BES.Catalog.default.TypeMatch+=sql:.*\.(SQL|sql)$;
 
-BES.Catalog.catalog.Include=;
-BES.Catalog.catalog.Exclude=^\..*;
+BES.Catalog.default.Include=;
+BES.Catalog.default.Exclude=^\..*;
 
 BES.FollowSymLinks=No
-BES.Catalog.catalog.FollowSymLinks=No
+BES.Catalog.default.FollowSymLinks=No
 
 BES.ServerPort=10022
 

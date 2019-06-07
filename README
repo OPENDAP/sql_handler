@@ -2,3 +2,20 @@
 $Id: README $
 
 Module README File
+
+Unlike most of the BES modules, this handler for SQL data is a separate project.
+It can be added to the bes/modules directory or built outside of the bes software.
+
+To build the code:
+
+autoreconf -fiv
+./configure --prefix=<prefix>
+make
+make check
+make install
+
+Notes:
+./configure must find both libdap and the BES. It will use the pkgconfig package 
+manager and, if that fails, look for dap-config and bes-config on the PATH.
+
+make check doesn't work

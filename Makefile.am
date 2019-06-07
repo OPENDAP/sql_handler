@@ -139,31 +139,16 @@ sample_datadir = $(datadir)/hyrax/data/sql
 sample_data_DATA = data/test_full.sql data/test_full1.sql data/test_full2.sql
 ###########################################################################
 
-install-data-local: sql.conf odbc.conf
-	@currdate=`date +"%y%m%d%H%M"`; \
-	test -d $(DESTDIR)$(sysconfdir)/bes || $(MKDIR_P) $(DESTDIR)$(sysconfdir)/bes; \
-	test -d $(DESTDIR)$(sysconfdir)/bes/modules || $(MKDIR_P) $(DESTDIR)$(sysconfdir)/bes/modules; \
-	test -f $(DESTDIR)$(sysconfdir)/bes/modules/sql.conf && \
-	mv -f $(DESTDIR)$(sysconfdir)/bes/modules/sql.conf \
-		$(DESTDIR)$(sysconfdir)/bes/modules/sql.conf.$$currdate; \
-	$(INSTALL_DATA) sql.conf $(DESTDIR)$(sysconfdir)/bes/modules/sql.conf
-	test -f $(DESTDIR)$(sysconfdir)/bes/modules/odbc.conf && \
-	mv -f $(DESTDIR)$(sysconfdir)/bes/modules/odbc.conf \
-		$(DESTDIR)$(sysconfdir)/bes/modules/odbc.conf.$$currdate; \
-	$(INSTALL_DATA) odbc.conf $(DESTDIR)$(sysconfdir)/bes/modules/odbc.conf
-
-uninstall-local:
-		rm -f $(DESTDIR)$(sysconfdir)/bes/modules/sql.conf
-		rm -f $(DESTDIR)$(sysconfdir)/bes/modules/odbc.conf
+moduledir = $(DESTDIR)$(sysconfdir)/bes/modules
+module_DATA = sql.conf odbc.conf
 
 sql.conf: sql.conf.in config.status
-		sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > sql.conf
+	sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > sql.conf
 
 odbc.conf: odbc.conf.in config.status
-		sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > odbc.conf
+	sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > odbc.conf
 
 #########################################################################
-
 
 # docs
 
@@ -238,21 +223,6 @@ docs:
 		tar -xvzf $$last.tar.gz 2>/dev/null; \
 	fi;)
 
-
-###########################################################################
-
-# Fortify targets.
-
-.PHONY: fortify
-fortify:
-	sourceanalyzer -b @PACKAGE@ $(MAKE)
-	sourceanalyzer -b @PACKAGE@ -scan -f @PACKAGE@-@PACKAGE_VERSION@.fpr
-
-# Use this to clean the fortify project.
-.PHONY: fortifyclean
-fortifyclean:
-	sourceanalyzer -b @PACKAGE@ -clean
-
 ###########################################################################
 #
 # Build linux RPMs
@@ -262,31 +232,6 @@ srpm: dist
 
 rpm: dist
 	rpmbuild -tb sql_module-@PACKAGE_VERSION@.tar.gz
-
-
-###########################################################################
-
-#SQL_check_HDRS = \
-#		Tests/SQLTests.h
-#		
-#SQL_check_SRCS = \
-#		Tests/SQLTests.cc
-
-
-## Dynamic Type Matching Check
-#CHECKS = dtmc
-#dtmcdir = tests/
-#bin_PROGRAMS=$(CHECKS)
-#dtmc_SOURCES = $(SQL_check_SRCS)
-#dtmc_CPPFLAGS = $(BES_CPPFLAGS) $(CPPUNIT_CFLAGS) -D __CLONE__=0
-#dtmc_LDFLAGS =$(CPPUNIT_LIBS)
-#dtmc_LDADD = $(BES_DAP_LIBS) libsql_module.la
-#dtmc_HEADERS = $(SQL_check_HDRS)
-#check:
-#	$(MAKE)
-
-
-###########################################################################
 
 # Build OS/X Packages.
 

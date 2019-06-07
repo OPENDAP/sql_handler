@@ -71,7 +71,7 @@ TESTDEBUG(ODBC_NAME,"ODBCConnector: Parameters:"
 	// with NULL and the length with 0. jhrg 9/7/12
 	string dsn = "DSN=";
 	dsn.append(getParams().getServer());
-	vector<SQLCHAR> OutConnectionString(SQL_MAX_OPTION_STRING_LENGTH + 1);
+	std::vector<SQLCHAR> OutConnectionString(SQL_MAX_OPTION_STRING_LENGTH + 1);
 	SQLSMALLINT OutConnectionStringLength;
 	rc = SQLDriverConnect(conn, NULL,
 			      (SQLCHAR*)dsn.c_str(), SQL_NTS,

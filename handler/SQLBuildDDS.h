@@ -48,6 +48,8 @@
 
 #include "SQLDefinitions.h"
 
+#include <DDS.h>
+
 /**
  * @todo add Manager template arguments and wrapper to pass
  * merge and join functions.
@@ -305,7 +307,7 @@ private:
         if (!bdds)
             throw BESInternalFatalError("SQLBuildDDS: Unable to get DDSResponse object", __FILE__, __LINE__);
 
-        DDS *dds = bdds->get_dds();
+        libdap::DDS *dds = bdds->get_dds();
 
         // The name of the Sequence was being set to
         // dhi.getBesContainer()->get_symbolic_name() but I changed that
@@ -318,7 +320,7 @@ private:
             = new SQLSequence<SQL_TYPE, ODBC_TYPE>(connector->getParams().getServer(),
                     connector->getParams().get_real_name(), connector);
 
-        AttrTable &attr = dds->get_attr_table();
+        libdap::AttrTable &attr = dds->get_attr_table();
 
         /**
          *  Reset cursor position
@@ -330,7 +332,7 @@ private:
          * NOTE: No value is read here, only DAP object build.
          */
         for (size_t i = 0; i < connector->getCols(); i++) {
-            BaseType *bt = NULL;
+            libdap::BaseType *bt = NULL;
 
             try {
                 BESDEBUG(SQL_NAME, "SQLBuildDDS: getting next object"<<endl);
@@ -366,7 +368,7 @@ private:
                     bt = new SQLDummySimpleType(_SQLH_DEFAULT_DAS_NAME, dummy_cast, false);
                     connector->setNext();
                     if (bt) {
-                        seq->add_var_nocopy(bt, nil);
+                        seq->add_var_nocopy(bt, libdap::nil);
 #if 0
                         delete bt;
                         bt = 0;

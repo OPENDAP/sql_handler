@@ -44,7 +44,7 @@ typedef struct dataset_section {
     string user; //!< user name
     string pass; //!< password
     SQLQuery query; //!< SQLQuery object
-    map<string, string> other; //!< optional rows
+    std::map<string, string> other; //!< optional rows
 
     /*
      * @brief copy constructor

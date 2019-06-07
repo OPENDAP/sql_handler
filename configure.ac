@@ -5,6 +5,8 @@
 AC_PREREQ(2.69)
 AC_INIT([sql_module], [1.0.0], [ccancellieri@hotmail.com, support@opendap.org])
 AC_CONFIG_MACRO_DIR([conf])
+AC_CONFIG_AUX_DIR([conf])
+
 AM_INIT_AUTOMAKE
 
 AC_CONFIG_SRCDIR([SQLModule.h])
@@ -41,7 +43,7 @@ AC_CHECK_TYPES([ptrdiff_t])
 AC_CHECK_FUNCS([strchr])
 
 dnl Checks for specific libraries
-AC_CHECK_LIBDAP([3.13.0],
+AC_CHECK_LIBDAP([3.20.0],
  [
   LIBS="$LIBS $DAP_LIBS"
   CPPFLAGS="$CPPFLAGS $DAP_CFLAGS"

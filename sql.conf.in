@@ -35,7 +35,7 @@ BES.module.sql=@bes_modules_dir@/libsql_module.so
 # 'hdf', 'HDF' or 'eos' which may also end in '.gz' or '.bz2'. In the latter
 # case the file will be treated as a compressed file.
 
-BES.Catalog.catalog.TypeMatch+=sql:.*\.(SQL|sql)$;
+BES.Catalog.default.TypeMatch+=sql:.*\.(SQL|sql)$;
 
 # To test your TypeMatch regular expression you can use besregtest as
 # follows:

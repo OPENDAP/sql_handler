@@ -12,8 +12,8 @@ check-local: atconfig atlocal $(TESTSUITE)
 	$(SHELL) '$(TESTSUITE)' $(TESTSUITEFLAGS)
 
 clean-local:
-	test ! -f '$(TESTSUITE)' || \
-	$(SHELL) '$(TESTSUITE)' --clean
+	test ! -f '$(TESTSUITE)' || $(SHELL) '$(TESTSUITE)' --clean
+	-rm $(TESTSUITE)
 
 distclean-local:
 	-rm atconfig

@@ -29,6 +29,8 @@
 
 #include "SQLContainer.h"
 
+#include <BESUtil.h>
+
 // debugging
 #include "SQLDefinitions.h"
 #include <BESDebug.h>
@@ -407,7 +409,7 @@ private:
      */
     void defineVariable(
     //variable definitions container
-            map<string, string> & vars,
+            std::map<string, string> & vars,
             // row where definition is found
             string & row,
             //index of variable KEY
@@ -426,7 +428,7 @@ private:
      */
     void variableSubstitution(
     //variable definitions container
-            map<string, string> & vars,
+            std::map<string, string> & vars,
             // row to apply
             string & row,
             //index of variable to substitute
