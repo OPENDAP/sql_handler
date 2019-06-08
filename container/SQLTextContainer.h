@@ -42,7 +42,10 @@
 // members
 #include <list>
 #include <string>
+#if 0
 #include "utils/SharedPtr.h"
+#endif
+
 
 // read
 #include <bitset>
@@ -502,8 +505,8 @@ private:
      * SQLContainerStorage.
      */
     DATASET *_dataset;
-    //smart::SharedPtr<DATASET> _dataset;
+    //std::shared_ptr<DATASET> _dataset;
     DATASET::iterator d_actual_section;
-    //smart::SharedPtr<DATASET::iterator> d_actual_section;
+    //std::shared_ptr<DATASET::iterator> d_actual_section;
 };
 #endif /* SQLTEXTCONTAINER_H_ */

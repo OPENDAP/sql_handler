@@ -60,7 +60,7 @@
 /**
  * @brief Abstract class which defines methods used by the
  * SQLHandler to explore and get data from a dataset.
- * Implements Clone to be usable with smart::SharedPtr<>.
+ * Implements Clone to be usable with std::shared_ptr<>.
  *
  * @implement smart::Clone
  * @implement BESFileContainer

@@ -27,9 +27,14 @@
 #ifndef SQLDYNAMICACTIONFACTORY_H_
 #define SQLDYNAMICACTIONFACTORY_H_
 
+#include <memory>
+
 #include "utils/SmartMap.h"
 #include "utils/Clone.h"
+
+#if 0
 #include "utils/SharedPtr.h"
+#endif
 
 #include "SQLActionFactory.h"
 #include "SQLDynamicActionList.h"
@@ -57,7 +62,7 @@ protected:
 						// override default SMART layer forcing to use the CLONE_LAYER
 						// using SMART LAYER:
 //@todo check why SmartValueMap don't use clone to instantiate SQLDynamicActionList
-						smart::SharedPtr<
+						std::shared_ptr<
 							// ON CONTAINER
 						SQLDynamicActionList<ARGS_TYPE,OUT_TYPE>,
 							// WITH CLONE LAYER
@@ -67,7 +72,7 @@ protected:
 		> action_map;
 private:
 
-	smart::SharedPtr<
+	std::shared_ptr<
 		action_map,
 		typename SmartValueMap<
 			CODE_TYPE,
@@ -78,7 +83,7 @@ private:
 	typedef smart::SmartValueMap<CODE_TYPE ,
 					SQLDynamicActionList<ARGS_TYPE,OUT_TYPE> > action_map;
 
-	smart::SharedPtr<action_map> _action_map;
+	std::shared_ptr<action_map> _action_map;
 
 #endif
 

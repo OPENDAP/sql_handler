@@ -31,8 +31,11 @@
 
 #include <Sequence.h>
 //auto_ptr
-//#include <memory>
+#include <memory>
+#if 0
 #include "utils/SharedPtr.h"
+#endif
+
 
 #include "connector/SQLSimpleConnector.h"
 
@@ -55,7 +58,7 @@ class SQLSequence: public libdap::Sequence {
 		 */
 		//auto_ptr<SQLSimpleConnector<SQL_TYPE,ODBC_TYPE> > _conn;
 #endif
-		smart::SharedPtr<SQLSimpleConnector<SQL_TYPE,ODBC_TYPE> > _conn;
+		std::shared_ptr<SQLSimpleConnector<SQL_TYPE,ODBC_TYPE> > _conn;
 
 public:
 

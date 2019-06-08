@@ -10,7 +10,8 @@ AUTOMAKE_OPTIONS = foreign check-news subdir-objects
 
 ACLOCAL_AMFLAGS = -I conf
 
-AM_CXXFLAGS=
+AM_CXXFLAGS= -std=c++11 --pedantic
+
 # -D__TESTS__
 
 SQL_SRCS = \
@@ -33,7 +34,7 @@ SQL_HDRS = SQLLinker.h \
 		container/SQLDataHandlerInterface.h \
 		container/SQLQuery.h container/SQLQueryDefinitions.h \
 		container/SQLTextContainer.h container/SQLTextDefinitions.h \
-		utils/SharedPtr.h utils/SmartList.h utils/SmartMap.h \
+		utils/SmartList.h utils/SmartMap.h \
 		utils/SmartCheck.h utils/SmartCast.h \
 		utils/Delete.h utils/Clone.h \
 		utils/StringMatch.h \
@@ -64,6 +65,8 @@ SQL_HDRS = SQLLinker.h \
 		action/SQLDynamicActionFactory.h action/SQLDynamicActionList.h \
 		action/SQLObjectActionFactory.h action/SQLObjectActionList.h \
 		action/SQLStaticAction.h action/SQLStaticActionList.h
+
+# removed. jhrg 6/7/19 utils/SharedPtr.h 
 
 ODBC_SRCS = \
 		unixODBC/ODBCPluginLoader.cc \
