@@ -6,6 +6,12 @@ Module README File
 Unlike most of the BES modules, this handler for SQL data is a separate project.
 It can be added to the bes/modules directory or built outside of the bes software.
 
+Requirements
+
+You will need an SQL database and the UnixODBC drivers. On OSX I installed the 
+ODBC drivers using 'brew install unixodbc'. There is an option in the configure
+script for the iODBC drivers, but I could not get the handler to link using them. 
+
 To build the code:
 
 autoreconf -fiv
