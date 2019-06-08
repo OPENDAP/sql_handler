@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure script for OPeNDAP Sql data handler
 
-AC_PREREQ(2.69)
+AC_PREREQ(2.67)
 AC_INIT([sql_module], [1.0.0], [ccancellieri@hotmail.com, support@opendap.org])
 AC_CONFIG_MACRO_DIR([conf])
 AC_CONFIG_AUX_DIR([conf])

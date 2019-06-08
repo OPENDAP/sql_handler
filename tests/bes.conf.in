@@ -30,16 +30,16 @@ BES.module.odbc=@abs_top_builddir@/.libs/libodbc_module.so
 # Setting the data location
 #-----------------------------------------------------------------------#
 
-BES.Catalog.default.RootDirectory=@abs_top_srcdir@
+BES.Catalog.catalog.RootDirectory=@abs_top_srcdir@
 BES.Data.RootDirectory=/dev/null
 
-BES.Catalog.default.TypeMatch+=sql:.*\.(SQL|sql)$;
+BES.Catalog.catalog.TypeMatch+=sql:.*\.(SQL|sql)$;
 
-BES.Catalog.default.Include=;
-BES.Catalog.default.Exclude=^\..*;
+BES.Catalog.catalog.Include=;
+BES.Catalog.catalog.Exclude=^\..*;
 
 BES.FollowSymLinks=No
-BES.Catalog.default.FollowSymLinks=No
+BES.Catalog.catalog.FollowSymLinks=No
 
 BES.ServerPort=10022
 
@@ -82,6 +82,10 @@ BES.Info.Type=xml
 # If a data file is compressed the BES will attempt to uncompress it.   #
 #                                                                       #
 #-----------------------------------------------------------------------#
+
+BES.UncompressCache.dir=/tmp
+BES.UncompressCache.prefix=besuc
+BES.UncompressCache.size=500
 
 # Currently the bz2 and gz file compression methods are understood by the
 # BES. We will add support for Z (Unix compress) if there's demand for it.
