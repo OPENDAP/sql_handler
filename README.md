@@ -21,8 +21,9 @@ manager and, if that fails, look for dap-config and bes-config on the PATH.
 **make check doesn't work**
 
 ## Installing DBMS software on your server.
-
-
+In order to server data from a database you need to have a database running to
+hold the data and respond to queries. If you haven't got that sorted already, 
+here's some info about how to go about it.
 
 ## MySQL
 
