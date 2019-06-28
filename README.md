@@ -27,24 +27,29 @@ manager and, if that fails, look for dap-config and bes-config on the PATH.
 ## MySQL
 
 ### Linux
-https://dev.mysql.com/doc/refman/5.7/en/binary-installation.html
-https://dev.mysql.com/doc/refman/8.0/en/binary-installation.html
+Available via `yum`|`apt-get as well` as a generic binary download.
+* Version 5.7 - https://dev.mysql.com/doc/refman/5.7/en/binary-installation.html
+* Version 8.0 - https://dev.mysql.com/doc/refman/8.0/en/binary-installation.html
 
 ### OSX
-https://dev.mysql.com/doc/refman/5.7/en/osx-installation.html
-https://dev.mysql.com/doc/refman/8.0/en/osx-installation.html
+Available as either as either a package installer or tar archive download.
+* Version 5.7 - https://dev.mysql.com/doc/refman/5.7/en/osx-installation.html
+* Version 8.0 - https://dev.mysql.com/doc/refman/8.0/en/osx-installation.html
 
 ## PostGreSQL
 
 ### Linux
-
+tdb
 ### OSX
+tdb
 
 ## SQLite
 
 ### Linux
+tdb
 
 ### OSX
+tdb
 
 
 ## Notes
