@@ -3,6 +3,8 @@
 .libs
 .pydevproject
 .autotools
+
+## Automake
 autom4te.cache
 Makefile
 Makefile.in
@@ -13,8 +15,29 @@ config.status
 aclocal.m4
 libtool
 stamp-h*
+bin/Makefile.in
+conf/*
 
-## files
+## Tests
+tests/atconfig
+tests/atlocal
+tests/bes.conf
+tests/generate_data_baseline.sh
+tests/generate_metadata_baseline.sh
+tests/package.m4
+tests/testsuite
+tests/testsuite.dir/
+
+
+## Specific generated files
+
+_configs.sed
+bin/besCreateSQLPlugin
+odbc.conf
+sql.conf
+sql_config.h
+
+## Genral Generated files
 *~
 *.o
 *.lo
@@ -32,11 +55,8 @@ lex.*.cc
 ## OS-X Finder spoo
 *.DS_Store
 
-bin/Makefile.in
-conf/*
 
-
-# IDE stuff
+## IDE stuff
 .dirstamp
 .settings
 .cproject
