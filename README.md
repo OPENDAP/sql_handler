@@ -8,8 +8,8 @@ It can be added to the bes/modules directory or built outside of the bes softwar
 
 To build the code:
 
-* `autoreconf -fiv
-./configure --prefix=<prefix>`
+* `autoreconf -fiv`
+* `./configure --prefix=$prefix`
 * `make`
 * `make check` (See more below)
 * `make install`
@@ -44,6 +44,9 @@ Available as either as either a package installer or tar archive download.
 * Version 5.7 - https://dev.mysql.com/doc/refman/5.7/en/osx-installation.html
 * Version 8.0 - https://dev.mysql.com/doc/refman/8.0/en/osx-installation.html
 
+Also available via:
+* **Homebrew** (Currently: 8.0.15)
+
 ## PostGreSQL
 
 ### Linux
@@ -61,10 +64,8 @@ Package Installer:
 There is also a Mac App that creates menubar controls for the DBMS
 * Mac App - https://postgresapp.com
 
-May also be found in:
-- **Fink** (_Please don't do that if you are building our software from source, it will make you sad._)
-- **MacPorts** (_YMMV_)
-- **Homebrew** (_GEnerally plays best with our production rules/ build system._)
+Also available via:
+- **Homebrew** (Currently 11.2)
 
 ## SQLite
 The SQLite binaries are described as: _A bundle of 
@@ -84,7 +85,7 @@ Also available via:
 3.28.0)
 
 Also available via:
-- **brew** (Currently  3.27.2)
+- **Homebrew** (Currently  3.27.2)
 
 ## Configuration
 
@@ -99,4 +100,9 @@ Location: `/etc/odbc_inst.ini`
 
 ## Notes
 
+Mac OSX package installers:
+- **Homebrew** (_Generally plays best with our production rules/ build system._)
+- **MacPorts** (_YMMV_)
+- **Fink** (_Please don't do this if you are building our software from source, 
+it will make you sad._)
 
