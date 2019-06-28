@@ -34,3 +34,10 @@ lex.*.cc
 
 bin/Makefile.in
 conf/*
+
+
+# IDE stuff
+.dirstamp
+.settings
+.cproject
+.project
