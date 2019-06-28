@@ -40,18 +40,44 @@ Available as either as either a package installer or tar archive download.
 ## PostGreSQL
 
 ### Linux
-tdb
+
+* All Versions - https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+
+Also available via:
+- **yum** (_Current available version on CentOS-7 is 9.2.24_)
+
+
 ### OSX
-tdb
+Package Installer: 
+* All Versions - https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+
+There is also a Mac App that creates menubar controls for the DBMS
+* Mac App - https://postgresapp.com
+
+May also be found in:
+- **Fink** (_Please don't do that if you are building our software from source, it will make you sad._)
+- **MacPorts** (_YMMV_)
+- **Homebrew** (_GEnerally plays best with our production rules/ build system._)
 
 ## SQLite
+The SQLite binaries are described as: _A bundle of 
+command-line tools for managing SQLite database files, including the 
+command-line shell program, the sqldiff program, and the sqlite3_analyzer 
+program._
 
 ### Linux
-tdb
+- **Latest Binaries** - https://www.sqlite.org/download.html (Current version 
+3.28.0)
+
+Also available via:
+- **yum** (_Current available version on CentOS-7 is 3.7.17_)
 
 ### OSX
-tdb
+- **Latest Binaries** - https://www.sqlite.org/download.html (Current version 
+3.28.0)
 
+Also available via:
+- **brew** (Currently  3.27.2)
 
 ## Notes
 * In order to run `make check` you will need to install the test database located 
