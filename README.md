@@ -86,8 +86,10 @@ in `install.dir`
 * `install.dir/odbc.TEMPLATES.ini` - Contains examples of various odbc_inst.ini 
 files for various DBMS system.
 
-* `odbc.ini` - Creates view into the database and exposes it via the ODBC interface.
-* `odbc_inst.ini` - Creates a associate between an odbc driver and a dbms.
+* `odbc.ini` - Creates view into the database and exposes it via the ODBC 
+interface. Location: `/etc/odbc.ini`
+* `odbc_inst.ini` - Creates a associate between an odbc driver and a dbms. 
+Location: `/etc/odbc_inst.ini`
 
 
 
