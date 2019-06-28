@@ -14,11 +14,18 @@ To build the code:
 * `make check` (See more below)
 * `make install`
 
-Notes:
-The `./configure` script must find both libdap and the BES. It will use the pkgconfig package 
-manager and, if that fails, look for dap-config and bes-config on the PATH.
+_Build Notes_
+* The `./configure` script must find both libdap and the BES. It will use the 
+pkgconfig package manager and, if that fails, look for dap-config and bes-config
+on the PATH.
+* **make check doesn't work**
+* In order to run `make check` you will need to install the test database located 
+in `install.dir` 
+  * Install DBMS as needed.
+  * **_How to load database tables in install.dir into DBMS?_**
+  * **_how to configure odbc.ini etc._**
 
-**make check doesn't work**
+
 
 ## Installing DBMS software on your server.
 In order to server data from a database you need to have a database running to
@@ -79,18 +86,17 @@ Also available via:
 Also available via:
 - **brew** (Currently  3.27.2)
 
-## Notes
-* In order to run `make check` you will need to install the test database located 
-in `install.dir` 
+## Configuration
 
-* `install.dir/odbc.TEMPLATES.ini` - Contains examples of various odbc_inst.ini 
-files for various DBMS system.
+* The file `sql_handler/install.dir/odbc.TEMPLATES.ini` contains examples of 
+ odbc_inst.ini files for various DBMS systems.
 
 * `odbc.ini` - Creates view into the database and exposes it via the ODBC 
 interface. Location: `/etc/odbc.ini`
+
 * `odbc_inst.ini` - Creates a associate between an odbc driver and a dbms. 
 Location: `/etc/odbc_inst.ini`
 
-
+## Notes
 
 
