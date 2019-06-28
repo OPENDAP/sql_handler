@@ -8,40 +8,55 @@ It can be added to the bes/modules directory or built outside of the bes softwar
 
 To build the code:
 
-autoreconf -fiv
-./configure --prefix=<prefix>
-make
-make check
-make install
+* `autoreconf -fiv
+./configure --prefix=<prefix>`
+* `make`
+* `make check` (See more below)
+* `make install`
 
 Notes:
-./configure must find both libdap and the BES. It will use the pkgconfig package 
+The `./configure` script must find both libdap and the BES. It will use the pkgconfig package 
 manager and, if that fails, look for dap-config and bes-config on the PATH.
 
-make check doesn't work
-
-
-test db in install_dir
-odbc.ini # Creates view into the databas and exposes it via the ODBC interface.
-odbc_inst.ini # Creates a associate between an odbc driver and a dbms.
-
-
-
-odbc_templates.ini # examples of various ibc_inst.ini files for various dbms system.
-
+**make check doesn't work**
 
 ## Installing DBMS software on your server.
 
-## OSX
 
-### MySQL
 
+## MySQL
+
+### Linux
+https://dev.mysql.com/doc/refman/5.7/en/binary-installation.html
+https://dev.mysql.com/doc/refman/8.0/en/binary-installation.html
+
+### OSX
 https://dev.mysql.com/doc/refman/5.7/en/osx-installation.html
 https://dev.mysql.com/doc/refman/8.0/en/osx-installation.html
 
-## Linux
+## PostGreSQL
 
-### MySQL
+### Linux
 
-https://dev.mysql.com/doc/refman/5.7/en/binary-installation.html
-https://dev.mysql.com/doc/refman/8.0/en/binary-installation.html
+### OSX
+
+## SQLite
+
+### Linux
+
+### OSX
+
+
+## Notes
+* In order to run `make check` you will need to install the test database located 
+in `install.dir` 
+
+* `install.dir/odbc.TEMPLATES.ini` - Contains examples of various odbc_inst.ini 
+files for various DBMS system.
+
+* `odbc.ini` - Creates view into the database and exposes it via the ODBC interface.
+* `odbc_inst.ini` - Creates a associate between an odbc driver and a dbms.
+
+
+
+
