@@ -21,7 +21,8 @@ on the PATH.
 * **make check doesn't work**
 * In order to run `make check` you will need to install the test database located 
 in `install.dir` 
-  * Install DBMS as needed.
+  * Install DBMS as needed (See _Installing DBMS software on your server_ below
+  ).
   * **_How to load database tables in install.dir into DBMS?_**
   * **_how to configure odbc.ini etc._**
 
@@ -73,9 +74,9 @@ Also available via:
 
 
 ## SQLite
-The SQLite binaries are described as: _A bundle of 
-command-line tools for managing SQLite database files, including the 
-command-line shell program, the sqldiff program, and the sqlite3_analyzer 
+The SQLite binaries are described as: 
+>_A bundle of command-line tools for managing SQLite database files, including 
+the command-line shell program, the sqldiff program, and the sqlite3_analyzer 
 program._
 
 ### Linux

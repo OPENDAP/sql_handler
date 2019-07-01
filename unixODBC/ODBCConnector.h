@@ -48,6 +48,8 @@
 #include "DEM/SQLErrorManager.h"
 #include "DEM/SQLErrorFactory.h"
 
+using std::string;
+
 /**
  * @brief ODBCConnector implementing the SQLConnector
  *
