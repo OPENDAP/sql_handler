@@ -39,34 +39,27 @@ here's some info about how to go about it.
 
 ### Linux
 Available as a generic binary download.
-* Version 5.7 - https://dev.mysql.com/doc/refman/5.7/en/binary-installation.html
-* Version 8.0 - https://dev.mysql.com/doc/refman/8.0/en/binary-installation.html
+* **[Version 5.7](https://dev.mysql.com/doc/refman/5.7/en/binary-installation.html)**
+* **[Version 8.0](https://dev.mysql.com/doc/refman/8.0/en/binary-installation.html)**
 
 Not currently available via `yum` on AWS CentOS-7
 ### OSX
 Available as either as either a package installer or tar archive download.
-* Version 5.7 - https://dev.mysql.com/doc/refman/5.7/en/osx-installation.html
-* Version 8.0 - https://dev.mysql.com/doc/refman/8.0/en/osx-installation.html
+* **[Version 5.7](https://dev.mysql.com/doc/refman/5.7/en/osx-installation.html)**
+* **[Version 8.0](https://dev.mysql.com/doc/refman/8.0/en/osx-installation.html)**
 
 Also available via:
 * **Homebrew** (Currently: 8.0.15)
 
 ## PostGreSQL
-
-### Linux
-
-* All Versions - https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
-
-Also available via:
-- **yum** (_Current available version on AWS CentOS-7 is 9.2.24_)
+* Linux - **[All Versions](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)**
+  * Also available via **yum** (_Current available version on AWS CentOS-7 is 9.2.24_)
 
 
-### OSX
-Package Installer: 
-* All Versions - https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+* OSX (Package Installer) - **[All Versions](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)**
 
 There is also a Mac App that creates menubar controls for the DBMS
-* Mac App - https://postgresapp.com
+* **[PostGres Menubar App for OSX](https://postgresapp.com)**
 
 Also available via:
 - **Homebrew** (Currently 11.2)
@@ -80,14 +73,14 @@ the command-line shell program, the sqldiff program, and the sqlite3_analyzer
 program._
 
 ### Linux
-- **Latest Binaries** - https://www.sqlite.org/download.html (Current version 
+- **[Latest Binaries](https://www.sqlite.org/download.html)** (Current version 
 3.28.0)
 
 Also available via:
 - **yum** (_Current available version on CentOS-7 is 3.7.17_)
 
 ### OSX
-- **Latest Binaries** - https://www.sqlite.org/download.html (Current version 
+- **[Latest Binaries](https://www.sqlite.org/download.html)** (Current version 
 3.28.0)
 
 Also available via:
