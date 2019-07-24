@@ -24,9 +24,22 @@ on the PATH.
 in `install.dir` 
   * Install DBMS as needed (See _Installing DBMS software on your server_ below
   ).
-  * **_How to load database tables in install.dir into DBMS?_**
+  * How to load database tables in install.dir into DBMS? (See _Creating the test database_ below)
   * **_how to configure odbc.ini etc._**
 
+
+## Installing ODBC on your Hyrax server.
+The `sql_handler` (and by extension Hyrax) utilize 
+[Open Database Connectivity (ODBC)](https://en.wikipedia.org/wiki/Open_Database_Connectivity) 
+to access various DBMS systems. Drivers will need to be installed on the Hyrax host system. 
+
+- [unixODBC](http://www.unixodbc.org) - This open source ODBC driver is available:
+  - As a source distribution (utilizes gnu autotools to build)
+  - In the `yum` inventory for **CentOS-6** and  **CentOS-7** and 
+  - In the `homebrew` inventory for **OSX**
+
+
+Some DBMS producers provide their own ODBC drivers. _See below._
 
 
 ## Installing DBMS software on your server.
@@ -65,6 +78,8 @@ Also available via: **Homebrew** (Currently: 8.0.15)
 - Also available via: **Homebrew** (Currently 11.2)
 - There is also a **[PostGres Menubar App for OSX](https://postgresapp.com)** that creates menubar controls for the PostGres DBMS
 
+**[PostGreSQL ODBC Implementation](https://odbc.postgresql.org)** - [All Versions](https://www.postgresql.org/ftp/odbc/versions/) _Caveat Emptor_: It would appear that this archive contains Windows binaries and source code for the rest (Linuix etc.).
+
 
 ## [SQLite](https://www.sqlite.org)
 The SQLite binaries are described as: 
@@ -100,4 +115,29 @@ Mac OSX package installers:
 - **MacPorts** (_ymmv_)
 - **Fink** (_Please don't do this if you are building our software from source, 
 it will make you sad._)
+
+
+## Process
+
+### PostGreSql 11.4 on OSX 10.13.6
+
+- Installed using the OSX package installer.
+
+#### Creating the test database
+- Created `test` database using the **pgAdmin** application.
+- Opened the SQL Shell (`psql`) application and connected to the `test` database.
+- Using the cut buffer I copied all but the first line (which selects which database to connect to, and accomplished in the previous step) from the `sglh.sql` file, and pasted those lines into the `psql` shell. This successfully created the table and values for the tests.
+
+```sql
+CREATE TABLE sqlh_table 
+(a integer NOT NULL DEFAULT 0,
+b real NOT NULL DEFAULT 0,
+c varchar(50),
+CONSTRAINT pk PRIMARY KEY (a));
+
+INSERT INTO sqlh_table(a, b, c) VALUES ('1', '81.0', 'string_a'), ('2', '61.1', 'string_b'), ('3', '51.0', 'string_c'), ('4', '2100.0', 'string_d'), ('5', '21.0', 'string_e'), ('6', '4133.0', 'string_f'), ('7', '31.4', 'string_g'), ('8', '21.3', 'string_h'), ('9', '11.6', 'string_i'), ('10', '22.2', 'string_j');
+```
+
+#### Setting up ODBC
+
 
