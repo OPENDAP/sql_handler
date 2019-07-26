@@ -298,9 +298,9 @@ public:
 					}
 #endif
                     BESDEBUG( SQL_NAME,"Done with group " << i <<endl);
-                    i++;
-                    BESDEBUG( SQL_NAME,"Next group is " << i <<endl);
+//                    i++;
                     i = get_next(groups, i);
+                    BESDEBUG( SQL_NAME,"Next group is " << i <<endl);
 				}
 				// if some group is found in the substring
 				if (gr.any()) {
