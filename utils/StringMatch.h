@@ -181,8 +181,13 @@ size_t get_next(std::bitset<sz> bs, size_t i)
 template <size_t sz>
 size_t get_next(std::bitset<sz> bs, size_t i)
 {
-    while (!(i < bs.size()) && bs.test(i)) ++i;
-
+    try {
+        while ((i < bs.size()) && !bs.test(i)) ++i;
+    }
+    catch(std::exception &e) {
+        BESDEBUG(SQL_NAME, "StringMatch::get_next(): ERROR: " << e.what() << endl);
+        throw;
+    }
     return i;
 }
 #endif
