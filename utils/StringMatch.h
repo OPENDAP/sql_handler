@@ -157,6 +157,7 @@ public:
  * @param i
  * @return The first/next index that's set
  */
+#if 0
 template <size_t sz>
 size_t get_next(std::bitset<sz> bs, size_t i)
 {
@@ -165,7 +166,7 @@ size_t get_next(std::bitset<sz> bs, size_t i)
     bool btst_test_failed = !bs.test(i);
 
     BESDEBUG(SQL_NAME,"StringMatch::get_next() Received i: "<< i << "  (btst_test_failed: "<< (btst_test_failed?"true)":"false)") << endl);
-	while (btst_test_failed && (i < btst_size)){
+	while ((i < btst_size) && btst_test_failed){
 	    ++i;
 	    btst_test_failed = !bs.test(i);
 	    BESDEBUG(SQL_NAME,"StringMatch::get_next() In loop. i: "<< i << "  (btst_test_failed(" << i << "): "<< (btst_test_failed?"true)":"false)") << endl);
@@ -175,12 +176,12 @@ size_t get_next(std::bitset<sz> bs, size_t i)
 	return i;
 }
 
-#if 0
+#else
 // Original implementation - trying to unpack it for the debugger above.
 template <size_t sz>
 size_t get_next(std::bitset<sz> bs, size_t i)
 {
-    while (!bs.test(i) && (i < bs.size())) ++i;
+    while (!(i < bs.size()) && bs.test(i)) ++i;
 
     return i;
 }
@@ -282,7 +283,8 @@ public:
 				 * @return  The index of the next bit set, or size() if not found.
 				 */
 				//for (size_t i = groups._Find_next(0); i < sz; i = groups._Find_next(i)) {
-				for (size_t i = get_next(groups, 0); i < sz;) {
+				for (size_t i = get_next(groups, 0); i < sz; i = get_next(groups, ++i)) {
+                    BESDEBUG( SQL_NAME,"Processing group is " << i << " of " << sz << endl);
 					// check if limits are acceptable (group is found)
 					if (indexes[i].rm_so != -1) { // if group is found
 						BESDEBUG( SQL_NAME,"Group number " << i << " is found: " <<
@@ -298,9 +300,6 @@ public:
 					}
 #endif
                     BESDEBUG( SQL_NAME,"Done with group " << i <<endl);
-//                    i++;
-                    i = get_next(groups, i);
-                    BESDEBUG( SQL_NAME,"Next group is " << i <<endl);
 				}
 				// if some group is found in the substring
 				if (gr.any()) {
