@@ -312,7 +312,7 @@ public:
 					// build the matched object
 					matched<sz> m(gr);
 					//for (size_t i = m.getMap().FIND_FIRST; i < sz; i = m.getMap()._Find_next(i)) {
-					for (size_t i = get_next(m.getMap(), 0); i < sz; i = get_next(m.getMap(), i)) {
+					for (size_t i = get_next(m.getMap(), 0); i < sz; i = get_next(m.getMap(), ++i)) {
 						m.setMatch(i_matched, row.substr(indexes[i].rm_so, indexes[i].rm_eo - indexes[i].rm_so));
 						BESDEBUG( SQL_NAME,"StringMatch::match extracting: "<<
 								"\ngroup: "<<i<<"\nfound: "<<m.getMatch(i_matched)<<endl );
