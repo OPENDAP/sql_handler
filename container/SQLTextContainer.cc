@@ -649,7 +649,8 @@ void SQLTextContainer::addNewSection(SQLH_DATASET_SECTION &new_section,
                                      std::bitset<_SQLH_DATASET_PARTS_NUM> &complete)
 {
     if (complete.test(where_tag)) {
-        // load constraints into the query
+        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::addNewSection() Processing WHERE tag"<<endl );
+       // load constraints into the query
         SQL_CONSTRAINT_SET cs = SQLQuery::loadConstraints(_where);
         new_section.query.setWhere(cs);
         //clear _where buffer
@@ -660,6 +661,7 @@ void SQLTextContainer::addNewSection(SQLH_DATASET_SECTION &new_section,
     }
 
     if (complete.test(select_tag)) {
+        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::addNewSection() Processing SELECT tag."<<endl );
         /**
          * load attribute into the query
          * set is ordered by attribute name to permit search by name
@@ -677,12 +679,12 @@ void SQLTextContainer::addNewSection(SQLH_DATASET_SECTION &new_section,
 
     if (required == (required & complete)) {
         // completion match requirements
-        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: push_back complete section->"<<new_section.api<<"<-"<<endl );
+        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::addNewSection() push_back complete section->"<<new_section.api<<"<-"<<endl );
         // push a copy of the last parsed section
         _dataset->push_back(new_section);
     }
     else {
-        TESTDEBUG(SQL_NAME_TEST,
+        BESDEBUG(SQL_NAME_TEST,
                 "SQLTextContainer: Unable to complete dataset scan. "
                 "\nNOTE: could be BigEndian or LittleEndian:"<<
                 "\nCOMPLETITION MAP: "<<complete.to_string()<<
@@ -728,7 +730,7 @@ void SQLTextContainer::defineVariable(std::map<string, string> & vars, string & 
 
     vars.insert(std::make_pair(var, value));
 
-    BESDEBUG(SQL_NAME, "Stored variable: " << var << "value: " << value << endl);
+    BESDEBUG(SQL_NAME, "Stored variable: " << var << " value: " << value << endl);
 }
 
 /**

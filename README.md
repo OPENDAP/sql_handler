@@ -33,13 +33,13 @@ The `sql_handler` (and by extension Hyrax) utilize
 [Open Database Connectivity (ODBC)](https://en.wikipedia.org/wiki/Open_Database_Connectivity) 
 to access various DBMS systems. Drivers will need to be installed on the Hyrax host system. 
 
-- [unixODBC](http://www.unixodbc.org) - This open source ODBC driver is available:
+**[unixODBC](http://www.unixodbc.org)** - This open source ODBC driver is available:
   - As a source distribution (utilizes gnu autotools to build)
   - In the `yum` inventory for **CentOS-6** and  **CentOS-7** and 
   - In the `homebrew` inventory for **OSX**
 
 
-Some DBMS producers provide their own ODBC drivers. _See below._
+Some DBMS producers provide their own ODBC drivers. _See the DBMS sections below._
 
 
 ## Installing DBMS software on your server.

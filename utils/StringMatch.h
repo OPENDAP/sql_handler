@@ -109,7 +109,7 @@ public:
 	matched<sz>(std::bitset<sz> &m) :
 			_sizeOn(m.count()), match(_sizeOn > 0 ? new std::string[_sizeOn]() : NULL), map(m)
 	{
-		TESTDEBUG( SQL_NAME,"CREATING: matched\nsize: "<<sz<<
+		BESDEBUG( SQL_NAME,"CREATING: matched\nsize: "<<sz<<
 				"\nsizeOn: "<<_sizeOn<<
 				"\nmap: "<<map.to_string()<<endl );
 	}
@@ -126,7 +126,7 @@ public:
 		for (size_t s = 0; s < _sizeOn; s++)
 			match[s] = m.match[s];
 
-		TESTDEBUG( SQL_NAME,"CREATING: matched\nsize: "<<sz<<
+		BESDEBUG( SQL_NAME,"CREATING: matched\nsize: "<<sz<<
 				"\nsizeOn: "<<_sizeOn<<
 				"\nmap: "<<map.to_string()<<endl );
 	}
@@ -141,12 +141,12 @@ public:
 #endif
 	virtual ~matched()
 	{
-		TESTDEBUG( SQL_NAME,"DELETING: matched"<<endl);
+		BESDEBUG( SQL_NAME,"DELETING: matched"<<endl);
 		if (match) {
 			delete[] match;
 		}
 		match = 0;
-		TESTDEBUG( SQL_NAME,"DELETED: matched"<<endl);
+		BESDEBUG( SQL_NAME,"DELETED: matched"<<endl);
 	}
 };
 
@@ -160,10 +160,31 @@ public:
 template <size_t sz>
 size_t get_next(std::bitset<sz> bs, size_t i)
 {
-	while (!bs.test(i) && (i < bs.size())) ++i;
+    BESDEBUG(SQL_NAME,"StringMatch::get_next() BEGIN"<< endl);
+    size_t btst_size = bs.size();
+    bool btst_test_failed = !bs.test(i);
 
+    BESDEBUG(SQL_NAME,"StringMatch::get_next() Received i: "<< i << "  (btst_test_failed: "<< (btst_test_failed?"true)":"false)") << endl);
+	while (btst_test_failed && (i < btst_size)){
+	    ++i;
+	    btst_test_failed = !bs.test(i);
+	    BESDEBUG(SQL_NAME,"StringMatch::get_next() In loop. i: "<< i << "  (btst_test_failed(" << i << "): "<< (btst_test_failed?"true)":"false)") << endl);
+   }
+
+    BESDEBUG(SQL_NAME,"StringMatch::get_next() END Returning i: "<< i << ")"<< endl);
 	return i;
 }
+
+#if 0
+// Original implementation - trying to unpack it for the debugger above.
+template <size_t sz>
+size_t get_next(std::bitset<sz> bs, size_t i)
+{
+    while (!bs.test(i) && (i < bs.size())) ++i;
+
+    return i;
+}
+#endif
 
 /**
  * @brief utility class containing string matching related functions
@@ -261,24 +282,29 @@ public:
 				 * @return  The index of the next bit set, or size() if not found.
 				 */
 				//for (size_t i = groups._Find_next(0); i < sz; i = groups._Find_next(i)) {
-				for (size_t i = get_next(groups, 0); i < sz; i = get_next(groups, i)) {
+				for (size_t i = get_next(groups, 0); i < sz;) {
 					// check if limits are acceptable (group is found)
 					if (indexes[i].rm_so != -1) { // if group is found
-						TESTDEBUG( SQL_NAME,"Group number "<<i<<" is found: "
-								"\nSubstring-> start:"<<indexes[i].rm_so<<
-								"\nSubstring-> size:"<<indexes[i].rm_eo-indexes[i].rm_so<<
-								"\nString-> size:"<<row.size()<<endl );
+						BESDEBUG( SQL_NAME,"Group number " << i << " is found: " <<
+								"\nSubstring-> start: "<< indexes[i].rm_so <<
+								"\nSubstring-> size: "<< indexes[i].rm_eo-indexes[i].rm_so <<
+								"\nString-> size: " << row.size() << endl );
 						gr.set(i, true);
 					}
 #if __TESTS__==1
-					else // no group found
-					TESTDEBUG( SQL_NAME,
+					else { // no group found
+					BESDEBUG( SQL_NAME,
 							"StringMatch: String matches but no group number "<<i<<" is found"<<endl);
+					}
 #endif
+                    BESDEBUG( SQL_NAME,"Done with group " << i <<endl);
+                    i++;
+                    BESDEBUG( SQL_NAME,"Next group is " << i <<endl);
+                    i = get_next(groups, i);
 				}
 				// if some group is found in the substring
 				if (gr.any()) {
-					TESTDEBUG( SQL_NAME,"StringMatch::Some group found, extracting: "<<endl );
+					BESDEBUG( SQL_NAME,"StringMatch::Some group found, extracting: "<<endl );
 					/**
 					 * now we know how many groups are found
 					 * let's create and populate array
@@ -289,7 +315,7 @@ public:
 					//for (size_t i = m.getMap().FIND_FIRST; i < sz; i = m.getMap()._Find_next(i)) {
 					for (size_t i = get_next(m.getMap(), 0); i < sz; i = get_next(m.getMap(), i)) {
 						m.setMatch(i_matched, row.substr(indexes[i].rm_so, indexes[i].rm_eo - indexes[i].rm_so));
-						TESTDEBUG( SQL_NAME,"StringMatch::match extracting: "<<
+						BESDEBUG( SQL_NAME,"StringMatch::match extracting: "<<
 								"\ngroup: "<<i<<"\nfound: "<<m.getMatch(i_matched)<<endl );
 						i_matched++;
 					}
@@ -300,7 +326,7 @@ public:
 				// delete matching string (entire string)
 				row.erase(indexes[0].rm_so, indexes[0].rm_eo - indexes[0].rm_so);
 
-				TESTDEBUG( SQL_NAME,"StringMatch::match remain: "<<row<<endl );
+				BESDEBUG( SQL_NAME,"StringMatch::match remain: "<<row<<endl );
 
 			}
 			regfree(&_reg_expr);
@@ -308,7 +334,7 @@ public:
 		catch (...) {
 			regfree(&_reg_expr);
 			throw;
-		} TESTDEBUG( SQL_NAME,"StringMatch::match done"<<endl );
+		} BESDEBUG( SQL_NAME,"StringMatch::match done"<<endl );
 		return ret;
 	}
 };
