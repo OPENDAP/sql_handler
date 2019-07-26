@@ -1,0 +1,7 @@
+Attributes {
+    test {
+        String a "Using precision: 0";
+        String b "Using precision: 0";
+        String c "Using precision: 0";
+    }
+}
