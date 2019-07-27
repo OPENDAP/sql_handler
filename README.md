@@ -224,8 +224,48 @@ SQLRowCount returns 10
 10 rows fetched
 SQL> 
 ```
+NOTE: One can fiddle with the `odbc.ini` file and see the effects. For example, changing the name of the Datassource from `[test]` to `[foo]` should produce the following results:
 
-At this point the fist three tests began to return valid content so I made baselines:
+```bash 
+[-bash: ~/OPeNDAP/hyrax/sql_handler] isql -v test
+[IM002][unixODBC][Driver Manager]Data source name not found and no default driver specified
+[ISQL]ERROR: Could not SQLConnect
+```
+
+and
+
+```bash
+[-bash: ~/OPeNDAP/hyrax/sql_handler] isql -v foo
++---------------------------------------+
+| Connected!                            |
+|                                       |
+| sql-statement                         |
+| help [tablename]                      |
+| quit                                  |
+|                                       |
++---------------------------------------+
+SQL> SELECT a,b,c FROM  sqlh_table;
++------------+----------------+---------------------------------------------------+
+| a          | b              | c                                                 |
++------------+----------------+---------------------------------------------------+
+| 1          | 81             | string_a                                          |
+| 2          | 61.099998      | string_b                                          |
+| 3          | 51             | string_c                                          |
+| 4          | 2100           | string_d                                          |
+| 5          | 21             | string_e                                          |
+| 6          | 4133           | string_f                                          |
+| 7          | 31.4           | string_g                                          |
+| 8          | 21.299999      | string_h                                          |
+| 9          | 11.6           | string_i                                          |
+| 10         | 22.200001      | string_j                                          |
++------------+----------------+---------------------------------------------------+
+SQLRowCount returns 10
+10 rows fetched
+SQL> 
+```
+
+After changing the Datasource smae BACK to `[test]` I saw that at this point the 
+first three tests began to return valid content so I made baselines:
 
 ```bash
 [-bash: ~/OPeNDAP/hyrax/sql_handler/tests] make chec
