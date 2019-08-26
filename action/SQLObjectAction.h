@@ -29,7 +29,7 @@
 
 #include "action/SQLAction.h"
 
-// TESTDEBUG
+// BESDEBUG
 #if __TESTS__==1
 #include "SQLDefinitions.h"
 #endif
@@ -98,7 +98,7 @@ public:
 	 */
 	virtual ~SQLObjectAction()
 	{
-		TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLObjectAction"<<endl);
+		BESDEBUG(SQL_NAME,"DELETING: SQLObjectAction"<<endl);
 		if (!_reuse) freeValue();
 	}
 	;
@@ -137,7 +137,7 @@ public:
 	void freeValue()
 	{
 		if (_val) {
-			TESTDEBUG(SQL_NAME_TEST,"SQLObjectAction: deleting val"<<endl);
+			BESDEBUG(SQL_NAME,"SQLObjectAction: deleting val"<<endl);
 			delete (_val);
 			_val = 0;
 		}
@@ -229,7 +229,7 @@ public:
 	 */
 	virtual ~SQLObjectAction()
 	{
-		TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLObjectAction"<<endl);
+		BESDEBUG(SQL_NAME,"DELETING: SQLObjectAction"<<endl);
 		if (!_reuse) freeValue();
 	}
 	;
@@ -254,7 +254,7 @@ public:
 	void freeValue()
 	{
 		if (_val) {
-			TESTDEBUG(SQL_NAME_TEST,"SQLObjectAction: freeing val"<<endl);
+			BESDEBUG(SQL_NAME,"SQLObjectAction: freeing val"<<endl);
 			free(_val);
 			_val = 0;
 		}
@@ -279,7 +279,7 @@ public:
 private:
 	void * _val;
 	bool _reuse;
-	SQLObjectAction()
+	SQLObjectAction():_val(0),_reuse(0)
 	{
 	}
 	;

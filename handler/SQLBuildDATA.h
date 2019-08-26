@@ -27,6 +27,11 @@
 #ifndef SQLBUILDDATA_H_
 #define SQLBUILDDATA_H_
 
+#include <DDS.h>
+#include <BESDataNames.h>
+#include <BESDebug.h>
+
+
 #include "connector/SQLConnector.h"
 
 #include "handler/connector/SQLConnectAction.h"
@@ -35,8 +40,6 @@
 #include "handler/connector/SQLNextTypeAction.h"
 
 // POST CONSTRAINTS
-#include <BESDataNames.h>
-
 #include "DTM/SQLSequence.h"
 #include "DTM/SQLTypeManager.h"
 #include "DTM/SQLDummySimpleType.h"
@@ -47,7 +50,6 @@
 
 #include "SQLDefinitions.h"
 
-#include <DDS.h>
 
 /**
  * @todo add Manager template arguments and wrapper to pass
@@ -363,6 +365,7 @@ private:
                 BESDEBUG(SQL_NAME, "SQLBuildDATA: The " << bt->type_name() <<
                         (bt->is_vector_type()?" array":" instance" )<< " named '"<< bt->name() <<
                         "'  is ready, adding..."<<endl);
+
                 // FIXME connector->getColDesc(i) is not the correct type value for
                 // most of the variables.
                 attr.append_attr(bt->name(), bt->type_name(), connector->getColDesc(i));
@@ -472,7 +475,7 @@ private:
         BESDEBUG(SQL_NAME, "SQLBuildDATA: Clear container"<<endl);
         bdds->clear_container();
 
-        BESDEBUG(SQL_NAME, "SQLBuildDATA: DATA is built"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDATA: DDS response object has been built"<<endl);
         return true;
     }
 };
