@@ -1,0 +1,7 @@
+Dataset {
+    Sequence {
+        Int32 a;
+        Float32 b;
+        String c;
+    } test;
+} mysql_1.sql;

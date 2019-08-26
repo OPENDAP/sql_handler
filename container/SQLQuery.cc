@@ -36,7 +36,7 @@
  */
 SQL_ATTRIBUTE_SET_BYNAME SQLQuery::loadAttributes(string & attr)
 {
-	TESTDEBUG( SQL_NAME,"SQLQuery::loadAttributes starting-> attr: "<<attr<<endl );
+	BESDEBUG( SQL_NAME,"SQLQuery::loadAttributes() starting-> attr: "<< attr <<endl );
 	SQL_ATTRIBUTE_SET_BYNAME ret;
 	// filling groups to extract (see match())
 	std::vector<size_t> groups;
@@ -49,10 +49,25 @@ SQL_ATTRIBUTE_SET_BYNAME SQLQuery::loadAttributes(string & attr)
 	std::vector < std::vector<string> > _match = StringMatch::match(_SQLH_CONT_REG_ATTR,
 	_SQLH_CONT_REG_ATTR_GROUPS, groups, attr);
 
+	std::vector<std::vector<string>>::const_iterator mit =_match.begin();
+	for(size_t i=0 ;mit != _match.end(); mit++, i++){
+	    string first_matched = (*mit)[0];
+        BESDEBUG( SQL_NAME,"SQLQuery::loadAttributes() matched[" << i << "]: "<< first_matched << endl );
+
+        SQLAttribute sql_attr(first_matched, i);
+        ret.insert(sql_attr);
+
+        // ret.insert(SQLAttribute(first_matched, i));
+	}
+#if 0
 	for (size_t m = 0; m < _match.size(); m++) {
+	    BESDEBUG( SQL_NAME,"SQLQuery::loadAttributes() match "<< m << endl );
 		// (table.),(attribute), position
 		ret.insert(SQLAttribute(_match[m][0], m));
-	} TESTDEBUG( SQL_NAME,"SQLQuery::loadAttributes found n_attributes: "<<ret.size()<<endl );
+	}
+#endif
+
+	BESDEBUG( SQL_NAME,"SQLQuery::loadAttributes() found n_attributes: "<<ret.size()<<endl );
 	return ret;
 }
 
@@ -66,7 +81,7 @@ SQL_ATTRIBUTE_SET_BYNAME SQLQuery::loadAttributes(string & attr)
 SQL_CONSTRAINT_SET SQLQuery::loadConstraints(string & where)
 {
 	SQL_CONSTRAINT_SET ret;
-	TESTDEBUG( SQL_NAME,"SQLQuery::loadConstraints starting: "<<where<<endl );
+	BESDEBUG( SQL_NAME,"SQLQuery::loadConstraints starting: "<<where<<endl );
 	std::vector<size_t> groups;
 	groups.push_back(_SQLH_CONT_REG_CONSTR_BASE_ATTR);
 	groups.push_back(_SQLH_CONT_REG_CONSTR_BASE_COMPARATOR);
@@ -79,7 +94,7 @@ SQL_CONSTRAINT_SET SQLQuery::loadConstraints(string & where)
 		ret.insert(SQLConstraint(_match[m][0],	// attribute
 				_match[m][1],	// comparator
 				_match[m][2])); // value
-	} TESTDEBUG( SQL_NAME,"SQLQuery::loadConstraints found n_constraints: "<<ret.size()<<endl );
+	} BESDEBUG( SQL_NAME,"SQLQuery::loadConstraints found n_constraints: "<<ret.size()<<endl );
 	return ret;
 }
 
@@ -102,7 +117,7 @@ SQLQuery::attrToSelect(string &onTheFly)
 	 * dataset's one.
 	 */
 	//string attr=get_attributes();
-	TESTDEBUG( SQL_NAME,"SQLQuery::attrToSelect starting: "<<onTheFly<<endl );
+	BESDEBUG( SQL_NAME,"SQLQuery::attrToSelect starting: "<<onTheFly<<endl );
 
 	// getting a reference to the actual attribute query object
 	// build a set ordered by attribute name
@@ -123,7 +138,7 @@ SQLQuery::attrToSelect(string &onTheFly)
 	bool all = false;
 	attrIterator i = _dataset_attr.find(SQLAttribute("*", 0));
 	if (i != _dataset_attr.end()) {
-		TESTDEBUG( SQL_NAME,
+	    BESDEBUG( SQL_NAME,
 				"SQLQuery::attrToSelect located: * attribute: "<<
 				"\nAttribute: "<<(*i).getAttribute()<<
 				"\nPosition: "<<(*i).getPosition()<<endl );
@@ -172,7 +187,7 @@ SQLQuery::attrToSelect(string &onTheFly)
 		}
 	}
 	if (attr->empty()) {
-		TESTDEBUG( SQL_NAME,"SQLQuery::attrToSelect select is still empty "<<endl);
+		BESDEBUG( SQL_NAME,"SQLQuery::attrToSelect select is still empty "<<endl);
 		/**
 		 * on the fly attribute list is empty
 		 * or
@@ -181,14 +196,14 @@ SQLQuery::attrToSelect(string &onTheFly)
 		 */
 		SQLQuery::attrIterator i = _dataset_attr.begin();
 		while (i != _dataset_attr.end()) {
-			TESTDEBUG( SQL_NAME,
+			BESDEBUG( SQL_NAME,
 					"SQLQuery::attrToSelect adding: "<<(*i).getAttribute()<<endl );
 			attr->insert((*i));
 			i++;
 		}
 	}
 
-	TESTDEBUG( SQL_NAME,"SQLTextContainer::attrToSelect"<<endl );
+	BESDEBUG( SQL_NAME,"SQLTextContainer::attrToSelect"<<endl );
 
 	return attr;
 }

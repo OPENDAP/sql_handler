@@ -33,13 +33,13 @@ The `sql_handler` (and by extension Hyrax) utilize
 [Open Database Connectivity (ODBC)](https://en.wikipedia.org/wiki/Open_Database_Connectivity) 
 to access various DBMS systems. Drivers will need to be installed on the Hyrax host system. 
 
-- [unixODBC](http://www.unixodbc.org) - This open source ODBC driver is available:
+**[unixODBC](http://www.unixodbc.org)** - This open source ODBC driver is available:
   - As a source distribution (utilizes gnu autotools to build)
   - In the `yum` inventory for **CentOS-6** and  **CentOS-7** and 
   - In the `homebrew` inventory for **OSX**
 
 
-Some DBMS producers provide their own ODBC drivers. _See below._
+Some DBMS producers provide their own ODBC drivers. _See the DBMS sections below._
 
 
 ## Installing DBMS software on your server.
@@ -76,7 +76,7 @@ Also available via: **Homebrew** (Currently: 8.0.15)
 **OSX** 
 - **[All Versions](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)**  (Package Installer)
 - Also available via: **Homebrew** (Currently 11.2)
-- There is also a **[PostGres Menubar App for OSX](https://postgresapp.com)** that creates menubar controls for the PostGres DBMS
+- There is also a **[PostGres Menubar App for OSX](https://postgresapp.com)** that creates menubar controls for the PostGres DBMS (conflicts with the package installer version of the DB)
 
 **[PostGreSQL ODBC Implementation](https://odbc.postgresql.org)** - [All Versions](https://www.postgresql.org/ftp/odbc/versions/) _Caveat Emptor_: It would appear that this archive contains Windows binaries and source code for the rest (Linuix etc.).
 
@@ -121,7 +121,9 @@ it will make you sad._)
 
 ### PostGreSql 11.4 on OSX 10.13.6
 
-- Installed using the OSX package installer.
+- Installed using [the OSX package installer located here](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+
+WARNING: The [PostGres Menubar App for OSX](https://postgresapp.com) will not work with the software installed by the package installer. 
 
 #### Creating the test database
 - Created `test` database using the **pgAdmin** application.
@@ -140,4 +142,145 @@ INSERT INTO sqlh_table(a, b, c) VALUES ('1', '81.0', 'string_a'), ('2', '61.1', 
 
 #### Setting up ODBC
 
+##### Installed [unixODBC](http://www.unixodbc.org)
+I used Homebrew to install unixODBC:
+- `brew install unixodbc` 
+
+##### Installed the PostgreSQL ODBC driver.
+- Downloaded the [PostGreSQL ODBC Implementation](https://odbc.postgresql.org) source bundle.
+- Followed the instructions [here](https://odbc.postgresql.org/docs/unix-compilation.html)
+
+```shell
+./configure
+make
+make install
+```
+##### Configuration
+The ODBC configuration is held in two files:
+- `/usr/local/etc/odbcinst.ini` which defines the dbms connection
+- `/usr/local/etc/odbc.ini` which defines the view of a database to the system.
+
+Example `/usr/local/etc/odbcinst.ini`:
+
+```sql
+[PostgreSQL]
+Description=PostgreSQL ODBC driver
+Driver=/usr/local/lib/psqlodbca.so
+debug=0
+Threading=2
+UsageCount=1
+```
+Example `/usr/local/etc/odbc.ini`:
+
+```sql
+[test]
+Driver              = PostgreSQL
+Description         = LocalPostgres
+Trace               = Yes
+TraceFile           = sql.log
+Database            = test
+Servername          = localhost
+UserName            = postgres
+Password            = foobar
+Port                = 5432
+Protocol            = 8.4
+ReadOnly            = No
+RowVersioning       = No
+ShowSystemTables    = No
+ShowOidColumn       = No
+FakeOidIndex        = No
+ConnSettings        =
+```
+
+##### Test
+At this point I was able to get the `isql` application to run and return the correct data:
+
+```bash
+[-bash: ~/OPeNDAP/hyrax/sql_handler] isql -v test
++---------------------------------------+
+| Connected!                            |
+|                                       |
+| sql-statement                         |
+| help [tablename]                      |
+| quit                                  |
+|                                       |
++---------------------------------------+
+SQL> SELECT a,b,c FROM  sqlh_table;
++------------+----------------+---------------------------------------------------+
+| a          | b              | c                                                 |
++------------+----------------+---------------------------------------------------+
+| 1          | 81             | string_a                                          |
+| 2          | 61.099998      | string_b                                          |
+| 3          | 51             | string_c                                          |
+| 4          | 2100           | string_d                                          |
+| 5          | 21             | string_e                                          |
+| 6          | 4133           | string_f                                          |
+| 7          | 31.4           | string_g                                          |
+| 8          | 21.299999      | string_h                                          |
+| 9          | 11.6           | string_i                                          |
+| 10         | 22.200001      | string_j                                          |
++------------+----------------+---------------------------------------------------+
+SQLRowCount returns 10
+10 rows fetched
+SQL> 
+```
+NOTE: One can fiddle with the `odbc.ini` file and see the effects. For example, changing the name of the Datassource from `[test]` to `[foo]` should produce the following results:
+
+```bash 
+[-bash: ~/OPeNDAP/hyrax/sql_handler] isql -v test
+[IM002][unixODBC][Driver Manager]Data source name not found and no default driver specified
+[ISQL]ERROR: Could not SQLConnect
+```
+
+and
+
+```bash
+[-bash: ~/OPeNDAP/hyrax/sql_handler] isql -v foo
++---------------------------------------+
+| Connected!                            |
+|                                       |
+| sql-statement                         |
+| help [tablename]                      |
+| quit                                  |
+|                                       |
++---------------------------------------+
+SQL> SELECT a,b,c FROM  sqlh_table;
++------------+----------------+---------------------------------------------------+
+| a          | b              | c                                                 |
++------------+----------------+---------------------------------------------------+
+| 1          | 81             | string_a                                          |
+| 2          | 61.099998      | string_b                                          |
+| 3          | 51             | string_c                                          |
+| 4          | 2100           | string_d                                          |
+| 5          | 21             | string_e                                          |
+| 6          | 4133           | string_f                                          |
+| 7          | 31.4           | string_g                                          |
+| 8          | 21.299999      | string_h                                          |
+| 9          | 11.6           | string_i                                          |
+| 10         | 22.200001      | string_j                                          |
++------------+----------------+---------------------------------------------------+
+SQLRowCount returns 10
+10 rows fetched
+SQL> 
+```
+
+After changing the Datasource source BACK to `[test]` I saw that at this point the 
+first three tests began to return valid content so I made baselines:
+
+```bash
+[-bash: ~/OPeNDAP/hyrax/sql_handler/tests] make chec
+[-bash: ~/OPeNDAP/hyrax/sql_handler/tests] ./testsuite 1 2 3
+## ----------------------------------------------------------- ##
+## sql_module 1.0.0 test suite: bes.conf besstandalone getdap. ##
+## ----------------------------------------------------------- ##
+  1: BESCMD mysql_1.das.bescmd                       ok
+  2: BESCMD mysql_1.dds.bescmd                       ok
+  3: BESCMD mysql_1.ddx.bescmd                       ok
+
+## ------------- ##
+## Test results. ##
+## ------------- ##
+
+All 3 tests were successful.
+```
 

@@ -62,7 +62,7 @@ SQLStaticActionList<MSG_TYPE,void> ODBCErrorFactoryComponent::invalid=
 SQLActionList<MSG_TYPE,void>&
 ODBCErrorFactoryComponent::_getActions(ERROR_TYPE *error)
 {
-	BESDEBUG(ODBC_NAME,"Getting new error"<<endl);
+	BESDEBUG(ODBC_NAME,"Checking for new errors.."<<endl);
 	if (!error)
 		throw BESInternalFatalError(
 				"ODBCPlugin: error code is NULL",__FILE__,__LINE__);

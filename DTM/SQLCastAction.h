@@ -28,7 +28,7 @@
 #define SQLCASTACTION_H_
 
 #include "action/SQLObjectAction.h"
-// TESTDEBUG
+// BESDEBUG
 #if __TESTS__==1
 #include "SQLDefinitions.h"
 #endif
@@ -100,7 +100,7 @@ public:
 	 */
 	OUT *action(IN * val)
 	{
-		TESTDEBUG(SQL_NAME_TEST,"SQLCastAction: casting object"<<endl);
+		BESDEBUG(SQL_NAME_TEST,"SQLCastAction: casting object"<<endl);
 		SQLObjectAction<IN,OUT>::setVal((*_cast)(val));
 		return this->getVal();
 	}
@@ -120,7 +120,7 @@ public:
 	 */
 	virtual ~SQLCastAction()
 	{
-		TESTDEBUG(SQL_NAME_TEST,"SQLCastAction: deleting object"<<endl);
+		BESDEBUG(SQL_NAME_TEST,"SQLCastAction: deleting object"<<endl);
 	}
 
 private:
