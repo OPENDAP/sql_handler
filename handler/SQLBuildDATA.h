@@ -360,7 +360,9 @@ private:
                     type_factory, error_factory);
 
             if (bt) { // if 'bt' is created
-                BESDEBUG(SQL_NAME, "SQLBuildDATA: next object is ready"<<endl);
+                BESDEBUG(SQL_NAME, "SQLBuildDATA: The " << bt->type_name() <<
+                        (bt->is_vector_type()?" array":" instance" )<< " named '"<< bt->name() <<
+                        "'  is ready, adding..."<<endl);
                 // FIXME connector->getColDesc(i) is not the correct type value for
                 // most of the variables.
                 attr.append_attr(bt->name(), bt->type_name(), connector->getColDesc(i));
@@ -403,7 +405,7 @@ private:
         connector->reset();
 
         if (seq) {
-            BESDEBUG(SQL_NAME, "SQLBuildDATA: Adding variable to dds"<<endl);
+            BESDEBUG(SQL_NAME, "SQLBuildDATA: Adding SQLSequence variable '" << seq->name() << "' to DDS"<<endl);
             dds->add_var_nocopy(seq);
 #if 0
             /** ONLY VALID FOR AUTO_PTR
@@ -417,7 +419,6 @@ private:
             // switched to _nocopy() above. 9/10/12 jhrg
             delete seq;//safe
 #endif
-            BESDEBUG(SQL_NAME, "SQLBuildDATA: set dataset name"<<endl);
             // The BES is setting this to 'virtual'. This is a better
             // name because it is consistent with how other responses
             // are named. 9/10/12 jhrg
@@ -426,6 +427,7 @@ private:
             if (p != string::npos && p+1 <= name.length())
                 name = name.substr(p + 1);
             dds->set_dataset_name(name);
+            BESDEBUG(SQL_NAME, "SQLBuildDATA: Set dataset name to: '"<< name << "'" <<endl);
 #if 0
             // Not needed. This is set by the BES (tucked away in dapreader)
             // in DapRequestHandler::dap_build_dds jhrg 9/10/12
