@@ -264,7 +264,7 @@ SQLRowCount returns 10
 SQL> 
 ```
 
-After changing the Datasource smae BACK to `[test]` I saw that at this point the 
+After changing the Datasource source BACK to `[test]` I saw that at this point the 
 first three tests began to return valid content so I made baselines:
 
 ```bash
