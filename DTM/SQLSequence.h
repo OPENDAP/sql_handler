@@ -170,10 +170,8 @@ public:
 
      @brief Read data into a local buffer.
 
-     @return The return value of this method for all types except Sequence
-     should always be false. Sequences should return true to indicate more
-     values remain in the Sequence, false to indicate no more values remain.
-     (see Sequence::serialize() and Sequence::read_row()).
+     @return The return value of this method is \c true when there is more data
+     to be read, and \c false otherwise.
      bool read()
      */
     /**
@@ -186,13 +184,13 @@ public:
             if (this->read_p()) // if already read
             { // Nothing to do
                 BESDEBUG(SQL_NAME, "SQLSequence:read() SEQUENCE ALREADY READ"<< endl);
-                return false;
+                return true;
             }
 
             if (!this->_conn->isReady()) {
                 // not ready to read, return
                 BESDEBUG(SQL_NAME, "SQLSequence:read() SEQUENCE EMPTY or not READY"<< endl);
-                return false;
+                return true;
             }
 
             if (_conn->notEnd()) {
@@ -230,7 +228,7 @@ public:
             _conn->close();
             throw SQLInternalError("SQLSequence:read() ERROR", __FILE__, __LINE__);
         }
-        return true;
+        return false;
     }
 
     BaseType *
