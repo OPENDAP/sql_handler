@@ -3,7 +3,7 @@
 # Configure script for OPeNDAP Sql data handler
 
 AC_PREREQ(2.67)
-AC_INIT([sql_module], [1.0.0], [ccancellieri@hotmail.com, support@opendap.org])
+AC_INIT([sql_module], [1.0.1], [support@opendap.org])
 AC_CONFIG_MACRO_DIR([conf])
 AC_CONFIG_AUX_DIR([conf])
 
@@ -51,53 +51,48 @@ AC_CHECK_LIBDAP([3.20.0],
  [ AC_MSG_ERROR([Cannot find libdap])
 ])
 
-AC_CHECK_BES([3.13.0],
+AC_CHECK_BES([3.20.0],
 [
 ],
 [ AC_MSG_ERROR([Could not find bes library and headers])
 ])
 
-dnl OPENDAP_DEBUG_OPTION
+dnl libiodbc_ok="no"
+dnl AC_ARG_WITH([iodbc],
+dnl    AC_HELP_STRING([--with-iodbc=path], [Use the iodbc library/dirvers at this location.]),
+dnl    [if test "$withval" = "yes"
+dnl     then
+dnl         AC_MSG_ERROR([You must supply a path when using --with-iodbc.])
+dnl     else
+dnl 	    ac_save_path=$PATH
+dnl 	    export PATH=$withval/bin:$PATH
 
-dnl FIXME Will the code build against iODBC?
-dnl
+dnl 	    AC_PATH_PROG([iODBC_CONFIG], [iodbc-config], [no])
 
-libiodbc_ok="no"
-AC_ARG_WITH([iodbc],
-   AC_HELP_STRING([--with-iodbc=path], [Use the iodbc library/dirvers at this location.]),
-   [if test "$withval" = "yes"
-    then
-        AC_MSG_ERROR([You must supply a path when using --with-iodbc.])
-    else
-	    ac_save_path=$PATH
-	    export PATH=$withval/bin:$PATH
+dnl         PATH=$ac_save_path
 
-	    AC_PATH_PROG([iODBC_CONFIG], [iodbc-config], [no])
+dnl 	    ODBC_LIBS="`$iODBC_CONFIG --libs`"
+dnl 	    ODBC_CPPFLAGS="`$iODBC_CONFIG --cflags`"
 
-        PATH=$ac_save_path
-
-	    ODBC_LIBS="`$iODBC_CONFIG --libs`"
-	    ODBC_CPPFLAGS="`$iODBC_CONFIG --cflags`"
-
-        AC_MSG_NOTICE([ODBC_CPPFLAGS is $ODBC_CPPFLAGS])
-        AC_MSG_NOTICE([ODBC_LIBS is $ODBC_LIBS])
+dnl         AC_MSG_NOTICE([ODBC_CPPFLAGS is $ODBC_CPPFLAGS])
+dnl         AC_MSG_NOTICE([ODBC_LIBS is $ODBC_LIBS])
         
-        AC_DEFINE([IODBC],[1],[define if iODBC dirvers/lib are present])
-        libiodbc_ok="yes"
-    fi],
-   [])
+dnl         AC_DEFINE([IODBC],[1],[define if iODBC dirvers/lib are present])
+dnl         libiodbc_ok="yes"
+dnl     fi],
+dnl    [])
 
-if test "$libiodb_ok" = "no"
-then
-    AC_PATH_PROG([iODBC_CONFIG], [iodbc-config], [no])
-    ODBC_LIBS="`$iODBC_CONFIG --libs`"
-    ODBC_CPPFLAGS="`$iODBC_CONFIG --cflags`"
-fi
+dnl if test "$libiodb_ok" = "no"
+dnl then
+dnl     AC_PATH_PROG([iODBC_CONFIG], [iodbc-config], [no])
+dnl     ODBC_LIBS="`$iODBC_CONFIG --libs`"
+dnl     ODBC_CPPFLAGS="`$iODBC_CONFIG --cflags`"
+dnl fi
 
-AC_SUBST([ODBC_LIBS])
-AC_SUBST([ODBC_CPPFLAGS])
+dnl AC_SUBST([ODBC_LIBS])
+dnl AC_SUBST([ODBC_CPPFLAGS])
 
-dnl AC_CHECK_ODBC([2.2.14], [], [AC_MSG_ERROR([Could not find UnixODBC library and headers])])
+AC_CHECK_ODBC([2.2.14], [], [AC_MSG_ERROR([Could not find UnixODBC library and headers])])
 
 AM_PATH_CPPUNIT(1.12.0,
 	[AM_CONDITIONAL([CPPUNIT], [true])],
@@ -110,8 +105,6 @@ AC_CONFIG_FILES([Makefile
 AC_CONFIG_TESTDIR(tests, [.])
 
 AC_CONFIG_FILES([tests/Makefile tests/atlocal tests/package.m4])
-AC_CONFIG_FILES([tests/generate_metadata_baseline.sh], [chmod +x tests/generate_metadata_baseline.sh])
-AC_CONFIG_FILES([tests/generate_data_baseline.sh], [chmod +x tests/generate_data_baseline.sh])
 
 AC_OUTPUT
 

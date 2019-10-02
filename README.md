@@ -3,6 +3,17 @@
 # Welcome to the Hyrax sql_handler
 This handler makes the happytimes with the RDBMS data. w00t.
 
+## Additional Required Software
+In addition to the Hyrax server, you will need a database that can be accessed using
+ODBC and an ODBC driver for that database that is compatible with the unixODBC 
+software package. This includes most Relational Database Management Systems (RDBMS)
+as well as many other interesting tools, including NoSQL databases like MongoDB.
+
+If your computer does not have the unixODBC driver software installed, see 
+'Installing ODBC on your Hyrax server' below. To build the Hyrax sql handler, you
+only need the generic components of unixODBC to be installed. However, to actually
+serve data from a database, you will need the appropriate (specific) driver.
+
 ## Building and Installing the sql_handler
 Unlike most of the BES modules, this handler for SQL data is a separate project.
 It can be added to the bes/modules directory or built outside of the bes software.
@@ -44,6 +55,21 @@ In order to serve data from a database you need to have a database running to
 hold the data and respond to queries. If you haven't got that sorted already, 
 here's some info about how to go about it.
 
+## [PostGreSQL](https://www.enterprisedb.com)
+
+**Linux** 
+- **[All Versions](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)** 
+- Also available via **yum** (_Current available version on AWS CentOS-7 is 9.2.24_)
+
+**OSX** 
+- **[All Versions](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)**  (Package Installer)
+- Also available via: **Homebrew** (Currently 11.2)
+- There is also a **[PostGres Menubar App for OSX](https://postgresapp.com)** that creates menubar controls for the 
+PostGres DBMS (conflicts with the package installer version of the DB)
+
+**[PostGreSQL ODBC Implementation](https://odbc.postgresql.org)** - [All Versions](https://www.postgresql.org/ftp/odbc/versions/) 
+_Caveat Emptor_: It would appear that this archive contains Windows binaries and source code for the rest (Linuix etc.).
+
 ## [MySQL](https://dev.mysql.com)
 
 **Linux**
@@ -61,20 +87,6 @@ Available as either as either a package installer or tar archive download.
 * **[Version 8.0](https://dev.mysql.com/doc/refman/8.0/en/osx-installation.html)**
 
 Also available via: **Homebrew** (Currently: 8.0.15)
-
-## [PostGreSQL](https://www.enterprisedb.com)
-
-**Linux** 
-- **[All Versions](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)** 
-- Also available via **yum** (_Current available version on AWS CentOS-7 is 9.2.24_)
-
-**OSX** 
-- **[All Versions](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)**  (Package Installer)
-- Also available via: **Homebrew** (Currently 11.2)
-- There is also a **[PostGres Menubar App for OSX](https://postgresapp.com)** that creates menubar controls for the PostGres DBMS (conflicts with the package installer version of the DB)
-
-**[PostGreSQL ODBC Implementation](https://odbc.postgresql.org)** - [All Versions](https://www.postgresql.org/ftp/odbc/versions/) _Caveat Emptor_: It would appear that this archive contains Windows binaries and source code for the rest (Linuix etc.).
-
 
 ## [SQLite](https://www.sqlite.org)
 The SQLite binaries are described as: 
@@ -97,11 +109,11 @@ program.
 * The file `sql_handler/install.dir/odbc.TEMPLATES.ini` contains examples of 
  odbc_inst.ini files for various DBMS systems.
 
-* `odbc.ini` - Creates view into the database and exposes it via the ODBC 
-interface. Location: `/etc/odbc.ini`
+* `odbc.ini` - Defines connection options; it creates view into the database
+and exposes it via the ODBC interface. Location: `/etc/odbc.ini`
 
-* `odbc_inst.ini` - Creates a associate between an odbc driver and a dbms. 
-Location: `/etc/odbc_inst.ini`
+* `odbc_inst.ini` - Defines driver options; it creates a associate between 
+an odbc driver and a dbms. Location: `/etc/odbc_inst.ini`
 
 ## Notes
 
@@ -227,7 +239,8 @@ SQLRowCount returns 10
 10 rows fetched
 SQL> 
 ```
-NOTE: One can fiddle with the `odbc.ini` file and see the effects. For example, changing the name of the Datassource from `[test]` to `[foo]` should produce the following results:
+NOTE: One can fiddle with the `odbc.ini` file and see the effects. For example, 
+changing the name of the Datassource from `[test]` to `[foo]` should produce the following results:
 
 ```bash 
 [-bash: ~/OPeNDAP/hyrax/sql_handler] isql -v test
