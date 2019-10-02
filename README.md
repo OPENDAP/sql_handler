@@ -30,11 +30,14 @@ _Build Notes_
 * The `./configure` script must find both libdap and the BES. It will use the 
 pkgconfig package manager and, if that fails, look for dap-config and bes-config
 on the PATH.
+* **configure or make doesn't work**
+* This will happen if unixODBC is not installed. Only the generic part of unixODBC 
+is needed to configure and build the handler. We suggest you use a binary package
+from yum, apt-get, or brew.
 * **make check doesn't work**
 * In order to run `make check` you will need to install the test database located 
 in `install.dir` 
-  * Install DBMS as needed (See _Installing DBMS software on your server_ below
-  ).
+  * Install DBMS as needed (See _Installing DBMS software on your server_ below).
   * How to load database tables in install.dir into DBMS? (See _Creating the test database_ below)
   * **_how to configure odbc.ini etc._**
 
