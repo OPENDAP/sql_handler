@@ -27,7 +27,6 @@ in `install.dir`
   * How to load database tables in install.dir into DBMS? (See _Creating the test database_ below)
   * **_how to configure odbc.ini etc._**
 
-
 ## Installing ODBC on your Hyrax server.
 The `sql_handler` (and by extension Hyrax) utilize 
 [Open Database Connectivity (ODBC)](https://en.wikipedia.org/wiki/Open_Database_Connectivity) 
@@ -37,17 +36,13 @@ to access various DBMS systems. Drivers will need to be installed on the Hyrax h
   - As a source distribution (utilizes gnu autotools to build)
   - In the `yum` inventory for **CentOS-6** and  **CentOS-7** and 
   - In the `homebrew` inventory for **OSX**
-
-
+  
 Some DBMS producers provide their own ODBC drivers. _See the DBMS sections below._
 
-
 ## Installing DBMS software on your server.
-In order to server data from a database you need to have a database running to
+In order to serve data from a database you need to have a database running to
 hold the data and respond to queries. If you haven't got that sorted already, 
 here's some info about how to go about it.
-
-
 
 ## [MySQL](https://dev.mysql.com)
 
@@ -116,19 +111,27 @@ Mac OSX package installers:
 - **Fink** (_Please don't do this if you are building our software from source, 
 it will make you sad._)
 
-
 ## Process
 
 ### PostGreSql 11.4 on OSX 10.13.6
 
 - Installed using [the OSX package installer located here](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+- If installing using homebrew on OSX, the rest of the Postgresql instructions worked _but_ 
+manually adding the 'postgres' user was needed. To do this use the command:
+
+```shell script
+/usr/local/opt/postgres/bin/createuser -s postgres
+```
 
 WARNING: The [PostGres Menubar App for OSX](https://postgresapp.com) will not work with the software installed by the package installer. 
 
 #### Creating the test database
-- Created `test` database using the **pgAdmin** application.
+- Created `test` database using the **pgAdmin** application. (or ``pg_ctl -D /usr/local/var/postgres start`` and then
+``createdb test`` for homebrew installs)
 - Opened the SQL Shell (`psql`) application and connected to the `test` database.
-- Using the cut buffer I copied all but the first line (which selects which database to connect to, and accomplished in the previous step) from the `sglh.sql` file, and pasted those lines into the `psql` shell. This successfully created the table and values for the tests.
+- Using the cut buffer I copied all but the first line (which selects which database to connect to, and accomplished 
+in the previous step) from the `sglh.sql` file, and pasted those lines into the `psql` shell. This successfully created
+the table and values for the tests.
 
 ```sql
 CREATE TABLE sqlh_table 
