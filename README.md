@@ -103,9 +103,13 @@ program.
 - Also available via: **yum** (_Current available version on CentOS-7 is 3.7.17_)
 
 **OSX** 
-- **[Latest Binaries](https://www.sqlite.org/download.html)** (Current version 
-3.28.0)
-- Also available via: **Homebrew** (Currently  3.27.2)
+- **[Latest Binaries](https://www.sqlite.org/download.html)** 
+- Also available via: **Homebrew** 
+- Use `brew install sqlite` but note that OSX already has sqlite3, which is an older 
+version of the code, so you need to modify the PATH environment variable like this:
+`export PATH="/usr/local/opt/sqlite/bin:$PATH"` and probably put that into `.bashrc`
+as well.
+- Install the sqliteodbc drivers using `brew install sqliteodbc`
 
 ## Configuration
 
@@ -126,7 +130,11 @@ Mac OSX package installers:
 - **Fink** (_Please don't do this if you are building our software from source, 
 it will make you sad._)
 
-## Process
+## Examples
+
+These examples include building a database that can be used with the tests. 
+Following one of these will result in a configuration such that `make check`
+should work.
 
 ### PostGreSql 11.4 on OSX 10.13.6
 

@@ -2,10 +2,14 @@
 <request reqID ="some_unique_value" >
     <setContext name="dap_format">dap2</setContext>
     <setContext name="xdap_accept">3.3</setContext>
-    <setContainer name="c">/data/mysql_1.sql</setContainer>
+    <setContainer name="c">/data/postgresql.sql</setContainer>
     <define name="d">
-	<container name="c" />
+	   <container name="c">
+	       <constraint>
+	           a,b
+	       </constraint>
+	   </container>
     </define>
-    <get type="dds" definition="d" />
+    <get type="dods" definition="d" />
 </request>
 
