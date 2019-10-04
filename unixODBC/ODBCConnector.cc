@@ -381,7 +381,7 @@ ODBCConnector::getMsg(ERROR_TYPE * error_code){
 		msgEnvSeq=1; //reset error sequence index
 		msgStmtSeq=1; //reset error sequence index
 		msgConnSeq=1; //reset error sequence index
-		sprintf(strMsg,"No errors");
+		strMsg = "No errors";
 		return &strMsg;
 	}
 	else if (*error_code==SQL_NO_DATA){

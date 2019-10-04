@@ -30,10 +30,6 @@
 // atoi
 #include <stdlib.h>
 
-#include <TheBESKeys.h>
-#include <BESInternalError.h>
-// BESKeys
-#include <BESSyntaxUserError.h>
 
 #include "connector/SQLConnector.h"
 
