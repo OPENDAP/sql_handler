@@ -26,6 +26,9 @@
 
 #include "SQLContainer.h"
 
+using std::endl;
+using std::string;
+
 /**
  * @brief Initialize time modification of the
  * referred file.

@@ -25,6 +25,11 @@
  */
 
 #include "SQLPlugin.h"
+
+using std::endl;
+using std::string;
+
+
 #if 0
 /**
  * static -> no sense:

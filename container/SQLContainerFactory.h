@@ -61,7 +61,7 @@ public:
 	SQLContainerFactory(SQLContainerStorage *container_storage=NULL,
 						SELECT_CONTAINER select_function=&selectContainer)
 	{
-		TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainerFactory"<<endl);
+		TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainerFactory" << std::endl);
 		if (select_function)
 			_select_func=select_function;
 		else
@@ -71,13 +71,13 @@ public:
 			cs=container_storage;
 		else {
 			BESDEBUG(SQL_NAME,
-				"Building SQLContainerFactory without persistence"<<endl);
+				"Building SQLContainerFactory without persistence" << std::endl);
 			cs=NULL;
 		}
 	}
 
 	virtual ~SQLContainerFactory(){
-		TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLContainerFactory"<<endl);
+		TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLContainerFactory" << std::endl);
 	};
 
 	/**

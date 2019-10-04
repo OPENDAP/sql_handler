@@ -69,7 +69,7 @@ typedef std::set<SQLConstraint> SQL_CONSTRAINT_SET;
 class SQLQuery {
 private:
 	SQL_ATTRIBUTE_SET_BYNAME select;
-	string from;
+	std::string from;
 	SQL_CONSTRAINT_SET where;
 
 public:
@@ -77,7 +77,7 @@ public:
 	 * @brief constructor
 	 */
 	SQLQuery():select(),from(),where(){
-TESTDEBUG( SQL_NAME,"CREATING: SQLQuery"<<endl );
+TESTDEBUG( SQL_NAME,"CREATING: SQLQuery"<< << std::endl );
 	}
 
 	/**
@@ -87,14 +87,14 @@ TESTDEBUG( SQL_NAME,"CREATING: SQLQuery"<<endl );
 	SQLQuery(const SQLQuery &q):
 		select(q.select),from(q.from),where(q.where)
 	{
-TESTDEBUG( SQL_NAME,"COPING: SQLQuery"<<endl );
+TESTDEBUG( SQL_NAME,"COPING: SQLQuery" << std::endl );
 	}
 
 	/**
 	 * @brief dtor
 	 */
 	virtual ~SQLQuery(){
-TESTDEBUG( SQL_NAME,"DELETING: SQLQuery"<<endl );
+TESTDEBUG( SQL_NAME,"DELETING: SQLQuery" << std::endl );
 	}
 
 	/**
@@ -131,15 +131,15 @@ TESTDEBUG( SQL_NAME,"DELETING: SQLQuery"<<endl );
 	 * you have to add join string
 	 * manually
 	 */
-	void addFrom(string s){
+	void addFrom(std::string s){
 		from.append(s);
 	}
 
-	virtual string &getFrom(){
+	virtual std::string &getFrom(){
 		return from;
 	}
 
-	void setFrom(string f){
+	void setFrom(std::string f){
 		from=f;
 	}
 
@@ -163,7 +163,7 @@ TESTDEBUG( SQL_NAME,"DELETING: SQLQuery"<<endl );
 	 * @return a SQL_CONSTRAINTS_SET
 	 * @note the substitute should still be settled
 	 */
-	static SQL_CONSTRAINT_SET loadConstraints(string & where);
+	static SQL_CONSTRAINT_SET loadConstraints(std::string & where);
 
 	/**
 	 * Load all attributes matching the regex and return
@@ -173,7 +173,7 @@ TESTDEBUG( SQL_NAME,"DELETING: SQLQuery"<<endl );
 	 *
 	 * @see attrToSelect
 	 */
-	static SQL_ATTRIBUTE_SET_BYNAME loadAttributes(string & attr);
+	static SQL_ATTRIBUTE_SET_BYNAME loadAttributes(std::string & attr);
 
 	/**
 	 * Projection
@@ -182,7 +182,7 @@ TESTDEBUG( SQL_NAME,"DELETING: SQLQuery"<<endl );
 	 * attributes ordered by position as
 	 * stored in the dataset
 	 */
-	virtual SQL_ATTRIBUTE_SET_BYPOS* attrToSelect(string &onTheFly);
+	virtual SQL_ATTRIBUTE_SET_BYPOS* attrToSelect(std::string &onTheFly);
 
 #if 0
 	/**
@@ -205,7 +205,7 @@ TESTDEBUG( SQL_NAME,"DELETING: SQLQuery"<<endl );
 	 *
 	 * @return a string representing a valid SQL WHERE predicate.
 	 */
-	virtual string constrToWhere(string &);
+	virtual std::string constrToWhere(std::string &);
 #endif
 
 #if 0
@@ -215,7 +215,7 @@ TESTDEBUG( SQL_NAME,"DELETING: SQLQuery"<<endl );
 	 * @param the join string to put between strings
 	 * @return the resulting string
 	 */
-	static std::string setToStr(std::set<string> &s, const string join);
+	static std::string setToStr(std::set<std::string> &s, const std::string join);
 #endif
 };
 

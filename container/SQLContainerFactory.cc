@@ -26,6 +26,10 @@
 
 #include "SQLContainerFactory.h"
 
+using std::endl;
+using std::string;
+
+
 SQLContainerStorage *SQLContainerFactory::cs=NULL;
 SELECT_CONTAINER SQLContainerFactory::_select_func=&selectContainer;
 
@@ -48,7 +52,7 @@ SQLContainerFactory::getContainer(BESDataHandlerInterface &dhi)
 {
 if (dhi.container) {
 	if (cs) {
-		BESDEBUG(SQL_NAME,"SQLContainerFactory: SQL storage container found. "<<endl);
+		BESDEBUG(SQL_NAME,"SQLContainerFactory: SQL storage container found. " << endl);
 
 		SQLContainer *c;
 #if 1
@@ -58,19 +62,19 @@ if (dhi.container) {
 		if ((c=dynamic_cast<SQLContainer*>(dhi.container))) {
 			if (c->isReady()){
 				BESDEBUG(SQL_NAME,
-					"SQLContainerFactory: Container is already a READY SQLContainer"<<endl);
+					"SQLContainerFactory: Container is already a READY SQLContainer" << endl);
 				//this is a copy
 				return c;//c->ptr_duplicate();
 			}
 			else {
 				BESDEBUG(SQL_NAME,
-					"SQLContainerFactory: Container is already SQLContainer but not READY"<<endl);
+					"SQLContainerFactory: Container is already SQLContainer but not READY" << endl);
 				/**
 				 * Since it's not ready let's update it
 				 * read dataset, reset time and set status
 				 */
 				if (!c->setup()){
-					BESDEBUG(SQL_NAME,"ERROR: SQLRequestHandler"<<endl);
+					BESDEBUG(SQL_NAME,"ERROR: SQLRequestHandler" << endl);
 					throw BESInternalError(
 						"SQLContainerFactory: Failed to rebuild sql dataset",
 						__FILE__,__LINE__);
@@ -86,11 +90,11 @@ if (dhi.container) {
 		else
 		{
 #endif
-			BESDEBUG(SQL_NAME,"SQLContainerFactory: Searching for cached container."<<endl);
+			BESDEBUG(SQL_NAME,"SQLContainerFactory: Searching for cached container." << endl);
 			// NOTE: using getName
 			c=cs->look_for(getName(*dhi.container));
 			if (c){
-				BESDEBUG(SQL_NAME,"SQLContainerFactory: Container is cached"<<endl);
+				BESDEBUG(SQL_NAME,"SQLContainerFactory: Container is cached" << endl);
 				/**
 				 * Applying new constraints and attributes
 				 * coming from the actual request
@@ -103,16 +107,16 @@ if (dhi.container) {
 				return c;
 			}
 			else {
-				BESDEBUG(SQL_NAME,"SQLContainerFactory: Container not cached: Try to build it"<<endl);
+				BESDEBUG(SQL_NAME,"SQLContainerFactory: Container not cached: Try to build it" << endl);
 				try {
-					BESDEBUG(SQL_NAME,"SQLContainerFactory: Setup SQLContainer: Creating dataset."<<endl);
+					BESDEBUG(SQL_NAME,"SQLContainerFactory: Setup SQLContainer: Creating dataset." << endl);
 					/**
 					 * Applying new constraints and attributes
 					 * coming from the actual request
 					 * NOTE: this will delete previous stored constraints
 					 */
 					SQLContainer *c=buildContainer(*dhi.container);
-TESTDEBUG(SQL_NAME_TEST,"SQLContainerFactory: Setup SQLContainer: Completed."<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLContainerFactory: Setup SQLContainer: Completed." << endl);
 					/**
 					 * Add to the SQLContainerStorageVolatile list
 					 * - using add_container since object isReady
@@ -133,7 +137,7 @@ TESTDEBUG(SQL_NAME_TEST,"SQLContainerFactory: Setup SQLContainer: Completed."<<e
 	} //endif (cs)
 	else
 	{
-		BESDEBUG(SQL_NAME,"SQLContainerFactory: Not using persistence"<<endl);
+		BESDEBUG(SQL_NAME,"SQLContainerFactory: Not using persistence" << endl);
 		//this is a copy
 		SQLContainer *c=buildContainer(*dhi.container);
 
@@ -213,20 +217,20 @@ SQLContainerFactory::setPersistence(SQLContainerStorage *container_storage)
 {
 	if (container_storage){
 		BESDEBUG(SQL_NAME,
-			"SQLContainerFactory: Assigning persistence"<<endl);
+			"SQLContainerFactory: Assigning persistence" << endl);
 		cs=container_storage;
 	}
 	else
 		BESDEBUG(SQL_NAME,
 			"SQLContainerFactory: Set SQLContainerFactory "
-			"to use no persistence"<<endl);
+			"to use no persistence" << endl);
 }
 
 void
 SQLContainerFactory::setSelector(SELECT_CONTAINER select_function){
 	if (select_function){
 		BESDEBUG(SQL_NAME,
-			"SQLContainerFactory: Assigning new selector function"<<endl);
+			"SQLContainerFactory: Assigning new selector function" << endl);
 		_select_func=select_function;
 	}
 	else

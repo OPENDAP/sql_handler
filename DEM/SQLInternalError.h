@@ -75,7 +75,7 @@ protected:
     {
     }
 public:
-    SQLInternalError(const string &msg, const string &file, unsigned int line) :
+    SQLInternalError(const std::string &msg, const std::string &file, unsigned int line) :
             BESError(msg, _SQLH_INTERNAL_ERROR, file, line)
     {
     }
@@ -83,9 +83,9 @@ public:
     {
     }
 
-    virtual void dump(ostream &strm) const
+    virtual void dump(std::ostream &strm) const
     {
-        strm << "SQLInternalError::dump - (" << (void *) this << ")" << endl;
+        strm << "SQLInternalError::dump - (" << (void *) this << ")" << std::endl;
         BESIndent::Indent();
         BESError::dump(strm);
         BESIndent::UnIndent();

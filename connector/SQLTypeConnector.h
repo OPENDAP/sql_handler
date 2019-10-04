@@ -80,7 +80,7 @@ private:
             // set the end condition
             _not_end = false; //!< GLOBAL ENDING CONDITION
 
-            BESDEBUG(SQL_NAME, "--ENDING------> getRow: "<<getRow() <<" getCol:"<<getCol()<<endl);
+            BESDEBUG(SQL_NAME, "--ENDING------> getRow: "<<getRow() <<" getCol:" << getCol() << std::endl);
 
             //returning maximum for skipped rows
             return getRows(); //!< FUNCTION ENDING CONDITION
@@ -310,15 +310,15 @@ public:
             _column_position = sum - getCols();
         }
 
-        BESDEBUG(SQL_NAME, "-------------> getRow: "<<getRow() <<" getCol:"<<getCol()<<endl);
-        BESDEBUG(SQL_NAME, "-------------> rows: "<<rows <<" increment:"<<increment<<endl);
+        BESDEBUG(SQL_NAME, "-------------> getRow: "<<getRow() <<" getCol:" << getCol() << std::endl);
+        BESDEBUG(SQL_NAME, "-------------> rows: "<<rows <<" increment:" << increment << std::endl);
 
         return rows;
     }
 
     virtual ~SQLTypeConnector()
     {
-        BESDEBUG(SQL_NAME, "DELETING: SQLTypeConnector"<<endl);
+        BESDEBUG(SQL_NAME, "DELETING: SQLTypeConnector" << std::endl);
     }
 
     /**
@@ -327,7 +327,7 @@ public:
     SQLTypeConnector() :
             _column_position(0), _row_position(0), _columns(0), _rows(0), _not_end(true)
     {
-        BESDEBUG(SQL_NAME, "CREATING: SQLTypeConnector"<<endl);
+        BESDEBUG(SQL_NAME, "CREATING: SQLTypeConnector" << std::endl);
     }
 
 };

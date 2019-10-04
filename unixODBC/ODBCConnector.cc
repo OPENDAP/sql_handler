@@ -26,6 +26,9 @@
 
 #include "ODBCConnector.h"
 
+using std::endl;
+using std::string;
+
 bool
 ODBCConnector::connect()
 {

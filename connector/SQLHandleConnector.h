@@ -169,7 +169,7 @@ public:
         delete _container;
         _container=0;
 #endif
-        BESDEBUG(SQL_NAME, "DELETING: SQLHandleConnector"<<endl);
+        BESDEBUG(SQL_NAME, "DELETING: SQLHandleConnector" << std::endl);
     }
     ;
 
@@ -182,7 +182,7 @@ public:
     SQLHandleConnector() :
             _isReady(false), _container(NULL)
     {
-        BESDEBUG(SQL_NAME, "CREATING: SQLHandleConnector"<<endl);
+        BESDEBUG(SQL_NAME, "CREATING: SQLHandleConnector" << std::endl);
     }
     ;
 
@@ -195,7 +195,7 @@ public:
     SQLHandleConnector(SQLContainer *c) :
             _isReady(false), _container(c)
     {
-        BESDEBUG(SQL_NAME, "CREATING: SQLHandleConnector"<<endl);
+        BESDEBUG(SQL_NAME, "CREATING: SQLHandleConnector" << std::endl);
     }
 };
 

@@ -25,6 +25,10 @@
  */
 #include "SQLContainerStorageVolatile.h"
 
+using std::endl;
+using std::string;
+
+
 bool
 SQLContainerStorageVolatile::update(SQLContainer *c){
 	bool ret;
@@ -42,7 +46,7 @@ SQLContainerStorageVolatile::update(SQLContainer *c){
 
 SQLContainer *
 SQLContainerStorageVolatile::look_for(const string &name){
-	BESDEBUG(SQL_NAME,"SQLContainerStorage:CASTING"<<endl);
+	BESDEBUG(SQL_NAME,"SQLContainerStorage:CASTING" << endl);
 	/**
 	 * It's important to note that here the SQLContainer
 	 * copy constructor is called which, (during copy),
@@ -54,27 +58,27 @@ SQLContainerStorageVolatile::look_for(const string &name){
 	SQLContainer *c=dynamic_cast<SQLContainer *>(
 		// look_for returns a copy (if found) or NULL (! found)
 		BESContainerStorageVolatile::look_for(name));
-	BESDEBUG(SQL_NAME,"SQLContainerStorage:CAST DONE"<<endl);
+	BESDEBUG(SQL_NAME,"SQLContainerStorage:CAST DONE" << endl);
 	if (c) {
 		// is uptodate?
 		if (c->isReady()){
 			BESDEBUG(SQL_NAME,"SQLContainerStorage: returning cached "
-					"container named: "<<name<<endl);
+					"container named: " << name << endl);
 		}
 		else {
 			BESDEBUG(SQL_NAME,"SQLContainerStorage: cached object isn't "
-					"UpToDate.\nRebuilding container named: "<<name<<endl);
+					"UpToDate.\nRebuilding container named: " << name << endl);
 
 			//read dataset, reset time and set status
 			if (!c->setup()){
-				BESDEBUG(SQL_NAME,"ERROR: SQLContainerStorage"<<endl);
+				BESDEBUG(SQL_NAME,"ERROR: SQLContainerStorage" << endl);
 				throw BESInternalError(
 					"SQLContainerStorage: Failed to rebuild sql dataset",
 					__FILE__,__LINE__);
 			}
 
 			BESDEBUG(SQL_NAME,"SQLContainerStorage: replace cached file "
-					"with updated version."<<endl);
+					"with updated version." << endl);
 			// update own the passed pointer
 			update(c->ptr_duplicate());
 

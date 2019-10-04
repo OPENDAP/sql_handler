@@ -151,7 +151,7 @@ public:
 			SQLActionFactory<ERROR_TYPE,MSG_TYPE,OUT> *error_factory,
 			bool force=false)
 	{
-		BESDEBUG(SQL_NAME,"SQLConnectAction: Connecting"<<endl);
+		BESDEBUG(SQL_NAME,"SQLConnectAction: Connecting" << std::endl);
 	try{
 			bool ret=connector.connect(container);
 			if (error_factory){
@@ -167,7 +167,7 @@ public:
 					"SQLConnectAction: Connect execution fails (returning false)",
 						__FILE__,__LINE__);
 
-			BESDEBUG(SQL_NAME,"SQLConnectAction: Connected"<<endl);
+			BESDEBUG(SQL_NAME,"SQLConnectAction: Connected" << std::endl);
 		}
 		catch(SQLInternalError ie){
 			// don't forget to close the connector

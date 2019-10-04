@@ -91,7 +91,7 @@ public:
     }
     virtual ~SQLSimpleConnector()
     {
-        BESDEBUG(SQL_NAME, "DELETING: SQLSimpleConnector"<<endl);
+        BESDEBUG(SQL_NAME, "DELETING: SQLSimpleConnector" << std::endl);
     }
     ;
     /**
@@ -103,7 +103,7 @@ public:
     SQLSimpleConnector() :
             SQLHandleConnector(), SQLTypeConnector<SQL_TYPE, ODBC_TYPE>()
     {
-        BESDEBUG(SQL_NAME, "CREATING: SQLSimpleConnector"<<endl);
+        BESDEBUG(SQL_NAME, "CREATING: SQLSimpleConnector" << std::endl);
     }
     ;
     /**
@@ -115,7 +115,7 @@ public:
     SQLSimpleConnector(SQLContainer *c) :
             SQLHandleConnector(c), SQLTypeConnector<SQL_TYPE, ODBC_TYPE>()
     {
-        BESDEBUG(SQL_NAME, "CREATING: SQLSimpleConnector"<<endl);
+        BESDEBUG(SQL_NAME, "CREATING: SQLSimpleConnector" << std::endl);
     }
 };
 

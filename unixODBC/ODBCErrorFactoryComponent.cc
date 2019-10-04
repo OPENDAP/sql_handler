@@ -26,6 +26,9 @@
 
 #include "ODBCErrorFactoryComponent.h"
 
+using std::endl;
+using std::string;
+
 // SQL_SUCCESS
 SQLStaticActionList<MSG_TYPE,void> ODBCErrorFactoryComponent::success=
 	SQLStaticActionList<MSG_TYPE,void>(SQLDefaultErrorAction<MSG_TYPE>::debugMethod);
