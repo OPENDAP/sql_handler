@@ -133,7 +133,7 @@ private:
 	 * @return SQLActionList
 	 *
 	 */
-	static SQLActionList<MSG_TYPE,void>& _getActions(ERROR_TYPE * error);
+	static SQLActionList<MSG_TYPE,void>& _getActions(ERROR_TYPE *error);
 
 	/**
 	 * @brief The method which represent the stop condition
