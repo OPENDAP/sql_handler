@@ -94,7 +94,7 @@ ODBCErrorFactoryComponent::_getActions(ERROR_TYPE *error)
 		BESDEBUG(ODBC_NAME,"NOT MAPPED ERROR"<<endl);
 		throw BESInternalFatalError("No ErrorList found",__FILE__,__LINE__);
 	}
-};
+}
 
 bool
 ODBCErrorFactoryComponent::_stop(ERROR_TYPE * error) {
@@ -107,4 +107,4 @@ ODBCErrorFactoryComponent::_stop(ERROR_TYPE * error) {
 		return true;
 	else
 		return false;
-};
+}
