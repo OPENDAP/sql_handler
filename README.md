@@ -3,6 +3,17 @@
 # Welcome to the Hyrax sql_handler
 This handler makes the happytimes with the RDBMS data. w00t.
 
+## Additional Required Software
+In addition to the Hyrax server, you will need a database that can be accessed using
+ODBC and an ODBC driver for that database that is compatible with the unixODBC 
+software package. This includes most Relational Database Management Systems (RDBMS)
+as well as many other interesting tools, including NoSQL databases like MongoDB.
+
+If your computer does not have the unixODBC driver software installed, see 
+'Installing ODBC on your Hyrax server' below. To build the Hyrax sql handler, you
+only need the generic components of unixODBC to be installed. However, to actually
+serve data from a database, you will need the appropriate (specific) driver.
+
 ## Building and Installing the sql_handler
 Unlike most of the BES modules, this handler for SQL data is a separate project.
 It can be added to the bes/modules directory or built outside of the bes software.
@@ -19,14 +30,16 @@ _Build Notes_
 * The `./configure` script must find both libdap and the BES. It will use the 
 pkgconfig package manager and, if that fails, look for dap-config and bes-config
 on the PATH.
+* **configure or make doesn't work**
+* This will happen if unixODBC is not installed. Only the generic part of unixODBC 
+is needed to configure and build the handler. We suggest you use a binary package
+from yum, apt-get, or brew.
 * **make check doesn't work**
 * In order to run `make check` you will need to install the test database located 
 in `install.dir` 
-  * Install DBMS as needed (See _Installing DBMS software on your server_ below
-  ).
+  * Install DBMS as needed (See _Installing DBMS software on your server_ below).
   * How to load database tables in install.dir into DBMS? (See _Creating the test database_ below)
   * **_how to configure odbc.ini etc._**
-
 
 ## Installing ODBC on your Hyrax server.
 The `sql_handler` (and by extension Hyrax) utilize 
@@ -37,17 +50,28 @@ to access various DBMS systems. Drivers will need to be installed on the Hyrax h
   - As a source distribution (utilizes gnu autotools to build)
   - In the `yum` inventory for **CentOS-6** and  **CentOS-7** and 
   - In the `homebrew` inventory for **OSX**
-
-
+  
 Some DBMS producers provide their own ODBC drivers. _See the DBMS sections below._
 
-
 ## Installing DBMS software on your server.
-In order to server data from a database you need to have a database running to
+In order to serve data from a database you need to have a database running to
 hold the data and respond to queries. If you haven't got that sorted already, 
 here's some info about how to go about it.
 
+## [PostGreSQL](https://www.enterprisedb.com)
 
+**Linux** 
+- **[All Versions](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)** 
+- Also available via **yum** (_Current available version on AWS CentOS-7 is 9.2.24_)
+
+**OSX** 
+- **[All Versions](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)**  (Package Installer)
+- Also available via: **Homebrew** (Currently 11.2)
+- There is also a **[PostGres Menubar App for OSX](https://postgresapp.com)** that creates menubar controls for the 
+PostGres DBMS (conflicts with the package installer version of the DB)
+
+**[PostGreSQL ODBC Implementation](https://odbc.postgresql.org)** - [All Versions](https://www.postgresql.org/ftp/odbc/versions/) 
+_Caveat Emptor_: It would appear that this archive contains Windows binaries and source code for the rest (Linuix etc.).
 
 ## [MySQL](https://dev.mysql.com)
 
@@ -67,20 +91,6 @@ Available as either as either a package installer or tar archive download.
 
 Also available via: **Homebrew** (Currently: 8.0.15)
 
-## [PostGreSQL](https://www.enterprisedb.com)
-
-**Linux** 
-- **[All Versions](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)** 
-- Also available via **yum** (_Current available version on AWS CentOS-7 is 9.2.24_)
-
-**OSX** 
-- **[All Versions](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)**  (Package Installer)
-- Also available via: **Homebrew** (Currently 11.2)
-- There is also a **[PostGres Menubar App for OSX](https://postgresapp.com)** that creates menubar controls for the PostGres DBMS (conflicts with the package installer version of the DB)
-
-**[PostGreSQL ODBC Implementation](https://odbc.postgresql.org)** - [All Versions](https://www.postgresql.org/ftp/odbc/versions/) _Caveat Emptor_: It would appear that this archive contains Windows binaries and source code for the rest (Linuix etc.).
-
-
 ## [SQLite](https://www.sqlite.org)
 The SQLite binaries are described as: 
 > A bundle of command-line tools for managing SQLite database files, including 
@@ -93,20 +103,24 @@ program.
 - Also available via: **yum** (_Current available version on CentOS-7 is 3.7.17_)
 
 **OSX** 
-- **[Latest Binaries](https://www.sqlite.org/download.html)** (Current version 
-3.28.0)
-- Also available via: **Homebrew** (Currently  3.27.2)
+- **[Latest Binaries](https://www.sqlite.org/download.html)** 
+- Also available via: **Homebrew** 
+- Use `brew install sqlite` but note that OSX already has sqlite3, which is an older 
+version of the code, so you need to modify the PATH environment variable like this:
+`export PATH="/usr/local/opt/sqlite/bin:$PATH"` and probably put that into `.bashrc`
+as well.
+- Install the sqliteodbc drivers using `brew install sqliteodbc`
 
 ## Configuration
 
 * The file `sql_handler/install.dir/odbc.TEMPLATES.ini` contains examples of 
  odbc_inst.ini files for various DBMS systems.
 
-* `odbc.ini` - Creates view into the database and exposes it via the ODBC 
-interface. Location: `/etc/odbc.ini`
+* `odbc.ini` - Defines connection options; it creates view into the database
+and exposes it via the ODBC interface. Location: `/etc/odbc.ini`
 
-* `odbc_inst.ini` - Creates a associate between an odbc driver and a dbms. 
-Location: `/etc/odbc_inst.ini`
+* `odbc_inst.ini` - Defines driver options; it creates a associate between 
+an odbc driver and a dbms. Location: `/etc/odbc_inst.ini`
 
 ## Notes
 
@@ -116,19 +130,31 @@ Mac OSX package installers:
 - **Fink** (_Please don't do this if you are building our software from source, 
 it will make you sad._)
 
+## Examples
 
-## Process
+These examples include building a database that can be used with the tests. 
+Following one of these will result in a configuration such that `make check`
+should work.
 
 ### PostGreSql 11.4 on OSX 10.13.6
 
 - Installed using [the OSX package installer located here](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+- If installing using homebrew on OSX, the rest of the Postgresql instructions worked _but_ 
+manually adding the 'postgres' user was needed. To do this use the command:
+
+```shell script
+/usr/local/opt/postgres/bin/createuser -s postgres
+```
 
 WARNING: The [PostGres Menubar App for OSX](https://postgresapp.com) will not work with the software installed by the package installer. 
 
 #### Creating the test database
-- Created `test` database using the **pgAdmin** application.
+- Created `test` database using the **pgAdmin** application. (or ``pg_ctl -D /usr/local/var/postgres start`` and then
+``createdb test`` for homebrew installs)
 - Opened the SQL Shell (`psql`) application and connected to the `test` database.
-- Using the cut buffer I copied all but the first line (which selects which database to connect to, and accomplished in the previous step) from the `sglh.sql` file, and pasted those lines into the `psql` shell. This successfully created the table and values for the tests.
+- Using the cut buffer I copied all but the first line (which selects which database to connect to, and accomplished 
+in the previous step) from the `sglh.sql` file, and pasted those lines into the `psql` shell. This successfully created
+the table and values for the tests.
 
 ```sql
 CREATE TABLE sqlh_table 
@@ -224,7 +250,8 @@ SQLRowCount returns 10
 10 rows fetched
 SQL> 
 ```
-NOTE: One can fiddle with the `odbc.ini` file and see the effects. For example, changing the name of the Datassource from `[test]` to `[foo]` should produce the following results:
+NOTE: One can fiddle with the `odbc.ini` file and see the effects. For example, 
+changing the name of the Datassource from `[test]` to `[foo]` should produce the following results:
 
 ```bash 
 [-bash: ~/OPeNDAP/hyrax/sql_handler] isql -v test

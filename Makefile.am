@@ -150,6 +150,15 @@ sql.conf: sql.conf.in config.status
 odbc.conf: odbc.conf.in config.status
 	sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > odbc.conf
 
+# Build a compile_commands.json.tmp file for use with CLion. This will emable
+# reasonable use for all the source that's compiled using either 'all' or
+# 'check' but other targets will have to be added by hand. See the compiledb
+# github site (https://github.com/nickdiego/compiledb) for more info.
+# jhrg 9/25/19
+.PHONY: compiledb
+compiledb:
+	make -nwk all check | compiledb
+
 #########################################################################
 
 # docs

@@ -4,4 +4,4 @@ Dataset {
         Float32 b;
         String c;
     } test;
-} mysql_1.sql;
+} postgresql.sql;

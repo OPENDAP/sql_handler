@@ -8,7 +8,7 @@ define $FROM$=table1 join table2
 
 [section]
 api=odbc
-#note: ' will not filtered
+#note: single quotes are not filtered
 server='PostgreSQL'
 user=$USER$
 
