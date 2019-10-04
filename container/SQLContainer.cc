@@ -104,7 +104,7 @@ SQLContainer::SQLContainer(const string &name,
 	TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainer"<<endl);
 	// initialize members
 	_isReady=false; // you have to run setup()
-};
+}
 
 /**
  * @brief Constructor
@@ -126,7 +126,7 @@ SQLContainer::SQLContainer(const BESFileContainer *c):
 	else
 		throw BESInternalError("SQLContainer: Unable to create an SQLContainer "
 				"using a NULL BESContainer pointer",__FILE__,__LINE__);
-};
+}
 
 /**
  * @brief Constructor
@@ -145,7 +145,7 @@ SQLContainer::SQLContainer(const BESContainer &c):
 	set_constraint(c.get_constraint());
 	set_attributes(c.get_attributes());
 	_isReady=false; // you have to run setup()
-};
+}
 
 /**
  * @brief Resulting object will be a copy of the passed one,
@@ -172,7 +172,7 @@ SQLContainer::SQLContainer(const SQLContainer *c):
 	else
 		throw BESInternalError("SQLContainer: Unable to create an SQLContainer "
 				"using a NULL SQLContainer pointer",__FILE__,__LINE__);
-};
+}
 
 /**
  * @brief Resulting object will be a copy of the passed one,
@@ -197,11 +197,11 @@ SQLContainer::SQLContainer(const SQLContainer &c):
 		_isReady=false;
 	}
 
-};
+}
 
 SQLContainer::~SQLContainer(){
 	TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLContainer"<<endl);
-};
+}
 
 /**
  * @brief clone private members, no
