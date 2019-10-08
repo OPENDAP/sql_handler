@@ -388,7 +388,7 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 ```
 Create and select the the _test_ database:
 
-```sql
+```bash
 mysql> CREATE DATABASE test;
 Query OK, 1 row affected (0.00 sec)
 mysql> USE test;
