@@ -515,6 +515,22 @@ Driver64=/usr/lib64/libmyodbc8w.so
 Setup64=/usr/lib64/libodbcmyS.so
 FileUsage=1
 ```
+
+Next I  edited the ``/etc/odbc.ini`` and added the test database like so:
+
+```ini
+[test]
+Driver              = MySQL
+Description         = LocalMySQL
+Trace               = Yes
+TraceFile           = sql.log
+Database            = test
+Servername          = localhost
+UserName            = mysql
+Password            = *************
+Port                = 3306
+```
+
 After which I was able to connect to the DB using the  `isql` ODBC application:
 
 Invoke `isql` on the "test" ODBC connection as the user "mysql" with password "passwordy"
