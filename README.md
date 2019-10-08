@@ -310,4 +310,248 @@ first three tests began to return valid content so I made baselines:
 
 All 3 tests were successful.
 ```
+### MySQL Ver 8.0.17 for Linux on x86_64 (MySQL Community Server - GPL) 
+_Installed on CentOS-7 latest running in an AWS EC2 instance._
+> NOTE: I disabled SELinux on this system to simplify my installation/configuration experience.
+
+#### Installation
+There are a bewildering number of ways to install MySQL on Linux. However, the most obvious one, 
+**yum**, is not by default connected to the MySQL repository. The 
+[MySQL Linux Installation Guide](https://dev.mysql.com/doc/refman/8.0/en/linux-installation.html)
+directs one to connect the MySQL repo to your system. IN a case of misunderstanding I downloaded
+the _Red Hat Enterprise Linux 7 / Oracle Linux 7 (x86, 64-bit), RPM Bundle_ from the **Red Hat Enterprise**
+section of this page: https://dev.mysql.com/downloads/mysql/  The installation required that _all_
+of the included rpms be named on the installation command:
+
+```bash
+tar -xvf mysql-8.0.17-1.el7.x86_64.rpm-bundle.tar;
+sudo yum install *.rpm; # Note that the tar ball unpacks all the rpms into the CWD
+```
+This successfully install the software.
+
+#### Start the MySQL daemon, _mysqld_
+In order to start the service:
+
+```bash
+sudo service start mysqld
+```
+
+#### Deal with the mysql _root_ user password
+After much trashing about I discover that the "root" password for the MySQL service is randomly 
+generated and written to the error log. In order to recover it, perform the following:
+
+```bash
+% sudo grep 'temporary password' /var/log/mysqld.log
+2019-10-07T19:06:18.810367Z 5 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: I_AOA_()d7e0
+```
+Changing the password goes like this:
+
+```bash
+# mysql -uroot -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 24
+Server version: 8.0.17
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'Your!Spiffy!New!Password123';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> quit
+Bye
+#
+```
+
+#### Create and populate the _test_ database
+Login as the mysql _root_ user:
+
+```bash
+mysql -uroot -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 26
+Server version: 8.0.17 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+```
+Create and select the the _test_ database:
+
+```bash
+mysql> CREATE DATABASE test;
+Query OK, 1 row affected (0.00 sec)
+mysql> USE test;
+Database changed
+```
+Create the the table *sqlh_table*:
+
+```bash
+mysql> CREATE TABLE sqlh_table 
+    -> (a integer NOT NULL DEFAULT 0,
+    -> b real NOT NULL DEFAULT 0,
+    -> c varchar(50),
+    -> CONSTRAINT pk PRIMARY KEY (a));
+Query OK, 0 rows affected (0.02 sec)
+```
+Populate the table *sqlh_table* with data:
+
+```bash
+mysql> INSERT INTO sqlh_table(a, b, c) VALUES ('1', '81.0', 'string_a'), ('2', '61.1', 'string_b'), ('3', '51.0', 'string_c'), ('4', '2100.0', 'string_d'), ('5', '21.0', 'string_e'), ('6', '4133.0', 'string_f'), ('7', '31.4', 'string_g'), ('8', '21.3', 'string_h'), ('9', '11.6', 'string_i'), ('10', '22.2', 'string_j');
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+```
+
+Now we need a test user because doing everything as _root_ is probably ill advised:
+From [Creating Accounts](https://dev.mysql.com/doc/refman/8.0/en/creating-accounts.html)
+
+```bash
+mysql -u root -p
+Enter password: 
+  ...
+mysql> CREATE USER 'mysql'@'localhost' IDENTIFIED BY 'mysqlUserPasswordHere';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> GRANT SELECT ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
+Query OK, 0 rows affected (0.00 sec)
+```
+
+That should be enough to get the tests working, so quit the MySQL client for now:
+
+```bash
+mysql> quit;
+```
+#### Configure the ODBC faffery
+I found ``odbcinst.ini`` like so:
+
+```bash
+[root@ip-172-31-9-74 etc]# find / -type f -name odbcinst.ini
+/etc/odbcinst.ini
+```
+And this is its content:
+
+```ini
+[PostgreSQL]
+Description=ODBC for PostgreSQL
+Driver=/usr/lib/psqlodbcw.so
+Setup=/usr/lib/libodbcpsqlS.so
+Driver64=/usr/lib64/psqlodbcw.so
+Setup64=/usr/lib64/libodbcpsqlS.so
+FileUsage=1
+
+[MySQL]
+Description=ODBC for MySQL
+Driver=/usr/lib/libmyodbc5.so
+Setup=/usr/lib/libodbcmyS.so
+Driver64=/usr/lib64/libmyodbc5.so
+Setup64=/usr/lib64/libodbcmyS.so
+FileUsage=1
+
+[MySQL ODBC 8.0 Unicode Driver]
+Driver=/usr/lib64/libmyodbc8w.so
+SETUP=/usr/lib64/libmyodbc8S.so
+UsageCount=1
+
+[MySQL ODBC 8.0 ANSI Driver]
+Driver=/usr/lib64/libmyodbc8a.so
+SETUP=/usr/lib64/libmyodbc8S.so
+UsageCount=1
+```
+
+So I added odbc.ini in the same spot with the same permissions:
+
+```bash
+[root@ip-172-31-9-74 etc]# touch /etc/odbc.ini
+[root@ip-172-31-9-74 etc]# chmod 644 !$
+chmod 644 /etc/odbc.ini
+[root@ip-172-31-9-74 etc]# ls -l /etc/odbc*
+-rw-r--r--. 1 root root   0 Oct  8 14:01 /etc/odbc.ini
+-rw-r--r--. 1 root root 579 Jun 11 23:20 /etc/odbcinst.ini
+```
+
+#### Get and install the MySQL ODBC connector
+
+Retrieve the appropriate **files** from: [MySQL ODBC Connector Downlods](https://dev.mysql.com/downloads/connector/odbc/)
+
+This requires two separete RPM downloads:
+
+- mysql-connector-odbc-8.0.17-1.el7.i686.rpm
+- mysql-connector-odbc-setup-8.0.17-1.el7.i686.rpm
+
+This page [MySQL ODC Connector Configuration](https://dev.mysql.com/doc/connector-odbc/en/connector-odbc-configuration-connection-parameters.html)
+was of little use, and after a ridculaous amount of additonal thrashing I found that 
+the ``odbcinst.ini`` file had to be modified to accomodate the new drivers:
+
+OLD:
+
+```
+[MySQL]
+Description=ODBC for MySQL
+Driver=/usr/lib/libmyodbc5.so
+Setup=/usr/lib/libodbcmyS.so
+Driver64=/usr/lib64/libmyodbc5.so
+Setup64=/usr/lib64/libodbcmyS.so
+FileUsage=1
+```
+NEW:
+
+```
+[MySQL]
+Description=ODBC for MySQL
+Driver=/usr/lib/libmyodbc8w.so
+Setup=/usr/lib/libodbcmyS.so
+Driver64=/usr/lib64/libmyodbc8w.so
+Setup64=/usr/lib64/libodbcmyS.so
+FileUsage=1
+```
+After which I was able to connect to the DB using the  `isql` ODBC application:
+
+Invoke `isql` on the "test" ODBC connection as the user "mysql" with password "passwordy"
+
+```bash
+% isql test mysql passwordy
++---------------------------------------+
+| Connected!                            |
+|                                       |
+| sql-statement                         |
+| help [tablename]                      |
+| quit                                  |
+|                                       |
++---------------------------------------+
+SQL> help sqlh_table
++-----------------------------------------------------------------+-----------------------------------------------------------------+-----------------------------------------------------------------+-----------------------------------------------------------------+----------+---------------------+------------+--------------+---------------+---------------+---------+-----------------------------------------------------------------+-----------------------------------------------------------------+--------------+-----------------+------------------+-----------------+------------+
+| TABLE_CAT                                                       | TABLE_SCHEM                                                     | TABLE_NAME                                                      | COLUMN_NAME                                                     | DATA_TYPE| TYPE_NAME           | COLUMN_SIZE| BUFFER_LENGTH| DECIMAL_DIGITS| NUM_PREC_RADIX| NULLABLE| REMARKS                                                         | COLUMN_DEF                                                      | SQL_DATA_TYPE| SQL_DATETIME_SUB| CHAR_OCTET_LENGTH| ORDINAL_POSITION| IS_NULLABLE|
++-----------------------------------------------------------------+-----------------------------------------------------------------+-----------------------------------------------------------------+-----------------------------------------------------------------+----------+---------------------+------------+--------------+---------------+---------------+---------+-----------------------------------------------------------------+-----------------------------------------------------------------+--------------+-----------------+------------------+-----------------+------------+
+|                                                                 |                                                                 | sqlh_table                                                      | a                                                               | 4        | integer             | 10         | 4            | 0             | 10            | 0       |                                                                 | 0                                                               | 4            |                 |                  | 1               | NO         |
+|                                                                 |                                                                 | sqlh_table                                                      | b                                                               | 8        | double              | 15         | 8            |               |               | 0       |                                                                 | 0                                                               | 8            |                 |                  | 2               | NO         |
+|                                                                 |                                                                 | sqlh_table                                                      | c                                                               | -9       | varchar             | 50         | 200          |               |               | 1       |                                                                 |                                                                 | -9           |                 | 200              | 3               | YES        |
++-----------------------------------------------------------------+-----------------------------------------------------------------+-----------------------------------------------------------------+-----------------------------------------------------------------+----------+---------------------+------------+--------------+---------------+---------------+---------+-----------------------------------------------------------------+-----------------------------------------------------------------+--------------+-----------------+------------------+-----------------+------------+
+SQLRowCount returns 3
+3 rows fetched
+SQL>
+```
+woot.
+
+(That was ridculous, unneccessarily complex, and non-intuitive)
+
+
+
+
+
+
+
+
+
+
 
