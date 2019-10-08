@@ -495,7 +495,7 @@ the ``odbcinst.ini`` file had to be modified to accomodate the new drivers:
 
 OLD:
 
-```
+```ini
 [MySQL]
 Description=ODBC for MySQL
 Driver=/usr/lib/libmyodbc5.so
@@ -506,7 +506,7 @@ FileUsage=1
 ```
 NEW:
 
-```
+```ini
 [MySQL]
 Description=ODBC for MySQL
 Driver=/usr/lib/libmyodbc8w.so
