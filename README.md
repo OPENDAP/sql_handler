@@ -347,7 +347,7 @@ generated and written to the error log. In order to recover it, perform the foll
 Changing the password goes like this:
 
 ```bash
-# mysql -uroot -p
+% sudo mysql -uroot -p
 Enter password: 
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 24
@@ -366,14 +366,13 @@ Query OK, 0 rows affected (0.00 sec)
 
 mysql> quit
 Bye
-#
 ```
 
 #### Create and populate the _test_ database
 Login as the mysql _root_ user:
 
 ```bash
-mysql -uroot -p
+% mysql -uroot -p
 Enter password: 
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 26
@@ -389,7 +388,7 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 ```
 Create and select the the _test_ database:
 
-```bash
+```sql
 mysql> CREATE DATABASE test;
 Query OK, 1 row affected (0.00 sec)
 mysql> USE test;
