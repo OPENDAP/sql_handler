@@ -74,7 +74,7 @@ SQLTextContainer::~SQLTextContainer()
     _dataset = 0;
     TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLTextContainer"<<endl);
 }
-;
+
 
 void SQLTextContainer::comparatorSubst(SQL_CONSTRAINT_SET& where)
 {
