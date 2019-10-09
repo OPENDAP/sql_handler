@@ -126,9 +126,9 @@ public:
 		for (size_t s = 0; s < _sizeOn; s++)
 			match[s] = m.match[s];
 
-		BESDEBUG( SQL_NAME,"CREATING: matched\nsize: "<<sz<<
-				"\nsizeOn: "<<_sizeOn<<
-				"\nmap: "<<map.to_string() << std::endl );
+		BESDEBUG( SQL_NAME,"CREATING: matched  size: "<< sz <<
+				" sizeOn: " << _sizeOn<<
+				" map: " << map.to_string() << std::endl );
 	}
 #if 0
 	// not needed
@@ -320,7 +320,7 @@ public:
 					for (size_t i = get_next(m.getMap(), 0); i < sz; i = get_next(m.getMap(), ++i)) {
 						m.setMatch(i_matched, row.substr(indexes[i].rm_so, indexes[i].rm_eo - indexes[i].rm_so));
 						BESDEBUG( SQL_NAME,"StringMatch::match extracting: "<<
-								"\ngroup: "<<i<<"\nfound: "<<m.getMatch(i_matched) << std::endl );
+								"group: " << i <<" found: "<<m.getMatch(i_matched) << std::endl );
 						i_matched++;
 					}
 					// store found groups

@@ -83,7 +83,7 @@ TESTDEBUG( SQL_NAME,
 #endif
 
 TESTDEBUG( SQL_NAME,"StringMatch::match extracting: "<<
-		"\ngroup: "<<*it<<"\nfound: "<<group_vect[gr]<<endl );
+		" group: "<<*it<<" found: "<<group_vect[gr]<<endl );
 			// next group to match
 			it++;
 			// store in position
