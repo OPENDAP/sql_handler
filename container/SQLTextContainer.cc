@@ -747,9 +747,9 @@ void SQLTextContainer::defineVariable(std::map<string, string> & vars, string & 
  */
 void SQLTextContainer::variableSubstitution(std::map<string, string> & vars, string & row, regmatch_t &key)
 {
-    BESDEBUG(SQL_NAME_TEST, "Row before substitution: "<<row<<
-//		"\nstart: "<<indexes[0].rm_so<<" end: "<<indexes[0].rm_eo<<
-            "\nV start: "<<key.rm_so<<" V end: "<<key.rm_eo<<endl);
+    BESDEBUG(SQL_NAME_TEST, "Row before substitution: " << row <<
+//		" start: "<< indexes[0].rm_so << " end: " << indexes[0].rm_eo <<
+            " V start: " << key.rm_so << " V end: " << key.rm_eo << endl);
     string var;
     if (key.rm_so != -1) {
         var = row.substr(key.rm_so, key.rm_eo - key.rm_so);
@@ -766,7 +766,7 @@ void SQLTextContainer::variableSubstitution(std::map<string, string> & vars, str
     }
     else {
         throw BESInternalError("SQLTextContainer: Variable not defined: " + var, __FILE__, __LINE__);
-    } BESDEBUG(SQL_NAME_TEST, "Row  after substitution: "<<row<<endl );
+    } BESDEBUG(SQL_NAME_TEST, "Row  after substitution: " << row <<endl );
 }
 
 /**
