@@ -110,7 +110,7 @@ public:
 			_sizeOn(m.count()), match(_sizeOn > 0 ? new std::string[_sizeOn]() : NULL), map(m)
 	{
 		BESDEBUG( SQL_NAME,"CREATING: matched size: "<< sz <<
-				 " nsizeOn: " << _sizeOn <<
+				 " sizeOn: " << _sizeOn <<
 				 " map: " << map.to_string() << std::endl );
 	}
 
