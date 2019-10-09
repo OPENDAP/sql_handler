@@ -74,7 +74,7 @@ SQLTextContainer::~SQLTextContainer()
     _dataset = 0;
     TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLTextContainer"<<endl);
 }
-;
+
 
 void SQLTextContainer::comparatorSubst(SQL_CONSTRAINT_SET& where)
 {
@@ -586,8 +586,8 @@ void SQLTextContainer::partTracking(bool &start, SQLH_DATASET_SECTION &new_secti
                                     _SQLH_DATASET_PARTS &reading_part, string & row,
                                     regmatch_t & tag)
 {
-    BESDEBUG(SQL_NAME_TEST, "Found a tag: " << row << "\nT start: "
-            << tag.rm_so << "T end: " << tag.rm_eo << endl);
+    BESDEBUG(SQL_NAME_TEST, "Found a tag. row: " << row << " Tag start: "
+            << tag.rm_so << "Tag end: " << tag.rm_eo << endl);
 
     // SECTION TAG
     if (row.compare(tag.rm_so, tag.rm_eo - tag.rm_so, _SQLH_DATASET_SECTION_TAG) == 0) {
@@ -715,9 +715,9 @@ void SQLTextContainer::defineVariable(std::map<string, string> & vars, string & 
 {
     BESDEBUG(SQL_NAME_TEST, "Storing variable definition: "<<row<<endl);
 
-    BESDEBUG(SQL_NAME_TEST, "Indexes (K for Key, V for Value):\nK start: "
-            <<key.rm_so<<" K end: "<<key.rm_eo<<
-            "\nV start: "<<val.rm_so<<" V end: "<<val.rm_eo<<endl);
+    BESDEBUG(SQL_NAME_TEST, "Indexes (K for Key, V for Value):" <<
+             " [K start: " << key.rm_so << " end: " << key.rm_eo << "]" <<
+             " [V start: " << val.rm_so << " end: " << val.rm_eo << "]" << endl);
 
     if (key.rm_so == -1 || val.rm_so == -1)
         throw BESInternalError("SQLTextContainer: row doesn't contain a valid variable definition: "
@@ -747,9 +747,9 @@ void SQLTextContainer::defineVariable(std::map<string, string> & vars, string & 
  */
 void SQLTextContainer::variableSubstitution(std::map<string, string> & vars, string & row, regmatch_t &key)
 {
-    BESDEBUG(SQL_NAME_TEST, "Row before substitution: "<<row<<
-//		"\nstart: "<<indexes[0].rm_so<<" end: "<<indexes[0].rm_eo<<
-            "\nV start: "<<key.rm_so<<" V end: "<<key.rm_eo<<endl);
+    BESDEBUG(SQL_NAME_TEST, "Row before substitution: " << row <<
+//		" start: "<< indexes[0].rm_so << " end: " << indexes[0].rm_eo <<
+            " V start: " << key.rm_so << " V end: " << key.rm_eo << endl);
     string var;
     if (key.rm_so != -1) {
         var = row.substr(key.rm_so, key.rm_eo - key.rm_so);
@@ -766,7 +766,7 @@ void SQLTextContainer::variableSubstitution(std::map<string, string> & vars, str
     }
     else {
         throw BESInternalError("SQLTextContainer: Variable not defined: " + var, __FILE__, __LINE__);
-    } BESDEBUG(SQL_NAME_TEST, "Row  after substitution: "<<row<<endl );
+    } BESDEBUG(SQL_NAME_TEST, "Row  after substitution: " << row <<endl );
 }
 
 /**
@@ -887,9 +887,9 @@ void SQLTextContainer::addKeyValue(SQLH_DATASET_SECTION &new_section,
 {
     BESDEBUG(SQL_NAME_TEST, "Found line in the form KEY=VALUE: "<<row<<endl);
 
-    BESDEBUG(SQL_NAME_TEST, "Indexes (K for Key, V for Value):\nK start: "<<
-            _key.rm_so<<" K end: "<<_key.rm_eo<<
-            "\nV start: "<<_val.rm_so<<" V end: "<<_val.rm_eo<<endl);
+    BESDEBUG(SQL_NAME_TEST, "Indexes (K for Key, V for Value):" <<
+             "[K start: " << _key.rm_so << " end: " << _key.rm_eo << "]" <<
+             "[V start: " << _val.rm_so << " end: " << _val.rm_eo << "]" << endl);
 
     string key;
     string val;

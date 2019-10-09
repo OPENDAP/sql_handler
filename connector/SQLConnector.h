@@ -37,7 +37,7 @@
  * data from the database.
  *
  */
-template <class SQL_TYPE, class ODBC_TYPE, class ERROR_TYPE, class MSG_TYPE=ERROR_TYPE>
+template <class SQL_TYPE, class ODBC_TYPE, class ERROR_TYPE, class MSG_TYPE/*=ERROR_TYPE*/>
 class SQLConnector :
 	public SQLSimpleConnector<SQL_TYPE,ODBC_TYPE>,
 	public SQLErrorConnector<ERROR_TYPE,MSG_TYPE> {

@@ -30,13 +30,11 @@
 // atoi
 #include <stdlib.h>
 
-
-#include "connector/SQLConnector.h"
-
 // unixODBC
 #include <sql.h>
 #include <sqlext.h>
 
+#include "connector/SQLConnector.h"
 
 #include "ODBCTypes.h"
 #include "SQLDefinitions.h"
@@ -155,7 +153,7 @@ public:
 		conn(NULL),		//!< connection handle
 		rc(0),			//!< d_status
 		toFetchRows(0),	//!< number of rows to fetch
-		strMsg(new char[_buf_size]()),	//!< error message
+		strMsg(""), 	//!< error message
 		msgEnvSeq(1),		//!< Env error sequence number // read API documentation
 		msgConnSeq(1),		//!< Conn error sequence number // read API documentation
 		msgStmtSeq(1),		//!< Stmt error sequence number // read API documentation
@@ -168,57 +166,68 @@ public:
 		descs(NULL),	//!< buffer (column descriptions)
 		names(NULL)	//!< buffer
 	{
-TESTDEBUG(ODBC_NAME,"CREATING: ODBCConnector"<<endl);
+        TESTDEBUG(ODBC_NAME,"CREATING: ODBCConnector"<<endl);
+        strMsg = new char[_buf_size];
 	};
 
-	virtual ~ODBCConnector(){
+	virtual ~ODBCConnector() {
 
-		// NONEDED
-		//		close();
+        // NONEDED
+        //		close();
 
-		// called by close()
-		//clean();
+        // called by close()
+        //clean();
 
-		// see clean()
-		if (strMsg)
-			delete [] strMsg;
-		strMsg=0;
+        // see clean()
+#if 0
+        if (strMsg) {
+            delete[] strMsg;
+            strMsg = 0;
+        }
+#endif
+
 	};
 
 private:
-	void clean(){
+	void clean() {
 
-		// set d_status to NOT READY
-		setReady(false);
+        // set d_status to NOT READY
+        setReady(false);
 
-		reset();
+        reset();
 
-		if (types)
-			delete [] types;
-		types=0;
-		if (sizes)
-			delete [] sizes;
-		sizes=0;
-		row_size=0;
-		if (descs)
-			delete [] descs;
-		descs=0;
-		if (names)
-			delete [] names;
-		names=0;
-		if (d_buf)
-			free(d_buf);
-		d_buf=0;
+        if (types) {
+            delete[] types;
+            types = 0;
+        }
+        if (sizes) {
+            delete[] sizes;
+            sizes = 0;
+        }
+        row_size = 0;
+        if (descs) {
+            delete[] descs;
+            descs = 0;
+        }
+        if (names) {
+            delete[] names;
+            names = 0;
+        }
+        if (d_buf) {
+            free(d_buf);
+            d_buf = 0;
+        }
 #if 0
-		/**
-		 * we have an action 'close()' which
-		 * may clear the error message.
-		 * This is done into the
-		 * destructor.
-		 */
-		if (strMsg)
-			delete [] strMsg;
-		strMsg=0;
+        /**
+         * we have an action 'close()' which
+         * may clear the error message.
+         * This is done into the
+         * destructor.
+         */
+        if (strMsg) {
+            delete [] strMsg;
+            strMsg=0;
+        }
 #endif
 
 		msgEnvSeq=1;	//!< Env error sequence number // read API documentation

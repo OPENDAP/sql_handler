@@ -27,6 +27,8 @@
 #ifndef ODBCTYPES_H_
 #define ODBCTYPES_H_
 
+#include <string>
+
 /**
  *  ERRORS
  *
@@ -39,8 +41,8 @@
 // SQLH
 typedef SQLRETURN ERROR_TYPE;
 //typedef SQLCHAR [] MSG_TYPE; // should be
-//typedef string MSG_TYPE; // workaround
-typedef char* MSG_TYPE; // workaround
+typedef std::string MSG_TYPE; // workaround
+//typedef char* MSG_TYPE; // workaround
 
 
 /**

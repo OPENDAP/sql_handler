@@ -109,9 +109,9 @@ public:
 	matched<sz>(std::bitset<sz> &m) :
 			_sizeOn(m.count()), match(_sizeOn > 0 ? new std::string[_sizeOn]() : NULL), map(m)
 	{
-		BESDEBUG( SQL_NAME,"CREATING: matched\nsize: "<<sz<<
-				"\nsizeOn: "<<_sizeOn<<
-				"\nmap: "<<map.to_string()<< std::endl );
+		BESDEBUG( SQL_NAME,"CREATING: matched size: "<< sz <<
+				 " sizeOn: " << _sizeOn <<
+				 " map: " << map.to_string() << std::endl );
 	}
 
 	/**
@@ -126,9 +126,9 @@ public:
 		for (size_t s = 0; s < _sizeOn; s++)
 			match[s] = m.match[s];
 
-		BESDEBUG( SQL_NAME,"CREATING: matched\nsize: "<<sz<<
-				"\nsizeOn: "<<_sizeOn<<
-				"\nmap: "<<map.to_string() << std::endl );
+		BESDEBUG( SQL_NAME,"CREATING: matched  size: "<< sz <<
+				" sizeOn: " << _sizeOn<<
+				" map: " << map.to_string() << std::endl );
 	}
 #if 0
 	// not needed
@@ -292,10 +292,10 @@ public:
                     BESDEBUG( SQL_NAME,"Processing group is " << i << " of " << sz << std::endl);
 					// check if limits are acceptable (group is found)
 					if (indexes[i].rm_so != -1) { // if group is found
-						BESDEBUG( SQL_NAME,"Group number " << i << " is found: " <<
-								"\nSubstring-> start: "<< indexes[i].rm_so <<
-								"\nSubstring-> size: "<< indexes[i].rm_eo-indexes[i].rm_so <<
-								"\nString-> size: " << row.size() << std::endl );
+						BESDEBUG( SQL_NAME,"Group number " << i << " is found:" <<
+								" Substring-> start: "<< indexes[i].rm_so <<
+								" Substring-> size: "<< indexes[i].rm_eo-indexes[i].rm_so <<
+								" String-> size: " << row.size() << std::endl );
 						gr.set(i, true);
 					}
 #if __TESTS__==1
@@ -320,7 +320,7 @@ public:
 					for (size_t i = get_next(m.getMap(), 0); i < sz; i = get_next(m.getMap(), ++i)) {
 						m.setMatch(i_matched, row.substr(indexes[i].rm_so, indexes[i].rm_eo - indexes[i].rm_so));
 						BESDEBUG( SQL_NAME,"StringMatch::match extracting: "<<
-								"\ngroup: "<<i<<"\nfound: "<<m.getMatch(i_matched) << std::endl );
+								"group: " << i <<" found: "<<m.getMatch(i_matched) << std::endl );
 						i_matched++;
 					}
 					// store found groups

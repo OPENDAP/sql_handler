@@ -44,7 +44,7 @@
  * @see SQLDefaultErrorFactory
  *
  */
-template <class ERROR_TYPE, class MSG_TYPE=ERROR_TYPE>
+template <class ERROR_TYPE, class MSG_TYPE/*=ERROR_TYPE*/>
 class SQLErrorConnector {
 	public:
 		/**

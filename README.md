@@ -300,9 +300,9 @@ first three tests began to return valid content so I made baselines:
 ## ----------------------------------------------------------- ##
 ## sql_module 1.0.0 test suite: bes.conf besstandalone getdap. ##
 ## ----------------------------------------------------------- ##
-  1: BESCMD mysql_1.das.bescmd                       ok
-  2: BESCMD mysql_1.dds.bescmd                       ok
-  3: BESCMD mysql_1.ddx.bescmd                       ok
+  1: BESCMD postgresql.das.bescmd                       ok
+  2: BESCMD postgresql.dds.bescmd                       ok
+  3: BESCMD postgresql.ddx.bescmd                       ok
 
 ## ------------- ##
 ## Test results. ##

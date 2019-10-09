@@ -30,7 +30,7 @@
 #include <BESDebug.h>
 
 #include <Sequence.h>
-//auto_ptr
+
 #include <memory>
 #if 0
 #include "utils/SharedPtr.h"
@@ -38,13 +38,15 @@
 
 #include "connector/SQLSimpleConnector.h"
 
+#define USE_AUTO_PTR 0
+
 /**
  * @brief SQLSequence is a libdap::Sequence implementation.
  */
 template<class SQL_TYPE, //connector TypeFactory
         class ODBC_TYPE> //connector TypeFactory
 class SQLSequence: public libdap::Sequence {
-#if 0
+#if USE_AUTO_PTR
     /**
      * We use auto_ptr to make possible transfer the connector
      * handle from this object to its copy.
@@ -55,10 +57,10 @@ class SQLSequence: public libdap::Sequence {
      * one copy of the sequence you may use SharedPtr and
      * check if use_count()==1 then conn->close() into dtor;
      */
-    //auto_ptr<SQLSimpleConnector<SQL_TYPE,ODBC_TYPE> > _conn;
-#endif
+    auto_ptr<SQLSimpleConnector<SQL_TYPE,ODBC_TYPE> > _conn;
+#else
     std::shared_ptr<SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> > _conn;
-
+#endif
 public:
 
     /**
@@ -67,7 +69,7 @@ public:
     SQLSequence(const string &name, const string &dataset, SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> * conn) :
             Sequence(name, dataset), _conn(conn)
     {
-        if (_conn) {
+        if ( _conn /* _conn.get() see USE_AUTO_PTR jhrg 10/7/19 */ ) {
             if (_conn->isReady()) {
                 _conn->reset();
             }
@@ -94,7 +96,7 @@ public:
     SQLSequence(SQLSequence & seq) :
             Sequence(seq), _conn(seq._conn)
     {
-        if (_conn) {
+        if ( _conn /* _conn.get() see USE_AUTO_PTR jhrg 10/7/19 */) {
             if (_conn->isReady()) {
                 _conn->reset();
             }
@@ -252,8 +254,7 @@ public:
          */
         if (_conn.get())
         _conn->close();
-#endif
-#if 1
+#else
         if (_conn.unique()) //use_count()==1
             _conn->close();
 #endif

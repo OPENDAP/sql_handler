@@ -24,10 +24,17 @@
  *      Author: carlo cancellieri
  */
 
+#include <string>
+#include <sstream>
+
 #include "ODBCConnector.h"
 
+#if 0
 using std::endl;
 using std::string;
+#endif
+
+using namespace std;
 
 bool
 ODBCConnector::connect()
@@ -35,10 +42,10 @@ ODBCConnector::connect()
 	BESDEBUG(ODBC_NAME,"ODBCConnector: Starting connection"<<endl);
 
 // WARNING -> DB password in printed out to DEBUG
-TESTDEBUG(ODBC_NAME,"ODBCConnector: Parameters:"
-		"\n    Server: "<<getParams().getServer()<<
-		"\n    Username: "<<getParams().getUser()<<
-		"\n    Password: "<<getParams().getPass()<<endl);
+	BESDEBUG(ODBC_NAME,"ODBCConnector Parameters" <<
+	         " Server=\"" << getParams().getServer() << "\"" <<
+		     " Username=\"" << getParams().getUser() << "\"" <<
+		     " Password=\"" << getParams().getPass() << "\"" << endl);
 	// clean previous buffer
 	if (isReady()){
 		clean();
@@ -60,11 +67,11 @@ TESTDEBUG(ODBC_NAME,"ODBCConnector: Parameters:"
 	 *
 	 */
 	//rc = SQLConnect(conn, ServerName, SQL_NTS, User, SQL_NTS, Password, SQL_NTS);
-#if 0
+#if 1
 	rc = SQLConnect(conn,(SQLCHAR*)getParams().getServer().c_str(), SQL_NTS,
 			(SQLCHAR*)getParams().getUser().c_str(), SQL_NTS,
 			(SQLCHAR*)getParams().getPass().c_str(), SQL_NTS);
-#endif
+#else
 	// I'm not sure this is any better than the above code, but suggests
 	// a way to cut down on the dumplication of information that's held
 	// in the odbc.ini file (that has username and password info too).
@@ -80,8 +87,8 @@ TESTDEBUG(ODBC_NAME,"ODBCConnector: Parameters:"
 			      (SQLCHAR*)dsn.c_str(), SQL_NTS,
 			      &OutConnectionString[0], SQL_MAX_OPTION_STRING_LENGTH,
 			      &OutConnectionStringLength, SQL_DRIVER_NOPROMPT);
-
-TESTDEBUG(ODBC_NAME,"ODBCConnector: Connection done with status: "<<rc<<endl);
+#endif
+	BESDEBUG(ODBC_NAME,"ODBCConnector: Connection done with status: "<<rc<<endl);
 
 	return true;
 }
@@ -389,7 +396,13 @@ ODBCConnector::getMsg(ERROR_TYPE * error_code){
 		msgEnvSeq=1; //reset error sequence index
 		msgStmtSeq=1; //reset error sequence index
 		msgConnSeq=1; //reset error sequence index
+		ostringstream oss;
+		oss << errNum << " " << strState << " No data";
+		strMsg = oss.str();
+#if 0
 		sprintf(strMsg,"%d %s %s\n", errNum, strState, "No data");
+#endif
+
 		return &strMsg;
 	}
 	else {
@@ -401,7 +414,13 @@ ODBCConnector::getMsg(ERROR_TYPE * error_code){
 				msgConnSeq, (SQLCHAR*)strState, &errNum,
 				(SQLCHAR*)msg, _buf_size, &msgLen))){
 			msgConnSeq++;
+            ostringstream oss;
+            oss << errNum << " " << strState << " " << msg;
+            strMsg = oss.str();
+#if 0
 			sprintf(strMsg,"%d %s %s\n", errNum, strState, msg);
+#endif
+
 			return &strMsg;
 		}
 		else
@@ -412,7 +431,13 @@ ODBCConnector::getMsg(ERROR_TYPE * error_code){
 				msgStmtSeq, (SQLCHAR*)strState, &errNum,
 				(SQLCHAR*)msg, _buf_size, &msgLen))){
 			msgStmtSeq++;
+	        ostringstream oss;
+	        oss << errNum << " " << strState << " " << msg;
+	        strMsg = oss.str();
+#if 0
 			sprintf(strMsg,"%d %s %s\n", errNum, strState, msg);
+#endif
+
 			return &strMsg;
 		}
 		else
@@ -423,13 +448,23 @@ ODBCConnector::getMsg(ERROR_TYPE * error_code){
 				msgEnvSeq, (SQLCHAR*)strState, &errNum,
 				(SQLCHAR*)msg, _buf_size, &msgLen))){
 			msgEnvSeq++;
+            ostringstream oss;
+            oss << errNum << " " << strState << " " << msg;
+            strMsg = oss.str();
+#if 0
 			sprintf(strMsg,"%d %s %s\n", errNum, strState, msg);
+#endif
+
 			return &strMsg;
 		}
 		else
 		{
 			BESDEBUG(ODBC_NAME,"ODBCConnector: GetError (env status): "<<rc2<<endl);
+			strMsg = "Unable to get error message";
+#if 0
 			sprintf(strMsg,"Unable to get error message");
+#endif
+
 			return &strMsg;
 		}
 	}
