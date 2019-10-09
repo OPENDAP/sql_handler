@@ -715,9 +715,9 @@ void SQLTextContainer::defineVariable(std::map<string, string> & vars, string & 
 {
     BESDEBUG(SQL_NAME_TEST, "Storing variable definition: "<<row<<endl);
 
-    BESDEBUG(SQL_NAME_TEST, "Indexes (K for Key, V for Value):\nK start: "
-            <<key.rm_so<<" K end: "<<key.rm_eo<<
-            "\nV start: "<<val.rm_so<<" V end: "<<val.rm_eo<<endl);
+    BESDEBUG(SQL_NAME_TEST, "Indexes (K for Key, V for Value):" <<
+             " [K start: " << key.rm_so << " end: " << key.rm_eo << "]" <<
+             " [V start: " << val.rm_so << " end: " << val.rm_eo << "]" << endl);
 
     if (key.rm_so == -1 || val.rm_so == -1)
         throw BESInternalError("SQLTextContainer: row doesn't contain a valid variable definition: "
