@@ -239,13 +239,13 @@ private:
 #if 1
 		catch (SQLInternalError &ie) {
 			// this error shouldn't be filtered!
-			BESDEBUG(SQL_NAME, ie.get_message());
+			BESDEBUG(SQL_NAME, ie.get_message() << std::endl);
 			throw;
 		}
 #endif
 		catch (SQLInternalFatalError &ife) {
 			// this error shouldn't be filtered!
-			BESDEBUG(SQL_NAME, ife.get_message());
+			BESDEBUG(SQL_NAME, ife.get_message() << std::endl);
 			throw;
 		}
 		/**
@@ -272,7 +272,7 @@ private:
 			 +e.get_message(),e.get_file(),e.get_line());
 			 */
 			// Generic BESError shouldn't be throw
-			BESDEBUG(SQL_NAME, e.get_message());
+			BESDEBUG(SQL_NAME, e.get_message() << std::endl);
 		}
 		catch (BESError &e) {
 			throw SQLInternalFatalError("SQLActionManager: running ACTIONs-> " + e.get_message(), e.get_file(),
