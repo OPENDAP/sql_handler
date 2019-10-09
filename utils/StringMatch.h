@@ -109,9 +109,9 @@ public:
 	matched<sz>(std::bitset<sz> &m) :
 			_sizeOn(m.count()), match(_sizeOn > 0 ? new std::string[_sizeOn]() : NULL), map(m)
 	{
-		BESDEBUG( SQL_NAME,"CREATING: matched\nsize: "<<sz<<
-				"\nsizeOn: "<<_sizeOn<<
-				"\nmap: "<<map.to_string()<< std::endl );
+		BESDEBUG( SQL_NAME,"CREATING: matched size: "<< sz <<
+				 " nsizeOn: " << _sizeOn <<
+				 " map: " << map.to_string() << std::endl );
 	}
 
 	/**
@@ -292,10 +292,10 @@ public:
                     BESDEBUG( SQL_NAME,"Processing group is " << i << " of " << sz << std::endl);
 					// check if limits are acceptable (group is found)
 					if (indexes[i].rm_so != -1) { // if group is found
-						BESDEBUG( SQL_NAME,"Group number " << i << " is found: " <<
-								"\nSubstring-> start: "<< indexes[i].rm_so <<
-								"\nSubstring-> size: "<< indexes[i].rm_eo-indexes[i].rm_so <<
-								"\nString-> size: " << row.size() << std::endl );
+						BESDEBUG( SQL_NAME,"Group number " << i << " is found:" <<
+								" Substring-> start: "<< indexes[i].rm_so <<
+								" Substring-> size: "<< indexes[i].rm_eo-indexes[i].rm_so <<
+								" String-> size: " << row.size() << std::endl );
 						gr.set(i, true);
 					}
 #if __TESTS__==1
