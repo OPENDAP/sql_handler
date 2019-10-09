@@ -30,13 +30,11 @@
 // atoi
 #include <stdlib.h>
 
-
-#include "connector/SQLConnector.h"
-
 // unixODBC
 #include <sql.h>
 #include <sqlext.h>
 
+#include "connector/SQLConnector.h"
 
 #include "ODBCTypes.h"
 #include "SQLDefinitions.h"
