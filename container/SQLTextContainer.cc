@@ -586,8 +586,8 @@ void SQLTextContainer::partTracking(bool &start, SQLH_DATASET_SECTION &new_secti
                                     _SQLH_DATASET_PARTS &reading_part, string & row,
                                     regmatch_t & tag)
 {
-    BESDEBUG(SQL_NAME_TEST, "Found a tag: " << row << "\nT start: "
-            << tag.rm_so << "T end: " << tag.rm_eo << endl);
+    BESDEBUG(SQL_NAME_TEST, "Found a tag. row: " << row << " Tag start: "
+            << tag.rm_so << "Tag end: " << tag.rm_eo << endl);
 
     // SECTION TAG
     if (row.compare(tag.rm_so, tag.rm_eo - tag.rm_so, _SQLH_DATASET_SECTION_TAG) == 0) {
@@ -887,9 +887,9 @@ void SQLTextContainer::addKeyValue(SQLH_DATASET_SECTION &new_section,
 {
     BESDEBUG(SQL_NAME_TEST, "Found line in the form KEY=VALUE: "<<row<<endl);
 
-    BESDEBUG(SQL_NAME_TEST, "Indexes (K for Key, V for Value):\nK start: "<<
-            _key.rm_so<<" K end: "<<_key.rm_eo<<
-            "\nV start: "<<_val.rm_so<<" V end: "<<_val.rm_eo<<endl);
+    BESDEBUG(SQL_NAME_TEST, "Indexes (K for Key, V for Value):" <<
+             "[K start: " << _key.rm_so << " end: " << _key.rm_eo << "]" <<
+             "[V start: " << _val.rm_so << " end: " << _val.rm_eo << "]" << endl);
 
     string key;
     string val;
