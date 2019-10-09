@@ -42,10 +42,10 @@ ODBCConnector::connect()
 	BESDEBUG(ODBC_NAME,"ODBCConnector: Starting connection"<<endl);
 
 // WARNING -> DB password in printed out to DEBUG
-TESTDEBUG(ODBC_NAME,"ODBCConnector: Parameters:"
-		"\n    Server: "<<getParams().getServer()<<
-		"\n    Username: "<<getParams().getUser()<<
-		"\n    Password: "<<getParams().getPass()<<endl);
+	BESDEBUG(ODBC_NAME,"ODBCConnector Parameters"<<
+	         " Server: " << getParams().getServer() <<
+		     " Username: " << getParams().getUser() <<
+		     " Password: " << getParams().getPass() << endl);
 	// clean previous buffer
 	if (isReady()){
 		clean();
@@ -88,7 +88,7 @@ TESTDEBUG(ODBC_NAME,"ODBCConnector: Parameters:"
 			      &OutConnectionString[0], SQL_MAX_OPTION_STRING_LENGTH,
 			      &OutConnectionStringLength, SQL_DRIVER_NOPROMPT);
 
-TESTDEBUG(ODBC_NAME,"ODBCConnector: Connection done with status: "<<rc<<endl);
+	BESDEBUG(ODBC_NAME,"ODBCConnector: Connection done with status: "<<rc<<endl);
 
 	return true;
 }
