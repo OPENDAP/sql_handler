@@ -72,7 +72,7 @@
  * @see ODBCErrorFactoryComponent
  */
 template <	class ERROR_TYPE,			//< connector && ErrorFactory
-			class MSG_TYPE=ERROR_TYPE,	//< connector && ErrorFactory
+			class MSG_TYPE/*=ERROR_TYPE*/,	//< connector && ErrorFactory
 			class OUT=void>				//< ErrorFactory
 class SQLErrorFactory :
 	public SQLActionFactory<ERROR_TYPE,MSG_TYPE,OUT> {
