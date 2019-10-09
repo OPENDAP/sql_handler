@@ -42,10 +42,10 @@ ODBCConnector::connect()
 	BESDEBUG(ODBC_NAME,"ODBCConnector: Starting connection"<<endl);
 
 // WARNING -> DB password in printed out to DEBUG
-	BESDEBUG(ODBC_NAME,"ODBCConnector Parameters"<<
-	         " Server: " << getParams().getServer() <<
-		     " Username: " << getParams().getUser() <<
-		     " Password: " << getParams().getPass() << endl);
+	BESDEBUG(ODBC_NAME,"ODBCConnector Parameters" <<
+	         " Server=\"" << getParams().getServer() << "\"" <<
+		     " Username=\"" << getParams().getUser() << "\"" <<
+		     " Password=\"" << getParams().getPass() << "\"" << endl);
 	// clean previous buffer
 	if (isReady()){
 		clean();
@@ -67,11 +67,11 @@ ODBCConnector::connect()
 	 *
 	 */
 	//rc = SQLConnect(conn, ServerName, SQL_NTS, User, SQL_NTS, Password, SQL_NTS);
-#if 0
+#if 1
 	rc = SQLConnect(conn,(SQLCHAR*)getParams().getServer().c_str(), SQL_NTS,
 			(SQLCHAR*)getParams().getUser().c_str(), SQL_NTS,
 			(SQLCHAR*)getParams().getPass().c_str(), SQL_NTS);
-#endif
+#else
 	// I'm not sure this is any better than the above code, but suggests
 	// a way to cut down on the dumplication of information that's held
 	// in the odbc.ini file (that has username and password info too).
@@ -87,7 +87,7 @@ ODBCConnector::connect()
 			      (SQLCHAR*)dsn.c_str(), SQL_NTS,
 			      &OutConnectionString[0], SQL_MAX_OPTION_STRING_LENGTH,
 			      &OutConnectionStringLength, SQL_DRIVER_NOPROMPT);
-
+#endif
 	BESDEBUG(ODBC_NAME,"ODBCConnector: Connection done with status: "<<rc<<endl);
 
 	return true;
