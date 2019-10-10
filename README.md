@@ -565,8 +565,28 @@ I re-enabled the authentication (see ODBCConnecor.cc lines 70-94) and added the 
 With the correct user and passowrd installed in the aforementioned file the handler was able to connect 
 to the MySQL service.
 
-At this point the code apears to be blocked at an unaticipated data type
+At this point the code apears to be blocked at an unaticipated data type.
 
+Running any of these commands in the tests directory:
+
+```bash
+besstandalone -c bes.conf -d "cerr,all" -i sql/mysql.dds.bescmd
+besstandalone -c bes.conf -d "cerr,all" -i sql/mysql.das.bescmd
+besstandalone -c bes.conf -d "cerr,all" -i sql/mysql.data.bescmd
+```
+Will produce this error:
+
+```bash
+SQLRequestHandler: Error: 7 Message: SQL Handler: The datatype read from the Data Source is not supported. The problem type code is: -8 File: unixODBC/ODBCTypeFactoryComponent.cc Line: 184
+```
+Hmmmmm
+
+Also of note is that running besstandalone without the debugging enabled does not produce a meaningful messsage:
+
+```xml
+<Message>SQLRequestHandler: Error occurred, bad constraints specified or no active database server for this dataset. Please,try a less restrictive constraint or contact the administrator.</Message>
+```
+This should be corrected in addition to correcting the underlying bug.
 
 
 
