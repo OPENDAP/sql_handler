@@ -562,10 +562,10 @@ woot.
 
 AT this point I had to revist the `sql_handler` code because there were issues with authentication.
 I re-enabled the authentication (see ODBCConnecor.cc lines 70-94) and added the "data" file data/mysql.sql
-With the correct user and passowrd installed in the aforementioned file the handler was able to connect 
+With the correct user and passoword installed in the aforementioned file the handler was able to connect 
 to the MySQL service.
 
-At this point the code apears to be blocked at an unaticipated data type.
+At this point the code apears to be failing because of an unanticipated data type.
 
 Running any of these commands in the tests directory:
 
@@ -586,7 +586,7 @@ Also of note is that running besstandalone without the debugging enabled does no
 ```xml
 <Message>SQLRequestHandler: Error occurred, bad constraints specified or no active database server for this dataset. Please,try a less restrictive constraint or contact the administrator.</Message>
 ```
-This should be corrected in addition to correcting the underlying bug.
+This should be corrected, in addition to correcting the underlying unanticipated data type bug.
 
 
 
