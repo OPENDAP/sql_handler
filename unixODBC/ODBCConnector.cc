@@ -68,6 +68,10 @@ ODBCConnector::connect()
 	 */
 	//rc = SQLConnect(conn, ServerName, SQL_NTS, User, SQL_NTS, Password, SQL_NTS);
 #if 1
+	// I turned this back on in order to get MySQL-8.x to work as this code would
+	// not correctly authenticate without it. After doing so, and thus disabling James' change below
+	// the PostgreSQL tests continued to work and the handler was able to use the "user" and "pass"
+	// sections of the data/mysql.sql definition to successfully authenticate with MySQL.
 	rc = SQLConnect(conn,(SQLCHAR*)getParams().getServer().c_str(), SQL_NTS,
 			(SQLCHAR*)getParams().getUser().c_str(), SQL_NTS,
 			(SQLCHAR*)getParams().getPass().c_str(), SQL_NTS);

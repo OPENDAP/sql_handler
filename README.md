@@ -560,6 +560,13 @@ woot.
 
 (That was ridculous, unneccessarily complex, and non-intuitive)
 
+AT this point I had to revist the `sql_handler` code because there were issues with authentication.
+I re-enabled the authentication (see ODBCConnecor.cc lines 70-94) and added the "data" file data/mysql.sql
+With the correct user and passowrd installed in the aforementioned file the handler was able to connect 
+to the MySQL service.
+
+At this point the code apears to be blocked at an unaticipated data type
+
 
 
 
