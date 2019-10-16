@@ -138,28 +138,7 @@ string SQLTextContainer::buildQuery()
      * attribute before append to the query.
      */
     string query = "SELECT ";
-    // buffer
     string buf;
-#if 0
-    /**
-     * >> 1- Why OLFS do not fill in attributes?
-     * >> why we have get_attributes into a BESContainer if it is not used?
-     * >>(all the constraint string goes in get_constraint()).
-     *
-     * One of the things that we wrote into one of our modules
-     * here at RPI (not OPeNDAP) was the idea of constraining your
-     * attribute list as well as your variable list. We also wanted
-     * to be able to aggregate attributes. So when I wrote the BES,
-     * I added this idea into the container. In addition to the variable
-     * constraint, we wanted attribute constraint as well, which is what
-     * get_attributes gives me.
-     *
-     * For now, I don't think you need to worry about it,
-     * unless you want to. Nobody else uses that except RPI.
-     * Patrick
-     */
-    string attributes=this->get_attributes();
-#endif
 
     /**
      * still remain attributes into the constraint string
@@ -175,8 +154,7 @@ string SQLTextContainer::buildQuery()
      */
     size_t split = buf.find("&");
 
-    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer split is: "<<split<<
-            "\nBuf: "<<buf<<endl );
+    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer split is: "<<split<< "\nBuf: "<<buf<<endl );
 
     string attributes;
     string constraints;
@@ -246,7 +224,6 @@ string SQLTextContainer::buildQuery()
      */
 
     BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::WHERE starting with:"<<
-//	"\nContainer constraints ->"<<q.getWhere()<<"<-"<<
             "\nOnTheFly  constraints ->"<<constraints<<"<-"<<endl );
 
     // where is optional and could be empty
@@ -330,8 +307,6 @@ string SQLTextContainer::buildQuery()
                      */
                     buf += (*ai).getFullName();
                 }
-                // append name
-//				buf+=(*wi).getAttribute().getName();
                 // append comparator
                 if (!(*wi).getSubstitute().empty())
                     buf += (*wi).getSubstitute();
@@ -356,7 +331,135 @@ string SQLTextContainer::buildQuery()
 
     BESDEBUG(SQL_NAME, "SQLTextContainer: QUERY: "<<query<<endl);
     return query;
+}
 
+string SQLTextContainer::buildCountQuery()
+{
+    BESDEBUG(SQL_NAME, "SQLTextContainer: Building query: "<<endl);
+    SQLQuery &q = getQuery();
+
+    /**
+     * build an attribute set ordered
+     * by position and fill it to reorder the
+     * attribute before append to the query.
+     */
+    string query = "SELECT COUNT(*)";
+
+    /**
+     *  FROM is fixed
+     *  @note: Formally could be a good idea to set
+     *  the symbolic name of the dataset to the
+     *  resulting table anyway the aliasing
+     *  SQL dialect may vary using different RDMS so
+     *  we do not proceed to rename.
+     */
+    query += " FROM " + q.getFrom();
+
+    // where is optional and could be empty
+    if (!q.getWhere().empty()) {
+        /**
+         * operate comparator substitution
+         * on container constraints
+         */
+        this->comparatorSubst(q.getWhere());
+
+        SQLQuery::whereIterator wi = q.getWhere().begin();
+        buf += (*wi++).toString();
+        while (wi != q.getWhere().end()) {
+            buf += _SQLH_CONT_REG_CONSTR_BASE_JOIN;
+            buf += (*wi).toString();
+            wi++;
+        }
+    }
+
+    // ON THE FLY SPECIFIED CONSTRAINTS
+
+    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::constrToWhere mid: "<<buf<<endl );
+    if (!constraints.empty()) {
+
+        // on the fly constraints are not empty
+        SQL_CONSTRAINT_SET in_constr = SQLQuery::loadConstraints(constraints);
+
+        /**
+         * operate comparator substitution
+         * on 'on the fly' specified constraints
+         */
+        this->comparatorSubst(in_constr);
+        // on the fly constraints are correctly loaded into 'in_constr'
+        if (!in_constr.empty()) {
+            SQLQuery::whereIterator wi = in_constr.begin();
+            do {
+                if (!buf.empty()) {
+                    // '_where' contain previous conditions join (AND)
+                    buf += _SQLH_CONT_REG_CONSTR_BASE_JOIN;
+                }
+                /**
+                 * we still have to operate attribute prefix
+                 * substitution from:
+                 * catalogContainer.attribute (coming from OLFS)
+                 * to
+                 * table_1.attribute (found in dataset)
+                 * so let's search by name
+                 *
+                 */
+                SQLQuery::attrIterator ai = q.getSelect().find((*wi).getAttribute());
+
+                // if found
+                if (ai != q.getSelect().end()) {
+                    /**
+                     * substitute the attribute FullName.
+                     * Why not use alias? It is not possible.
+                     * How an SQL query gets evaluated. Note that this is a conceptual description;
+                     * a good RDBMS will change the order of operation to optimize; as long
+                     * as the results remain the same that is not a problem.
+                     * Step 1: Evaluate FROM clause, build intermediate table from all rows in
+                     * the tables used, joined together on the conditions given. If old style
+                     * join syntax is used (with the ON conditions in the WHERE clause), this
+                     * step will yield the full carthesian product of all tables used.
+                     * Step 2: Evaluate WHERE clause, remove rows that don't match the criteria
+                     * from intermediate table.
+                     * Step 3: Evaluate GROUP BY clause, group rows together according to the
+                     * specified arguments.
+                     * Step 4: Evaluate HAVING clause, remove groups that don't match the
+                     * criteria from intermediate table.
+                     * Step 5: Evaluate SELECT clause, build result set to be returned from the
+                     * data in the intermediate table.
+                     * Step 6: Evaluate ORDER BY, perform sorting.
+                     * Officially, columns that are not included in the SELECT clause are not
+                     * available for sorting. Many products (like SQL Server) do allow this, but
+                     * it is a non-standard extension of the ISO/ANSI SQL-92 specification (and I
+                     * don't think that later SQL specifications included this).
+                     * Since the alias of a columns or expression is only effective from step 5
+                     * but the WHERE clause is evaluated as step 2, it is clear that an alias
+                     * can't be used in the WHERE clause.
+                     * @note: thanks to Mr. Hugo Kornelis
+                     */
+                    buf += (*ai).getFullName();
+                }
+                // append comparator
+                if (!(*wi).getSubstitute().empty())
+                    buf += (*wi).getSubstitute();
+                else
+                    buf += (*wi).getComparator();
+                // append value
+                buf += (*wi).getVal();
+            } while (++wi != in_constr.end());
+        }
+    }
+
+    if (!buf.empty()) {
+        // we have: simply use it
+        query += " WHERE " + buf;
+    }
+
+    query += ";";
+
+    /**
+     * @todo ADD some 'ORDER BY' other funny options
+     */
+
+    BESDEBUG(SQL_NAME, "SQLTextContainer: QUERY: "<<query<<endl);
+    return query;
 }
 
 /**
@@ -390,14 +493,9 @@ std::bitset<_SQLH_DATASET_PARTS_NUM> SQLTextContainer::requirements()
 
 bool SQLTextContainer::read() throw (BESError)
 {
-
     BESDEBUG(SQL_NAME, "SQLTextContainer: start reading dataset"<<endl);
     // to read the accessed file
     std::fstream file;
-#if 0
-    // pointer to the new section to add
-    SQLH_DATASET_SECTION *new_section=NULL;
-#endif
     // FIXME Move the compiles inside the try/catch
     regex_t _reg_v;
     if (regcomp(&_reg_v, _SQLH_DATASET_REG_VAR, REG_EXTENDED) != 0) {

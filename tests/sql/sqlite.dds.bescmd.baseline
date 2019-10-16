@@ -1,0 +1,7 @@
+Dataset {
+    Sequence {
+        Int32 a;
+        Float64 b;
+        String c;
+    } sqlite_test;
+} sqlite.sql;

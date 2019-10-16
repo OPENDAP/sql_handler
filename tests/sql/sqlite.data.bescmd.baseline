@@ -1,0 +1,8 @@
+The data:
+Sequence {
+    Int32 a;
+    Float64 b;
+    String c;
+} sqlite_test = { 
+0: { FAIL } };
+

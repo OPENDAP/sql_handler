@@ -1,100 +1,94 @@
- /*
- * ODBCConnector.cpp
- *
- * This file is part of the SQLHandler a C++ library to add relational
- * database access to the OPeNDAP Hyrax back-end server.
- * Copyright (C) 2010  Carlo Cancellieri <ccancellieri@hotmail.com>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA  02110-1301  USA
- *
- *  Created on: 22/giu/2010
- *      Author: carlo cancellieri
- */
+/*
+* ODBCConnector.cpp
+*
+* This file is part of the SQLHandler a C++ library to add relational
+* database access to the OPeNDAP Hyrax back-end server.
+* Copyright (C) 2010  Carlo Cancellieri <ccancellieri@hotmail.com>
+*
+* This library is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+* MA  02110-1301  USA
+*
+*  Created on: 22/giu/2010
+*      Author: carlo cancellieri
+*/
 
 #include <string>
 #include <sstream>
 
 #include "ODBCConnector.h"
 
-#if 0
-using std::endl;
-using std::string;
-#endif
-
 using namespace std;
 
 bool
-ODBCConnector::connect()
-{
-	BESDEBUG(ODBC_NAME,"ODBCConnector: Starting connection"<<endl);
+ODBCConnector::connect() {
+    BESDEBUG(ODBC_NAME, "ODBCConnector: Starting connection" << endl);
 
 // WARNING -> DB password in printed out to DEBUG
-	BESDEBUG(ODBC_NAME,"ODBCConnector Parameters" <<
-	         " Server=\"" << getParams().getServer() << "\"" <<
-		     " Username=\"" << getParams().getUser() << "\"" <<
-		     " Password=\"" << getParams().getPass() << "\"" << endl);
-	// clean previous buffer
-	if (isReady()){
-		clean();
-	}
+    BESDEBUG(ODBC_NAME, "ODBCConnector Parameters" <<
+                                                   " Server=\"" << getParams().getServer() << "\"" <<
+                                                   " Username=\"" << getParams().getUser() << "\"" <<
+                                                   " Password=\"" << getParams().getPass() << "\"" << endl);
+    // clean previous buffer
+    if (isReady()) {
+        clean();
+    }
 
-	// Allocate an environment handle
-	rc = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &env);
+    // Allocate an environment handle
+    rc = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &env);
 
-	//@todo check this on MS ODBC
-	rc = SQLSetEnvAttr(env, SQL_ATTR_ODBC_VERSION, (void*) SQL_OV_ODBC3, 0);
+    //@todo check this on MS ODBC
+    rc = SQLSetEnvAttr(env, SQL_ATTR_ODBC_VERSION, (void *) SQL_OV_ODBC3, 0);
 
-	// Allocate a connection handle
-	rc = SQLAllocHandle(SQL_HANDLE_DBC, env, &conn);
+    // Allocate a connection handle
+    rc = SQLAllocHandle(SQL_HANDLE_DBC, env, &conn);
 
-	/**
-	 *  @todo Connect using DSN
-	 *  SQLDriverConnect(conn, NULL, "DSN=PostgreSQL;", SQL_NTS,
-	 *  	NULL, 0, NULL, SQL_DRIVER_COMPLETE);
-	 *
-	 */
-	//rc = SQLConnect(conn, ServerName, SQL_NTS, User, SQL_NTS, Password, SQL_NTS);
+    /**
+     *  @todo Connect using DSN
+     *  SQLDriverConnect(conn, NULL, "DSN=PostgreSQL;", SQL_NTS,
+     *  	NULL, 0, NULL, SQL_DRIVER_COMPLETE);
+     *
+     */
+    //rc = SQLConnect(conn, ServerName, SQL_NTS, User, SQL_NTS, Password, SQL_NTS);
 #if 1
-	// I turned this back on in order to get MySQL-8.x to work as this code would
-	// not correctly authenticate without it. After doing so, and thus disabling James' change below
-	// the PostgreSQL tests continued to work and the handler was able to use the "user" and "pass"
-	// sections of the data/mysql.sql definition to successfully authenticate with MySQL.
-	rc = SQLConnect(conn,(SQLCHAR*)getParams().getServer().c_str(), SQL_NTS,
-			(SQLCHAR*)getParams().getUser().c_str(), SQL_NTS,
-			(SQLCHAR*)getParams().getPass().c_str(), SQL_NTS);
+    // I turned this back on in order to get MySQL-8.x to work as this code would
+    // not correctly authenticate without it. After doing so, and thus disabling James' change below
+    // the PostgreSQL tests continued to work and the handler was able to use the "user" and "pass"
+    // sections of the data/mysql.sql definition to successfully authenticate with MySQL.
+    rc = SQLConnect(conn, (SQLCHAR *) getParams().getServer().c_str(), SQL_NTS,
+                    (SQLCHAR *) getParams().getUser().c_str(), SQL_NTS,
+                    (SQLCHAR *) getParams().getPass().c_str(), SQL_NTS);
 #else
-	// I'm not sure this is any better than the above code, but suggests
-	// a way to cut down on the dumplication of information that's held
-	// in the odbc.ini file (that has username and password info too).
-	// I added extra parameters to get the connection string because I'm
-	// chasing down memory errors and one is reported involoving this
-	// call. It neither helped nor hurt... The pointers can be replaced
-	// with NULL and the length with 0. jhrg 9/7/12
-	string dsn = "DSN=";
-	dsn.append(getParams().getServer());
-	std::vector<SQLCHAR> OutConnectionString(SQL_MAX_OPTION_STRING_LENGTH + 1);
-	SQLSMALLINT OutConnectionStringLength;
-	rc = SQLDriverConnect(conn, NULL,
-			      (SQLCHAR*)dsn.c_str(), SQL_NTS,
-			      &OutConnectionString[0], SQL_MAX_OPTION_STRING_LENGTH,
-			      &OutConnectionStringLength, SQL_DRIVER_NOPROMPT);
+    // I'm not sure this is any better than the above code, but suggests
+    // a way to cut down on the duplication of information that's held
+    // in the odbc.ini file (that has username and password info too).
+    // I added extra parameters to get the connection string because I'm
+    // chasing down memory errors and one is reported involoving this
+    // call. It neither helped nor hurt... The pointers can be replaced
+    // with NULL and the length with 0. jhrg 9/7/12
+    string dsn = "DSN=";
+    dsn.append(getParams().getServer());
+    std::vector<SQLCHAR> OutConnectionString(SQL_MAX_OPTION_STRING_LENGTH + 1);
+    SQLSMALLINT OutConnectionStringLength;
+    rc = SQLDriverConnect(conn, NULL,
+                  (SQLCHAR*)dsn.c_str(), SQL_NTS,
+                  &OutConnectionString[0], SQL_MAX_OPTION_STRING_LENGTH,
+                  &OutConnectionStringLength, SQL_DRIVER_NOPROMPT);
 #endif
-	BESDEBUG(ODBC_NAME,"ODBCConnector: Connection done with status: "<<rc<<endl);
+    BESDEBUG(ODBC_NAME, "ODBCConnector: Connection done with status: " << rc << endl);
 
-	return true;
+    return true;
 }
 
 
@@ -104,113 +98,112 @@ ODBCConnector::connect()
  * if column parameter is 0 returns the row size;
  */
 SQLLEN &
-ODBCConnector::getColSize(size_t column){
-	if (sizes){
-		if (column==getCols())
-			return row_size;
-		if(column<getCols()){
-			return sizes[column];
-		}
-		else
-			throw SQLInternalError("Index provided exceeds the array limit!",
-					__FILE__,__LINE__);
-	}
-	else {
+ODBCConnector::getColSize(size_t column) {
+    if (sizes) {
+        if (column == getCols())
+            return row_size;
+        if (column < getCols()) {
+            return sizes[column];
+        }
+        else
+            throw SQLInternalError("Index provided exceeds the array limit!",
+                                   __FILE__, __LINE__);
+    }
+    else {
 
-		if (getCols()>0){
-			sizes=new SQLLEN[getCols()]();
-			//(SQLSMALLINT*)calloc(getCols(),sizeof(SQLSMALLINT));
-		}
-		else
-			throw SQLInternalError(
-					"Unable to calculate size for a ResultSet of 0 columns",
-						__FILE__,__LINE__);
+        if (getCols() > 0) {
+            sizes = new SQLLEN[getCols()]();
+            //(SQLSMALLINT*)calloc(getCols(),sizeof(SQLSMALLINT));
+        }
+        else
+            throw SQLInternalError(
+                    "Unable to calculate size for a ResultSet of 0 columns",
+                    __FILE__, __LINE__);
 
-		for (size_t col=0; col<getCols(); col++)
-		{
-			SQLLEN actual_column_size;
-			rc=SQLColAttribute(stmt ,((SQLSMALLINT)col+1),
-				SQL_DESC_LENGTH,NULL, 0, NULL, &actual_column_size);
-TESTDEBUG(ODBC_NAME,"ODBCConnector: Getting actual_col_size: "<<
-	actual_column_size<<" for column: "<<col<<" exit status: "<<rc<<endl);
-			/**
-			 *  force check for errors here
-			 *  since this is a critical operation
-			 */
-			if (sef)
-				SQLErrorManager<void>::trigger(_SQLH_ON_ALWAYS,*sef);
-			sizes[col]=actual_column_size;
-			row_size+=actual_column_size;
-		}
-		return getColSize(column);
-	}
+        for (size_t col = 0; col < getCols(); col++) {
+            SQLLEN actual_column_size;
+            rc = SQLColAttribute(stmt, ((SQLSMALLINT) col + 1),
+                                 SQL_DESC_LENGTH, NULL, 0, NULL, &actual_column_size);
+            TESTDEBUG(ODBC_NAME, "ODBCConnector: Getting actual_col_size: " <<
+                                                                            actual_column_size << " for column: " << col
+                                                                            << " exit status: " << rc << endl);
+            /**
+             *  force check for errors here
+             *  since this is a critical operation
+             */
+            if (sef)
+                SQLErrorManager<void>::trigger(_SQLH_ON_ALWAYS, *sef);
+            sizes[col] = actual_column_size;
+            row_size += actual_column_size;
+        }
+        return getColSize(column);
+    }
 }
 
 SQL_TYPE
-ODBCConnector::getCType(SQLLEN /* jhrg &*/ sql_type)
-{
-	switch(sql_type){
-	case SQL_CHAR:
-	case SQL_VARCHAR:
-	case SQL_LONGVARCHAR:
-		return SQL_C_CHAR;
-		break;
-	case SQL_WCHAR:
-	case SQL_WVARCHAR:
-	case SQL_WLONGVARCHAR:
-		return SQL_C_WCHAR;
-		break;
-	case SQL_DECIMAL:
-	case SQL_NUMERIC:
-		return SQL_C_LONG; // not default
-		break;
-	case SQL_BIT:
-		return SQL_C_BIT;
-		break;
-	case SQL_TINYINT:
-		return SQL_C_TINYINT;
-		break;
-	case SQL_SMALLINT:
-		return SQL_C_SHORT;
-		break;
-	case SQL_INTEGER:
-		return SQL_C_LONG; //todo check LONG or SLONG?
-		break;
-	case SQL_BIGINT:
-		return SQL_C_SBIGINT;
-		break;
-	case SQL_REAL:
-		return SQL_C_FLOAT;
-		break;
-	case SQL_FLOAT:
-		return SQL_C_DOUBLE;
-		break;
-	case SQL_DOUBLE:
-		return SQL_C_DOUBLE;
-		break;
-	case SQL_BINARY:
-	case SQL_VARBINARY:
-	case SQL_LONGVARBINARY:
-		return SQL_C_BINARY;
-		break;
-	case SQL_TYPE_DATE:
-		return SQL_C_TYPE_DATE;
-		break;
-	case SQL_TYPE_TIME:
-		return SQL_C_TYPE_TIME;
-		break;
-		/* todo: TIME
-	case SQL_INTERVAL_...:
-		return SQL_C_TYPE_DATE;
-		break;
-		*/
-	case SQL_GUID:
-		return SQL_C_CHAR;
-		break;
-	default:
-		return SQL_C_CHAR;
-		break;
-	}
+ODBCConnector::getCType(SQLLEN /* jhrg &*/ sql_type) {
+    switch (sql_type) {
+        case SQL_CHAR:
+        case SQL_VARCHAR:
+        case SQL_LONGVARCHAR:
+            return SQL_C_CHAR;
+            break;
+        case SQL_WCHAR:
+        case SQL_WVARCHAR:
+        case SQL_WLONGVARCHAR:
+            return SQL_C_WCHAR;
+            break;
+        case SQL_DECIMAL:
+        case SQL_NUMERIC:
+            return SQL_C_LONG; // not default
+            break;
+        case SQL_BIT:
+            return SQL_C_BIT;
+            break;
+        case SQL_TINYINT:
+            return SQL_C_TINYINT;
+            break;
+        case SQL_SMALLINT:
+            return SQL_C_SHORT;
+            break;
+        case SQL_INTEGER:
+            return SQL_C_LONG; //todo check LONG or SLONG?
+            break;
+        case SQL_BIGINT:
+            return SQL_C_SBIGINT;
+            break;
+        case SQL_REAL:
+            return SQL_C_FLOAT;
+            break;
+        case SQL_FLOAT:
+            return SQL_C_DOUBLE;
+            break;
+        case SQL_DOUBLE:
+            return SQL_C_DOUBLE;
+            break;
+        case SQL_BINARY:
+        case SQL_VARBINARY:
+        case SQL_LONGVARBINARY:
+            return SQL_C_BINARY;
+            break;
+        case SQL_TYPE_DATE:
+            return SQL_C_TYPE_DATE;
+            break;
+        case SQL_TYPE_TIME:
+            return SQL_C_TYPE_TIME;
+            break;
+            /* todo: TIME
+        case SQL_INTERVAL_...:
+            return SQL_C_TYPE_DATE;
+            break;
+            */
+        case SQL_GUID:
+            return SQL_C_CHAR;
+            break;
+        default:
+            return SQL_C_CHAR;
+            break;
+    }
 }
 
 /**
@@ -220,259 +213,227 @@ ODBCConnector::getCType(SQLLEN /* jhrg &*/ sql_type)
  * 1 - n 		column index
  */
 SQL_TYPE *
-ODBCConnector::getType(size_t column){
-	if (types){
-		if(column<getCols()){
-			return &types[column];
-		}
-		else
-			throw SQLInternalError("Index provided exceeds the array limit!",
-					__FILE__,__LINE__);
-	}
-	else {
+ODBCConnector::getType(size_t column) {
+    if (types) {
+        if (column < getCols()) {
+            return &types[column];
+        }
+        else
+            throw SQLInternalError("Index provided exceeds the array limit!",
+                                   __FILE__, __LINE__);
+    }
+    else {
 
-		if (getCols()>0){
-			types=new SQL_TYPE[getCols()]();
-		}
-		else
-			throw SQLInternalError(
-					"Unable to check type for a ResultSet of 0 columns",
-						__FILE__,__LINE__);
+        if (getCols() > 0) {
+            types = new SQL_TYPE[getCols()]();
+        }
+        else
+            throw SQLInternalError(
+                    "Unable to check type for a ResultSet of 0 columns",
+                    __FILE__, __LINE__);
 
-		for (size_t col=0; col<getCols(); col++)
-		{
-		  // Added initialization; this quiets an 'uninitialized access' error
-		  // reported by valgrind. jhrg 9/7/12
-			SQLLEN sql_type = 0;
-			rc=SQLColAttribute(stmt , col+1, SQL_DESC_CONCISE_TYPE, 0, 0, 0, &sql_type);
-			BESDEBUG(ODBC_NAME,"ODBCConnector: Getting column type: "<<sql_type<<
-					" for column: "<<col<<" exit status: "<<rc<<endl);
-			/**
-			 *  force check for errors here
-			 *  since this is a critical operation
-			 */
-			if (sef)
-				SQLErrorManager<void>::trigger(_SQLH_ON_ALWAYS,*sef);
+        for (size_t col = 0; col < getCols(); col++) {
+            // Added initialization; this quiets an 'uninitialized access' error
+            // reported by valgrind. jhrg 9/7/12
+            SQLLEN sql_type = 0;
+            rc = SQLColAttribute(stmt, col + 1, SQL_DESC_CONCISE_TYPE, 0, 0, 0, &sql_type);
+            BESDEBUG(ODBC_NAME, "ODBCConnector: Getting column type: " << sql_type <<
+                                                                       " for column: " << col << " exit status: " << rc
+                                                                       << endl);
+            /**
+             *  force check for errors here
+             *  since this is a critical operation
+             */
+            if (sef)
+                SQLErrorManager<void>::trigger(_SQLH_ON_ALWAYS, *sef);
 
-			types[col]=getCType(sql_type);
-		}
+            types[col] = getCType(sql_type);
+        }
 
-		return getType(column);
-	}
+        return getType(column);
+    }
 }
 
 const string &
-ODBCConnector::getColName(const size_t &column){
-	if (names){
-		if(column<getCols()){
-			return names[column];
-		}
-		else {
-TESTDEBUG(SQL_NAME_TEST,"ODBCConnector::getColName() "
-		"\n on column: "<<column<<endl);
-			throw SQLInternalFatalError("Index provided exceeds the array limit!",
-					__FILE__,__LINE__);
-		}
-	}
-	else {
+ODBCConnector::getColName(const size_t &column) {
+    if (names) {
+        if (column < getCols()) {
+            return names[column];
+        }
+        else {
+            TESTDEBUG(SQL_NAME_TEST, "ODBCConnector::getColName() "
+                                     "\n on column: " << column << endl);
+            throw SQLInternalFatalError("Index provided exceeds the array limit!",
+                                        __FILE__, __LINE__);
+        }
+    }
+    else {
 
-		if (getCols()>0){
-			names=new string[getCols()]();
-			//(SQLLEN*)calloc(getCols(),sizeof(SQLLEN));
-		}
-		else
-			throw SQLInternalFatalError(
-					"Unable to check name for a ResultSet of 0 columns",
-						__FILE__,__LINE__);
+        if (getCols() > 0) {
+            names = new string[getCols()]();
+            //(SQLLEN*)calloc(getCols(),sizeof(SQLLEN));
+        }
+        else
+            throw SQLInternalFatalError(
+                    "Unable to check name for a ResultSet of 0 columns",
+                    __FILE__, __LINE__);
 
-		for (size_t col=0; col<getCols(); col++)
-		{
-			char name[_buf_size];
-			rc=SQLColAttribute(stmt , col+1, SQL_DESC_NAME, &name, _buf_size, 0, 0);
-			BESDEBUG(ODBC_NAME,"ODBCConnector: Getting column name: "<<name<<
-					" for column: "<<col<<" exit status: "<<rc<<endl);
-			/**
-			 *  force check for errors here
-			 *  since this is a critical operation
-			 */
-			if (sef)
-				SQLErrorManager<void>::trigger(_SQLH_ON_ALWAYS,*sef);
+        for (size_t col = 0; col < getCols(); col++) {
+            char name[_buf_size];
+            rc = SQLColAttribute(stmt, col + 1, SQL_DESC_NAME, &name, _buf_size, 0, 0);
+            BESDEBUG(ODBC_NAME, "ODBCConnector: Getting column name: " << name <<
+                                                                       " for column: " << col << " exit status: " << rc
+                                                                       << endl);
+            /**
+             *  force check for errors here
+             *  since this is a critical operation
+             */
+            if (sef)
+                SQLErrorManager<void>::trigger(_SQLH_ON_ALWAYS, *sef);
 
-			names[col].assign(name);
-		}
-		return getColName(column);
-	}
+            names[col].assign(name);
+        }
+        return getColName(column);
+    }
 }
 
 // to get portable INT -> to -> STRING
 #include <sstream>
+
 const string &
-ODBCConnector::getColDesc(const size_t& column){
-	if (descs){
-		if(column<getCols()){
-			return descs[column];
-		}
-		else
-			throw SQLInternalFatalError("Index provided exceeds the array limit!",
-					__FILE__,__LINE__);
-	}
-	else {
+ODBCConnector::getColDesc(const size_t &column) {
+    if (descs) {
+        if (column < getCols()) {
+            return descs[column];
+        }
+        else
+            throw SQLInternalFatalError("Index provided exceeds the array limit!",
+                                        __FILE__, __LINE__);
+    }
+    else {
 
-		if (getCols()>0){
-			descs=new string[getCols()]();
-			//(SQLSMALLINT*)calloc(getCols(),sizeof(SQLSMALLINT));
-		}
-		else
-			throw SQLInternalFatalError(
-					"Unable to calculate size for a ResultSet of 0 columns",
-						__FILE__,__LINE__);
+        if (getCols() > 0) {
+            descs = new string[getCols()]();
+            //(SQLSMALLINT*)calloc(getCols(),sizeof(SQLSMALLINT));
+        }
+        else
+            throw SQLInternalFatalError(
+                    "Unable to calculate size for a ResultSet of 0 columns",
+                    __FILE__, __LINE__);
 
-		for (size_t col=0; col<getCols(); col++)
-		{
-			/**
-			 * @todo MORE FANCY DESCRIPTION
-			 * probably using column type we may want to show:
-			 * precision	SQL_DESC_PRECISION
-			 * time type
-			 * type of column SQL_DESC_TYPE_NAME
-			 * name of column
-			 * table name		SQL_DESC_TABLE_NAME
-			 */
-			SQLLEN len=0;
-			rc=SQLColAttribute(stmt ,((SQLSMALLINT)col+1),
-				SQL_DESC_PRECISION,NULL, 0,NULL, &len);
-TESTDEBUG(ODBC_NAME,"ODBCConnector: Getting actual_col_desc: "<<len<<
-	" for column: "<<col<<" exit status: "<<rc<<endl);
-			/**
-			 *  force check for errors here
-			 */
-			try{
-				if (sef)
-					SQLErrorManager<void>::trigger(_SQLH_ON_GET_NEXT,*sef);
-				//@todo something better of the following:
-				std::stringstream o;
-				o<<len;
-				descs[col]="Using precision: "+o.str();
-			}catch (SQLInternalError &e){
-				/**
-				 * This is not a critical op. so
-				 * if not fatal error is thrown
-				 * set to empty string.
-				 */
-				descs[col]="";
-			}
-		}
-		return getColDesc(column);
-	}
+        for (size_t col = 0; col < getCols(); col++) {
+            /**
+             * @todo MORE FANCY DESCRIPTION
+             * probably using column type we may want to show:
+             * precision	SQL_DESC_PRECISION
+             * time type
+             * type of column SQL_DESC_TYPE_NAME
+             * name of column
+             * table name		SQL_DESC_TABLE_NAME
+             */
+            SQLLEN len = 0;
+            rc = SQLColAttribute(stmt, ((SQLSMALLINT) col + 1),
+                                 SQL_DESC_PRECISION, NULL, 0, NULL, &len);
+            /**
+             *  force check for errors here
+             */
+            try {
+                if (sef)
+                    SQLErrorManager<void>::trigger(_SQLH_ON_GET_NEXT, *sef);
+
+                //@todo something better of the following:
+                std::stringstream o;
+                o << len;
+                descs[col] = "Using precision: " + o.str();
+            }
+            catch (SQLInternalError &e) {
+                /**
+                 * This is not a critical op. so
+                 * if not fatal error is thrown
+                 * set to empty string.
+                 */
+                descs[col] = "";
+            }
+        }
+        return getColDesc(column);
+    }
 }
 
 ERROR_TYPE *
-ODBCConnector::getError(){
-TESTDEBUG(ODBC_NAME,"ODBCConnector: running GetError() on status: "<<rc<<endl);
-	return &rc;
+ODBCConnector::getError() {
+    TESTDEBUG(ODBC_NAME, "ODBCConnector: running GetError() on status: " << rc << endl);
+    return &rc;
 }
 
 MSG_TYPE *
-ODBCConnector::getMsg(ERROR_TYPE * error_code){
-#if 1
-	char strState[_buf_size];
-	SQLINTEGER errNum=0;
-	SQLSMALLINT msgLen=0;
-#if __TESTS__==1
-	if (error_code)
-		BESDEBUG(ODBC_NAME,
-			"ODBCConnector: running GetMsg() on status: "<<*error_code<<endl);
-	else
-		BESDEBUG(ODBC_NAME,
-			"ODBCConnector: running GetMsg() on status: NULL"<<endl);
-#endif
+ODBCConnector::getMsg(ERROR_TYPE *error_code) {
+    char strState[_buf_size];
+    SQLINTEGER errNum = 0;
+    SQLSMALLINT msgLen = 0;
 
-	if (SQL_SUCCEEDED(*error_code)){
-		// QUERY success no error
-		msgEnvSeq=1; //reset error sequence index
-		msgStmtSeq=1; //reset error sequence index
-		msgConnSeq=1; //reset error sequence index
-		strMsg = "No errors";
-		return &strMsg;
-	}
-	else if (*error_code==SQL_NO_DATA){
-		// QUERY result gives no data into the result
-		msgEnvSeq=1; //reset error sequence index
-		msgStmtSeq=1; //reset error sequence index
-		msgConnSeq=1; //reset error sequence index
-		ostringstream oss;
-		oss << errNum << " " << strState << " No data";
-		strMsg = oss.str();
-#if 0
-		sprintf(strMsg,"%d %s %s\n", errNum, strState, "No data");
-#endif
-
-		return &strMsg;
-	}
-	else {
-		SQLRETURN rc2;
-		char msg[_buf_size];
-// check connection statement
-		if (SQL_SUCCESS==(rc2=
-				SQLGetDiagRec(SQL_HANDLE_DBC, conn,
-				msgConnSeq, (SQLCHAR*)strState, &errNum,
-				(SQLCHAR*)msg, _buf_size, &msgLen))){
-			msgConnSeq++;
+    if (SQL_SUCCEEDED(*error_code)) {
+        // QUERY success no error
+        msgEnvSeq = 1; //reset error sequence index
+        msgStmtSeq = 1; //reset error sequence index
+        msgConnSeq = 1; //reset error sequence index
+        strMsg = "No errors";
+        return &strMsg;
+    }
+    else if (*error_code == SQL_NO_DATA) {
+        // QUERY result gives no data into the result
+        msgEnvSeq = 1; //reset error sequence index
+        msgStmtSeq = 1; //reset error sequence index
+        msgConnSeq = 1; //reset error sequence index
+        ostringstream oss;
+        oss << errNum << " " << strState << " No data";
+        strMsg = oss.str();
+        return &strMsg;
+    }
+    else {
+        SQLRETURN rc2;
+        char msg[_buf_size];
+        // check connection statement
+        if (SQL_SUCCESS == (rc2 = SQLGetDiagRec(SQL_HANDLE_DBC, conn,
+                                                msgConnSeq, (SQLCHAR *) strState, &errNum,
+                                                (SQLCHAR *) msg, _buf_size, &msgLen))) {
+            msgConnSeq++;
             ostringstream oss;
             oss << errNum << " " << strState << " " << msg;
             strMsg = oss.str();
-#if 0
-			sprintf(strMsg,"%d %s %s\n", errNum, strState, msg);
-#endif
+            return &strMsg;
+        }
+        else
+            BESDEBUG(ODBC_NAME, "ODBCConnector: GetError (conn status): " << rc2 << endl);
 
-			return &strMsg;
-		}
-		else
-			BESDEBUG(ODBC_NAME,"ODBCConnector: GetError (conn status): "<<rc2<<endl);
-// check statement statement
-		if (SQL_SUCCESS==(rc2=
-				SQLGetDiagRec(SQL_HANDLE_STMT, stmt,
-				msgStmtSeq, (SQLCHAR*)strState, &errNum,
-				(SQLCHAR*)msg, _buf_size, &msgLen))){
-			msgStmtSeq++;
-	        ostringstream oss;
-	        oss << errNum << " " << strState << " " << msg;
-	        strMsg = oss.str();
-#if 0
-			sprintf(strMsg,"%d %s %s\n", errNum, strState, msg);
-#endif
-
-			return &strMsg;
-		}
-		else
-			BESDEBUG(ODBC_NAME,"ODBCConnector: GetError (stmt status): "<<rc2<<endl);
-// check environment statement
-		if (SQL_SUCCESS==(rc2=
-				SQLGetDiagRec(SQL_HANDLE_ENV, env,
-				msgEnvSeq, (SQLCHAR*)strState, &errNum,
-				(SQLCHAR*)msg, _buf_size, &msgLen))){
-			msgEnvSeq++;
+        // check statement statement
+        if (SQL_SUCCESS == (rc2 = SQLGetDiagRec(SQL_HANDLE_STMT, stmt,
+                                                msgStmtSeq, (SQLCHAR *) strState, &errNum,
+                                                (SQLCHAR *) msg, _buf_size, &msgLen))) {
+            msgStmtSeq++;
             ostringstream oss;
             oss << errNum << " " << strState << " " << msg;
             strMsg = oss.str();
-#if 0
-			sprintf(strMsg,"%d %s %s\n", errNum, strState, msg);
-#endif
+            return &strMsg;
+        }
+        else
+            BESDEBUG(ODBC_NAME, "ODBCConnector: GetError (stmt status): " << rc2 << endl);
 
-			return &strMsg;
-		}
-		else
-		{
-			BESDEBUG(ODBC_NAME,"ODBCConnector: GetError (env status): "<<rc2<<endl);
-			strMsg = "Unable to get error message";
-#if 0
-			sprintf(strMsg,"Unable to get error message");
-#endif
-
-			return &strMsg;
-		}
-	}
-#endif
+        // check environment statement
+        if (SQL_SUCCESS == (rc2 = SQLGetDiagRec(SQL_HANDLE_ENV, env,
+                                                msgEnvSeq, (SQLCHAR *) strState, &errNum,
+                                                (SQLCHAR *) msg, _buf_size, &msgLen))) {
+            msgEnvSeq++;
+            ostringstream oss;
+            oss << errNum << " " << strState << " " << msg;
+            strMsg = oss.str();
+            return &strMsg;
+        }
+        else {
+            BESDEBUG(ODBC_NAME, "ODBCConnector: GetError (env status): " << rc2 << endl);
+            strMsg = "Unable to get error message";
+            return &strMsg;
+        }
+    }
 }
 
 /**
@@ -483,90 +444,116 @@ ODBCConnector::getMsg(ERROR_TYPE * error_code){
  * @note should set isReady() flag
  */
 bool
-ODBCConnector::query(){
-	/**
-	 *  ready should be settled to true by query
-	 *  so if this happen here we have to clean
-	 *  buffers.
-	 */
-	if (isReady()) {
-		// close(); no, simply reset vars
-		clean(); //!< clean members
-		// connect(); no, simply execute new query
-	}
-	// Allocate a statement handle
-	SQLAllocHandle(SQL_HANDLE_STMT, conn, &stmt);
+ODBCConnector::query() {
+    /**
+     *  ready should be settled to true by query
+     *  so if this happen here we have to clean
+     *  buffers.
+     */
+    if (isReady()) {
+        // close(); no, simply reset vars
+        clean(); //!< clean members
+        // connect(); no, simply execute new query
+    }
 
-	string query=getParams().buildQuery();
-TESTDEBUG(ODBC_NAME,"ODBCConnector: Executing (REALLY) query"<<endl);
-	rc=SQLExecDirect(stmt,(SQLCHAR *)query.c_str(),SQL_NTS);
-	BESDEBUG(ODBC_NAME,"ODBCConnector: Query \""<<query
-		<<"\" (REALLY) executed; rc=" << rc <<endl);
+    // Allocate a statement handle
+    SQLAllocHandle(SQL_HANDLE_STMT, conn, &stmt);
 
-	// rows
-	//size_t rows;
-	SQLLEN rows=0;
-	SQLRowCount(stmt, &rows);
-	BESDEBUG(ODBC_NAME,"ODBCConnector: Setting rows number: "<<rows<<endl);
-	setRows(rows);
-
-	// columns
-	//size_t cols;
-	SQLSMALLINT cols=0;
-	SQLNumResultCols(stmt, &cols);
-	BESDEBUG(ODBC_NAME,"ODBCConnector: Setting columns number: "<<cols<<endl);
-	setCols(cols);
 #if 0
-	/**
-	 * To specify the size of the rowset, the Statement
-	 * attribute SQL_ROWSET_SIZE (SQLExtendedFetch) or
-	 * SQL_ATTR_ROW_ARRAY_SIZE (SQLFetchScroll) must be
-	 * set to the required value using the
-	 * SQLSetStmtAttr call.
-	 */
-	SQLSetStmtAttr(stmt,SQL_ATTR_ROW_ARRAY_SIZE,&bufferRows,0);
+    // FIXME Hackery. I used this ti get the number of rows. The SQLRowCount()
+    // Does not reliably return that for anything other than UPDATE, INSERT,
+    // or DELETE statements. jhrg 10/16/19
+    string count_stmt = "SELECT COUNT(*) FROM sqlh_table WHERE b < 50;";
+    rc = SQLExecDirect(stmt, (SQLCHAR *) count_stmt.c_str(), SQL_NTS);
+    BESDEBUG(ODBC_NAME, "ODBCConnector: Query \"" << count_stmt << "\" executed; rc=" << rc << endl);
+
+    /* create a cursor and execute a statement */
+
+    if (!SQL_SUCCEEDED(rc)) { cerr << "couldn't exec sql, process error, free resources" << endl; }
+    /* fetch the result: here we expect single row with single column */
+    rc = SQLFetch(stmt);
+    if (!SQL_SUCCEEDED(rc)) { cerr << "couldn't fetch row, process error, free resources" << endl; }
+    /* extract data from the fetched row */
+    SQLLEN indicator;
+    long count = 0;
+    SQLLEN cbValueMax = sizeof(count);
+    rc = SQLGetData(stmt, 1, SQL_C_LONG, &count, cbValueMax, &indicator);
+    if (!SQL_SUCCEEDED(rc)) { /* couldn't convert to int, process error, free resources */ }
+    if (indicator == SQL_NULL_DATA) { /* unexpected NULL, process error, free resources */ }
+
+    BESDEBUG(ODBC_NAME, "Rows in table: " << hex << count << dec << ", indicator: " << indicator << endl);
+
+    /* free resources: close the cursor */
+    SQLFreeHandle(SQL_HANDLE_STMT, stmt);
 #endif
 
-	BESDEBUG(ODBC_NAME,"ODBCConnector: Calculating columns size"<<endl);
+    // Allocate a statement handle
+    SQLAllocHandle(SQL_HANDLE_STMT, conn, &stmt);
 
-	// NOTE if(d_buf) check is done by clear()
-	d_buf=(SQLCHAR**)calloc(cols,sizeof(SQLCHAR*));
-	for (int c=0; c<cols; c++){
-		// check maximum sizeof
-		d_buf[c]=(SQLCHAR*)calloc(getColSize(c),sizeof(SQLCHAR));
+    string query = getParams().buildQuery();
+    rc = SQLExecDirect(stmt, (SQLCHAR *) query.c_str(), SQL_NTS);
+    BESDEBUG(ODBC_NAME, "ODBCConnector: Query \"" << query << "\" executed; rc=" << rc << endl);
 
-TESTDEBUG(ODBC_NAME,"ODBCConnector: Calculated: "<<
-	getColSize(c)<<" for column: "<<c<<endl);
-	}
+    // rows
+    //size_t rows;
+    // This is a bug. The SQLRowCount() function returns the number of rows affected by an
+    // UPDATE, INSERT, or DELETE statement; an SQL_ADD, SQL_UPDATE_BY_BOOKMARK, or
+    // SQL_DELETE_BY_BOOKMARK operation in SQLBulkOperations; or an SQL_UPDATE or
+    // SQL_DELETE operation in SQLSetPos. Some drivers might set it for other operations, apparently.
+    // See https://docs.microsoft.com/en-us/sql/odbc/reference/syntax/sqlrowcount-function?view=sql-server-ver15
+    // For this handler's code to work, we need to know the number of rows in the database!
+    // jhrg 10/16/19
+    SQLLEN rows = 0;
+    SQLRowCount(stmt, &rows);
+    BESDEBUG(ODBC_NAME, "ODBCConnector: Setting rows number: " << rows << endl);
+    //rows = 10;    // FIXME jhrg 10/16/19
+    setRows(rows);
 
-	//binding
-TESTDEBUG(ODBC_NAME,"ODBCConnector: Binding"<<endl);
+    // columns
+    //size_t cols;
+    SQLSMALLINT cols = 0;
+    SQLNumResultCols(stmt, &cols);
+    BESDEBUG(ODBC_NAME, "ODBCConnector: Setting columns number: " << cols << endl);
+    setCols(cols);
+#if 0
+    /**
+     * To specify the size of the rowset, the Statement
+     * attribute SQL_ROWSET_SIZE (SQLExtendedFetch) or
+     * SQL_ATTR_ROW_ARRAY_SIZE (SQLFetchScroll) must be
+     * set to the required value using the
+     * SQLSetStmtAttr call.
+     */
+    SQLSetStmtAttr(stmt,SQL_ATTR_ROW_ARRAY_SIZE,&bufferRows,0);
+#endif
 
-	/* Loop through the rows in the result-set binding to */
-	/* local variables */
-	for (int i = 0; i < cols; i++) {
-		rc=SQLBindCol( stmt, i + 1, *getType(i),//SQL_C_CHAR,//bind to char
-				d_buf[ i ], getColSize(i), &d_status[ i ] );//sizeof( d_buf[i] )
+    BESDEBUG(ODBC_NAME, "ODBCConnector: Calculating columns size" << endl);
 
-TESTDEBUG(ODBC_NAME,"ODBCConnector: Binding info-> Status:"<<rc<<
-				" Type:"<<*getType(i)<<" size:"<<getColSize(i)<<
-				" Col_status:"<<(d_status[i]==SQL_NULL_DATA)<<endl);
-	}
+    // NOTE if(d_buf) check is done by clear()
+    d_buf = (SQLCHAR **) calloc(cols, sizeof(SQLCHAR *));
+    for (int c = 0; c < cols; c++) {
+        // check maximum sizeof
+        d_buf[c] = (SQLCHAR *) calloc(getColSize(c), sizeof(SQLCHAR));
+    }
 
-TESTDEBUG(ODBC_NAME,"ODBCConnector: Bind done. Status: "<<rc<<endl);
+    /* Loop through the rows in the result-set binding to */
+    /* local variables */
+    for (int i = 0; i < cols; i++) {
+        rc = SQLBindCol(stmt, i + 1, *getType(i),//SQL_C_CHAR,//bind to char
+                        d_buf[i], getColSize(i), &d_status[i]);//sizeof( d_buf[i] )
+    }
 
-	// if resulting d_status SUCCEDED set READY d_status.
-	if (sef)
-		SQLErrorManager<void>::trigger(_SQLH_ON_ALWAYS,*sef);
+    // if resulting d_status SUCCEEDED set READY d_status.
+    if (sef)
+        SQLErrorManager<void>::trigger(_SQLH_ON_ALWAYS, *sef);
 
-	// set number of rows to fetch.
-	toFetchRows=1;
-	// set cursors to start and check notEnd condition
-	reset();
-	// set d_status
-	setReady(true);
-	// return the d_status
-	return true;
+    // set number of rows to fetch.
+    toFetchRows = 1;
+    // set cursors to start and check notEnd condition
+    reset();
+    // set d_status
+    setReady(true);
+    // return the d_status
+    return true;
 }
 
 /**
@@ -591,109 +578,90 @@ TESTDEBUG(ODBC_NAME,"ODBCConnector: Bind done. Status: "<<rc<<endl);
  * @note use notEnd to check end condition
  */
 ODBC_TYPE *
-ODBCConnector::getNext(size_t next){
-	if (!isReady() || !notEnd())
-		throw SQLInternalError(
-			"Unable to getNext() element, connector: !isReady() or end is reached",
-			__FILE__,__LINE__);
-	//@todo may we want to try to reconnect?
+ODBCConnector::getNext(size_t next) {
+    if (!isReady() || !notEnd())
+        throw SQLInternalError(
+                "Unable to getNext() element, connector: !isReady() or end is reached",
+                __FILE__, __LINE__);
 
-	/**
-	 * number of rows to fetch (skip or extract)
-	 */
-	while (toFetchRows>0){ // while skip
-TESTDEBUG(SQL_NAME_TEST,"--------setNext starting fetch"<<endl);
-TESTDEBUG(SQL_NAME_TEST,"--------setNext resulting-----> rows: "<<toFetchRows<<endl);
-		fetch(); // fetch next row
-		toFetchRows--;
-	}
+    //@todo may we want to try to reconnect?
 
-	// get the pointer
-	SQLCHAR *ret= d_buf[getCol()];
+    /**
+     * number of rows to fetch (skip or extract)
+     */
+    while (toFetchRows > 0) { // while skip
+        fetch(); // fetch next row
+        toFetchRows--;
+    }
 
-	/**
-	 * Set number of column and rows
-	 * corresponding to the current
-	 * position + next.
-	 * Return the number of skipped rows
-	 * which is stored for the next fetch
-	 * operation
-	 */
-	toFetchRows=setNext(next);
+    // get the pointer
+    SQLCHAR *ret = d_buf[getCol()];
 
-	return ret;
+    /**
+     * Set number of column and rows
+     * corresponding to the current
+     * position + next.
+     * Return the number of skipped rows
+     * which is stored for the next fetch
+     * operation
+     */
+    toFetchRows = setNext(next);
+
+    return ret;
 }
 
 void
-ODBCConnector::fetch(){
-#if 0
-	/** ACTUALLY NOT NEEDED
-	 * clean buffer
-	 */
-	for (size_t c=0; c<getCols(); c++){
-TESTDEBUG(ODBC_NAME,"ODBCConnector: buf["<<c<<"]: \""<<d_buf[c]<<"\""<<endl);
-		//*d_buf[c]=0;
-	}
-#endif
-	/**
-	 * fetch row
-	 */
-	rc=SQLFetch(stmt);
+ODBCConnector::fetch() {
+    /**
+     * fetch row
+     */
+    rc = SQLFetch(stmt);
 
-	/**
-	 *  if some fetched data is null
-	 *  set it to '0'
-	 */
-	for (size_t c=0; c<getCols(); c++){
-		if (d_status[c]==SQL_NULL_DATA)
-			d_buf[c]=(SQLCHAR*)'0';
-TESTDEBUG(SQL_NAME_TEST," Col_status:"<<(d_status[c]==SQL_NULL_DATA)<<endl);
-	}
-
-#if __TESTS__==1
-	for (size_t c=0; c<getCols(); c++)
-		BESDEBUG(ODBC_NAME,
-				"ODBCConnector: new buffer value buf["<<c<<"]: ->\""<<d_buf[c]<<"\"<-"<<endl);
-	BESDEBUG(ODBC_NAME,"ODBCConnector: Fetch status: "<<rc<<endl);
-#endif
+    /**
+     *  if some fetched data is null
+     *  set it to '0'
+     */
+    for (size_t c = 0; c < getCols(); c++) {
+        if (d_status[c] == SQL_NULL_DATA)
+            d_buf[c] = (SQLCHAR *) '0';
+    }
 }
 
 /**
  * @brief Set error factory used by this connector.
  */
 void
-ODBCConnector::setErrorFactory(SQLErrorFactory<ERROR_TYPE,MSG_TYPE> &ef){
-	sef=&ef;	//!<DO NOT DELETE!
+ODBCConnector::setErrorFactory(SQLErrorFactory<ERROR_TYPE, MSG_TYPE> &ef) {
+    sef = &ef;    //!<DO NOT DELETE!
 }
 
 /**
  * @brief Close connection
  */
 bool
-ODBCConnector::close(){
-	SQLCloseCursor(stmt);
-	SQLFreeHandle(SQL_HANDLE_STMT, stmt);
-	SQLDisconnect(conn);
-	SQLFreeHandle(SQL_HANDLE_DBC, conn);
-	/**
-	 * We end off the transaction using SQLEndTran,
-	 * and deallocate the handles in reverse order
-	 * compared with the way we allocated the handles.
-	 * First we free the statement handle, then we
-	 * disconnect from the database using SQLDisconnect,
-	 * and then use SQLFreeHandle to free up all the
-	 * other handles we allocated!
-	 */
-	SQLEndTran(SQL_HANDLE_ENV, env, SQL_ROLLBACK);
-	SQLFreeHandle(SQL_HANDLE_ENV, env);
+ODBCConnector::close() {
+    SQLCloseCursor(stmt);
+    SQLFreeHandle(SQL_HANDLE_STMT, stmt);
+    SQLDisconnect(conn);
+    SQLFreeHandle(SQL_HANDLE_DBC, conn);
 
+    /**
+     * We end off the transaction using SQLEndTran,
+     * and deallocate the handles in reverse order
+     * compared with the way we allocated the handles.
+     * First we free the statement handle, then we
+     * disconnect from the database using SQLDisconnect,
+     * and then use SQLFreeHandle to free up all the
+     * other handles we allocated!
+     */
+    SQLEndTran(SQL_HANDLE_ENV, env, SQL_ROLLBACK);
+    SQLFreeHandle(SQL_HANDLE_ENV, env);
 
-	clean();//!< clean temporary members;
+    clean();//!< clean temporary members;
 
-	BESDEBUG(ODBC_NAME,"ODBCConnector: Connection closed"<<endl);
-	return true;
+    BESDEBUG(ODBC_NAME, "ODBCConnector: Connection closed" << endl);
+    return true;
 }
-
 
 #if 0
 /**
@@ -704,23 +672,23 @@ ODBCConnector::close(){
  * to get available drivers to use in dataset
  */
 void ODBCConnector::getSQLDrivers(){
-	SQLCHAR driver[256];
-	SQLCHAR attr[256];
-	SQLSMALLINT driver_ret;
-	SQLSMALLINT attr_ret;
-	SQLUSMALLINT direction;
+    SQLCHAR driver[256];
+    SQLCHAR attr[256];
+    SQLSMALLINT driver_ret;
+    SQLSMALLINT attr_ret;
+    SQLUSMALLINT direction;
 
-	SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &env);
-	SQLSetEnvAttr(env, SQL_ATTR_ODBC_VERSION, (void *) SQL_OV_ODBC3, 0);
+    SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &env);
+    SQLSetEnvAttr(env, SQL_ATTR_ODBC_VERSION, (void *) SQL_OV_ODBC3, 0);
 
-	direction = SQL_FETCH_FIRST;
-	while(SQL_SUCCEEDED(rc = SQLDrivers(env, direction,
-					   driver, sizeof(driver), &driver_ret,
-					   attr, sizeof(attr), &attr_ret))) {
-		direction = SQL_FETCH_NEXT;
-		printf("%s - %s\n", driver, attr);
-		if (rc == SQL_SUCCESS_WITH_INFO) printf("\tdata truncation\n");
-	}
+    direction = SQL_FETCH_FIRST;
+    while(SQL_SUCCEEDED(rc = SQLDrivers(env, direction,
+                       driver, sizeof(driver), &driver_ret,
+                       attr, sizeof(attr), &attr_ret))) {
+        direction = SQL_FETCH_NEXT;
+        printf("%s - %s\n", driver, attr);
+        if (rc == SQL_SUCCESS_WITH_INFO) printf("\tdata truncation\n");
+    }
 }
 
 /**
@@ -730,23 +698,22 @@ void ODBCConnector::getSQLDrivers(){
  * to get available datasources for a dataset
  */
 void ODBCConnector::getSQLDataSources(){
-	SQLCHAR dsn[256];
-	SQLCHAR desc[256];
-	SQLSMALLINT dsn_ret;
-	SQLSMALLINT desc_ret;
-	SQLUSMALLINT direction;
+    SQLCHAR dsn[256];
+    SQLCHAR desc[256];
+    SQLSMALLINT dsn_ret;
+    SQLSMALLINT desc_ret;
+    SQLUSMALLINT direction;
 
-	SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &env);
-	SQLSetEnvAttr(env, SQL_ATTR_ODBC_VERSION, (void *) SQL_OV_ODBC3, 0);
+    SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &env);
+    SQLSetEnvAttr(env, SQL_ATTR_ODBC_VERSION, (void *) SQL_OV_ODBC3, 0);
 
-	direction = SQL_FETCH_FIRST;
-	while(SQL_SUCCEEDED(rc = SQLDataSources(env, direction,
-					   dsn, sizeof(dsn), &dsn_ret,
-					   desc, sizeof(desc), &desc_ret))) {
-		direction = SQL_FETCH_NEXT;
-		printf("%s - %s\n", dsn, desc);
-		if (rc == SQL_SUCCESS_WITH_INFO) printf("\tdata truncation\n");
-	}
+    direction = SQL_FETCH_FIRST;
+    while(SQL_SUCCEEDED(rc = SQLDataSources(env, direction,
+                       dsn, sizeof(dsn), &dsn_ret,
+                       desc, sizeof(desc), &desc_ret))) {
+        direction = SQL_FETCH_NEXT;
+        printf("%s - %s\n", dsn, desc);
+        if (rc == SQL_SUCCESS_WITH_INFO) printf("\tdata truncation\n");
+    }
 }
-
 #endif

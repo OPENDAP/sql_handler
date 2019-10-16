@@ -101,6 +101,14 @@ public:
     virtual string buildQuery();
 
     /**
+     * @brief Build a COUNT query
+     * Use this query to get teh COUNT(*) of the rows for the query
+     * returned by buildQuery().
+     * @return Use this query to get the row count
+     */
+    virtual string buildCountQuery();
+
+    /**
      * @brief return a reference to the actual section
      * SQLQuery object
      * @return a reference to the SQLQuery object

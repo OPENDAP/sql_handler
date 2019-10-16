@@ -1,0 +1,7 @@
+Attributes {
+    sqlite_test {
+        String a "Using precision: 10";
+        String b "Using precision: 15";
+        String c "Using precision: 50";
+    }
+}
