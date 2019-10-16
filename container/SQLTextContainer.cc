@@ -343,7 +343,7 @@ string SQLTextContainer::buildCountQuery()
      * by position and fill it to reorder the
      * attribute before append to the query.
      */
-    string query = "SELECT COUNT(*)";
+    string query = "SELECT COUNT(*) FROM ";
 
     /**
      *  FROM is fixed
@@ -353,7 +353,10 @@ string SQLTextContainer::buildCountQuery()
      *  SQL dialect may vary using different RDMS so
      *  we do not proceed to rename.
      */
-    query += " FROM " + q.getFrom();
+    query.append(q.getFrom());
+
+    // Build these separately and then add them at the end. jhrg 10/16/19
+    string constraints = "";
 
     // where is optional and could be empty
     if (!q.getWhere().empty()) {
@@ -364,19 +367,16 @@ string SQLTextContainer::buildCountQuery()
         this->comparatorSubst(q.getWhere());
 
         SQLQuery::whereIterator wi = q.getWhere().begin();
-        buf += (*wi++).toString();
+        constraints.append((*wi++).toString());
         while (wi != q.getWhere().end()) {
-            buf += _SQLH_CONT_REG_CONSTR_BASE_JOIN;
-            buf += (*wi).toString();
+            constraints.append(_SQLH_CONT_REG_CONSTR_BASE_JOIN);
+            constraints.append((*wi).toString());
             wi++;
         }
     }
 
     // ON THE FLY SPECIFIED CONSTRAINTS
-
-    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::constrToWhere mid: "<<buf<<endl );
     if (!constraints.empty()) {
-
         // on the fly constraints are not empty
         SQL_CONSTRAINT_SET in_constr = SQLQuery::loadConstraints(constraints);
 
@@ -389,9 +389,9 @@ string SQLTextContainer::buildCountQuery()
         if (!in_constr.empty()) {
             SQLQuery::whereIterator wi = in_constr.begin();
             do {
-                if (!buf.empty()) {
+                if (!constraints.empty()) {
                     // '_where' contain previous conditions join (AND)
-                    buf += _SQLH_CONT_REG_CONSTR_BASE_JOIN;
+                    constraints.append(_SQLH_CONT_REG_CONSTR_BASE_JOIN);
                 }
                 /**
                  * we still have to operate attribute prefix
@@ -434,25 +434,26 @@ string SQLTextContainer::buildCountQuery()
                      * can't be used in the WHERE clause.
                      * @note: thanks to Mr. Hugo Kornelis
                      */
-                    buf += (*ai).getFullName();
+                    constraints.append((*ai).getFullName());
                 }
                 // append comparator
                 if (!(*wi).getSubstitute().empty())
-                    buf += (*wi).getSubstitute();
+                    constraints.append((*wi).getSubstitute());
                 else
-                    buf += (*wi).getComparator();
+                    constraints.append((*wi).getComparator());
                 // append value
-                buf += (*wi).getVal();
+                constraints.append((*wi).getVal());
             } while (++wi != in_constr.end());
         }
     }
 
-    if (!buf.empty()) {
+    if (!constraints.empty()) {
         // we have: simply use it
-        query += " WHERE " + buf;
+        query.append(" WHERE ");
+        query.append(constraints);
     }
 
-    query += ";";
+    query.append(";");
 
     /**
      * @todo ADD some 'ORDER BY' other funny options

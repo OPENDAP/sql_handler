@@ -436,33 +436,15 @@ ODBCConnector::getMsg(ERROR_TYPE *error_code) {
     }
 }
 
-/**
- * @brief Query
- * @note this is also a good place to
- * update QUERY size limit using
- * setCols(nFiled) and setRows(nRows)
- * @note should set isReady() flag
- */
-bool
-ODBCConnector::query() {
-    /**
-     *  ready should be settled to true by query
-     *  so if this happen here we have to clean
-     *  buffers.
-     */
-    if (isReady()) {
-        // close(); no, simply reset vars
-        clean(); //!< clean members
-        // connect(); no, simply execute new query
-    }
-
-    // Allocate a statement handle
-    SQLAllocHandle(SQL_HANDLE_STMT, conn, &stmt);
-
+unsigned int
+ODBCConnector::getRowCount() {
 #if 0
     // FIXME Hackery. I used this ti get the number of rows. The SQLRowCount()
     // Does not reliably return that for anything other than UPDATE, INSERT,
     // or DELETE statements. jhrg 10/16/19
+    // Allocate a statement handle
+    SQLAllocHandle(SQL_HANDLE_STMT, conn, &stmt);
+
     string count_stmt = "SELECT COUNT(*) FROM sqlh_table WHERE b < 50;";
     rc = SQLExecDirect(stmt, (SQLCHAR *) count_stmt.c_str(), SQL_NTS);
     BESDEBUG(ODBC_NAME, "ODBCConnector: Query \"" << count_stmt << "\" executed; rc=" << rc << endl);
@@ -486,6 +468,27 @@ ODBCConnector::query() {
     /* free resources: close the cursor */
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
 #endif
+}
+
+/**
+ * @brief Query
+ * @note this is also a good place to
+ * update QUERY size limit using
+ * setCols(nFiled) and setRows(nRows)
+ * @note should set isReady() flag
+ */
+bool
+ODBCConnector::query() {
+    /**
+     *  ready should be settled to true by query
+     *  so if this happen here we have to clean
+     *  buffers.
+     */
+    if (isReady()) {
+        // close(); no, simply reset vars
+        clean(); //!< clean members
+        // connect(); no, simply execute new query
+    }
 
     // Allocate a statement handle
     SQLAllocHandle(SQL_HANDLE_STMT, conn, &stmt);

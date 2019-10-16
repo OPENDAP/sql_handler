@@ -104,6 +104,14 @@ public:
 	virtual ERROR_TYPE * getError();
 
 	/**
+	 * @brief Get the number of rows in the response
+	 * Use SQL's COUNT() function to get the number of rows that will be returned by
+	 * the SELECT statement returned by the query() method of this class.
+	 * @return the number of rows
+	 */
+    unsigned int getRowCount();
+
+	/**
 	 * @brief Query
 	 * NOTE: this is also a good place to
 	 * update QUERY size limit using
@@ -171,21 +179,6 @@ public:
 	};
 
 	virtual ~ODBCConnector() {
-
-        // NONEDED
-        //		close();
-
-        // called by close()
-        //clean();
-
-        // see clean()
-#if 0
-        if (strMsg) {
-            delete[] strMsg;
-            strMsg = 0;
-        }
-#endif
-
 	};
 
 private:
@@ -217,59 +210,11 @@ private:
             free(d_buf);
             d_buf = 0;
         }
-#if 0
-        /**
-         * we have an action 'close()' which
-         * may clear the error message.
-         * This is done into the
-         * destructor.
-         */
-        if (strMsg) {
-            delete [] strMsg;
-            strMsg=0;
-        }
-#endif
 
 		msgEnvSeq=1;	//!< Env error sequence number // read API documentation
 		msgStmtSeq=1;	//!< Stmt error sequence number // read API documentation
 		msgConnSeq=1;	//!< Conn error sequence number // read API documentation
-
-#if 0
-		/**
-		 *  handled by ODBCPlugin
-		 */
-		if (sef)
-			delete sef;
-		sef=0;
-#endif
-#if 0
-		/**
-		 * handled by close()
-		 */
-		// statement handle
-		stmt;
-		// environment handle
-		env;
-		// connection handle
-		conn;
-#endif
 	}
-
-#if 0
-	// QUERY column size
-	//  getCols()
-	// QUERY row size
-	//  getRows()
-	// BUFFER max column size
-	//  getCols()
-	// BUFFER max row size
-	int bufferRows;
-	// BUFFER actual row
-	int bufferRow;
-	// BUFFER actual col
-	int bufferCol;
-#endif
-
 
 	SQLHSTMT stmt;//!< statement handle
 
@@ -285,7 +230,6 @@ private:
 	SQLSMALLINT msgEnvSeq,msgConnSeq,msgStmtSeq; //!< error index sequence
 
 	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> *sef; //!<this is passed not rebuilt
-
 
 	SQLCHAR **d_buf;	//!< buffer
 	SQLLEN d_status[_buf_size];	//!< buffer d_status
