@@ -43,8 +43,8 @@
 //DDS
 #include "handler/SQLBuildDDS.h"
 
-#include "unixODBC/ODBCConnector.h"
-#include "unixODBC/ODBCTypes.h"
+#include "ODBCConnector.h"
+#include "ODBCTypes.h"
 
 #include "ODBCTypeFactoryComponent.h"
 // checking errors
@@ -72,8 +72,8 @@
  * types which will be used by template class of the SQLHandler:
  * 	-	SQL_TYPE						// SQLTypeConnector
  * 	-	ODBC_TYPE						// SQLTypeConnector
- * 	-	ERROR_TYPE						// SQLErrorFactory && SQLErrorConnector
- * 	-	MSG_TYPE = ERROR_TYPE			// SQLErrorFactory && SQLErrorConnector
+ * 	-	error_t						// SQLErrorFactory && SQLErrorConnector
+ * 	-	message_t = error_t			// SQLErrorFactory && SQLErrorConnector
  * 	-	OUT_TYPE1 = void				// SQLErrorFactory
  * 	-	CODE_TYPE = SQL_TYPE			// SQLTypeFactory
  * 	-	ARGS_TYPE = SQL_TYPE			// SQLTypeFactory
@@ -107,8 +107,8 @@ public:
      */
     typedef SQLBuildDAS<SQL_TYPE,            // SQLTypeFactory && connector
             ODBC_TYPE,            // SQLTypeFactory && connector
-            ERROR_TYPE,        // SQLErrorFactory(IN) && connector
-            MSG_TYPE,            // SQLErrorFactory(ARG) && connector
+            error_t,        // SQLErrorFactory(IN) && connector
+            message_t,            // SQLErrorFactory(ARG) && connector
             void>                // SQLErrorFactory(OUT)
             DASBuilder;
 
@@ -119,8 +119,8 @@ public:
      */
     typedef SQLBuildDDS<SQL_TYPE,            // SQLTypeFactory && connector
             ODBC_TYPE,            // SQLTypeFactory && connector
-            ERROR_TYPE,        // SQLErrorFactory(IN) && connector
-            MSG_TYPE,            // SQLErrorFactory(ARG) && connector
+            error_t,        // SQLErrorFactory(IN) && connector
+            message_t,            // SQLErrorFactory(ARG) && connector
             void>                // SQLErrorFactory(OUT)
             DDSBuilder;
     /**
@@ -130,8 +130,8 @@ public:
      */
     typedef SQLBuildDATA<SQL_TYPE,            // SQLTypeFactory && connector
             ODBC_TYPE,            // SQLTypeFactory && connector
-            ERROR_TYPE,        // SQLErrorFactory(IN) && connector
-            MSG_TYPE,            // SQLErrorFactory(ARG) && connector
+            error_t,        // SQLErrorFactory(IN) && connector
+            message_t,            // SQLErrorFactory(ARG) && connector
             void>                // SQLErrorFactory(OUT)
             DATABuilder;
 

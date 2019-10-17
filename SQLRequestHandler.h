@@ -56,7 +56,9 @@
 #include <BESConstraintFuncs.h>
 #include <BESServiceRegistry.h>
 #include <BESUtil.h>
+
 #include <pthread.h>
+
 // get the lock
 #define LOCK(m) pthread_mutex_lock((m))
 // test the lock
@@ -106,22 +108,18 @@ private:
     static pthread_mutex_t _mutex;
     static pthread_once_t _block;
 
-
     /**
      * @brief mutex initialization routine
      */
-    static void
-    once_init_routine() {
+    static void once_init_routine() {
         if (INIT(&_mutex) != 0)
-            throw BESInternalError(
-                    "Could not initialize mutex. Exiting.", __FILE__, __LINE__);
+            throw BESInternalError("Could not initialize mutex. Exiting.", __FILE__, __LINE__);
     }
 
     /**
      * @brief self referred to implement the Singleton pattern
      */
     static SQLRequestHandler *_rh;
-
 
     typedef sql_handler_map::iterator SQLHandler_iterator;
     typedef sql_handler_map::const_iterator SQLHandler_citer;
@@ -147,23 +145,22 @@ private:
      * @return true only if the function handler
      * (named 'name') should be deleted.
      */
-    bool update_wrap_count(const string &name, bool add)
-    throw(BESInternalFatalError);
+    bool update_wrap_count(const string &name, bool add) throw(BESInternalFatalError);
 
     /**
- * @todo when an incoming request fails due to bad query, the
- * same constraints are applied to the next section of the dataset
- * which may has (probably) different column and tables names
- * so constraints will not match and all the query to the following
- * sections will fail.
- * <br>This not happen when constraints are empty
- * <br>SOLUTIONs:
- * <br>Administrator: can set homogeneous views with same columns
- * and attributes for each database used by this dataset.
- * <br>Coding: we can add some specification to dataset which
- * tells if sections are homogeneous or not, in this case (not
- * homogeneous) we use only the fist 'working' (can connect) section.
- *
+     * @todo when an incoming request fails due to bad query, the
+     * same constraints are applied to the next section of the dataset
+     * which may has (probably) different column and tables names
+     * so constraints will not match and all the query to the following
+     * sections will fail.
+     * <br>This not happen when constraints are empty
+     * <br>SOLUTIONs:
+     * <br>Administrator: can set homogeneous views with same columns
+     * and attributes for each database used by this dataset.
+     * <br>Coding: we can add some specification to dataset which
+     * tells if sections are homogeneous or not, in this case (not
+     * homogeneous) we use only the fist 'working' (can connect) section.
+     *
      * @brief function used to implement recursive calls through
      * available servers listed into the dataset.
      * This function look at the actual container in the 'dhi' and

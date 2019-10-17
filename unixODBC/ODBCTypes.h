@@ -40,11 +40,17 @@
 #include <sqltypes.h>
 
 // SQLH
+#if 0
+// Changed the names of these to remove the conflict (in my brain)
+// between the typedef name and the template name. The code was
+// correct, but it was hard to know where the typedef was in effect
+// and where the name was used only as a template. jhrg 10/17/19
 typedef SQLRETURN ERROR_TYPE;
-//typedef SQLCHAR [] MSG_TYPE; // should be
-typedef std::string MSG_TYPE; // workaround
-//typedef char* MSG_TYPE; // workaround
+typedef std::string MSG_TYPE;
+#endif
 
+typedef SQLRETURN error_t;
+typedef std::string message_t;
 
 /**
  *  TYPES
@@ -80,6 +86,7 @@ typedef std::string MSG_TYPE; // workaround
 *  used) which uses negative integer for mapping type.
 */
 typedef SQLSMALLINT SQL_TYPE;
+
 /**
  *  will be used column bind
  *  so each column will have a different

@@ -42,8 +42,9 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <math.h>
+#include <regex.h>
 
-// _SQLH_CONT_TIME_DIF && regex
+// _SQLH_CONT_TIME_DIF
 #include "SQLContainerDefinitions.h"
 
 #include <utils/Clone.h>

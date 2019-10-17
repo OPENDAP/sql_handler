@@ -28,7 +28,7 @@
 #define ODBCCONNECTOR_H_
 
 // atoi
-#include <stdlib.h>
+#include <cstdlib>
 
 // unixODBC
 #include <sql.h>
@@ -42,8 +42,6 @@
 #include "DEM/SQLErrorManager.h"
 #include "DEM/SQLErrorFactory.h"
 
-using std::string;
-
 /**
  * @brief ODBCConnector implementing the SQLConnector
  *
@@ -52,7 +50,7 @@ using std::string;
  * @see SQLErrorConnector
  *
  */
-class ODBCConnector : public SQLConnector<SQL_TYPE, ODBC_TYPE, ERROR_TYPE, MSG_TYPE> {
+class ODBCConnector : public SQLConnector<SQL_TYPE, ODBC_TYPE, error_t, message_t> {
 
 #define _buf_size 1024
 
@@ -62,7 +60,7 @@ class ODBCConnector : public SQLConnector<SQL_TYPE, ODBC_TYPE, ERROR_TYPE, MSG_T
      */
     bool connect();
 
-    MSG_TYPE *getMsg(ERROR_TYPE *error_code);
+    message_t *getMsg(error_t *error_code);
 
     /**
      * return the maximum size of a column data type
@@ -101,7 +99,7 @@ public:
     virtual const string &getColDesc(const size_t &column);
 
 
-    virtual ERROR_TYPE *getError();
+    virtual error_t *getError();
 
     /**
      * @brief Get the number of rows in the response
@@ -147,7 +145,7 @@ public:
     /**
      * @brief Set error factory used by this connector.
      */
-    void setErrorFactory(SQLErrorFactory<ERROR_TYPE, MSG_TYPE> &ef);
+    void setErrorFactory(SQLErrorFactory<error_t, message_t> &ef);
 
     /**
      * @brief Close connection
@@ -155,7 +153,7 @@ public:
     bool close();
 
     ODBCConnector() :
-            SQLConnector<SQL_TYPE, ODBC_TYPE, ERROR_TYPE, MSG_TYPE>(),
+            SQLConnector<SQL_TYPE, ODBC_TYPE, error_t, message_t>(),
             stmt(NULL),        //!< statement handle
             env(NULL),        //!< environment handle
             conn(NULL),        //!< connection handle
@@ -225,10 +223,10 @@ private:
     size_t toFetchRows; //!<number of rows to fetch or skip
 
     // errors
-    MSG_TYPE strMsg; //!< error message (argument)
+    message_t strMsg; //!< error message (argument)
     SQLSMALLINT msgEnvSeq, msgConnSeq, msgStmtSeq; //!< error index sequence
 
-    SQLErrorFactory<ERROR_TYPE, MSG_TYPE> *sef; //!<this is passed not rebuilt
+    SQLErrorFactory<error_t, message_t> *sef; //!<this is passed not rebuilt
 
     SQLCHAR **d_buf;    //!< buffer
     SQLLEN d_status[_buf_size];    //!< buffer d_status

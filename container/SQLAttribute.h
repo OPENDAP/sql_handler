@@ -27,10 +27,11 @@
 #ifndef SQLATTRIBUTE_H_
 #define SQLATTRIBUTE_H_
 
-#include <vector>
-#include "utils/StringMatch.h"
 #include <list>
 #include <bitset>
+
+#include "utils/StringMatch.h"
+
 /**
  * @brief Defines Attributes for a SQLQuery.
  *
@@ -52,21 +53,20 @@
  * @see SQLContainer::buildQuery()
  *
  */
-/**
- *
- */
 #define _SQLH_REG_ATTR \
     "^[ ]*(([A-z0-9\\_]+\\.)*([A-z0-9\\_]+))[ ]*$|"\
     "^[ ]*(([A-z0-9\\_]+\\.)*([A-z0-9\\_]+))([ ]+| [Aa][Ss] )([A-z0-9\\_]+)[ ]*$|"\
     "^[ ]*([A-z0-9\\_]+|[\\*])[ ]*$"
 
 #define _SQLH_ATTR_REG_GROUPS 10 //!< number of groups '()' in regex +1
+
 /**
  *  set the group (starts from 0)
  *  table alias
  */
 #define _SQLH_ATTR_REG_PREFIX_GROUP_op1 1
 #define _SQLH_ATTR_REG_PREFIX_GROUP_op2 4
+
 /**
  * #define _SQLH_ATTR_REG_PREFIX_GROUP_op3 -1
  */
@@ -222,16 +222,13 @@ public:
             else if (bs.test(_SQLH_ATTR_REG_ATTR_GROUP_op3))
                 this->setName((*i).getMatch(i_matched++));
             else
-                throw BESInternalError(
-                        "Unable to match required attribute name.",
-                        __FILE__, __LINE__);
+                throw BESInternalError("Unable to match required attribute name.", __FILE__, __LINE__);
 
             BESDEBUG(SQL_NAME, "SQLAttribute::loadAttribute NAME:" << getName() << std::endl);
         }
         else
-            throw BESInternalError(
-                    "Unable to match the SQLAttributes parts",
-                    __FILE__, __LINE__);
+            throw BESInternalError("Unable to match the SQLAttributes parts", __FILE__, __LINE__);
+
         BESDEBUG(SQL_NAME, "SQLAttribute::loadAttribute done" << std::endl);
         return true;
     }
@@ -266,9 +263,7 @@ public:
             attribute(attr),
             position(pos) {
         if (!this->loadAttribute(attr))
-            throw BESInternalError(
-                    "Passed string is not recognized as SQLAttribute",
-                    __FILE__, __LINE__);
+            throw BESInternalError("Passed string is not recognized as SQLAttribute", __FILE__, __LINE__);
         BESDEBUG(SQL_NAME, "CREATING: SQLAttribute" << std::endl);
     };
 
@@ -439,9 +434,10 @@ public:
      * @brief dtor
      */
     virtual ~SQLAttrComp() {
-        if (comp)
+        if (comp) {
             delete comp;
-        comp = 0;
+            comp = 0;
+        }
     }
 
 private:

@@ -157,9 +157,7 @@ public:
                                                   *error_factory);
             }
             else if (!ret)
-                throw SQLInternalFatalError(
-                        "SQLCloseAction: close execution fails (returning false)",
-                        __FILE__, __LINE__);
+                throw SQLInternalFatalError("SQLCloseAction: close execution fails (returning false)", __FILE__, __LINE__);
             BESDEBUG(SQL_NAME, "SQLCloseAction: Successfully closed" << std::endl);
         }
         catch (SQLInternalError &ie) {
@@ -167,22 +165,16 @@ public:
              *  This exception here (applied to close) should be fatal.
              *  It will be throw as Fatal Error.
              */
-            throw SQLInternalFatalError(ie.get_message(),
-                                        ie.get_file(),
-                                        ie.get_line());
+            throw SQLInternalFatalError(ie.get_message(), ie.get_file(), ie.get_line());
         }
         catch (BESError &e) {
-            throw SQLInternalFatalError(e.get_message(),
-                                        e.get_file(), e.get_line());
+            throw SQLInternalFatalError(e.get_message(), e.get_file(), e.get_line());
         }
         catch (std::exception &e) {
-            throw SQLInternalFatalError(e.what(),
-                                        __FILE__, __LINE__);
+            throw SQLInternalFatalError(e.what(), __FILE__, __LINE__);
         }
         catch (...) {
-            throw SQLInternalFatalError(
-                    "SQLCloseAction: Unknow error while connecting",
-                    __FILE__, __LINE__);
+            throw SQLInternalFatalError("SQLCloseAction: Unknown error while connecting", __FILE__, __LINE__);
         }
         return NULL; // to avoid warning
     }

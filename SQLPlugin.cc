@@ -29,20 +29,7 @@
 using std::endl;
 using std::string;
 
-
-#if 0
-/**
- * static -> no sense:
- * SQPlugin should be unique instance for each package
- */
-SQLPluginList *SQLPlugin::_pl=SQLPlugin::findTheList();
-#endif
-
 SQLPlugin::~SQLPlugin(void) {
-#if 0
-    // THIS IS DONE BY THE SQLRequestHandler::remove_sql_handler
-    remove_handlers();
-#endif
 }
 
 void SQLPlugin::remove_handlers() {
@@ -93,11 +80,7 @@ bool SQLPlugin::remove_handler(const string &command) {
          * command, the wrapping function will be completely
          * removed.
          */
-#if 0
-        // _pl is Member of this class now
-        if (!_pl)
-        _pl=SQLPlugin::find_RequestHandler();
-#endif
+
         if (_pl) {
             //update the SQLRequestHandler wrapper usage counter
             if (!_pl->remove_sql_wrapper(command)) {
@@ -161,14 +144,6 @@ sql_request_handler SQLPlugin::find_handler(const string &handler_name) {
 
 SQLPluginList *
 SQLPlugin::findTheList() {
-#if 0
-    // NOT SAFE instance can be deleted by SQLRequestHandler dtor
-    // try cached position
-    if (_pl) {
-        BESDEBUG(SQL_NAME,"SQLPlugin: returning cached version: "<<_pl<<endl);
-        return _pl;
-    }
-#endif
     // search for the SQLRequestHandler
     BESRequestHandler *bes_pl = BESRequestHandlerList::TheList()->find_handler(SQL_NAME);
 
@@ -185,7 +160,7 @@ SQLPlugin::findTheList() {
          * BESPlugin.h:123
          */
         BESDEBUG(SQL_NAME, "SQLPlugin: SQLRequestHandler found has ptr: " << bes_pl << endl);
-//dynamic_cast<SQLPluginList*>(bes__pl)->dump(std::cerr);
+
         SQLLinker *l = static_cast<SQLLinker *>(bes_pl);
         if (l) {
             BESDEBUG(SQL_NAME, "SQLPlugin: SQLRequestHandler THE LINK WORKS!!" << endl);
@@ -195,7 +170,6 @@ SQLPlugin::findTheList() {
             BESDEBUG(SQL_NAME, "SQLPlugin: SQLRequestHandler THE LINK <<DO NOT>> WORKS!!" << endl);
             return NULL;
         }
-        //return dynamic_cast<SQLPluginList*>(bes_pl);
     }
     else
         return NULL;

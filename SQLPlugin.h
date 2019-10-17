@@ -42,6 +42,7 @@ class SQLPluginList;
 #include "SQLResponseNames.h"
 
 #include "container/SQLDataHandlerInterface.h"
+
 // add_handler
 #include <BESInternalFatalError.h>
 
@@ -183,7 +184,6 @@ public:
 	 * @see SQLResponseNames
 	 */
     virtual void remove_handlers();
-
 
     /**
 	 * @brief If some handler are still in the map,

@@ -75,7 +75,7 @@
  * @see getErrorFactory
  *
  */
-class ODBCErrorFactoryComponent : public SQLErrorFactory<ERROR_TYPE, MSG_TYPE> {
+class ODBCErrorFactoryComponent : public SQLErrorFactory<error_t, message_t> {
 public:
 #if 0
     /**
@@ -83,9 +83,9 @@ public:
      * @param conn a reference to the ODBCConnector
      * @return a copy of a SQLErrorFactory of this driver (unixODBC)
      */
-    static SQLErrorFactory<ERROR_TYPE,MSG_TYPE>
+    static SQLErrorFactory<error_t,message_t>
     getErrorFactory(ODBCConnector &conn){
-        return SQLErrorFactory<ERROR_TYPE,MSG_TYPE>(conn,&_getActions,&_stop);
+        return SQLErrorFactory<error_t,message_t>(conn,&_getActions,&_stop);
     }
 #endif
 
@@ -95,14 +95,14 @@ public:
      * SQLConnector
      */
     ODBCErrorFactoryComponent(ODBCConnector &conn) :
-            SQLErrorFactory<ERROR_TYPE, MSG_TYPE>(conn, &_getActions, &_stop) {}
+            SQLErrorFactory<error_t, message_t>(conn, &_getActions, &_stop) {}
 
     /**
      * @brief copy constructor
      * @param a reference to an ODBCErrorFactoryComponent
      */
     ODBCErrorFactoryComponent(ODBCErrorFactoryComponent &c) :
-            SQLErrorFactory<ERROR_TYPE, MSG_TYPE>(c.getConnector(),
+            SQLErrorFactory<error_t, message_t>(c.getConnector(),
                                                   &c._getActions,
                                                   &c._stop) {}
 
@@ -119,7 +119,7 @@ private:
      * (ActionsLists) to do on the incoming error code.
      * Defined template parameters indicates the types used
      * by the actions in the lists:
-     * - MSG_TYPE is the type passed as IN (as input argument
+     * - message_t is the type passed as IN (as input argument
      * of the action)
      * - void is the returned type of the action
      * <br>NOTE: default actions defined in SQLDefaultErrorAction
@@ -133,7 +133,7 @@ private:
      * @return SQLActionList
      *
      */
-    static SQLActionList<MSG_TYPE, void> &_getActions(ERROR_TYPE *error);
+    static SQLActionList<message_t, void> &_getActions(error_t *error);
 
     /**
      * @brief The method which represent the stop condition
@@ -146,14 +146,14 @@ private:
      * call ERROR_CODE getCode(), this will result in:
      * At the end of the actual executing ActionList exit.
      */
-    static bool _stop(ERROR_TYPE *error);
+    static bool _stop(error_t *error);
 
     /**
      * defines the type of ACTION which will be used to
      * build static action lists.
      * <br>Note: this defines a function pointer.
      */
-    typedef SQLStaticAction<MSG_TYPE>::ACTION _list_type;
+    typedef SQLStaticAction<message_t>::ACTION _list_type;
 
     /**
      * From SQLGetEnvAttr API DOC we could have 5
@@ -171,19 +171,19 @@ private:
     static _list_type _error[];
 #endif
     // 1 SQL_SUCCESS,
-    static SQLStaticActionList<MSG_TYPE, void> success;
+    static SQLStaticActionList<message_t, void> success;
 
     // 2 SQL_SUCCESS_WITH_INFO,
-    static SQLStaticActionList<MSG_TYPE, void> info;
+    static SQLStaticActionList<message_t, void> info;
 
     // 3 SQL_NO_DATA,
-    static SQLStaticActionList<MSG_TYPE, void> no_data;
+    static SQLStaticActionList<message_t, void> no_data;
 
     // 4 SQL_ERROR,
-    static SQLStaticActionList<MSG_TYPE, void> error;
+    static SQLStaticActionList<message_t, void> error;
 
     // 5 SQL_INVALID_HANDLE.
-    static SQLStaticActionList<MSG_TYPE, void> invalid;
+    static SQLStaticActionList<message_t, void> invalid;
 };
 
 #endif /* ODBCERRORFACTORYCOMPONENT_H_ */

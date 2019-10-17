@@ -30,16 +30,16 @@ using std::endl;
 using std::string;
 
 // SQL_SUCCESS
-SQLStaticActionList<MSG_TYPE, void> ODBCErrorFactoryComponent::success =
-        SQLStaticActionList<MSG_TYPE, void>(SQLDefaultErrorAction<MSG_TYPE>::debugMethod);
+SQLStaticActionList<message_t, void> ODBCErrorFactoryComponent::success =
+        SQLStaticActionList<message_t, void>(SQLDefaultErrorAction<message_t>::debugMethod);
 
 // SQL_SUCCESS_WITH_INFO
-SQLStaticActionList<MSG_TYPE, void> ODBCErrorFactoryComponent::info =
-        SQLStaticActionList<MSG_TYPE, void>(SQLDefaultErrorAction<MSG_TYPE>::debugMethod);
+SQLStaticActionList<message_t, void> ODBCErrorFactoryComponent::info =
+        SQLStaticActionList<message_t, void>(SQLDefaultErrorAction<message_t>::debugMethod);
 
 // SQL_NO_DATA
-SQLStaticActionList<MSG_TYPE, void> ODBCErrorFactoryComponent::no_data =
-        SQLStaticActionList<MSG_TYPE, void>(SQLDefaultErrorAction<MSG_TYPE>::debugMethod);
+SQLStaticActionList<message_t, void> ODBCErrorFactoryComponent::no_data =
+        SQLStaticActionList<message_t, void>(SQLDefaultErrorAction<message_t>::debugMethod);
 
 #if 0
 // fatalAction also print to debug
@@ -55,15 +55,15 @@ SQLStaticActionList<MSG_TYPE,void> ODBCErrorFactoryComponent::no_data=
 #endif
 
 // SQL_ERROR
-SQLStaticActionList<MSG_TYPE, void> ODBCErrorFactoryComponent::error =
-        SQLStaticActionList<MSG_TYPE, void>(SQLDefaultErrorAction<MSG_TYPE>::fatalMethod);
+SQLStaticActionList<message_t, void> ODBCErrorFactoryComponent::error =
+        SQLStaticActionList<message_t, void>(SQLDefaultErrorAction<message_t>::fatalMethod);
 
 // SQL_INVALID_HANDLE
-SQLStaticActionList<MSG_TYPE, void> ODBCErrorFactoryComponent::invalid =
-        SQLStaticActionList<MSG_TYPE, void>(SQLDefaultErrorAction<MSG_TYPE>::fatalMethod);
+SQLStaticActionList<message_t, void> ODBCErrorFactoryComponent::invalid =
+        SQLStaticActionList<message_t, void>(SQLDefaultErrorAction<message_t>::fatalMethod);
 
-SQLActionList<MSG_TYPE, void> &
-ODBCErrorFactoryComponent::_getActions(ERROR_TYPE *error) {
+SQLActionList<message_t, void> &
+ODBCErrorFactoryComponent::_getActions(error_t *error) {
     BESDEBUG(ODBC_NAME, "Checking for new errors.." << endl);
     if (!error)
         throw BESInternalFatalError(
@@ -96,7 +96,7 @@ ODBCErrorFactoryComponent::_getActions(ERROR_TYPE *error) {
 }
 
 bool
-ODBCErrorFactoryComponent::_stop(ERROR_TYPE *error) {
+ODBCErrorFactoryComponent::_stop(error_t *error) {
     if (!error)
         throw BESInternalFatalError(
                 "ODBCPlugin: error code is NULL", __FILE__, __LINE__);
