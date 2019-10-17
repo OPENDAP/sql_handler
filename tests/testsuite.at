@@ -17,4 +17,4 @@ AT_BESCMD_BINARY_DAP2_RESPONSE_TEST([sql/postgresql.data_constraint_2.bescmd], [
 AT_BESCMD_RESPONSE_TEST([sql/sqlite.das.bescmd], [pass])
 AT_BESCMD_RESPONSE_TEST([sql/sqlite.dds.bescmd], [pass])
 AT_BESCMD_RESPONSE_TEST([sql/sqlite.ddx.bescmd], [pass])
-AT_BESCMD_BINARY_DAP2_RESPONSE_TEST([sql/sqlite.data.bescmd], [xfail])
+AT_BESCMD_BINARY_DAP2_RESPONSE_TEST([sql/sqlite.data.bescmd], [pass])

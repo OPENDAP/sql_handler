@@ -109,7 +109,7 @@ public:
 	 * the SELECT statement returned by the query() method of this class.
 	 * @return the number of rows
 	 */
-    unsigned int getRowCount();
+    unsigned long getRowCount();
 
 	/**
 	 * @brief Query

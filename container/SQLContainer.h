@@ -136,6 +136,14 @@ public:
     virtual string buildQuery()=0;
 
     /**
+      * @brief Build a COUNT query
+      * Use this query to get teh COUNT(*) of the rows for the query
+      * returned by buildQuery().
+      * @return Use this query to get the row count
+      */
+    virtual string buildCountQuery()=0;
+
+    /**
      * Index other (optional) strings.
      * If getOther provides modification for 'buf'
      * be sure to return true.

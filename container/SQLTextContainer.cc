@@ -129,7 +129,7 @@ void SQLTextContainer::comparatorSubst(SQL_CONSTRAINT_SET& where)
 
 string SQLTextContainer::buildQuery()
 {
-    BESDEBUG(SQL_NAME, "SQLTextContainer: Building query: "<<endl);
+    BESDEBUG(SQL_NAME, "SQLTextContainer: Building SELECT query: "<<endl);
     SQLQuery &q = getQuery();
 
     /**
@@ -335,7 +335,7 @@ string SQLTextContainer::buildQuery()
 
 string SQLTextContainer::buildCountQuery()
 {
-    BESDEBUG(SQL_NAME, "SQLTextContainer: Building query: "<<endl);
+    BESDEBUG(SQL_NAME, "SQLTextContainer: Building COUNT query: "<<endl);
     SQLQuery &q = getQuery();
 
     /**

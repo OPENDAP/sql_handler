@@ -436,37 +436,46 @@ ODBCConnector::getMsg(ERROR_TYPE *error_code) {
     }
 }
 
-unsigned int
+unsigned long
 ODBCConnector::getRowCount() {
-#if 0
+#if 1
+    SQLHSTMT statement;
     // FIXME Hackery. I used this ti get the number of rows. The SQLRowCount()
     // Does not reliably return that for anything other than UPDATE, INSERT,
     // or DELETE statements. jhrg 10/16/19
     // Allocate a statement handle
-    SQLAllocHandle(SQL_HANDLE_STMT, conn, &stmt);
+    SQLAllocHandle(SQL_HANDLE_STMT, conn, &statement);
 
-    string count_stmt = "SELECT COUNT(*) FROM sqlh_table WHERE b < 50;";
-    rc = SQLExecDirect(stmt, (SQLCHAR *) count_stmt.c_str(), SQL_NTS);
+    string count_stmt = getParams().buildCountQuery();
+    rc = SQLExecDirect(statement, (SQLCHAR *) count_stmt.c_str(), SQL_NTS);
     BESDEBUG(ODBC_NAME, "ODBCConnector: Query \"" << count_stmt << "\" executed; rc=" << rc << endl);
 
     /* create a cursor and execute a statement */
 
-    if (!SQL_SUCCEEDED(rc)) { cerr << "couldn't exec sql, process error, free resources" << endl; }
+    if (!SQL_SUCCEEDED(rc))
+        throw BESInternalError("ODBC SQL Error: Couldn't exec query", __FILE__, __LINE__);
+
     /* fetch the result: here we expect single row with single column */
-    rc = SQLFetch(stmt);
-    if (!SQL_SUCCEEDED(rc)) { cerr << "couldn't fetch row, process error, free resources" << endl; }
+    rc = SQLFetch(statement);
+    if (!SQL_SUCCEEDED(rc))
+        throw BESInternalError("ODBC SQL Error: Couldn't fetch row", __FILE__, __LINE__);
+
     /* extract data from the fetched row */
     SQLLEN indicator;
     long count = 0;
     SQLLEN cbValueMax = sizeof(count);
-    rc = SQLGetData(stmt, 1, SQL_C_LONG, &count, cbValueMax, &indicator);
-    if (!SQL_SUCCEEDED(rc)) { /* couldn't convert to int, process error, free resources */ }
-    if (indicator == SQL_NULL_DATA) { /* unexpected NULL, process error, free resources */ }
+    rc = SQLGetData(statement, 1, SQL_C_LONG, &count, cbValueMax, &indicator);
+    if (!SQL_SUCCEEDED(rc))
+        throw BESInternalError("ODBC SQL Error: Couldn't extract row count", __FILE__, __LINE__);
+    if (indicator == SQL_NULL_DATA)
+        throw BESInternalError("ODBC SQL Error: Unexpected null value returned by the database", __FILE__, __LINE__);
 
     BESDEBUG(ODBC_NAME, "Rows in table: " << hex << count << dec << ", indicator: " << indicator << endl);
 
     /* free resources: close the cursor */
-    SQLFreeHandle(SQL_HANDLE_STMT, stmt);
+    SQLFreeHandle(SQL_HANDLE_STMT, statement);
+
+    return count;
 #endif
 }
 
@@ -485,10 +494,16 @@ ODBCConnector::query() {
      *  buffers.
      */
     if (isReady()) {
-        // close(); no, simply reset vars
         clean(); //!< clean members
-        // connect(); no, simply execute new query
     }
+
+    // rows
+    // getRowCount() uses the same query logic as buildQuery(), but gets the row count
+    // instead of the data. This works reliably (with a variety of ODBC drivers) while
+    // the SQLRowCount() function does not. That is, SQLRowCount is guaranteed for
+    // UPDATE, INSERT, or DELETE statements only.
+    unsigned long rows = getRowCount();
+    setRows(rows);
 
     // Allocate a statement handle
     SQLAllocHandle(SQL_HANDLE_STMT, conn, &stmt);
@@ -496,8 +511,10 @@ ODBCConnector::query() {
     string query = getParams().buildQuery();
     rc = SQLExecDirect(stmt, (SQLCHAR *) query.c_str(), SQL_NTS);
     BESDEBUG(ODBC_NAME, "ODBCConnector: Query \"" << query << "\" executed; rc=" << rc << endl);
+    if (!SQL_SUCCEEDED(rc))
+        throw BESInternalError("ODBC SQL Error: Couldn't exec query", __FILE__, __LINE__);
 
-    // rows
+#if 0
     //size_t rows;
     // This is a bug. The SQLRowCount() function returns the number of rows affected by an
     // UPDATE, INSERT, or DELETE statement; an SQL_ADD, SQL_UPDATE_BY_BOOKMARK, or
@@ -509,14 +526,17 @@ ODBCConnector::query() {
     SQLLEN rows = 0;
     SQLRowCount(stmt, &rows);
     BESDEBUG(ODBC_NAME, "ODBCConnector: Setting rows number: " << rows << endl);
-    //rows = 10;    // FIXME jhrg 10/16/19
+    //rows = 10;    // HACK jhrg 10/16/19
     setRows(rows);
+#endif
 
     // columns
-    //size_t cols;
     SQLSMALLINT cols = 0;
-    SQLNumResultCols(stmt, &cols);
+    rc = SQLNumResultCols(stmt, &cols);
     BESDEBUG(ODBC_NAME, "ODBCConnector: Setting columns number: " << cols << endl);
+    if (!SQL_SUCCEEDED(rc))
+        throw BESInternalError("ODBC SQL Error: Couldn't get column number", __FILE__, __LINE__);
+
     setCols(cols);
 #if 0
     /**
@@ -538,11 +558,13 @@ ODBCConnector::query() {
         d_buf[c] = (SQLCHAR *) calloc(getColSize(c), sizeof(SQLCHAR));
     }
 
-    /* Loop through the rows in the result-set binding to */
-    /* local variables */
+    // Loop through the rows in the result-set binding to local variables
     for (int i = 0; i < cols; i++) {
-        rc = SQLBindCol(stmt, i + 1, *getType(i),//SQL_C_CHAR,//bind to char
-                        d_buf[i], getColSize(i), &d_status[i]);//sizeof( d_buf[i] )
+        rc = SQLBindCol(stmt, i + 1, *getType(i),
+                        d_buf[i], getColSize(i), &d_status[i]);
+        if (!SQL_SUCCEEDED(rc))
+            throw BESInternalError("ODBC SQL Error: Couldn't bind result set to local variables", __FILE__, __LINE__);
+
     }
 
     // if resulting d_status SUCCEEDED set READY d_status.
