@@ -61,13 +61,6 @@ SQL_ATTRIBUTE_SET_BYNAME SQLQuery::loadAttributes(string &attr) {
 
         // ret.insert(SQLAttribute(first_matched, i));
     }
-#if 0
-    for (size_t m = 0; m < _match.size(); m++) {
-        BESDEBUG( SQL_NAME,"SQLQuery::loadAttributes() match "<< m << endl );
-        // (table.),(attribute), position
-        ret.insert(SQLAttribute(_match[m][0], m));
-    }
-#endif
 
     BESDEBUG(SQL_NAME, "SQLQuery::loadAttributes() found n_attributes: " << ret.size() << endl);
     return ret;

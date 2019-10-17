@@ -56,15 +56,9 @@ private:
      * You'll never have to delete it.
      */
     SQLContainer *_sql_container;
-#if 0
-    // working but dangerous
-    // see below
-    std::shared_ptr<SQLContainer,smart::Clone<SQLContainer> > _sql_container;
-#endif
 
-    SQLDataHandlerInterface() :
-            _dhi(NULL), _sql_container(NULL) {
-    };
+    SQLDataHandlerInterface() : _dhi(NULL), _sql_container(NULL) {
+    }
 public:
 
     /**
@@ -73,29 +67,6 @@ public:
     SQLDataHandlerInterface(BESDataHandlerInterface &dhi) :
             _dhi(&dhi), _sql_container(SQLContainerFactory::getContainer(dhi)) {
     }
-
-#if 0
-    /**
-     * WORKING BUT DANGEROUS
-     * (with command "show version" BES set a null dhi.container
-     * which make this constructor throw the error)
-     *
-     * @brief Constructor
-     *
-     * @note: the SharedPtr<> can't be loaded if
-     * SQLContainerFactory::getContainer() returns a NULL
-     * pointer. In that case a fatal error is thrown.
-     */
-    SQLDataHandlerInterface(BESDataHandlerInterface &dhi):
-    _dhi(&dhi),
-    _sql_container(
-            SQLContainerFactory::getContainer(dhi)?
-            :
-            throw BESInternalFatalError(
-                    "Unable to build SQLDataHandlerInterface with a NULL SQLContainer",
-                    __FILE__,__LINE__)) {
-    };
-#endif
 
     virtual ~SQLDataHandlerInterface() {
         if (_sql_container)

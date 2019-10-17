@@ -60,16 +60,7 @@ SQLContainer::init() {
 bool
 SQLContainer::isUpToDate() const {
     struct stat buf;
-    if (!stat(this->get_real_name().c_str(), &buf)) {
-#if __TESTS__ == 1
-        char timeStr[100];
-        strftime(timeStr, 100, "%d-%m-%Y %H:%M:%S", localtime( &buf.st_mtime));
-        BESDEBUG(SQL_NAME,"SQLContainer: Last modified date and time: "<<timeStr<<endl);
-        strftime(timeStr, 100, "%d-%m-%Y %H:%M:%S", localtime( &_time));
-        BESDEBUG(SQL_NAME,"SQLContainer: this container date and time: "<<timeStr<<endl);
-        BESDEBUG(SQL_NAME,"SQLContainer: Time difference in seconds: "<<
-                fabs(difftime(_time,buf.st_mtime))<<endl);
-#endif
+    if (stat(this->get_real_name().c_str(), &buf) == 0) {
         if (fabs(difftime(_time, buf.st_mtime)) < _SQLH_CONT_TIME_DIF) {
             BESDEBUG(SQL_NAME, "SQLContainer: Cached file is up to date" << endl);
             return true;

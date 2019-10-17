@@ -29,10 +29,6 @@
 
 #include "action/SQLAction.h"
 
-// BESDEBUG
-#if __TESTS__ == 1
-#include "SQLDefinitions.h"
-#endif
 // free
 #include <cstdlib>
 

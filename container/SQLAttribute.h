@@ -27,19 +27,6 @@
 #ifndef SQLATTRIBUTE_H_
 #define SQLATTRIBUTE_H_
 
-#if 0
-/**
- * NOT USED
- * @brief attribute sort mode
- */
-typedef enum _AttrSortMode {
-    _sql_attr_name_sort=0,		//!< _sql_attr_name_sort
-    _sql_attr_fullName_sort=1,              //!< _sql_attr_fullName_sort
-    _sql_attr_position_sort=2,            //!< _sql_attr_position_sort
-    _sql_attr_all_sort=3} SQLAttrSortMode;//!< _sql_attr_all_sort
-#endif
-
-// FIXME Removed jhrg 10/1/14 using namespace std;
 #include <vector>
 #include "utils/StringMatch.h"
 #include <list>

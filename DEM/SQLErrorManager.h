@@ -105,12 +105,6 @@ public:
      * @brief SQLActionManager<...>::JOIN type function
      */
     static JOIN *join(JOIN *prev, JOIN *actual) {
-#if __TESTS__ == 1
-        if (actual)
-        BESDEBUG(SQL_NAME,"_JOIN: "<<std::endl);
-        else
-        BESDEBUG(SQL_NAME,"!_JOIN: "<<std::endl);
-#endif
         return actual;
         // no delete
     }
@@ -119,12 +113,6 @@ public:
      * @brief SQLActionManager<libdap::BaseType>::MERGE type function
      */
     static JOIN *merge(JOIN *prev, JOIN *actual) {
-#if __TESTS__ == 1
-        if (actual)
-        BESDEBUG(SQL_NAME,"_MERGE: "<<std::endl);
-        else
-        BESDEBUG(SQL_NAME,"!_MERGE: "<<std::endl);
-#endif
         return actual;
         // no delete
     }

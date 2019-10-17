@@ -294,12 +294,7 @@ public:
                                                            " String-> size: " << row.size() << std::endl);
                         gr.set(i, true);
                     }
-#if __TESTS__ == 1
-                        else { // no group found
-                        BESDEBUG( SQL_NAME,
-                                "StringMatch: String matches but no group number "<<i<<" is found"<<endl);
-                        }
-#endif
+
                     BESDEBUG(SQL_NAME, "Done with group " << i << std::endl);
                 }
                 // if some group is found in the substring

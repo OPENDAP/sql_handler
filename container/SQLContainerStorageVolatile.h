@@ -95,29 +95,7 @@ public:
 
     virtual ~SQLContainerStorageVolatile() {
         del_containers();
-    };
-
-
-#if 0
-    // commented out: not used && to update for use SQLContainerFactory
-    void add_container(const string & name,
-                        const string & real_name,
-                        const string & type)
-    {
-//			if (_cf)
-            BESContainerStorageVolatile::add_container(
-                _cf.getContainer(name,real_name,type));
-#if 0
-        else
-            throw BESInternalFatalError(
-                "SQLContainerStorageVolatile: Unable to load "
-                "SQLContainer(s), passed factory ptr is NULL",
-                __FILE__,__LINE__);
-#endif
-        dump(std::cerr);
     }
-#endif
-
 };
 
 #endif /* SQLCONTAINERSTORAGEVOLATILE_H_ */

@@ -43,15 +43,8 @@
 #include <list>
 #include <string>
 
-#if 0
-#include "utils/SharedPtr.h"
-#endif
-
-
 // read
 #include <bitset>
-//#include <sys/types.h> included by SQLContainer
-//#include <regex.h> included by SQLContainer
 #include <fstream>
 #include "SQLTextDefinitions.h"
 

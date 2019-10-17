@@ -179,14 +179,6 @@ public:
 
                         // tryNext action and merge results
                         _merge = merge_f(_merge, tryNext(actions, args));
-
-#if __TESTS__ == 1
-                        if (_merge)
-                        BESDEBUG(SQL_NAME,"ActionManager: MERGE!NULL"<<std::endl);
-                        else
-                        BESDEBUG(SQL_NAME,"ActionManager: MERGEisNULL"<<std::endl);
-#endif
-
                     }
                 }
                 catch (SQLInternalError &ie) {
@@ -199,13 +191,6 @@ public:
 
             // join resulting _merge_status
             _join = join_f(_join, _merge);
-
-#if __TESTS__ == 1
-            if (_join)
-            BESDEBUG(SQL_NAME,"ActionManager: JOIN!NULL"<<std::endl);
-            else
-            BESDEBUG(SQL_NAME,"ActionManager: JOINisNULL"<<std::endl);
-#endif
 
             // resetting _merge_status
             _merge = NULL;

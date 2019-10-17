@@ -38,7 +38,6 @@
 
 #include <string>
 #include <set>
-// FIXME Removed jhrg 10/1/14 using namespace std;
 
 // order type can be set in constructor
 typedef std::set<SQLAttribute, SQLAttrComp> SQL_ATTRIBUTE_SET;
@@ -155,7 +154,6 @@ public:
         where = c;
     }
 
-
     /**
      * @brief Load all constraint matching the regex and return
      * the loaded set of SQLContraints.
@@ -183,40 +181,6 @@ public:
      * stored in the dataset
      */
     virtual SQL_ATTRIBUTE_SET_BYPOS *attrToSelect(std::string &onTheFly);
-
-#if 0
-    /**
-     * MOVED INTO SQLTextContainer::READ()
-     * Selection
-     * @brief Standard function which filter SQLContainer attributes
-     * to build a valid SQL WHERE predicate.
-     * The function should look at the attributes and to the dataset
-     * specified where predicate to check that 'on the fly' specified
-     * contraints are 'more restrictive' then the dataset one.
-     *
-     * @todo: this is not easy since adding predicates here is not
-     * implicit that we are restricting the range.
-     * We have to discuss about this. carlo cancellieri 27/Jul/2010
-     *
-     * <br>@note: This member uses the match function.
-     * <br>It also uses the bool getOther(string &) method
-     * to check if some exception to the standard SQL comparator
-     * are provided for the driver (API) in use.
-     *
-     * @return a string representing a valid SQL WHERE predicate.
-     */
-    virtual std::string constrToWhere(std::string &);
-#endif
-
-#if 0
-    /**
-     * @brief Utility function to return a set<T> as string
-     * @param s the set to use
-     * @param the join string to put between strings
-     * @return the resulting string
-     */
-    static std::string setToStr(std::set<std::string> &s, const std::string join);
-#endif
 };
 
 #endif /* SQLQUERY_H_ */

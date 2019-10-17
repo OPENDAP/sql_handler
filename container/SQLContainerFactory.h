@@ -157,11 +157,6 @@ protected:
      * SQLContainer to use.
      */
     static SQLContainer *selectContainer(string name, string real_name, string type) {
-#if 0
-        //if we get an XML file use
-        return SQLXMLContainer(name,real_name,type);
-#endif
-        // if we get a TXT file use
         // NOTE: symbolic_name == real_name
         return new SQLTextContainer(name, real_name, type);
     }

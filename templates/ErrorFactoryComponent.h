@@ -27,7 +27,6 @@
 #ifndef OPENDAP_CLASSERRORFACTORYCOMPONENT_H_
 #define OPENDAP_CLASSERRORFACTORYCOMPONENT_H_
 
-
 #include "action/SQLStaticActionList.h"
 
 #include "DEM/SQLErrorFactory.h"

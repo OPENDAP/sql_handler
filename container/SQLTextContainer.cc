@@ -24,10 +24,11 @@
  *      Author: carlo cancellieri
  */
 
+#include <memory>
+
 #include "SQLTextContainer.h"
 
-using std::endl;
-using std::string;
+using namespace std;
 
 SQLTextContainer::SQLTextContainer(const string &name, const string &real_name, const string &type) :
         SQLContainer(name, real_name, type), _dataset(new DATASET()), d_actual_section(_dataset->begin()) {
@@ -169,7 +170,7 @@ string SQLTextContainer::buildQuery() {
      * attributes ordered by position as
      * stored in the dataset
      */
-    std::auto_ptr<SQL_ATTRIBUTE_SET_BYPOS> attrs(q.attrToSelect(attributes));
+    unique_ptr<SQL_ATTRIBUTE_SET_BYPOS> attrs(q.attrToSelect(attributes));
     buf.clear();
     if (!attrs->empty()) {
         SQL_ATTRIBUTE_SET_BYPOS::iterator i = attrs->begin();

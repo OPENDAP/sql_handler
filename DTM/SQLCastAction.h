@@ -28,10 +28,7 @@
 #define SQLCASTACTION_H_
 
 #include "action/SQLObjectAction.h"
-// BESDEBUG
-#if __TESTS__ == 1
-#include "SQLDefinitions.h"
-#endif
+
 // free
 #include <cstdlib>
 

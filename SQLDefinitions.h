@@ -27,23 +27,9 @@
 #ifndef SQLDEFINITIONS_H_
 #define SQLDEFINITIONS_H_
 
-
 // DEBUG
 #include "SQLResponseNames.h"
 #include <BESDebug.h>
-
-#ifdef __TESTS__
-
-#if 0
-
-#define TESTDEBUG(X,Y) BESDEBUG(X,Y)
-#else
-#define TESTDEBUG(X,Y)
-#endif
-
-#endif
-
-
 
 /**
  * catalog
