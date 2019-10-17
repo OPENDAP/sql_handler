@@ -52,24 +52,19 @@ typedef struct dataset_section {
      */
     dataset_section(const dataset_section &ds) :
             api(ds.api), server(ds.server), port(ds.port), dbname(ds.dbname), user(ds.user), pass(ds.pass), query(
-                    ds.query), other(ds.other)
-    {
-        TESTDEBUG(SQL_NAME_TEST,"CREATE: DATASET_SECTION"<<endl);
+            ds.query), other(ds.other) {
     }
 
     /**
      * @brief default constructor
      */
-    dataset_section()
-    {
-        TESTDEBUG(SQL_NAME_TEST,"CREATE: SQLH_DATASET_SECTION"<<endl);
+    dataset_section() {
     }
+
     /**
      * @brief dtor
      */
-    virtual ~dataset_section()
-    {
-        TESTDEBUG(SQL_NAME_TEST,"DELETE: SQLH_DATASET_SECTION ->api: "<<api<<endl);
+    virtual ~dataset_section() {
     }
 
 } SQLH_DATASET_SECTION;
@@ -126,7 +121,7 @@ typedef enum _dataset_parts {
 #define _SQLH_DATASET_REG_VAR_GROUP 1
 // variable definition
 #define _SQLH_DATASET_REG_DEFVAR \
-	"[ ]*define[ ]+(\\$[A-z,0-9,_]*\\$)[ ]*=[ ]*([A-z,0-9,\\',\\\", ,\\,]+)"
+    "[ ]*define[ ]+(\\$[A-z,0-9,_]*\\$)[ ]*=[ ]*([A-z,0-9,\\',\\\", ,\\,]+)"
 // number of groups '()' in regex +1
 #define _SQLH_DATASET_REG_DEFVAR_GROUPS 3
 // set the interesting group (starts from 0)
@@ -148,8 +143,8 @@ typedef enum _dataset_parts {
 // key=value
 //@todo: check this
 #define _SQLH_DATASET_REG_KEY_VAL \
-	"^[ ]*([A-z,0-9,_]*|!=|<=|>=|~=|\\*)[ ]*=[ ]*" \
-	"(==|>=|<=|~=|!=|[A-z,0-9,\\',\\\", ,\\,,\\*,\\%,<,>,!,~]+)"
+    "^[ ]*([A-z,0-9,_]*|!=|<=|>=|~=|\\*)[ ]*=[ ]*" \
+    "(==|>=|<=|~=|!=|[A-z,0-9,\\',\\\", ,\\,,\\*,\\%,<,>,!,~]+)"
 //NOTE: Start/End spaces in variable are stored
 /*
  * = 			Equal

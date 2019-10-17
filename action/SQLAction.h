@@ -33,7 +33,7 @@
 #include "DEM/SQLInternalError.h"
 #include "DEM/SQLInternalFatalError.h"
 
-#if __CLONE__==1
+#if __CLONE__ == 1
 #include "utils/Clone.h"
 #endif
 
@@ -50,65 +50,63 @@
  * @see ./handler/connector/{actions}
  * @see SQLStaticAction (stores static action)
  */
-template <class ARGS_TYPE, class OUT_TYPE=void>
+template<class ARGS_TYPE, class OUT_TYPE=void>
 struct SQLAction
-#if __CLONE__==1
-	: smart::Clone<SQLAction<ARGS_TYPE,OUT_TYPE> > {
+#if __CLONE__ == 1
+    : smart::Clone<SQLAction<ARGS_TYPE,OUT_TYPE> > {
 public:
-	/**
-	 * @brief The clone interface implemented by this class.
-	 */
-	typedef typename smart::Clone<SQLAction<ARGS_TYPE,OUT_TYPE> > CLONE_ACTION_INT ;
+    /**
+     * @brief The clone interface implemented by this class.
+     */
+    typedef typename smart::Clone<SQLAction<ARGS_TYPE,OUT_TYPE> > CLONE_ACTION_INT ;
 #if 0
-	/**
-	 * @brief This is the implementation of the
-	 * Clone interface.
-	 * @return a pointer to a clone of this object
-	 */
-	virtual SQLAction<ARGS_TYPE,OUT_TYPE>* create()throw (std::bad_alloc){
-		return this->clone();
-	};
+    /**
+     * @brief This is the implementation of the
+     * Clone interface.
+     * @return a pointer to a clone of this object
+     */
+    virtual SQLAction<ARGS_TYPE,OUT_TYPE>* create()throw (std::bad_alloc){
+        return this->clone();
+    };
 
-	/**
-	 * @brief This is the implementation of the
-	 * Clone interface.
-	 * @return a pointer to a clone of this object
-	 */
-	virtual SQLAction<ARGS_TYPE,OUT_TYPE> *clone(){
-		return new SQLAction<ARGS_TYPE,OUT_TYPE>(this);
-	}
+    /**
+     * @brief This is the implementation of the
+     * Clone interface.
+     * @return a pointer to a clone of this object
+     */
+    virtual SQLAction<ARGS_TYPE,OUT_TYPE> *clone(){
+        return new SQLAction<ARGS_TYPE,OUT_TYPE>(this);
+    }
 #endif
 #else
-		{
-		public:
+{
+public:
 #endif
 
-	// DEFINITION
-	typedef OUT_TYPE*(*ACTION)(ARGS_TYPE*);
+    // DEFINITION
+    typedef OUT_TYPE *(*ACTION)(ARGS_TYPE *);
 
-	/**
-	 * @brief define the action represented by this instance
-	 * @return a pointer of OUT type (default is 'void*').
-	 */
-	virtual OUT_TYPE * action(ARGS_TYPE * args)=0;
+    /**
+     * @brief define the action represented by this instance
+     * @return a pointer of OUT type (default is 'void*').
+     */
+    virtual OUT_TYPE *action(ARGS_TYPE *args) = 0;
 
-	/**
-	 * @brief operator() enable an SQLAction to run
-	 * like an SQLAction<IN,OUT>::ACTION
-	 * (action)(argument)
-	 */
-	virtual OUT_TYPE * operator()(ARGS_TYPE* args){
-		return ((this->action)(args));
-	}
+    /**
+     * @brief operator() enable an SQLAction to run
+     * like an SQLAction<IN,OUT>::ACTION
+     * (action)(argument)
+     */
+    virtual OUT_TYPE *operator()(ARGS_TYPE *args) {
+        return ((this->action)(args));
+    }
 
+    /**
+     * @brief constructor.
+     */
+    SQLAction() {}
 
-	/**
-	 * @brief constructor.
-	 */
-	SQLAction(){};
-
-	virtual ~SQLAction(){};
-
+    virtual ~SQLAction() {}
 };
 
 

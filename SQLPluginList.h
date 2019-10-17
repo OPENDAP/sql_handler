@@ -32,13 +32,14 @@
 
 #include "SQLDefinitions.h"
 #include "SQLPlugin.h"
+
 class SQLPlugin;
 
-class SQLPluginList{
+class SQLPluginList {
 public:
-    SQLPluginList(){};
+    SQLPluginList() {};
 
-	virtual ~SQLPluginList(){};
+    virtual ~SQLPluginList() {};
 
     /**
      * update the wrap_count and return
@@ -49,68 +50,68 @@ public:
      * (named 'name') should be deleted.
      */
     virtual bool
-    update_wrap_count(const string & name, bool add)
-    throw (BESInternalFatalError)=0;
+    update_wrap_count(const string &name, bool add)
+    throw(BESInternalFatalError) = 0;
 
-	/**
-	 * @brief Used to find an SQLPlugin into the list
-	 * @param name the name of the SQLPlugin to find
-	 * @return a pointer to the found plugin or NULL
-	 * if no SQLPlugin is found.
-	 */
-	virtual SQLPlugin*
-	find_sql_handler(const string& name)=0;
+    /**
+     * @brief Used to find an SQLPlugin into the list
+     * @param name the name of the SQLPlugin to find
+     * @return a pointer to the found plugin or NULL
+     * if no SQLPlugin is found.
+     */
+    virtual SQLPlugin *
+    find_sql_handler(const string &name) = 0;
 
-	/**
-	 * @brief Remove an SQLPlugin from the list.
-	 * @param name the name of the SQLPlugin to remove
-	 * @return true if remove is correctly completed
-	 */
-	virtual bool
-	remove_sql_handler(const string &name)=0;
+    /**
+     * @brief Remove an SQLPlugin from the list.
+     * @param name the name of the SQLPlugin to remove
+     * @return true if remove is correctly completed
+     */
+    virtual bool
+    remove_sql_handler(const string &name) = 0;
 
-	/**
-	 * @brief Remove all the SQLPlugin from the list.
-	 */
-	virtual void
-	remove_sql_handlers()=0;
+    /**
+     * @brief Remove all the SQLPlugin from the list.
+     */
+    virtual void
+    remove_sql_handlers() = 0;
 
-	/**
-	 * @brief Add an SQLPlugin to the list.
-	 * @param name the name of the SQLPlugin to add
-	 * @param handler a new pointer instance to a SQLPlugin
-	 * implementation
-	 * @return true if add is correctly completed
-	 */
-	virtual bool
-	add_sql_handler(const string& name,	SQLPlugin* handler)=0;
+    /**
+     * @brief Add an SQLPlugin to the list.
+     * @param name the name of the SQLPlugin to add
+     * @param handler a new pointer instance to a SQLPlugin
+     * implementation
+     * @return true if add is correctly completed
+     */
+    virtual bool
+    add_sql_handler(const string &name, SQLPlugin *handler) = 0;
 
-	/**
-	 * @brief Add wrapper for this command, this will enable
-	 * the wrapper to call not predefined commands.
-	 * This method is called by SQLPlugin::add_handler to
-	 * make sure that the added SQLPlugin handler function
-	 * is correctly wrapped by a function in the
-	 * SQLRequestHandler.
-	 * @return 'true' if the 'command' is already wrapped
-	 * 'false' otherwise.
-	 */
-	virtual bool
-	add_sql_wrapper(const string& command)=0;
+    /**
+     * @brief Add wrapper for this command, this will enable
+     * the wrapper to call not predefined commands.
+     * This method is called by SQLPlugin::add_handler to
+     * make sure that the added SQLPlugin handler function
+     * is correctly wrapped by a function in the
+     * SQLRequestHandler.
+     * @return 'true' if the 'command' is already wrapped
+     * 'false' otherwise.
+     */
+    virtual bool
+    add_sql_wrapper(const string &command) = 0;
 
-	/**
-	 * @brief test deletion of the wrapper for this command,
-	 * this will check how many handlers are wrapped by this
-	 * command, if _wrap_count is '1' the wrapping function
-	 * is removed.
-	 * This method is called by SQLPlugin::remove_handler to
-	 * make sure that the wrapper for the SQLPlugin function
-	 * is correctly removed.
-	 * @return 'true' if the 'command' is correctly removed
-	 * 'false' otherwise.
-	 */
-	virtual bool
-	remove_sql_wrapper(const string& command)=0;
+    /**
+     * @brief test deletion of the wrapper for this command,
+     * this will check how many handlers are wrapped by this
+     * command, if _wrap_count is '1' the wrapping function
+     * is removed.
+     * This method is called by SQLPlugin::remove_handler to
+     * make sure that the wrapper for the SQLPlugin function
+     * is correctly removed.
+     * @return 'true' if the 'command' is correctly removed
+     * 'false' otherwise.
+     */
+    virtual bool
+    remove_sql_wrapper(const string &command) = 0;
 
 };
 

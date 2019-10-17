@@ -36,30 +36,32 @@
  * @brief The module of the SQLHandler it
  * load the main components of the handler.
  */
-class OPENDAP_CLASSModule : public BESAbstractModule
-{
+class OPENDAP_CLASSModule : public BESAbstractModule {
 public:
-	/**
-	 * @brief ctor
-	 */
-	OPENDAP_CLASSModule() {}
+    /**
+     * @brief ctor
+     */
+    OPENDAP_CLASSModule() {}
+
     /**
      * @brief dtor
      */
-	virtual	~OPENDAP_CLASSModule() {}
-	/**
-	 * @brief initialize BES components.
-	 * Register SQLHandler components from the BES environment
-	 */
-    virtual void		initialize( const string &modname ) ;
+    virtual    ~OPENDAP_CLASSModule() {}
+
+    /**
+     * @brief initialize BES components.
+     * Register SQLHandler components from the BES environment
+     */
+    virtual void initialize(const string &modname);
+
     /**
      * @brief de-register SQLHandler components from the
      * BES environment
      */
-    virtual void		terminate( const string &modname ) ;
+    virtual void terminate(const string &modname);
 
-    virtual void		dump( ostream &strm ) const ;
-} ;
+    virtual void dump(ostream &strm) const;
+};
 
 #endif // I_SQLModule_H
 

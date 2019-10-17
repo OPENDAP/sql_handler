@@ -39,13 +39,13 @@
 #define _SQLH_CHECK_SIZE 6 // form CONNECT to CUSTOM
 
 typedef enum {
-_SQLH_ON_ALWAYS=0,
-_SQLH_ON_CONNECT=1,
-_SQLH_ON_CLOSE=2,
-_SQLH_ON_QUERY=3,
-_SQLH_ON_GET_NEXT=4,
-_SQLH_ON_NEXT_ROW=5,
-_SQLH_ON_CUSTOM=6
+    _SQLH_ON_ALWAYS = 0,
+    _SQLH_ON_CONNECT = 1,
+    _SQLH_ON_CLOSE = 2,
+    _SQLH_ON_QUERY = 3,
+    _SQLH_ON_GET_NEXT = 4,
+    _SQLH_ON_NEXT_ROW = 5,
+    _SQLH_ON_CUSTOM = 6
 } _SQLH_CHECKS;
 
 // FIXME Removed jhrg 10/1/14 using namespace std;
@@ -77,58 +77,60 @@ _SQLH_ON_CUSTOM=6
  * <br>Note: This list affects ALL the registered SQL plugin modules.
  * <br>The _SQLH_ON_ALWAYS is used to force the CheckPoint to always start.
  */
-class SQLCheckPoint{
+class SQLCheckPoint {
 private:
-	static bool isSet;
+    static bool isSet;
 
-	// we use bitset instead of vector<bool>
-	// this should be faster and smaller
-	static std::bitset<_SQLH_CHECK_SIZE> function;
+    // we use bitset instead of vector<bool>
+    // this should be faster and smaller
+    static std::bitset<_SQLH_CHECK_SIZE> function;
 
 protected:
-	// used to cache results
-	static unsigned long last_type_checked;
-	static bool last_status;
+    // used to cache results
+    static unsigned long last_type_checked;
+    static bool last_status;
 
 public:
-	/**
-	 * @brief initialize the class setting
-	 * its static member reading from the
-	 * configuration file.
-	 * @return true
-	 * @throws BESError if something goes
-	 * wrong
-	 */
-	static bool init() throw (BESError);
+    /**
+     * @brief initialize the class setting
+     * its static member reading from the
+     * configuration file.
+     * @return true
+     * @throws BESError if something goes
+     * wrong
+     */
+    static bool init() throw(BESError);
 
-	/**
-	 * @brief check if the passed (type) argument
-	 * represent an active check point,
-	 * if so return true; false otherwise
-	 */
-	static bool check(unsigned long type);
+    /**
+     * @brief check if the passed (type) argument
+     * represent an active check point,
+     * if so return true; false otherwise
+     */
+    static bool check(unsigned long type);
+
 #if 0
-	/**
-	 * THIS SHOULD NOT BE NECESSARY:
-	 * -> USE ON_CUSTOM
-	 * carlo cancellieri 06-03-2010
-	 *
-	 *
-	 * @DEPRECATED
-	 *
-	 * implement this method to add
-	 * more custom check points.
-	 * NOTE: you need to use customCheck()
-	 * in your code.
-	 * Before creating a new CHECK POINT:
-	 * use your own check points only if
-	 * the standard ones don't logically fit
-	 * your check case
-	 */
-	virtual bool customCheck(){
-		throw BESInternalError("Custom check method not implemented",
-					__FILE__,__LINE__);
-	};
+    /**
+     * THIS SHOULD NOT BE NECESSARY:
+     * -> USE ON_CUSTOM
+     * carlo cancellieri 06-03-2010
+     *
+     *
+     * @DEPRECATED
+     *
+     * implement this method to add
+     * more custom check points.
+     * NOTE: you need to use customCheck()
+     * in your code.
+     * Before creating a new CHECK POINT:
+     * use your own check points only if
+     * the standard ones don't logically fit
+     * your check case
+     */
+    virtual bool customCheck(){
+        throw BESInternalError("Custom check method not implemented",
+                    __FILE__,__LINE__);
+    };
 #endif
 };
+
 #endif /* SQLCHECKPOINT_H_ */

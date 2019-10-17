@@ -30,9 +30,6 @@
 #include <memory>
 
 #include "utils/SmartList.h"
-#if 0
-#include "utils/SharedPtr.h"
-#endif
 
 #include "SQLAction.h"
 
@@ -42,99 +39,97 @@
  * defined by SQLActionList interface.
  *
  */
-template <class ARGS_TYPE,class OUT_TYPE=void>
-class SQLDynamicActionList:
-	public SQLActionList<ARGS_TYPE,OUT_TYPE>,
-	/**
-	 * @todo: here some #ifdef to check for the 'smart' layer
-	 */
-#if __CLONE__==1
+template<class ARGS_TYPE, class OUT_TYPE=void>
+class SQLDynamicActionList :
+        public SQLActionList<ARGS_TYPE, OUT_TYPE>,
+        /**
+         * @todo: here some #ifdef to check for the 'smart' layer
+         */
+#if __CLONE__ == 1
 
-	public smart::SmartList<
-					SQLAction<ARGS_TYPE,OUT_TYPE>,
-					// override default SMART layer forcing to use the CLONE_LAYER
-					std::shared_ptr<
-						SQLAction<ARGS_TYPE,OUT_TYPE> ,
-						typename SmartList<SQLAction<ARGS_TYPE,OUT_TYPE> >::CLONE_LIST_INT> >{
-	public:
+public smart::SmartList<
+                SQLAction<ARGS_TYPE,OUT_TYPE>,
+                // override default SMART layer forcing to use the CLONE_LAYER
+                std::shared_ptr<
+                    SQLAction<ARGS_TYPE,OUT_TYPE> ,
+                    typename SmartList<SQLAction<ARGS_TYPE,OUT_TYPE> >::CLONE_LIST_INT> >{
+public:
 
-		// clone pattern implementation
-		SQLDynamicActionList<ARGS_TYPE,OUT_TYPE>* clone(){
-			return new SQLDynamicActionList<ARGS_TYPE,OUT_TYPE>(this);
-		}
-		// clone pattern implementation
-		SQLDynamicActionList<ARGS_TYPE,OUT_TYPE>* create()throw (std::bad_alloc){
-			return new SQLDynamicActionList<ARGS_TYPE,OUT_TYPE>();
-		}
+    // clone pattern implementation
+    SQLDynamicActionList<ARGS_TYPE,OUT_TYPE>* clone(){
+        return new SQLDynamicActionList<ARGS_TYPE,OUT_TYPE>(this);
+    }
+    // clone pattern implementation
+    SQLDynamicActionList<ARGS_TYPE,OUT_TYPE>* create()throw (std::bad_alloc){
+        return new SQLDynamicActionList<ARGS_TYPE,OUT_TYPE>();
+    }
 
-		SQLDynamicActionList():
-			smart::SmartList<
-				SQLAction<ARGS_TYPE,OUT_TYPE> ,
-				std::shared_ptr<
-					SQLAction<ARGS_TYPE,OUT_TYPE> ,
-					typename SmartList<	SQLAction<ARGS_TYPE,OUT_TYPE> >::CLONE_LIST_INT>  >(){};
+    SQLDynamicActionList():
+        smart::SmartList<
+            SQLAction<ARGS_TYPE,OUT_TYPE> ,
+            std::shared_ptr<
+                SQLAction<ARGS_TYPE,OUT_TYPE> ,
+                typename SmartList<	SQLAction<ARGS_TYPE,OUT_TYPE> >::CLONE_LIST_INT>  >(){};
 
-		SQLDynamicActionList(SQLDynamicActionList<ARGS_TYPE,OUT_TYPE > &list):
-						smart::SmartList<
-							SQLAction<ARGS_TYPE,OUT_TYPE> ,
-							std::shared_ptr< SQLAction<ARGS_TYPE,OUT_TYPE> ,
-							typename SmartList<SQLAction<ARGS_TYPE,OUT_TYPE> >::CLONE_LIST_INT>  >(list){};
+    SQLDynamicActionList(SQLDynamicActionList<ARGS_TYPE,OUT_TYPE > &list):
+                    smart::SmartList<
+                        SQLAction<ARGS_TYPE,OUT_TYPE> ,
+                        std::shared_ptr< SQLAction<ARGS_TYPE,OUT_TYPE> ,
+                        typename SmartList<SQLAction<ARGS_TYPE,OUT_TYPE> >::CLONE_LIST_INT>  >(list){};
 
-		SQLDynamicActionList(SQLDynamicActionList<ARGS_TYPE,OUT_TYPE > *list):
-						smart::SmartList<
-							SQLAction<ARGS_TYPE,OUT_TYPE> ,
-							std::shared_ptr< SQLAction<ARGS_TYPE,OUT_TYPE> ,
-							typename SmartList<SQLAction<ARGS_TYPE,OUT_TYPE> >::CLONE_LIST_INT> >(list){};
+    SQLDynamicActionList(SQLDynamicActionList<ARGS_TYPE,OUT_TYPE > *list):
+                    smart::SmartList<
+                        SQLAction<ARGS_TYPE,OUT_TYPE> ,
+                        std::shared_ptr< SQLAction<ARGS_TYPE,OUT_TYPE> ,
+                        typename SmartList<SQLAction<ARGS_TYPE,OUT_TYPE> >::CLONE_LIST_INT> >(list){};
 #else
 
-	public smart::SmartList<SQLAction<ARGS_TYPE,OUT_TYPE> >{
-	public:
-		SQLDynamicActionList():
-			smart::SmartList< SQLAction<ARGS_TYPE,OUT_TYPE> >(){};
+        public smart::SmartList<SQLAction<ARGS_TYPE, OUT_TYPE> > {
+public:
+    SQLDynamicActionList() :
+            smart::SmartList<SQLAction<ARGS_TYPE, OUT_TYPE> >() {};
 
-		SQLDynamicActionList(SQLDynamicActionList<ARGS_TYPE,OUT_TYPE > &list):
-						smart::SmartList< SQLAction<ARGS_TYPE,OUT_TYPE> >(list){};
+    SQLDynamicActionList(SQLDynamicActionList<ARGS_TYPE, OUT_TYPE> &list) :
+            smart::SmartList<SQLAction<ARGS_TYPE, OUT_TYPE> >(list) {};
 
-		SQLDynamicActionList(SQLDynamicActionList<ARGS_TYPE,OUT_TYPE > *list):
-						smart::SmartList< SQLAction<ARGS_TYPE,OUT_TYPE> >(list){};
+    SQLDynamicActionList(SQLDynamicActionList<ARGS_TYPE, OUT_TYPE> *list) :
+            smart::SmartList<SQLAction<ARGS_TYPE, OUT_TYPE> >(list) {};
 
 #endif
 
-	virtual OUT_TYPE * doNext(ARGS_TYPE * in){
-		if (_iterator!=this->end()){
-			return (*(_iterator++)->get()).action(in);
-		}
-		else
-			if (this->reset())
-				return (*(_iterator)->get()).action(in);
-			else
-				throw SQLInternalError("Unable to reset the ActionList",
-						__FILE__,__LINE__);
+    virtual OUT_TYPE *doNext(ARGS_TYPE *in) {
+        if (_iterator != this->end()) {
+            return (*(_iterator++)->get()).action(in);
+        }
+        else if (this->reset())
+            return (*(_iterator)->get()).action(in);
+        else
+            throw SQLInternalError("Unable to reset the ActionList",
+                                   __FILE__, __LINE__);
 
-	};
+    }
 
-	virtual bool hasNext(){
-		if (_iterator!=this->end())
-			return true;
-		else
-			return false;
-	};
+    virtual bool hasNext() {
+        if (_iterator != this->end())
+            return true;
+        else
+            return false;
+    }
 
-	virtual bool reset(){
-		_iterator=this->begin();
-		return true;
-	};
+    virtual bool reset() {
+        _iterator = this->begin();
+        return true;
+    }
 
-	virtual size_t getSize(){
-		return this->size();
-	};
+    virtual size_t getSize() {
+        return this->size();
+    }
 
-	virtual ~SQLDynamicActionList(){
-TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLDynamicActionList"<<endl);
-	};
+    virtual ~SQLDynamicActionList() {
+    }
 
 private:
-	typename SQLDynamicActionList<ARGS_TYPE,OUT_TYPE >::iterator _iterator;
+    typename SQLDynamicActionList<ARGS_TYPE, OUT_TYPE>::iterator _iterator;
 
 };
 

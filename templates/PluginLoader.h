@@ -30,37 +30,42 @@
 
 #include "BESAbstractModule.h"
 #include "OPENDAP_CLASSPlugin.h"
+
 #COMPLETE#
+
 #include "DEM/SQLCheckPoint.h"
+
 #COMPLETE#
+
 /**
  * @brief SQLPluginLoader is the SQL counterpart of a BESAbstractModule
  * and is used to load, initialize and terminate an SQLPlugin.
  */
-class OPENDAP_CLASSPluginLoader : public BESAbstractModule{
+class OPENDAP_CLASSPluginLoader : public BESAbstractModule {
 public:
-	/**
-	 * @brief ctor
-	 */
-	OPENDAP_CLASSPluginLoader():BESAbstractModule(){};
-	/**
-	 * @brief dtor
-	 */
-	virtual ~OPENDAP_CLASSPluginLoader(){};
+    /**
+     * @brief ctor
+     */
+    OPENDAP_CLASSPluginLoader() : BESAbstractModule() {};
 
-	/**
-	 * @brief initialize SQL components.
-	 * Register OPENDAP_CLASSPlugin into the SQLRequestHandler
-	 */
-    virtual void		initialize( const string &modname );
+    /**
+     * @brief dtor
+     */
+    virtual ~OPENDAP_CLASSPluginLoader() {};
+
+    /**
+     * @brief initialize SQL components.
+     * Register OPENDAP_CLASSPlugin into the SQLRequestHandler
+     */
+    virtual void initialize(const string &modname);
 
     /**
      * @brief de-register SQLHandler components from the
      * De-register OPENDAP_CLASSPlugin from the SQLRequestHandler
      */
-    virtual void		terminate( const string &modname );
+    virtual void terminate(const string &modname);
 
-    virtual void		dump( ostream &strm ) const ;
+    virtual void dump(ostream &strm) const;
 };
 
 #endif /* OPENDAP_CLASSPLUGINLOADER_H_ */

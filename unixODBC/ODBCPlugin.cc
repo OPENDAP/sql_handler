@@ -75,156 +75,153 @@
  *  a working demonstrative example.
  */
 bool
-ODBCPlugin::build_das( SQLDataHandlerInterface &dhi ){
-	/**
-	 * Build the ODBCConnector which implements an SQLConnector
-	 * so this is a SQLTypeConnector and a SQLErrorConnector
-	 */
-	ODBCConnector conn;
+ODBCPlugin::build_das(SQLDataHandlerInterface &dhi) {
+    /**
+     * Build the ODBCConnector which implements an SQLConnector
+     * so this is a SQLTypeConnector and a SQLErrorConnector
+     */
+    ODBCConnector conn;
 
-	/**
-	 * Build the error factory used by this builder
-	 * Here we use a StaticErrorFactory.
-	 * @see ODBCErrorFactoryComponent
-	 */
-	ODBCErrorFactoryComponent efc(conn);
-	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef = efc ;
+    /**
+     * Build the error factory used by this builder
+     * Here we use a StaticErrorFactory.
+     * @see ODBCErrorFactoryComponent
+     */
+    ODBCErrorFactoryComponent efc(conn);
+    SQLErrorFactory<ERROR_TYPE, MSG_TYPE> ef = efc;
 
-	/**
-	 * Set the error factory into the ODBCConnector for internal
-	 * use.
-	 * <br>Note that this is not a Connector interface method.
-	 */
-	conn.setErrorFactory(ef);
+    /**
+     * Set the error factory into the ODBCConnector for internal
+     * use.
+     * <br>Note that this is not a Connector interface method.
+     */
+    conn.setErrorFactory(ef);
 
-	/**
-	 * Build the defined FactoryComponent passing the
-	 * TypeConnector (which is implemented in ODBCConnector)
-	 * @see ODBCTypeFactoryComponent
-	 * @see ODBCConnector
-	 */
-	ODBCTypeFactoryComponent fc=ODBCTypeFactoryComponent(conn);
+    /**
+     * Build the defined FactoryComponent passing the
+     * TypeConnector (which is implemented in ODBCConnector)
+     * @see ODBCTypeFactoryComponent
+     * @see ODBCConnector
+     */
+    ODBCTypeFactoryComponent fc = ODBCTypeFactoryComponent(conn);
 
-	/**
-	 *  Run the data builder static method implemented
-	 *  by SQLBuildDAS.
-	 *  <br>
-	 *  Other working calls:
-	 *  DASBuilder::sql_build_das(dhi,ef,tf,conn); // need DTM
-	 *  SQLBuildDAS<SQL_TYPE,ODBC_TYPE>::sql_build_das(dhi,fc,conn);
-	 */
-	return DASBuilder::sql_build_das(dhi,ef,fc,conn);
+    /**
+     *  Run the data builder static method implemented
+     *  by SQLBuildDAS.
+     *  <br>
+     *  Other working calls:
+     *  DASBuilder::sql_build_das(dhi,ef,tf,conn); // need DTM
+     *  SQLBuildDAS<SQL_TYPE,ODBC_TYPE>::sql_build_das(dhi,fc,conn);
+     */
+    return DASBuilder::sql_build_das(dhi, ef, fc, conn);
 }
 
 bool
-ODBCPlugin::build_dds( SQLDataHandlerInterface &dhi ){
-	/**
-	 * Build the ODBCConnector which implements an SQLConnector
-	 * so this is a SQLTypeConnector and a SQLErrorConnector
-	 */
-	ODBCConnector *conn=new ODBCConnector();
+ODBCPlugin::build_dds(SQLDataHandlerInterface &dhi) {
+    /**
+     * Build the ODBCConnector which implements an SQLConnector
+     * so this is a SQLTypeConnector and a SQLErrorConnector
+     */
+    ODBCConnector *conn = new ODBCConnector();
 
-	/**
-	 * Build the error factory used by this builder
-	 * Here we use a StaticErrorFactory.
-	 * @see ODBCErrorFactoryComponent
-	 */
-	ODBCErrorFactoryComponent efc(*conn);
-	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef= efc ;
-	/**
-	 * Set the error factory into the ODBCConnector for internal
-	 * use.
-	 * @note: that this is not a Connector interface method.
-	 */
-	conn->setErrorFactory(ef);
+    /**
+     * Build the error factory used by this builder
+     * Here we use a StaticErrorFactory.
+     * @see ODBCErrorFactoryComponent
+     */
+    ODBCErrorFactoryComponent efc(*conn);
+    SQLErrorFactory<ERROR_TYPE, MSG_TYPE> ef = efc;
+    /**
+     * Set the error factory into the ODBCConnector for internal
+     * use.
+     * @note: that this is not a Connector interface method.
+     */
+    conn->setErrorFactory(ef);
 
-	/**
-	 * Build the defined FactoryComponent passing the
-	 * TypeConnector (which is implemented in ODBCConnector)
-	 * @see ODBCTypeFactoryComponent
-	 * @see ODBCConnector
-	 */
-	ODBCTypeFactoryComponent fc=ODBCTypeFactoryComponent(*conn);
+    /**
+     * Build the defined FactoryComponent passing the
+     * TypeConnector (which is implemented in ODBCConnector)
+     * @see ODBCTypeFactoryComponent
+     * @see ODBCConnector
+     */
+    ODBCTypeFactoryComponent fc = ODBCTypeFactoryComponent(*conn);
 
-	/**
-	 *  Run the data builder static method implemented
-	 *  by SQLPlugin.
-	 */
-	return DDSBuilder::sql_build_dds(dhi,ef,fc,conn);
+    /**
+     *  Run the data builder static method implemented
+     *  by SQLPlugin.
+     */
+    return DDSBuilder::sql_build_dds(dhi, ef, fc, conn);
 }
 
 bool
-ODBCPlugin::build_data( SQLDataHandlerInterface &dhi ){
-	/**
-	 * Build the ODBCConnector which implements an SQLConnector
-	 * so this is a SQLTypeConnector and a SQLErrorConnector
-	 */
-	ODBCConnector *conn=new ODBCConnector();
+ODBCPlugin::build_data(SQLDataHandlerInterface &dhi) {
+    /**
+     * Build the ODBCConnector which implements an SQLConnector
+     * so this is a SQLTypeConnector and a SQLErrorConnector
+     */
+    ODBCConnector *conn = new ODBCConnector();
 
-	/**
-	 * Build the error factory used by this builder
-	 * Here we use a StaticErrorFactory.
-	 * @see ODBCErrorFactoryComponent
-	 */
-	ODBCErrorFactoryComponent efc(*conn);
-	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef= efc ;
-	/**
-	 * Set the error factory into the ODBCConnector for internal
-	 * use.
-	 * @note that this is not a Connector interface method.
-	 */
-	conn->setErrorFactory(ef);
+    /**
+     * Build the error factory used by this builder
+     * Here we use a StaticErrorFactory.
+     * @see ODBCErrorFactoryComponent
+     */
+    ODBCErrorFactoryComponent efc(*conn);
+    SQLErrorFactory<ERROR_TYPE, MSG_TYPE> ef = efc;
+    /**
+     * Set the error factory into the ODBCConnector for internal
+     * use.
+     * @note that this is not a Connector interface method.
+     */
+    conn->setErrorFactory(ef);
 
-	/**
-	 * Build the defined TypeFactoryComponent passing the
-	 * TypeConnector (which is implemented in ODBCConnector)
-	 * @see ODBCTypeFactoryComponent
-	 * @see ODBCConnector
-	 */
-	ODBCTypeFactoryComponent fc=ODBCTypeFactoryComponent(*conn);
+    /**
+     * Build the defined TypeFactoryComponent passing the
+     * TypeConnector (which is implemented in ODBCConnector)
+     * @see ODBCTypeFactoryComponent
+     * @see ODBCConnector
+     */
+    ODBCTypeFactoryComponent fc = ODBCTypeFactoryComponent(*conn);
 
-	/**
-	 *  Run the data builder static method implemented
-	 *  by SQLBuildDATA.
-	 */
-	return DATABuilder::sql_build_data(dhi,ef,fc,conn);
+    /**
+     *  Run the data builder static method implemented
+     *  by SQLBuildDATA.
+     */
+    return DATABuilder::sql_build_data(dhi, ef, fc, conn);
 }
 
 bool
-ODBCPlugin::build_vers( SQLDataHandlerInterface &dhi )
-{
-	/**
-	 * @todo: make a better output layout (indent?)
-	 */
-	BESVersionInfo *info = dynamic_cast<BESVersionInfo *>(
-			dhi.getBesHandler().get_response_object()) ;
-	info->add_library( ODBC_NAME , ODBC_VERSION ) ;
-	return true;
+ODBCPlugin::build_vers(SQLDataHandlerInterface &dhi) {
+    /**
+     * @todo: make a better output layout (indent?)
+     */
+    BESVersionInfo *info = dynamic_cast<BESVersionInfo *>(
+            dhi.getBesHandler().get_response_object());
+    info->add_library(ODBC_NAME, ODBC_VERSION);
+    return true;
 }
 
 bool
-ODBCPlugin::build_help( SQLDataHandlerInterface &dhi )
-{
-	BESInfo *info = dynamic_cast<BESInfo *>(
-			dhi.getBesHandler().get_response_object());
+ODBCPlugin::build_help(SQLDataHandlerInterface &dhi) {
+    BESInfo *info = dynamic_cast<BESInfo *>(
+            dhi.getBesHandler().get_response_object());
 /**
  * @todo: This is an example. If you had a help file you
  * could load it like this and if your handler handled
  * the following responses.
  */
-	map<string,string> attrs ;
-	attrs["name"] = ODBC_NAME ;
-	attrs["version"] = ODBC_VERSION ;
-	list<string> services ;
-	BESServiceRegistry::TheRegistry()->services_handled( SQL_NAME, services );
-	if( services.size() > 0 )
-	{
-		string handles = BESUtil::implode( services, ',' ) ;
-		attrs["handles"] = handles ;
-	}
-	info->begin_tag( "module", &attrs ) ;
-	//info->add_data_from_file( "SQL.Help", "SQL Help" ) ;
-	info->end_tag( "module" ) ;
+    map<string, string> attrs;
+    attrs["name"] = ODBC_NAME;
+    attrs["version"] = ODBC_VERSION;
+    list<string> services;
+    BESServiceRegistry::TheRegistry()->services_handled(SQL_NAME, services);
+    if (services.size() > 0) {
+        string handles = BESUtil::implode(services, ',');
+        attrs["handles"] = handles;
+    }
+    info->begin_tag("module", &attrs);
+    //info->add_data_from_file( "SQL.Help", "SQL Help" ) ;
+    info->end_tag("module");
 
-	return true;
+    return true;
 }

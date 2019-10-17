@@ -98,105 +98,104 @@
  * that some example are provided into the code.
  *
  */
-class ODBCPlugin : public SQLPlugin	{
+class ODBCPlugin : public SQLPlugin {
 public:
-	/**
-	 * setting DAS builder types
-	 * @see ODBCTypes
-	 * @see SQLBuildDAS
-	 */
-	typedef	SQLBuildDAS< SQL_TYPE,			// SQLTypeFactory && connector
-						 ODBC_TYPE,			// SQLTypeFactory && connector
-						 ERROR_TYPE,		// SQLErrorFactory(IN) && connector
-						 MSG_TYPE,			// SQLErrorFactory(ARG) && connector
-						 void>				// SQLErrorFactory(OUT)
-								DASBuilder;
+    /**
+     * setting DAS builder types
+     * @see ODBCTypes
+     * @see SQLBuildDAS
+     */
+    typedef SQLBuildDAS<SQL_TYPE,            // SQLTypeFactory && connector
+            ODBC_TYPE,            // SQLTypeFactory && connector
+            ERROR_TYPE,        // SQLErrorFactory(IN) && connector
+            MSG_TYPE,            // SQLErrorFactory(ARG) && connector
+            void>                // SQLErrorFactory(OUT)
+            DASBuilder;
 
-	/**
-	 * setting DATA builder types
-	 * @see ODBCTypes
-	 * @see SQLBuildDATA
-	 */
-	typedef	SQLBuildDDS< SQL_TYPE,			// SQLTypeFactory && connector
-						 ODBC_TYPE,			// SQLTypeFactory && connector
-						 ERROR_TYPE,		// SQLErrorFactory(IN) && connector
-						 MSG_TYPE,			// SQLErrorFactory(ARG) && connector
-						 void>				// SQLErrorFactory(OUT)
-								DDSBuilder;
-	/**
-	 * setting DATA builder types
-	 * @see ODBCTypes
-	 * @see SQLBuildDATA
-	 */
-	typedef	SQLBuildDATA<SQL_TYPE,			// SQLTypeFactory && connector
-						 ODBC_TYPE,			// SQLTypeFactory && connector
-						 ERROR_TYPE,		// SQLErrorFactory(IN) && connector
-						 MSG_TYPE,			// SQLErrorFactory(ARG) && connector
-						 void>				// SQLErrorFactory(OUT)
-								DATABuilder;
-	/**
-	 * @brief Default constructor
-	 */
-	ODBCPlugin(const string &name):	SQLPlugin(name){
+    /**
+     * setting DATA builder types
+     * @see ODBCTypes
+     * @see SQLBuildDATA
+     */
+    typedef SQLBuildDDS<SQL_TYPE,            // SQLTypeFactory && connector
+            ODBC_TYPE,            // SQLTypeFactory && connector
+            ERROR_TYPE,        // SQLErrorFactory(IN) && connector
+            MSG_TYPE,            // SQLErrorFactory(ARG) && connector
+            void>                // SQLErrorFactory(OUT)
+            DDSBuilder;
+    /**
+     * setting DATA builder types
+     * @see ODBCTypes
+     * @see SQLBuildDATA
+     */
+    typedef SQLBuildDATA<SQL_TYPE,            // SQLTypeFactory && connector
+            ODBC_TYPE,            // SQLTypeFactory && connector
+            ERROR_TYPE,        // SQLErrorFactory(IN) && connector
+            MSG_TYPE,            // SQLErrorFactory(ARG) && connector
+            void>                // SQLErrorFactory(OUT)
+            DATABuilder;
 
-		SQLPlugin::add_handler(DAS_RESPONSE, ODBCPlugin::build_das ) ;
-		SQLPlugin::add_handler(DDS_RESPONSE, ODBCPlugin::build_dds ) ;
-		SQLPlugin::add_handler(DATA_RESPONSE, ODBCPlugin::build_data ) ;
-		SQLPlugin::add_handler(HELP_RESPONSE, ODBCPlugin::build_help ) ;
-		SQLPlugin::add_handler(VERS_RESPONSE, ODBCPlugin::build_vers ) ;
+    /**
+     * @brief Default constructor
+     */
+    ODBCPlugin(const string &name) : SQLPlugin(name) {
 
-TESTDEBUG(SQL_NAME_TEST,"CREATED: unixODBC Plugin"<<endl);
-	};
+        SQLPlugin::add_handler(DAS_RESPONSE, ODBCPlugin::build_das);
+        SQLPlugin::add_handler(DDS_RESPONSE, ODBCPlugin::build_dds);
+        SQLPlugin::add_handler(DATA_RESPONSE, ODBCPlugin::build_data);
+        SQLPlugin::add_handler(HELP_RESPONSE, ODBCPlugin::build_help);
+        SQLPlugin::add_handler(VERS_RESPONSE, ODBCPlugin::build_vers);
+    }
 
-	virtual ~ODBCPlugin(){
-TESTDEBUG(SQL_NAME_TEST,"DELETED: unixODBC PLUGIN"<<endl);
-	};
+    virtual ~ODBCPlugin() {
+    }
 
-	/**
-	 * @brief method to build DAS
-	 * @param dhi reference to SQLDataHandlerInterface
-	 * @see comments in code for detailed explanation
-	 */
-	static bool	build_das( SQLDataHandlerInterface &c );
+    /**
+     * @brief method to build DAS
+     * @param dhi reference to SQLDataHandlerInterface
+     * @see comments in code for detailed explanation
+     */
+    static bool build_das(SQLDataHandlerInterface &c);
 
-	/**
-	 * @brief method to build DDS
-	 * @param dhi reference to SQLDataHandlerInterface
-	 * @see comments in code for detailed explanation
-	 */
-	static bool	build_dds( SQLDataHandlerInterface &c );
+    /**
+     * @brief method to build DDS
+     * @param dhi reference to SQLDataHandlerInterface
+     * @see comments in code for detailed explanation
+     */
+    static bool build_dds(SQLDataHandlerInterface &c);
 
-	/**
-	 * @brief method to build DATA
-	 * @param dhi reference to SQLDataHandlerInterface
-	 * @see comments in code for detailed explanation
-	 */
-	static bool build_data( SQLDataHandlerInterface &c );
-	/**
-	 * @brief Override default SQLPlugin::version
-	 * static version (passing its address to the constructor).
-	 * <br>Usually you don't need to do so. Here we have to
-	 * use different PACKAGE_NAME and PACKAGE_VERSION variables
-	 * since unixODBC is bundled in the same package of the
-	 * SQLHandler.
-	 * @param SQLDataHandlerInterface &c
-	 * @see SQLPlugin::version()
-	 * @see ODBCPlugin::version()
-	 */
-	static bool	build_vers( SQLDataHandlerInterface &c );
+    /**
+     * @brief method to build DATA
+     * @param dhi reference to SQLDataHandlerInterface
+     * @see comments in code for detailed explanation
+     */
+    static bool build_data(SQLDataHandlerInterface &c);
 
-	/**
-	 * @brief Override default SQLPlugin::help
-	 * static version (passing its address to the constructor).
-	 * <br>Usually you don't need to do so. Here we have to
-	 * use different PACKAGE_NAME and PACKAGE_VERSION variables
-	 * since unixODBC is bundled in the same package of the
-	 * SQLHandler.
-	 * @param SQLDataHandlerInterface &c
-	 * @see SQLPlugin::help()
-	 * @see ODBCPlugin::help()
-	 */
-	static bool build_help( SQLDataHandlerInterface &c );
+    /**
+     * @brief Override default SQLPlugin::version
+     * static version (passing its address to the constructor).
+     * <br>Usually you don't need to do so. Here we have to
+     * use different PACKAGE_NAME and PACKAGE_VERSION variables
+     * since unixODBC is bundled in the same package of the
+     * SQLHandler.
+     * @param SQLDataHandlerInterface &c
+     * @see SQLPlugin::version()
+     * @see ODBCPlugin::version()
+     */
+    static bool build_vers(SQLDataHandlerInterface &c);
+
+    /**
+     * @brief Override default SQLPlugin::help
+     * static version (passing its address to the constructor).
+     * <br>Usually you don't need to do so. Here we have to
+     * use different PACKAGE_NAME and PACKAGE_VERSION variables
+     * since unixODBC is bundled in the same package of the
+     * SQLHandler.
+     * @param SQLDataHandlerInterface &c
+     * @see SQLPlugin::help()
+     * @see ODBCPlugin::help()
+     */
+    static bool build_help(SQLDataHandlerInterface &c);
 
 };
 

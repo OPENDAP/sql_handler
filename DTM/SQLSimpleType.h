@@ -56,7 +56,7 @@ template<class SQL_TYPE, class ODBC_TYPE = void, class DAP_TYPE = libdap::BaseTy
         class OUT = void> // the cast output type
 // actually it is 'void' to use buf2val
 // change this if you want to use set_val
-class SQLSimpleType: public SQLBaseType<SQL_TYPE, ODBC_TYPE, DAP_TYPE, OUT> {
+class SQLSimpleType : public SQLBaseType<SQL_TYPE, ODBC_TYPE, DAP_TYPE, OUT> {
     bool _reuse;
 public:
 
@@ -80,29 +80,25 @@ public:
      */
     SQLSimpleType(SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> &_connector,
                   typename SQLCastAction<ODBC_TYPE, OUT>::CAST cast_function, bool reuse = true) :
-            SQLBaseType<SQL_TYPE, ODBC_TYPE, DAP_TYPE, OUT>(_connector, cast_function, reuse), _reuse(reuse)
-    {
-        BESDEBUG(SQL_NAME, "CREATING: SQLSimpleType"<< endl);
-    }
-    ;
+            SQLBaseType<SQL_TYPE, ODBC_TYPE, DAP_TYPE, OUT>(_connector, cast_function, reuse), _reuse(reuse) {
+        BESDEBUG(SQL_NAME, "CREATING: SQLSimpleType" << endl);
+    };
 
-    virtual ~SQLSimpleType()
-    {
-    }
-    ;
+    virtual ~SQLSimpleType() {
+    };
 
     /**
      * WARNING suppose DAP_TYPE is a BaseType inherited object
      */
-    virtual bool read()
-    {
+    virtual bool read() {
         try {
             if (this->read_p()) {
-                BESDEBUG(SQL_NAME, "SQLSimpleType: skipping object"<< endl);
+                BESDEBUG(SQL_NAME, "SQLSimpleType: skipping object" << endl);
                 return false;
             }
             else {
-                BESDEBUG(SQL_NAME, "SQLSimpleType: Reading object '" << this->name() << "' cast(): "<< this->cast() << endl);
+                BESDEBUG(SQL_NAME,
+                         "SQLSimpleType: Reading object '" << this->name() << "' cast(): " << this->cast() << endl);
                 this->set_value(*this->cast());
                 //this->set_read_p(true); -> done by set_value()
                 if (!_reuse) {
@@ -113,29 +109,25 @@ public:
             }
         }
         catch (BESError &e) {
-            BESDEBUG(SQL_NAME, "SQLSimpleType: Unable to read variable '" << this->name() << "'"<< endl);
-            throw BESInternalFatalError("SQLSimpleType: Unable to read variable '" + this->name() + "': " + e.get_message(), e.get_file(),
+            BESDEBUG(SQL_NAME, "SQLSimpleType: Unable to read variable '" << this->name() << "'" << endl);
+            throw BESInternalFatalError(
+                    "SQLSimpleType: Unable to read variable '" + this->name() + "': " + e.get_message(), e.get_file(),
                     e.get_line());
         }
-    }
-    ;
+    };
 
-    virtual libdap::BaseType *ptr_duplicate()
-    {
+    virtual libdap::BaseType *ptr_duplicate() {
         return new SQLSimpleType<SQL_TYPE, ODBC_TYPE, DAP_TYPE, OUT>(*this);
-    }
-    ;
+    };
 
     /**
      * @brief copy constructor (used by ptr_duplicate())
      * <br>WARNING suppose DAP_TYPE is a BaseType
      */
     SQLSimpleType(SQLSimpleType<SQL_TYPE, ODBC_TYPE, DAP_TYPE, OUT> &obj) :
-            SQLBaseType<SQL_TYPE, ODBC_TYPE, DAP_TYPE, OUT>(obj), _reuse(obj._reuse)
-    {
-        BESDEBUG(SQL_NAME, "COPING: SQLSimpleType"<< endl);
-    }
-    ;
+            SQLBaseType<SQL_TYPE, ODBC_TYPE, DAP_TYPE, OUT>(obj), _reuse(obj._reuse) {
+        BESDEBUG(SQL_NAME, "COPING: SQLSimpleType" << endl);
+    };
 };
 
 /**
@@ -177,32 +169,28 @@ public:
      */
     SQLSimpleType(SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> &_connector,
                   typename SQLCastAction<ODBC_TYPE, void>::CAST cast_function, bool reuse = true) :
-            SQLBaseType<SQL_TYPE, ODBC_TYPE, DAP_TYPE, void>(_connector, cast_function), _reuse(reuse)
-    {
-    }
-    ;
+            SQLBaseType<SQL_TYPE, ODBC_TYPE, DAP_TYPE, void>(_connector, cast_function), _reuse(reuse) {
+    };
 
-    virtual ~SQLSimpleType()
-    {
-    }
-    ;
+    virtual ~SQLSimpleType() {
+    };
 
     /**
      * WARNING suppose DAP_TYPE is a BaseType inherited object
      */
-    virtual bool read()
-    {
+    virtual bool read() {
         try {
             if (this->read_p()) {
-                BESDEBUG(SQL_NAME, "SQLSimpleType: skipping object"<< endl);
+                BESDEBUG(SQL_NAME, "SQLSimpleType: skipping object" << endl);
                 return false;
             }
             else {
-                BESDEBUG(SQL_NAME, "SQLSimpleType: Reading object '" << this->name() << "' cast(): "<< this->cast() << endl);
+                BESDEBUG(SQL_NAME,
+                         "SQLSimpleType: Reading object '" << this->name() << "' cast(): " << this->cast() << endl);
                 this->val2buf(this->cast()); // cast value to the new type
                 if (!_reuse)
                     this->getCast().freeValue(); // deleting casted value
-                BESDEBUG(SQL_NAME, "SQLSimpleType: object '" << this->name() << "' copied to the buffer."<< endl);
+                BESDEBUG(SQL_NAME, "SQLSimpleType: object '" << this->name() << "' copied to the buffer." << endl);
                 // not usable!
                 // since we cannot know the argument type here
                 // this->set_value( this->doRead() );
@@ -212,28 +200,24 @@ public:
         } // try
         catch (BESError &e) {
             BESDEBUG(SQL_NAME, "SQLSimpleType: Unable to read variable '" << this->name() << "': " + e.get_message());
-            throw BESInternalFatalError("SQLSimpleType: Unable to read variable '" + this->name() + "': " + e.get_message(), e.get_file(),
+            throw BESInternalFatalError(
+                    "SQLSimpleType: Unable to read variable '" + this->name() + "': " + e.get_message(), e.get_file(),
                     e.get_line());
         }
-    }
-    ;
+    };
 
-    virtual libdap::BaseType *ptr_duplicate()
-    {
+    virtual libdap::BaseType *ptr_duplicate() {
         return new SQLSimpleType<SQL_TYPE, ODBC_TYPE, DAP_TYPE, void>(*this);
-    }
-    ;
+    };
 
     /**
      * @brief used in ptr_duplicate()
      * WARNING suppose DAP_TYPE is a BaseType
      */
     SQLSimpleType(SQLSimpleType<SQL_TYPE, ODBC_TYPE, DAP_TYPE, void> &obj) :
-            SQLBaseType<SQL_TYPE, ODBC_TYPE, DAP_TYPE, void>(obj), _reuse(obj._reuse)
-    {
-        BESDEBUG(SQL_NAME, "COPING: SQLSimpleType"<< endl);
-    }
-    ;
+            SQLBaseType<SQL_TYPE, ODBC_TYPE, DAP_TYPE, void>(obj), _reuse(obj._reuse) {
+        BESDEBUG(SQL_NAME, "COPING: SQLSimpleType" << endl);
+    };
 };
 
 #endif /* SQLSIMPLETYPE_H_ */

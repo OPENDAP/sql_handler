@@ -48,51 +48,50 @@
  * to define its own action() storage type.
  *
  */
-template <class ARGS_TYPE,class OUT_TYPE=void>
+template<class ARGS_TYPE, class OUT_TYPE=void>
 class SQLActionList {
 public:
-	SQLActionList(){};
-	//SQLActionList(SQLActionList<IN,OUT> *ptr){};
+    SQLActionList() {};
+    //SQLActionList(SQLActionList<IN,OUT> *ptr){};
 
-	/**
-	 * UPDATE: 16 Jun 2010
-	 * commented out:
-	 * 		virtual SQLAction<IN,OUT>& getNext()=0;
-	 * Substituted by:
-	 * 		virtual OUT * doNext(IN * in)=0;
-	 * This is done to free the list storage type:
-	 * Static way -> list of ACTION
-	 * Dynamic way -> list of SQLAction
-	 */
-	/**
-	 * @brief run next action in the list.
-	 * @return an OUT value (default is 'void*')
-	 */
-	virtual  OUT_TYPE * doNext(ARGS_TYPE * in) =0;
+    /**
+     * UPDATE: 16 Jun 2010
+     * commented out:
+     * 		virtual SQLAction<IN,OUT>& getNext()=0;
+     * Substituted by:
+     * 		virtual OUT * doNext(IN * in)=0;
+     * This is done to free the list storage type:
+     * Static way -> list of ACTION
+     * Dynamic way -> list of SQLAction
+     */
+    /**
+     * @brief run next action in the list.
+     * @return an OUT value (default is 'void*')
+     */
+    virtual OUT_TYPE *doNext(ARGS_TYPE *in) = 0;
 
 
-	/**
-	 * @brief check if there is an SQLAction<IN,OUT>.
-	 * @return true if getNext() can return next action
-	 */
-	virtual bool hasNext() =0;
+    /**
+     * @brief check if there is an SQLAction<IN,OUT>.
+     * @return true if getNext() can return next action
+     */
+    virtual bool hasNext() = 0;
 
-	/**
-	 * @brief calculate the size of the ActionList.
-	 * @return size_t representing the size
-	 */
-	virtual size_t getSize() =0;
+    /**
+     * @brief calculate the size of the ActionList.
+     * @return size_t representing the size
+     */
+    virtual size_t getSize() = 0;
 
-	/**
-	 * @brief initialize/reset the next element to the
-	 * first element in the list.
-	 * @return false if something goes wrong.
-	 */
-	virtual bool reset() =0;
+    /**
+     * @brief initialize/reset the next element to the
+     * first element in the list.
+     * @return false if something goes wrong.
+     */
+    virtual bool reset() = 0;
 
-	virtual ~SQLActionList(){
-TESTDEBUG(SQL_NAME_TEST,"DELETING: ACTION LIST"<<endl);
-	};
+    virtual ~SQLActionList() {
+    }
 
 };
 

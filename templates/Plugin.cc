@@ -25,7 +25,9 @@
  */
 
 #include "OPENDAP_CLASSPlugin.h"
+
 #DAS#
+
 /**
  * @brief This is the build_das method which fill
  * DAS object using default unixOPENDAP_CLASS static structures.
@@ -75,169 +77,174 @@
  *  a working demonstrative example.
  */
 bool
-OPENDAP_CLASSPlugin::build_das( SQLDataHandlerInterface &dhi ){
+OPENDAP_CLASSPlugin::build_das(SQLDataHandlerInterface &dhi) {
 #SIMPLE#
-	/**
-	 * Build the OPENDAP_CLASSCSimpleonnector which implements an
-	 * SQLSimpleConnector so this is a SQLTypeConnector
-	 */
-	OPENDAP_CLASSSimpleConnector conn;
-#SIMPLE#
-#COMPLETE#
-	/**
-	 * Build the OPENDAP_CLASSConnector which implements an SQLConnector
-	 * so this is a SQLTypeConnector and a SQLErrorConnector
-	 */
-	OPENDAP_CLASSConnector conn;
-
-	/**
-	 * Build the error factory used by this builder
-	 * Here we use a StaticErrorFactory.
-	 * @see OPENDAP_CLASSErrorFactoryComponent
-	 */
-	OPENDAP_CLASSErrorFactoryComponent efc(conn);
-	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef=efc;
-
-	/**
-	 * Set the error factory into the OPENDAP_CLASSConnector for internal
-	 * use.
-	 * <br>Note that this is not a Connector interface method.
-	 */
-	conn.setErrorFactory(ef);
-#COMPLETE#
-	/**
-	 * Build the defined FactoryComponent passing the
-	 * TypeConnector (which is implemented in OPENDAP_CLASSConnector)
-	 * @see OPENDAP_CLASSTypeFactoryComponent
-	 * @see OPENDAP_CLASSConnector
-	 */
-	OPENDAP_CLASSTypeFactoryComponent fc=OPENDAP_CLASSTypeFactoryComponent(conn);
-
-	/**
-	 *  Run the data builder static method implemented
-	 *  by SQLBuildDAS.
-	 *  <br>
-	 *  Other working calls:
-	 *  DASBuilder::sql_build_das(dhi,ef,tf,conn); // need DTM
-	 *  SQLBuildDAS<SQL_TYPE,OPENDAP_CLASS_TYPE>::sql_build_das(dhi,fc,conn);
-	 */
-#SIMPLE#
-	return DASBuilder::sql_build_das(dhi,fc,conn);
+    /**
+     * Build the OPENDAP_CLASSCSimpleonnector which implements an
+     * SQLSimpleConnector so this is a SQLTypeConnector
+     */
+    OPENDAP_CLASSSimpleConnector conn;
 #SIMPLE#
 #COMPLETE#
-	return DASBuilder::sql_build_das(dhi,ef,fc,conn);
+    /**
+     * Build the OPENDAP_CLASSConnector which implements an SQLConnector
+     * so this is a SQLTypeConnector and a SQLErrorConnector
+     */
+    OPENDAP_CLASSConnector conn;
+
+    /**
+     * Build the error factory used by this builder
+     * Here we use a StaticErrorFactory.
+     * @see OPENDAP_CLASSErrorFactoryComponent
+     */
+    OPENDAP_CLASSErrorFactoryComponent efc(conn);
+    SQLErrorFactory <ERROR_TYPE, MSG_TYPE> ef = efc;
+
+    /**
+     * Set the error factory into the OPENDAP_CLASSConnector for internal
+     * use.
+     * <br>Note that this is not a Connector interface method.
+     */
+    conn.setErrorFactory(ef);
+#COMPLETE#
+    /**
+     * Build the defined FactoryComponent passing the
+     * TypeConnector (which is implemented in OPENDAP_CLASSConnector)
+     * @see OPENDAP_CLASSTypeFactoryComponent
+     * @see OPENDAP_CLASSConnector
+     */
+    OPENDAP_CLASSTypeFactoryComponent fc = OPENDAP_CLASSTypeFactoryComponent(conn);
+
+    /**
+     *  Run the data builder static method implemented
+     *  by SQLBuildDAS.
+     *  <br>
+     *  Other working calls:
+     *  DASBuilder::sql_build_das(dhi,ef,tf,conn); // need DTM
+     *  SQLBuildDAS<SQL_TYPE,OPENDAP_CLASS_TYPE>::sql_build_das(dhi,fc,conn);
+     */
+#SIMPLE#
+    return DASBuilder::sql_build_das(dhi, fc, conn);
+#SIMPLE#
+#COMPLETE#
+    return DASBuilder::sql_build_das(dhi, ef, fc, conn);
 #COMPLETE#
 }
+
 #DAS#
 #DDS#
+
 bool
-OPENDAP_CLASSPlugin::build_dds( SQLDataHandlerInterface &dhi ){
+OPENDAP_CLASSPlugin::build_dds(SQLDataHandlerInterface &dhi) {
 #SIMPLE#
-	/**
-	 * Build the OPENDAP_CLASSCSimpleonnector which implements an
-	 * SQLSimpleConnector so this is a SQLTypeConnector
-	 */
-	OPENDAP_CLASSSimpleConnector *conn=new OPENDAP_CLASSSimpleConnector();
-#SIMPLE#
-#COMPLETE#
-	/**
-	 * Build the OPENDAP_CLASSConnector which implements an SQLConnector
-	 * so this is a SQLTypeConnector and a SQLErrorConnector
-	 */
-	OPENDAP_CLASSConnector *conn=new OPENDAP_CLASSConnector();
-
-	/**
-	 * Build the error factory used by this builder
-	 * Here we use a StaticErrorFactory.
-	 * @see OPENDAP_CLASSErrorFactoryComponent
-	 */
-	OPENDAP_CLASSErrorFactoryComponent efc(*conn);
-	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef=efc;
-	/**
-	 * Set the error factory into the OPENDAP_CLASSConnector for internal
-	 * use.
-	 * <br>Note that this is not a Connector interface method.
-	 */
-	conn->setErrorFactory(ef);
-#COMPLETE#
-
-	/**
-	 * Build the defined FactoryComponent passing the
-	 * TypeConnector (which is implemented in OPENDAP_CLASSConnector)
-	 * @see OPENDAP_CLASSTypeFactoryComponent
-	 * @see OPENDAP_CLASSConnector
-	 */
-	OPENDAP_CLASSTypeFactoryComponent fc=OPENDAP_CLASSTypeFactoryComponent(*conn);
-
-	/**
-	 *  Run the data builder static method implemented
-	 *  by SQLPlugin.
-	 */
-#SIMPLE#
-	return DDSBuilder::sql_build_dds(dhi,fc,conn);
+    /**
+     * Build the OPENDAP_CLASSCSimpleonnector which implements an
+     * SQLSimpleConnector so this is a SQLTypeConnector
+     */
+    OPENDAP_CLASSSimpleConnector *conn = new OPENDAP_CLASSSimpleConnector();
 #SIMPLE#
 #COMPLETE#
-	return DDSBuilder::sql_build_dds(dhi,ef,fc,conn);
+    /**
+     * Build the OPENDAP_CLASSConnector which implements an SQLConnector
+     * so this is a SQLTypeConnector and a SQLErrorConnector
+     */
+    OPENDAP_CLASSConnector *conn = new OPENDAP_CLASSConnector();
+
+    /**
+     * Build the error factory used by this builder
+     * Here we use a StaticErrorFactory.
+     * @see OPENDAP_CLASSErrorFactoryComponent
+     */
+    OPENDAP_CLASSErrorFactoryComponent efc(*conn);
+    SQLErrorFactory <ERROR_TYPE, MSG_TYPE> ef = efc;
+    /**
+     * Set the error factory into the OPENDAP_CLASSConnector for internal
+     * use.
+     * <br>Note that this is not a Connector interface method.
+     */
+    conn->setErrorFactory(ef);
+#COMPLETE#
+
+    /**
+     * Build the defined FactoryComponent passing the
+     * TypeConnector (which is implemented in OPENDAP_CLASSConnector)
+     * @see OPENDAP_CLASSTypeFactoryComponent
+     * @see OPENDAP_CLASSConnector
+     */
+    OPENDAP_CLASSTypeFactoryComponent fc = OPENDAP_CLASSTypeFactoryComponent(*conn);
+
+    /**
+     *  Run the data builder static method implemented
+     *  by SQLPlugin.
+     */
+#SIMPLE#
+    return DDSBuilder::sql_build_dds(dhi, fc, conn);
+#SIMPLE#
+#COMPLETE#
+    return DDSBuilder::sql_build_dds(dhi, ef, fc, conn);
 #COMPLETE#
 }
+
 #DDS#
 #DATA#
+
 bool
-OPENDAP_CLASSPlugin::build_data( SQLDataHandlerInterface &dhi ){
+OPENDAP_CLASSPlugin::build_data(SQLDataHandlerInterface &dhi) {
 #SIMPLE#
-	/**
-	 * Build the OPENDAP_CLASSCSimpleonnector which implements an
-	 * SQLSimpleConnector so this is a SQLTypeConnector
-	 */
-	OPENDAP_CLASSSimpleConnector *conn=new OPENDAP_CLASSSimpleConnector();
+    /**
+     * Build the OPENDAP_CLASSCSimpleonnector which implements an
+     * SQLSimpleConnector so this is a SQLTypeConnector
+     */
+    OPENDAP_CLASSSimpleConnector *conn = new OPENDAP_CLASSSimpleConnector();
 #SIMPLE#
 #COMPLETE#
-	/**
-	 * Build the OPENDAP_CLASSConnector which implements an SQLConnector
-	 * so this is a SQLTypeConnector and a SQLErrorConnector
-	 */
-	OPENDAP_CLASSConnector *conn=new OPENDAP_CLASSConnector();
+    /**
+     * Build the OPENDAP_CLASSConnector which implements an SQLConnector
+     * so this is a SQLTypeConnector and a SQLErrorConnector
+     */
+    OPENDAP_CLASSConnector *conn = new OPENDAP_CLASSConnector();
 
-	/**
-	 * Build the error factory used by this builder
-	 * Here we use a StaticErrorFactory.
-	 * @see OPENDAP_CLASSErrorFactoryComponent
-	 */
-	OPENDAP_CLASSErrorFactoryComponent efc(*conn);
-	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> ef=efc;
-	/**
-	 * Set the error factory into the OPENDAP_CLASSConnector for internal
-	 * use.
-	 * <br>Note that this is not a Connector interface method.
-	 */
-	conn->setErrorFactory(ef);
+    /**
+     * Build the error factory used by this builder
+     * Here we use a StaticErrorFactory.
+     * @see OPENDAP_CLASSErrorFactoryComponent
+     */
+    OPENDAP_CLASSErrorFactoryComponent efc(*conn);
+    SQLErrorFactory <ERROR_TYPE, MSG_TYPE> ef = efc;
+    /**
+     * Set the error factory into the OPENDAP_CLASSConnector for internal
+     * use.
+     * <br>Note that this is not a Connector interface method.
+     */
+    conn->setErrorFactory(ef);
 #COMPLETE#
-	/**
-	 * Build the defined TypeFactoryComponent passing the
-	 * TypeConnector (which is implemented in OPENDAP_CLASSConnector)
-	 * @see OPENDAP_CLASSTypeFactoryComponent
-	 * @see OPENDAP_CLASSConnector
-	 */
-	OPENDAP_CLASSTypeFactoryComponent fc=OPENDAP_CLASSTypeFactoryComponent(*conn);
+    /**
+     * Build the defined TypeFactoryComponent passing the
+     * TypeConnector (which is implemented in OPENDAP_CLASSConnector)
+     * @see OPENDAP_CLASSTypeFactoryComponent
+     * @see OPENDAP_CLASSConnector
+     */
+    OPENDAP_CLASSTypeFactoryComponent fc = OPENDAP_CLASSTypeFactoryComponent(*conn);
 
-	/**
-	 *  Run the data builder static method implemented
-	 *  by SQLBuildDATA.
-	 */
+    /**
+     *  Run the data builder static method implemented
+     *  by SQLBuildDATA.
+     */
 #SIMPLE#
-	return DATABuilder::sql_build_data(dhi,fc,conn);
+    return DATABuilder::sql_build_data(dhi, fc, conn);
 #SIMPLE#
 #COMPLETE#
-	return DATABuilder::sql_build_data(dhi,ef,fc,conn);
+    return DATABuilder::sql_build_data(dhi, ef, fc, conn);
 #COMPLETE#
 }
+
 #DATA#
+
 bool
-OPENDAP_CLASSPlugin::build_vers( SQLDataHandlerInterface &dhi )
-{
-	//@todo: make a better output layout (indent?)
-	BESVersionInfo *info = dynamic_cast<BESVersionInfo *>(
-			dhi.getBesHandler().get_response_object());
-	info->add_library( OPENDAP_CLASS_NAME , PACKAGE_VERSION ) ;
-	return true;
+OPENDAP_CLASSPlugin::build_vers(SQLDataHandlerInterface &dhi) {
+    //@todo: make a better output layout (indent?)
+    BESVersionInfo *info = dynamic_cast<BESVersionInfo *>(
+            dhi.getBesHandler().get_response_object());
+    info->add_library(OPENDAP_CLASS_NAME, PACKAGE_VERSION);
+    return true;
 }

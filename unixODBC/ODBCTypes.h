@@ -38,6 +38,7 @@
  * typedef SQLSMALLINT     SQLRETURN;
  */
 #include <sqltypes.h>
+
 // SQLH
 typedef SQLRETURN ERROR_TYPE;
 //typedef SQLCHAR [] MSG_TYPE; // should be

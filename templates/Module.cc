@@ -27,7 +27,7 @@
 
 #include <iostream>
 
-using std::endl ;
+using std::endl;
 
 #include "OPENDAP_CLASSResponseNames.h"
 
@@ -45,10 +45,9 @@ using std::endl ;
 
 
 void
-OPENDAP_CLASSModule::initialize( const string &modname )
-{
-    BESDEBUG( modname, "Initializing SQLPlugin "
-		       << modname << endl ) ;
+OPENDAP_CLASSModule::initialize(const string &modname) {
+    BESDEBUG(modname, "Initializing SQLPlugin "
+            << modname << endl);
     /**
 	 *  initialize check point reading
 	 *  configuration file.
@@ -58,42 +57,39 @@ OPENDAP_CLASSModule::initialize( const string &modname )
     /**
 	 * Add OPENDAP_CLASS SQL plugin to SQLRequestHandler
 	 */
-    BESDEBUG( modname, "    adding "<< modname
-        		<<" SQLPlugin to the SQL request handler" << endl ) ;
+    BESDEBUG(modname, "    adding " << modname
+                                    << " SQLPlugin to the SQL request handler" << endl);
 
     if (!SQLRequestHandler::add_sql_handler(modname, new OPENDAP_CLASSPlugin(modname)))
-    	throw BESInternalFatalError("Unable to load the module named "+modname,
-    			__FILE__,__LINE__);
+        throw BESInternalFatalError("Unable to load the module named " + modname,
+                                    __FILE__, __LINE__);
 
-    BESDEBUG( modname, "    adding "<<modname<<" debug context" << endl ) ;
-    BESDebug::Register( modname );
+    BESDEBUG(modname, "    adding " << modname << " debug context" << endl);
+    BESDebug::Register(modname);
 
-    BESDEBUG( modname, "SQL Module initialized"<< endl );
+    BESDEBUG(modname, "SQL Module initialized" << endl);
 }
 
 void
-OPENDAP_CLASSModule::terminate( const string &modname )
-{
-    BESDEBUG( modname, "Cleaning SQL module " << modname << endl ) ;
+OPENDAP_CLASSModule::terminate(const string &modname) {
+    BESDEBUG(modname, "Cleaning SQL module " << modname << endl);
 
-    BESDEBUG( modname,"    removing " << modname << " sql plugin handler" << endl ) ;
+    BESDEBUG(modname, "    removing " << modname << " sql plugin handler" << endl);
     SQLRequestHandler::remove_sql_handler(modname);
 
-    BESDEBUG( modname, "Done Cleaning SQLPlugin "<< modname << endl ) ;
+    BESDEBUG(modname, "Done Cleaning SQLPlugin " << modname << endl);
 }
 
 extern "C"
 {
-    BESAbstractModule *maker()
-    {
-	return new OPENDAP_CLASSModule ;
-    }
+BESAbstractModule *maker() {
+    return new OPENDAP_CLASSModule;
+}
 }
 
 void
-OPENDAP_CLASSModule::dump( ostream &strm ) const
-{
+OPENDAP_CLASSModule::dump(ostream &strm) const {
     strm << BESIndent::LMarg << "SQLModule::dump - ("
-			     << (void *)this << ")" << endl ;
+         << (void *) this << ")" << endl;
 }
 

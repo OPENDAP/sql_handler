@@ -26,6 +26,7 @@
 
 #ifndef SQLDEFAULTERRORACTION_H_
 #define SQLDEFAULTERRORACTION_H_
+
 #include <BESDebug.h>
 
 #include "action/SQLStaticAction.h"
@@ -88,79 +89,79 @@
  * It provide public methods to get SQLAction instances
  * or ACTION methods to build your own static ActionLists
  */
-template <class IN>
+template<class IN>
 class SQLDefaultErrorAction {
 #if 0
 #define _SQLH_DEBUG(args); \
-	BESDEBUG( SQL_NAME, _SQLH_DEBUG_PREFIX<<args<< endl );
+    BESDEBUG( SQL_NAME, _SQLH_DEBUG_PREFIX<<args<< endl );
 #define _SQLH_EXCEPT(args); \
-	throw SQLInternalError(_SQLH_EXCEPTION_PREFIX+args,__FILE__,__LINE__);
+    throw SQLInternalError(_SQLH_EXCEPTION_PREFIX+args,__FILE__,__LINE__);
 #define _SQLH_EXCEPT(args); \
-	throw SQLInternalError(_SQLH_EXCEPTION_PREFIX+args,__FILE__,__LINE__);
+    throw SQLInternalError(_SQLH_EXCEPTION_PREFIX+args,__FILE__,__LINE__);
 #endif
 public:
-	/**
-	 * @brief Throws an SQLInternalFatalError Exception.
-	 * @param args is a template argument appended to
-	 * SQLDefinitions::_SQLH_FATAL_PREFIX using
-	 * operator<<
-	 */
-	static void *fatalMethod(IN *args){
-		BESDEBUG(SQL_NAME,_SQLH_FATAL_PREFIX<<*args<< std::endl);
-		throw SQLInternalFatalError(*args,__FILE__,__LINE__);
-		return NULL; // to avoid warning
-	}
+    /**
+     * @brief Throws an SQLInternalFatalError Exception.
+     * @param args is a template argument appended to
+     * SQLDefinitions::_SQLH_FATAL_PREFIX using
+     * operator<<
+     */
+    static void *fatalMethod(IN *args) {
+        BESDEBUG(SQL_NAME, _SQLH_FATAL_PREFIX << *args << std::endl);
+        throw SQLInternalFatalError(*args, __FILE__, __LINE__);
+        return NULL; // to avoid warning
+    }
 
-	/**
-	 * @brief Instantiate an SQLAction initialized using
-	 * fatalMethod
-	 * @return A new instance of SQLAction<IN,void>
-	 */
-	static SQLStaticAction<IN,void> *fatalAction(){
-		return new SQLStaticAction<IN>(&fatalMethod);
-	}
+    /**
+     * @brief Instantiate an SQLAction initialized using
+     * fatalMethod
+     * @return A new instance of SQLAction<IN,void>
+     */
+    static SQLStaticAction<IN, void> *fatalAction() {
+        return new SQLStaticAction<IN>(&fatalMethod);
+    }
 
-	/**
-	 * @brief Throws an SQLInternalError Exception
-  	 * @param args is a template argument appended to
-	 * SQLDefinitions::_SQLH_EXCEPTION_PREFIX using
-	 * operator+
-	 */
-	static void *exceptionMethod(IN *args){
-		BESDEBUG(SQL_NAME,_SQLH_EXCEPTION_PREFIX<<*args<< std::endl);
-		throw SQLInternalError(*args,__FILE__,__LINE__);
-		return NULL; // to avoid warning
-	}
+    /**
+     * @brief Throws an SQLInternalError Exception
+       * @param args is a template argument appended to
+     * SQLDefinitions::_SQLH_EXCEPTION_PREFIX using
+     * operator+
+     */
+    static void *exceptionMethod(IN *args) {
+        BESDEBUG(SQL_NAME, _SQLH_EXCEPTION_PREFIX << *args << std::endl);
+        throw SQLInternalError(*args, __FILE__, __LINE__);
+        return NULL; // to avoid warning
+    }
 
-	/**
-	 * @brief Instantiate an SQLAction initialized using
-	 * exceptionMethod
-	 * @return A new instance of SQLAction<IN,void>
-	 */
-	static SQLStaticAction<IN,void> *exceptionAction(){
-		return new SQLStaticAction<IN>(&exceptionMethod);
-	}
+    /**
+     * @brief Instantiate an SQLAction initialized using
+     * exceptionMethod
+     * @return A new instance of SQLAction<IN,void>
+     */
+    static SQLStaticAction<IN, void> *exceptionAction() {
+        return new SQLStaticAction<IN>(&exceptionMethod);
+    }
 
-	/**
-	 * @brief Run BESDEBUG in 'sql' context
-  	 * @param args is a template argument type
-  	 * which is appended to the
-  	 * SQLDefinitions::_SQLH_DEBUG_PREFIX using
-  	 * 'operator<<'
-	 */
-	static void *debugMethod(IN *args) {
-		BESDEBUG( SQL_NAME, _SQLH_DEBUG_PREFIX<<*args<< std::endl);
-		return NULL; // to avoid warning
-	}
+    /**
+     * @brief Run BESDEBUG in 'sql' context
+       * @param args is a template argument type
+       * which is appended to the
+       * SQLDefinitions::_SQLH_DEBUG_PREFIX using
+       * 'operator<<'
+     */
+    static void *debugMethod(IN *args) {
+        BESDEBUG(SQL_NAME, _SQLH_DEBUG_PREFIX << *args << std::endl);
+        return NULL; // to avoid warning
+    }
 
-	/**
-	 * @brief Instantiate an SQLAction initialized using
-	 * debugMethod
-	 * @return A new instance of SQLAction<IN,void>
-	 */
-	static SQLStaticAction<IN,void> *debugAction(){
-		return new SQLStaticAction<IN>(&debugMethod);
-	}
+    /**
+     * @brief Instantiate an SQLAction initialized using
+     * debugMethod
+     * @return A new instance of SQLAction<IN,void>
+     */
+    static SQLStaticAction<IN, void> *debugAction() {
+        return new SQLStaticAction<IN>(&debugMethod);
+    }
 
 };
 

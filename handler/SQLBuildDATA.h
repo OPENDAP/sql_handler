@@ -70,14 +70,11 @@ template<class SQL_TYPE, // connector
         class OUT_TYPE2 = libdap::BaseType> // SQLTypeFactory
 class SQLBuildDATA {
 private:
-    SQLBuildDATA()
-    {
-    }
-    ;
-    virtual ~SQLBuildDATA()
-    {
-    }
-    ;
+    SQLBuildDATA() {
+    };
+
+    virtual ~SQLBuildDATA() {
+    };
 public:
 #if 0
     static bool
@@ -149,14 +146,11 @@ class SQLBuildDATA<SQL_TYPE, // connector
         SQL_TYPE, // SPECIALIZED
         libdap::BaseType> { // SPECIALIZED
 private:
-    SQLBuildDATA()
-    {
-    }
-    ;
-    virtual ~SQLBuildDATA()
-    {
-    }
-    ;
+    SQLBuildDATA() {
+    };
+
+    virtual ~SQLBuildDATA() {
+    };
 public:
 
     /**
@@ -182,9 +176,8 @@ public:
      * @see SQLObjectTypeFactory
      * @see ODBCFactoryComponent
      */
-    static bool sql_build_data(SQLDataHandlerInterface &dhi, SQLTypeFactoryComponent<SQL_TYPE, ODBC_TYPE>& fc,
-                               SQLSimpleConnector<SQL_TYPE, ODBC_TYPE>* connector)
-    {
+    static bool sql_build_data(SQLDataHandlerInterface &dhi, SQLTypeFactoryComponent<SQL_TYPE, ODBC_TYPE> &fc,
+                               SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> *connector) {
         /**
          * Build the TypeFactory which will be our
          * BaseType factory.
@@ -221,10 +214,9 @@ public:
      * @see ODBCFactoryComponent
      */
     static bool sql_build_data(SQLDataHandlerInterface &dhi,
-                               SQLActionFactory<ERROR_TYPE, MSG_TYPE, OUT_TYPE1>& error_factory,
-                               SQLTypeFactoryComponent<SQL_TYPE, ODBC_TYPE>& fc,
-                               SQLSimpleConnector<SQL_TYPE, ODBC_TYPE>* connector)
-    {
+                               SQLActionFactory<ERROR_TYPE, MSG_TYPE, OUT_TYPE1> &error_factory,
+                               SQLTypeFactoryComponent<SQL_TYPE, ODBC_TYPE> &fc,
+                               SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> *connector) {
         /**
          * Build the TypeFactory which will be our
          * BaseType factory.
@@ -259,13 +251,12 @@ public:
      * @see ODBCFactoryComponent
      */
     static bool sql_build_data(SQLDataHandlerInterface &dhi,
-                               SQLActionFactory<ERROR_TYPE, MSG_TYPE, OUT_TYPE1>& error_factory,
-                               SQLActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType>& type_factory,
-                               SQLSimpleConnector<SQL_TYPE, ODBC_TYPE>* connector)
-    {
+                               SQLActionFactory<ERROR_TYPE, MSG_TYPE, OUT_TYPE1> &error_factory,
+                               SQLActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType> &type_factory,
+                               SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> *connector) {
 
         return sql_build_data(dhi, &error_factory, // pass as !NULL pointer
-                type_factory, connector);
+                              type_factory, connector);
     }
 
 private:
@@ -275,8 +266,7 @@ private:
      * @return a new string containing
      * the default name for DAS
      */
-    static string * dummy_cast(void *)
-    {
+    static string *dummy_cast(void *) {
         return new string(_SQLH_DEFAULT_DAS_NAME);
     }
 
@@ -290,23 +280,22 @@ private:
      *
      */
     static bool sql_build_data(SQLDataHandlerInterface &dhi,
-                               SQLActionFactory<ERROR_TYPE, MSG_TYPE, OUT_TYPE1>* error_factory,
-                               SQLActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType>& type_factory,
-                               SQLSimpleConnector<SQL_TYPE, ODBC_TYPE>* connector)
-    {
-        BESDEBUG(SQL_NAME, "SQLBuildDATA: Connecting "<<endl);
+                               SQLActionFactory<ERROR_TYPE, MSG_TYPE, OUT_TYPE1> *error_factory,
+                               SQLActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType> &type_factory,
+                               SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> *connector) {
+        BESDEBUG(SQL_NAME, "SQLBuildDATA: Connecting " << endl);
         SQLConnectAction<ERROR_TYPE, MSG_TYPE, OUT_TYPE1>::connect(
-        // SQLHandleConnector
+                // SQLHandleConnector
                 *connector,
                 // get container from storage
                 dhi.getSQLContainer(),
                 // check action to do on errors
                 error_factory); // try to connect
-        BESDEBUG(SQL_NAME, "SQLBuildDATA: Connected"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDATA: Connected" << endl);
 
-        BESDEBUG(SQL_NAME, "SQLBuildDATA: Executing query"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDATA: Executing query" << endl);
         SQLQueryAction<ERROR_TYPE, MSG_TYPE, OUT_TYPE1>::query(*connector, error_factory);
-        BESDEBUG(SQL_NAME, "SQLBuildDATA: Query successfully done"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDATA: Query successfully done" << endl);
 
         BESResponseObject *response = dhi.getResponseObject();
 
@@ -324,8 +313,8 @@ private:
         // name(s) would be awkward and would also 'leak' information about
         // the database. 9/10/12 jhrg
         SQLSequence<SQL_TYPE, ODBC_TYPE> *seq
-            = new SQLSequence<SQL_TYPE, ODBC_TYPE>(connector->getParams().getServer(),
-                    connector->getParams().get_real_name(), connector);
+                = new SQLSequence<SQL_TYPE, ODBC_TYPE>(connector->getParams().getServer(),
+                                                       connector->getParams().get_real_name(), connector);
 #if 0
         SQLSequence<SQL_TYPE, ODBC_TYPE> *seq = new SQLSequence<SQL_TYPE, ODBC_TYPE>(
                 dhi.getBesContainer()->get_symbolic_name(), connector->getParams().get_real_name(), connector);
@@ -356,15 +345,17 @@ private:
         for (size_t i = 0; i < connector->getCols(); i++) {
             libdap::BaseType *bt = NULL;
 
-            BESDEBUG(SQL_NAME, "SQLBuildDATA: getting next object"<<endl);
+            BESDEBUG(SQL_NAME, "SQLBuildDATA: getting next object" << endl);
 
             bt = SQLNextTypeAction<SQL_TYPE, ODBC_TYPE, ERROR_TYPE, MSG_TYPE, OUT_TYPE1>::nextType(*connector,
-                    type_factory, error_factory);
+                                                                                                   type_factory,
+                                                                                                   error_factory);
 
             if (bt) { // if 'bt' is created
                 BESDEBUG(SQL_NAME, "SQLBuildDATA: The " << bt->type_name() <<
-                        (bt->is_vector_type()?" array":" instance" )<< " named '"<< bt->name() <<
-                        "'  is ready, adding..."<<endl);
+                                                        (bt->is_vector_type() ? " array" : " instance") << " named '"
+                                                        << bt->name() <<
+                                                        "'  is ready, adding..." << endl);
 
                 // FIXME connector->getColDesc(i) is not the correct type value for
                 // most of the variables.
@@ -377,7 +368,7 @@ private:
             }
             else // error occurred on 'bt' creation
             {
-                BESDEBUG(SQL_NAME, "SQLBuildDATA: : Unrecognized NULL object, Adding default place-holder."<<endl);
+                BESDEBUG(SQL_NAME, "SQLBuildDATA: : Unrecognized NULL object, Adding default place-holder." << endl);
                 /**
                  * create new Str type and initialize it using
                  * the dummy_reader which simply returns a
@@ -392,10 +383,6 @@ private:
                 connector->setNext();
                 if (bt) {
                     seq->add_var_nocopy(bt, libdap::nil);
-#if 0
-                    delete bt;
-                    bt = 0;
-#endif
                     // TODO Check these values
                     attr.append_attr(_SQLH_DEFAULT_DAS_NAME, _SQLH_DEFAULT_DAS_TYPE, _SQLH_DEFAULT_DAS_VAL);
                 }
@@ -408,74 +395,31 @@ private:
         connector->reset();
 
         if (seq) {
-            BESDEBUG(SQL_NAME, "SQLBuildDATA: Adding SQLSequence variable '" << seq->name() << "' to DDS"<<endl);
+            BESDEBUG(SQL_NAME, "SQLBuildDATA: Adding SQLSequence variable '" << seq->name() << "' to DDS" << endl);
             dds->add_var_nocopy(seq);
-#if 0
-            /** ONLY VALID FOR AUTO_PTR
-             * To be added ptr_duplicate is called so this sequence
-             * is no more usable since connector handle is passed to
-             * its duplicate.
-             * @see SQLSequence
-             */
-#endif
-#if 0
-            // switched to _nocopy() above. 9/10/12 jhrg
-            delete seq;//safe
-#endif
+
             // The BES is setting this to 'virtual'. This is a better
             // name because it is consistent with how other responses
             // are named. 9/10/12 jhrg
             string name = connector->getParams().get_real_name();
             size_t p = name.find_last_of('/');
-            if (p != string::npos && p+1 <= name.length())
+            if (p != string::npos && p + 1 <= name.length())
                 name = name.substr(p + 1);
             dds->set_dataset_name(name);
-            BESDEBUG(SQL_NAME, "SQLBuildDATA: Set dataset name to: '"<< name << "'" <<endl);
-#if 0
-            // Not needed. This is set by the BES (tucked away in dapreader)
-            // in DapRequestHandler::dap_build_dds jhrg 9/10/12
-            dds->filename(dhi.getBesContainer()->get_real_name());
-#endif
-#if __TESTS__==1
-            TESTDEBUG(SQL_NAME_TEST,"-----------DDS_DUMP-------------"<<endl);
-            dds->dump(std::cerr);
-            TESTDEBUG(SQL_NAME_TEST,"------ATTR DUMP DONE------"<<endl);
-#endif
+            BESDEBUG(SQL_NAME, "SQLBuildDATA: Set dataset name to: '" << name << "'" << endl);
         }
         else
             throw BESInternalError("Unable to build an SQLSequence", __FILE__, __LINE__);
 
-#if 0
-        BESDEBUG(SQL_NAME,"SQLBuildDATA: Transferring attributes"<<endl);
-        if (das) {
-            dds->transfer_attributes( das );
-            /**
-             * @todo: check this
-             * comments says that it is safe to delete (copied)
-             * but seams that it's not true!
-             *
-             * from DDS.cc 358-359
-             * This method uses a deep copy to transfer the attributes, to it's safe to
-             * delete the source DAS object passed to this method once it's done.
-             */
-//?			delete das;
-//			das=0;
-        }
-        else
-        throw BESInternalFatalError(
-                "SQLBuildDATA: Unable to transfer a NULL DAS object",
-                __FILE__,__LINE__);
-#endif
-
         dhi.getBesHandler().data[POST_CONSTRAINT] = dhi.getBesContainer()->get_constraint();
 
-        BESDEBUG(SQL_NAME, "SQLBuildDATA: Set constraint"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDATA: Set constraint" << endl);
         bdds->set_constraint(dhi.getBesHandler());
 
-        BESDEBUG(SQL_NAME, "SQLBuildDATA: Clear container"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDATA: Clear container" << endl);
         bdds->clear_container();
 
-        BESDEBUG(SQL_NAME, "SQLBuildDATA: DDS response object has been built"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDATA: DDS response object has been built" << endl);
         return true;
     }
 };

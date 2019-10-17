@@ -54,7 +54,7 @@
  * of the following regex
  */
 #define _SQLH_CONT_REG_ATTR \
-	"(^|,)[ ]*([A-z0-9\\_\\. ]+|[\\*])[ ]*(,|$)"
+    "(^|,)[ ]*([A-z0-9\\_\\. ]+|[\\*])[ ]*(,|$)"
 // number of groups '()' in regex +1
 #define _SQLH_CONT_REG_ATTR_GROUPS 4
 /**
@@ -112,10 +112,10 @@
  *  so it should match a DAP constraints AND a SQL WHERE predicate
  */
 #define _SQLH_CONT_REG_CONSTR_BASE \
-	"[ ]*&?(([A-z,0-9]+\\.)?(\\w+[0-9]*\\.?\\_?\\w*[0-9]*))" \
-		"[ ]*(<|>|=|!=|<=|>=|~=|<>)" \
-			"[ ]*([\\',\\\",\\%,\\*]*\\w*[\\.?,\\_?,\\w*,[0-9]*]*[\\',\\\",\\%,\\*]*)"
-				//"[ ]*AND|and|OR?|or?"
+    "[ ]*&?(([A-z,0-9]+\\.)?(\\w+[0-9]*\\.?\\_?\\w*[0-9]*))" \
+        "[ ]*(<|>|=|!=|<=|>=|~=|<>)" \
+            "[ ]*([\\',\\\",\\%,\\*]*\\w*[\\.?,\\_?,\\w*,[0-9]*]*[\\',\\\",\\%,\\*]*)"
+//"[ ]*AND|and|OR?|or?"
 
 // number of groups '()' in regex +1
 #define _SQLH_CONT_REG_CONSTR_BASE_GROUPS 6

@@ -41,15 +41,16 @@
 // FIXME Removed jhrg 10/1/14 using namespace std;
 
 // order type can be set in constructor
-typedef std::set<SQLAttribute,SQLAttrComp > SQL_ATTRIBUTE_SET;
+typedef std::set<SQLAttribute, SQLAttrComp> SQL_ATTRIBUTE_SET;
 // set ordered by Attribute rest+name
-typedef std::set<SQLAttribute,SQLAttrAttrComp> SQL_ATTRIBUTE_SET_BYATTR;
+typedef std::set<SQLAttribute, SQLAttrAttrComp> SQL_ATTRIBUTE_SET_BYATTR;
 // set ordered by Attribute name
-typedef std::set<SQLAttribute,SQLAttrNameComp> SQL_ATTRIBUTE_SET_BYNAME;
+typedef std::set<SQLAttribute, SQLAttrNameComp> SQL_ATTRIBUTE_SET_BYNAME;
 // set ordered by position
-typedef std::set<SQLAttribute,SQLAttrPosComp> SQL_ATTRIBUTE_SET_BYPOS;
+typedef std::set<SQLAttribute, SQLAttrPosComp> SQL_ATTRIBUTE_SET_BYPOS;
 
 typedef std::set<SQLConstraint> SQL_CONSTRAINT_SET;
+
 /**
  * @brief Class which introduce a layer to take
  * SQL query manipulation separated by the SQLContainer.
@@ -68,154 +69,153 @@ typedef std::set<SQLConstraint> SQL_CONSTRAINT_SET;
  */
 class SQLQuery {
 private:
-	SQL_ATTRIBUTE_SET_BYNAME select;
-	std::string from;
-	SQL_CONSTRAINT_SET where;
+    SQL_ATTRIBUTE_SET_BYNAME select;
+    std::string from;
+    SQL_CONSTRAINT_SET where;
 
 public:
-	/**
-	 * @brief constructor
-	 */
-	SQLQuery():select(),from(),where(){
-TESTDEBUG( SQL_NAME,"CREATING: SQLQuery"<< << std::endl );
-	}
+    /**
+     * @brief constructor
+     */
+    SQLQuery() : select(), from(), where() {
+    }
 
-	/**
-	 * @brief copy constructor
-	 * @param q const reference to the SQLQuery to copy
-	 */
-	SQLQuery(const SQLQuery &q):
-		select(q.select),from(q.from),where(q.where)
-	{
-TESTDEBUG( SQL_NAME,"COPING: SQLQuery" << std::endl );
-	}
+    /**
+     * @brief copy constructor
+     * @param q const reference to the SQLQuery to copy
+     */
+    SQLQuery(const SQLQuery &q) :
+            select(q.select), from(q.from), where(q.where) {
+    }
 
-	/**
-	 * @brief dtor
-	 */
-	virtual ~SQLQuery(){
-TESTDEBUG( SQL_NAME,"DELETING: SQLQuery" << std::endl );
-	}
+    /**
+     * @brief dtor
+     */
+    virtual ~SQLQuery() {
+    }
 
-	/**
-	 * @brief defines attribute iterator (ordered by attribute name)
-	 */
-	typedef SQL_ATTRIBUTE_SET_BYNAME::iterator attrIterator;
+    /**
+     * @brief defines attribute iterator (ordered by attribute name)
+     */
+    typedef SQL_ATTRIBUTE_SET_BYNAME::iterator attrIterator;
 
-	/**
-	 * @brief insert an attribute into the query
-	 * @param s an SQLAttribute ordered by attribute name
-	 */
-	void addSelect(SQLAttribute s){
-		select.insert(s);
-	}
-	/*
-	 * @brief return a set of attribute representing the
-	 * select clause of this query.
-	 * @note this set is ordered by attribute (rest+name) so you
-	 * may want to transform it in an ordered by position set.
-	 */
-	virtual SQL_ATTRIBUTE_SET_BYNAME &getSelect(){
-		return select;
-	}
-	/**
-	 * @brief set the select clause as parameter.
-	 * @param s an SQLAttribute ordered by attribute
-	 */
-	void setSelect(SQL_ATTRIBUTE_SET_BYNAME & s){
-		select=s;
-	}
+    /**
+     * @brief insert an attribute into the query
+     * @param s an SQLAttribute ordered by attribute name
+     */
+    void addSelect(SQLAttribute s) {
+        select.insert(s);
+    }
 
-	/**
-	 * @note: only append is done
-	 * you have to add join string
-	 * manually
-	 */
-	void addFrom(std::string s){
-		from.append(s);
-	}
+    /*
+     * @brief return a set of attribute representing the
+     * select clause of this query.
+     * @note this set is ordered by attribute (rest+name) so you
+     * may want to transform it in an ordered by position set.
+     */
+    virtual SQL_ATTRIBUTE_SET_BYNAME &getSelect() {
+        return select;
+    }
 
-	virtual std::string &getFrom(){
-		return from;
-	}
+    /**
+     * @brief set the select clause as parameter.
+     * @param s an SQLAttribute ordered by attribute
+     */
+    void setSelect(SQL_ATTRIBUTE_SET_BYNAME &s) {
+        select = s;
+    }
 
-	void setFrom(std::string f){
-		from=f;
-	}
+    /**
+     * @note: only append is done
+     * you have to add join string
+     * manually
+     */
+    void addFrom(std::string s) {
+        from.append(s);
+    }
 
-	/**
-	 * @brief define the constraint iterator
-	 */
-	typedef SQL_CONSTRAINT_SET::iterator whereIterator;
+    virtual std::string &getFrom() {
+        return from;
+    }
 
-	SQL_CONSTRAINT_SET & getWhere(){
-		return where;
-	}
-	void setWhere(SQL_CONSTRAINT_SET c){
-		where=c;
-	}
+    void setFrom(std::string f) {
+        from = f;
+    }
+
+    /**
+     * @brief define the constraint iterator
+     */
+    typedef SQL_CONSTRAINT_SET::iterator whereIterator;
+
+    SQL_CONSTRAINT_SET &getWhere() {
+        return where;
+    }
+
+    void setWhere(SQL_CONSTRAINT_SET c) {
+        where = c;
+    }
 
 
-	/**
-	 * @brief Load all constraint matching the regex and return
-	 * the loaded set of SQLContraints.
-	 * @param attr a reference to the string containing constraints
-	 * @return a SQL_CONSTRAINTS_SET
-	 * @note the substitute should still be settled
-	 */
-	static SQL_CONSTRAINT_SET loadConstraints(std::string & where);
+    /**
+     * @brief Load all constraint matching the regex and return
+     * the loaded set of SQLContraints.
+     * @param attr a reference to the string containing constraints
+     * @return a SQL_CONSTRAINTS_SET
+     * @note the substitute should still be settled
+     */
+    static SQL_CONSTRAINT_SET loadConstraints(std::string &where);
 
-	/**
-	 * Load all attributes matching the regex and return
-	 * the loaded set of attributes as string
-	 * @param attr a reference to the string containing attributes
-	 * @return a new SQL_ATTRIBUTE_SET_BYNAME
-	 *
-	 * @see attrToSelect
-	 */
-	static SQL_ATTRIBUTE_SET_BYNAME loadAttributes(std::string & attr);
+    /**
+     * Load all attributes matching the regex and return
+     * the loaded set of attributes as string
+     * @param attr a reference to the string containing attributes
+     * @return a new SQL_ATTRIBUTE_SET_BYNAME
+     *
+     * @see attrToSelect
+     */
+    static SQL_ATTRIBUTE_SET_BYNAME loadAttributes(std::string &attr);
 
-	/**
-	 * Projection
-	 *
-	 * returns a set of attributes filtered
-	 * attributes ordered by position as
-	 * stored in the dataset
-	 */
-	virtual SQL_ATTRIBUTE_SET_BYPOS* attrToSelect(std::string &onTheFly);
+    /**
+     * Projection
+     *
+     * returns a set of attributes filtered
+     * attributes ordered by position as
+     * stored in the dataset
+     */
+    virtual SQL_ATTRIBUTE_SET_BYPOS *attrToSelect(std::string &onTheFly);
 
 #if 0
-	/**
-	 * MOVED INTO SQLTextContainer::READ()
-	 * Selection
-	 * @brief Standard function which filter SQLContainer attributes
-	 * to build a valid SQL WHERE predicate.
-	 * The function should look at the attributes and to the dataset
-	 * specified where predicate to check that 'on the fly' specified
-	 * contraints are 'more restrictive' then the dataset one.
-	 *
-	 * @todo: this is not easy since adding predicates here is not
-	 * implicit that we are restricting the range.
-	 * We have to discuss about this. carlo cancellieri 27/Jul/2010
-	 *
-	 * <br>@note: This member uses the match function.
-	 * <br>It also uses the bool getOther(string &) method
-	 * to check if some exception to the standard SQL comparator
-	 * are provided for the driver (API) in use.
-	 *
-	 * @return a string representing a valid SQL WHERE predicate.
-	 */
-	virtual std::string constrToWhere(std::string &);
+    /**
+     * MOVED INTO SQLTextContainer::READ()
+     * Selection
+     * @brief Standard function which filter SQLContainer attributes
+     * to build a valid SQL WHERE predicate.
+     * The function should look at the attributes and to the dataset
+     * specified where predicate to check that 'on the fly' specified
+     * contraints are 'more restrictive' then the dataset one.
+     *
+     * @todo: this is not easy since adding predicates here is not
+     * implicit that we are restricting the range.
+     * We have to discuss about this. carlo cancellieri 27/Jul/2010
+     *
+     * <br>@note: This member uses the match function.
+     * <br>It also uses the bool getOther(string &) method
+     * to check if some exception to the standard SQL comparator
+     * are provided for the driver (API) in use.
+     *
+     * @return a string representing a valid SQL WHERE predicate.
+     */
+    virtual std::string constrToWhere(std::string &);
 #endif
 
 #if 0
-	/**
-	 * @brief Utility function to return a set<T> as string
-	 * @param s the set to use
-	 * @param the join string to put between strings
-	 * @return the resulting string
-	 */
-	static std::string setToStr(std::set<std::string> &s, const std::string join);
+    /**
+     * @brief Utility function to return a set<T> as string
+     * @param s the set to use
+     * @param the join string to put between strings
+     * @return the resulting string
+     */
+    static std::string setToStr(std::set<std::string> &s, const std::string join);
 #endif
 };
 

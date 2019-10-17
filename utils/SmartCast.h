@@ -36,108 +36,98 @@
 
 namespace smart {
 
-	/**
-	 * @brief Structure to provide a getPtr() function
-	 * which is able to return a pointer copy
-	 * starting from a unknown type object.
-	 * <br>NOTE:if __CLONE__ flag is active
-	 * (set it to 1) the specialization
-	 * structure will be able to provide a
-	 * copy also for T* see comments why this
-	 * is not possible without CLONE.
-	 */
-	template <class T, class _CLONE=void>
-	struct SmartCast {
-		static T* getPtr(){
-TESTDEBUG(SQL_NAME_TEST, "SmartCast: &-CONSTRUCTOR:----"<<std::endl);
-			return new T();
-		}
-		/**
-		 * @brief constructor: will NOT make a copy of the passed pointer.
-		 * This is done since we cannot allocate abstract T classes.
-		 * You may use this constructor passing new copy of the variable.
-		 * Use this constructor carefully since 'k' may not be stored
-		 * into the heap!
-		 * const int *i=new const int();
-		 * const int &r=5;
-		 * i=&r;
-		 * delete i;
-		 */
-		static T* getPtr(T* k){
-TESTDEBUG(SQL_NAME_TEST,"SmartCast: *-CONSTRUCTOR----"<<std::endl);
-			/**
-			 *  does T implement copy constructor?
-			 *  If so, which type?
-			 *  T n=new T(*K);
-			 *  T n=new T(K);
-			 *  use CLONE
-			 */
-			return k;
+    /**
+     * @brief Structure to provide a getPtr() function
+     * which is able to return a pointer copy
+     * starting from a unknown type object.
+     * <br>NOTE:if __CLONE__ flag is active
+     * (set it to 1) the specialization
+     * structure will be able to provide a
+     * copy also for T* see comments why this
+     * is not possible without CLONE.
+     */
+    template<class T, class _CLONE=void>
+    struct SmartCast {
+        static T *getPtr() {
+            return new T();
+        }
 
-		}
+        /**
+         * @brief constructor: will NOT make a copy of the passed pointer.
+         * This is done since we cannot allocate abstract T classes.
+         * You may use this constructor passing new copy of the variable.
+         * Use this constructor carefully since 'k' may not be stored
+         * into the heap!
+         * const int *i=new const int();
+         * const int &r=5;
+         * i=&r;
+         * delete i;
+         */
+        static T *getPtr(T *k) {
+            /**
+             *  does T implement copy constructor?
+             *  If so, which type?
+             *  T n=new T(*K);
+             *  T n=new T(K);
+             *  use CLONE
+             */
+            return k;
+        }
 
-		/*
-		 * build a new object using
-		 * copy constructor
-		 */
-		static T* getPtr(T k){
-			return new T(k);
-		}
+        /*
+         * build a new object using
+         * copy constructor
+         */
+        static T *getPtr(T k) {
+            return new T(k);
+        }
 
-		/**
-		 * @brief constructor: will NOT make a copy of the passed pointer.
-		 * This is done since we cannot allocate abstract T classes.
-		 * You may use this constructor passing new copy of the variable.
-		 * Use this constructor carefully since 'k' may not be stored
-		 * into the heap!
-		 * const int *i=new const int();
-		 * const int &r=5;
-		 * i=&r;
-		 * delete i;
-		 */
-		static const T* getPtr(const T* k){
-TESTDEBUG(SQL_NAME_TEST,"SmartCast: *-CONST-CONSTRUCTOR----"<<std::endl);
-			return k;
-		}
+        /**
+         * @brief constructor: will NOT make a copy of the passed pointer.
+         * This is done since we cannot allocate abstract T classes.
+         * You may use this constructor passing new copy of the variable.
+         * Use this constructor carefully since 'k' may not be stored
+         * into the heap!
+         * const int *i=new const int();
+         * const int &r=5;
+         * i=&r;
+         * delete i;
+         */
+        static const T *getPtr(const T *k) {
+            return k;
+        }
 
-		/*
-		 * build a new object using
-		 * copy constructor
-		 */
-		static const T* getPtr(const T& k){
-TESTDEBUG(SQL_NAME_TEST,"SmartCast: &-CONST-CONSTRUCTOR----"<<std::endl);
-			return new const T(k);
-		}
+        /*
+         * build a new object using
+         * copy constructor
+         */
+        static const T *getPtr(const T &k) {
+            return new const T(k);
+        }
+    };
 
-	};
+    /**
+     * @brief if clone.h is defined we could provide safe
+     * clone layer allocation functionalities.
+     */
+    template<class T>
+    struct SmartCast<T, smart::Clone<T> > {
+        static T *getPtr(T *k) {
+            return k->clone();
+        }
 
-	/**
-	 * @brief if clone.h is defined we could provide safe
-	 * clone layer allocation functionalities.
-	 */
-	template <class T >
-	struct SmartCast < T, smart::Clone<T> > {
+        static T *getPtr(T &k) {
+            return k.clone();
+        }
 
-		static T* getPtr(T* k){
-TESTDEBUG(SQL_NAME_TEST,"SmartCast: *-CLONE----"<<std::endl);
-			return k->clone();
-		}
+        static const T *getPtr(const T *k) {
+            return const_cast<const T *>(k->clone());
+        }
 
-		static T* getPtr(T& k){
-TESTDEBUG(SQL_NAME_TEST,"SmartCast: &-CLONE----"<<std::endl);
-			return k.clone();
-		}
-
-		static const T* getPtr(const T* k){
-TESTDEBUG(SQL_NAME_TEST,"SmartCast: *-CLONE----"<<std::endl);
-			return const_cast<const T*>(k->clone());
-		}
-		static const T* getPtr(const T& k){
-TESTDEBUG(SQL_NAME_TEST,"SmartCast: &-CLONE----"<<std::endl);
-			return const_cast<const T*>(k->clone());
-		}
-
-	};
+        static const T *getPtr(const T &k) {
+            return const_cast<const T *>(k->clone());
+        }
+    };
 }
 
 

@@ -26,6 +26,7 @@
 
 #ifndef SQLCONTAINERFACTORY_H_
 #define SQLCONTAINERFACTORY_H_
+
 #include <BESInternalError.h>
 #include <BESContainer.h>
 #include <string>
@@ -37,7 +38,7 @@
 #include "SQLTextContainer.h"
 
 
-	typedef SQLContainer* (*SELECT_CONTAINER)(string name,string real_name, string type);
+typedef SQLContainer *(*SELECT_CONTAINER)(string name, string real_name, string type);
 
 /**
  * @brief Factory used to build SQLContainers, this factory
@@ -47,130 +48,127 @@
 class SQLContainerFactory {
 public:
 
-	/**
-	 * @brief constructor
-	 * @param container_storage an instance of SQLContainerStorageVolatile
-	 * @todo define a SQLContainerStorage
-	 * @param select_function a function which select the SQLContainer to
-	 * return using the dataset MIME or a personal algorithm. (Default
-	 * algorithm returns always a SQLTextContainer)
-	 * <br>NOTE: container_storage pointer should be handled (dtor) externally
-	 * since it probably is coming from a BESContainerStorageList::TheList
-	 * which doesn't build a copy.
-	 */
-	SQLContainerFactory(SQLContainerStorage *container_storage=NULL,
-						SELECT_CONTAINER select_function=&selectContainer)
-	{
-		TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainerFactory" << std::endl);
-		if (select_function)
-			_select_func=select_function;
-		else
-			throw BESInternalFatalError("Unable to initialize the SQLContainerFactory"
-					"using a NULL SELECT_CONTAINER function ptr",__FILE__,__LINE__);
-		if (container_storage)
-			cs=container_storage;
-		else {
-			BESDEBUG(SQL_NAME,
-				"Building SQLContainerFactory without persistence" << std::endl);
-			cs=NULL;
-		}
-	}
+    /**
+     * @brief constructor
+     * @param container_storage an instance of SQLContainerStorageVolatile
+     * @todo define a SQLContainerStorage
+     * @param select_function a function which select the SQLContainer to
+     * return using the dataset MIME or a personal algorithm. (Default
+     * algorithm returns always a SQLTextContainer)
+     * <br>NOTE: container_storage pointer should be handled (dtor) externally
+     * since it probably is coming from a BESContainerStorageList::TheList
+     * which doesn't build a copy.
+     */
+    SQLContainerFactory(SQLContainerStorage *container_storage = NULL,
+                        SELECT_CONTAINER select_function = &selectContainer) {
+        if (select_function)
+            _select_func = select_function;
+        else
+            throw BESInternalFatalError("Unable to initialize the SQLContainerFactory"
+                                        "using a NULL SELECT_CONTAINER function ptr", __FILE__, __LINE__);
+        if (container_storage)
+            cs = container_storage;
+        else {
+            BESDEBUG(SQL_NAME,
+                     "Building SQLContainerFactory without persistence" << std::endl);
+            cs = NULL;
+        }
+    }
 
-	virtual ~SQLContainerFactory(){
-		TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLContainerFactory" << std::endl);
-	};
+    virtual ~SQLContainerFactory() {
+    };
 
-	/**
-	 * @brief Wrapper for getName(string,string,string)
-	 * @param c reference to a container
-	 * @return a string containing a unique name for this container
-	 */
-	static string getName(BESContainer &c){
-		return getName(c.get_symbolic_name(),
-						c.get_real_name(),
-						c.get_container_type());
-	}
+    /**
+     * @brief Wrapper for getName(string,string,string)
+     * @param c reference to a container
+     * @return a string containing a unique name for this container
+     */
+    static string getName(BESContainer &c) {
+        return getName(c.get_symbolic_name(),
+                       c.get_real_name(),
+                       c.get_container_type());
+    }
 
-	/**
-	 * @brief Different container should use a different name, this
-	 * function return the real name of an object.
-	 * This will be used to register and search object into/from the
-	 * ContainerStorage
-	 * @param name symbolic name of the container
-	 * @param real_name real name of the container
-	 * @param type type of the container
-	 * @return a string containing a unique name for this container
-	 */
-	static string getName(const string &name,
-							const string &real_name,
-							const string &type){
-		return real_name;
-	}
+    /**
+     * @brief Different container should use a different name, this
+     * function return the real name of an object.
+     * This will be used to register and search object into/from the
+     * ContainerStorage
+     * @param name symbolic name of the container
+     * @param real_name real name of the container
+     * @param type type of the container
+     * @return a string containing a unique name for this container
+     */
+    static string getName(const string &name,
+                          const string &real_name,
+                          const string &type) {
+        return real_name;
+    }
 
-	/**
-	 * @param container_storage an instance of SQLContainerStorage
-	 * <br>NOTE: container_storage pointer should be handled (dtor) externally
-	 * since it probably is coming from a BESContainerStorageList::TheList
-	 * which doesn't build a copy.
-	 */
-	static void setPersistence(SQLContainerStorage *container_storage);
+    /**
+     * @param container_storage an instance of SQLContainerStorage
+     * <br>NOTE: container_storage pointer should be handled (dtor) externally
+     * since it probably is coming from a BESContainerStorageList::TheList
+     * which doesn't build a copy.
+     */
+    static void setPersistence(SQLContainerStorage *container_storage);
 
-	/**
-	 * @param select_function a function which select the SQLContainer to
-	 * return using the dataset MIME or a personal algorithm. (Default
-	 * algorithm returns always a SQLTextContainer)
-	 */
-	static void setSelector(SELECT_CONTAINER select_function=&selectContainer);
+    /**
+     * @param select_function a function which select the SQLContainer to
+     * return using the dataset MIME or a personal algorithm. (Default
+     * algorithm returns always a SQLTextContainer)
+     */
+    static void setSelector(SELECT_CONTAINER select_function = &selectContainer);
 
-	/**
-	 * Build a container starting from the actual selected container
-	 * of the passed dhi (dhi.container), or get it from the storage
-	 * (if available).
-	 * It also take care of the AGE of the stored file calling, (if
-	 * needed), methods to update the container, substitute the
-	 * stored copy and return the updated container.
-	 * This is the method to call if you want to use the
-	 * ContainerStorage. If you don't, try to use buildContainer.
-	 * @param BESDataHandlerInterface &
-	 * @return an copy of the SQLContainer
-	 * @see SQLContainer
-	 */
-	static SQLContainer * getContainer(BESDataHandlerInterface &dhi);
+    /**
+     * Build a container starting from the actual selected container
+     * of the passed dhi (dhi.container), or get it from the storage
+     * (if available).
+     * It also take care of the AGE of the stored file calling, (if
+     * needed), methods to update the container, substitute the
+     * stored copy and return the updated container.
+     * This is the method to call if you want to use the
+     * ContainerStorage. If you don't, try to use buildContainer.
+     * @param BESDataHandlerInterface &
+     * @return an copy of the SQLContainer
+     * @see SQLContainer
+     */
+    static SQLContainer *getContainer(BESDataHandlerInterface &dhi);
 
-	/**
-	 * @return a container ready to be used
-	 * @throws a BESInternalError if container setup fails.
-	 */
-	static SQLContainer* buildContainer(BESContainer &c) throw (BESInternalError);
+    /**
+     * @return a container ready to be used
+     * @throws a BESInternalError if container setup fails.
+     */
+    static SQLContainer *buildContainer(BESContainer &c) throw(BESInternalError);
 
-	/**
-	 * @brief factory method
-	 * This method use the overrider (if) method to build
-	 * and update an SQLContainer.
-	 * @WARNING no way to set attributes and constraints use
-	 * this only if you want to build a container from scratch
-	 */
-	static SQLContainer* buildContainer(const string &name,const string &real_name,
-									const string &type)throw (BESInternalError);
+    /**
+     * @brief factory method
+     * This method use the overrider (if) method to build
+     * and update an SQLContainer.
+     * @WARNING no way to set attributes and constraints use
+     * this only if you want to build a container from scratch
+     */
+    static SQLContainer *buildContainer(const string &name, const string &real_name,
+                                        const string &type) throw(BESInternalError);
 
 protected:
-	/**
-	 * @brief implements logic to choose the
-	 * SQLContainer to use.
-	 */
-	static SQLContainer* selectContainer(string name,string real_name, string type){
+    /**
+     * @brief implements logic to choose the
+     * SQLContainer to use.
+     */
+    static SQLContainer *selectContainer(string name, string real_name, string type) {
 #if 0
-		//if we get an XML file use
-		return SQLXMLContainer(name,real_name,type);
+        //if we get an XML file use
+        return SQLXMLContainer(name,real_name,type);
 #endif
-		// if we get a TXT file use
-		// NOTE: symbolic_name == real_name
-		return new SQLTextContainer(name,real_name,type);
-	}
+        // if we get a TXT file use
+        // NOTE: symbolic_name == real_name
+        return new SQLTextContainer(name, real_name, type);
+    }
 
 private:
-	static SELECT_CONTAINER _select_func;
-	static SQLContainerStorage *cs;
+    static SELECT_CONTAINER _select_func;
+    static SQLContainerStorage *cs;
 };
 
 #endif /* SQLCONTAINERFACTORY_H_ */

@@ -124,9 +124,7 @@ ODBCConnector::getColSize(size_t column) {
             SQLLEN actual_column_size;
             rc = SQLColAttribute(stmt, ((SQLSMALLINT) col + 1),
                                  SQL_DESC_LENGTH, NULL, 0, NULL, &actual_column_size);
-            TESTDEBUG(ODBC_NAME, "ODBCConnector: Getting actual_col_size: " <<
-                                                                            actual_column_size << " for column: " << col
-                                                                            << " exit status: " << rc << endl);
+
             /**
              *  force check for errors here
              *  since this is a critical operation
@@ -261,8 +259,6 @@ ODBCConnector::getColName(const size_t &column) {
             return names[column];
         }
         else {
-            TESTDEBUG(SQL_NAME_TEST, "ODBCConnector::getColName() "
-                                     "\n on column: " << column << endl);
             throw SQLInternalFatalError("Index provided exceeds the array limit!",
                                         __FILE__, __LINE__);
         }
@@ -361,7 +357,6 @@ ODBCConnector::getColDesc(const size_t &column) {
 
 ERROR_TYPE *
 ODBCConnector::getError() {
-    TESTDEBUG(ODBC_NAME, "ODBCConnector: running GetError() on status: " << rc << endl);
     return &rc;
 }
 
@@ -538,6 +533,7 @@ ODBCConnector::query() {
         throw BESInternalError("ODBC SQL Error: Couldn't get column number", __FILE__, __LINE__);
 
     setCols(cols);
+
 #if 0
     /**
      * To specify the size of the rowset, the Statement

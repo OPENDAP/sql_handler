@@ -42,6 +42,7 @@
 // members
 #include <list>
 #include <string>
+
 #if 0
 #include "utils/SharedPtr.h"
 #endif
@@ -70,16 +71,16 @@
  * @see SQLContainer
  *
  */
-class SQLTextContainer: public SQLContainer {
+class SQLTextContainer : public SQLContainer {
 public:
-    SQLTextContainer(const string &name, const string & real_name, const string &type);
+    SQLTextContainer(const string &name, const string &real_name, const string &type);
 
     /**
      * @brief constructor
      * @param c reference to a BESContainer
      */
     explicit
-    SQLTextContainer(const BESContainer & c);
+    SQLTextContainer(const BESContainer &c);
 
     /**
      * @brief copy constructor
@@ -87,7 +88,7 @@ public:
      * to copy
      */
     explicit
-    SQLTextContainer(const SQLTextContainer & c);
+    SQLTextContainer(const SQLTextContainer &c);
 
     /**
      * @brief dtor
@@ -113,8 +114,7 @@ public:
      * SQLQuery object
      * @return a reference to the SQLQuery object
      */
-    virtual SQLQuery &getQuery()
-    {
+    virtual SQLQuery &getQuery() {
         return (d_actual_section)->query;
     }
 
@@ -124,8 +124,7 @@ public:
      * @return true if buf is found in the actual
      * section
      */
-    virtual bool getOther(string & buf)
-    {
+    virtual bool getOther(string &buf) {
         std::map<string, string>::iterator it = (d_actual_section)->other.find(buf);
         if (it != (d_actual_section)->other.end()) {
             buf = (*it).second;
@@ -140,8 +139,7 @@ public:
      * from the dataset's API list.
      * @see SQLContainer
      */
-    virtual string &getApi()
-    {
+    virtual string &getApi() {
         return (d_actual_section)->api;
     }
 
@@ -152,8 +150,7 @@ public:
      * @return a string reference
      * @see SQLContainer
      */
-    virtual string &getUser()
-    {
+    virtual string &getUser() {
         return (d_actual_section)->user;
     }
 
@@ -164,8 +161,7 @@ public:
      * @return a string reference
      * @see SQLContainer
      */
-    virtual string &getPass()
-    {
+    virtual string &getPass() {
         return (d_actual_section)->pass;
     }
 
@@ -177,8 +173,7 @@ public:
      * represent the DSN name.
      * @see SQLContainer
      */
-    virtual string &getServer()
-    {
+    virtual string &getServer() {
         return (d_actual_section)->server;
     }
 
@@ -190,8 +185,7 @@ public:
      * @return a string reference
      * @see SQLContainer
      */
-    virtual string &getDBName()
-    {
+    virtual string &getDBName() {
         return (d_actual_section)->dbname;
     }
 
@@ -202,8 +196,7 @@ public:
      * @return a string reference
      * @see SQLContainer
      */
-    virtual string &getPort()
-    {
+    virtual string &getPort() {
         return (d_actual_section)->port;
     }
 
@@ -214,8 +207,7 @@ public:
      * - reset() put cursor to 0
      * @see SQLContainer
      */
-    virtual void reset()
-    {
+    virtual void reset() {
         (d_actual_section) = _dataset->begin();
     }
 
@@ -228,8 +220,7 @@ public:
      * @see setup()
      * @see SQLContainer
      */
-    virtual void clear()
-    {
+    virtual void clear() {
         if (_dataset)
             delete _dataset;
         _dataset = new DATASET();
@@ -247,8 +238,7 @@ public:
      * @see setNext()
      * @see SQLContainer
      */
-    virtual bool end()
-    {
+    virtual bool end() {
         if ((d_actual_section) == _dataset->end())
             return true;
         else
@@ -259,8 +249,7 @@ public:
      * @brief Tell if the section list is empty.
      * @see SQLContainer
      */
-    virtual bool empty()
-    {
+    virtual bool empty() {
         if (_dataset->empty())
             return true;
         else
@@ -281,8 +270,7 @@ public:
      * @return boolean false if end is reached
      * @see SQLContainer
      */
-    virtual bool setNext()
-    {
+    virtual bool setNext() {
         if (end()) {
             return false;
         }
@@ -300,9 +288,7 @@ public:
     /**
      * @brief method to duplicate this instances of BESContainer
      */
-    SQLTextContainer* ptr_duplicate()
-    {
-        TESTDEBUG(SQL_NAME_TEST,"CLONING: SQLTextContainer"<<endl);
+    SQLTextContainer *ptr_duplicate() {
         return new SQLTextContainer(*this);
     }
 
@@ -353,14 +339,14 @@ private:
      * transform DAP comparator to standard SQL's one.
      * @param reference to a set of SQLConstraints
      */
-    void comparatorSubst(std::set<SQLConstraint>& where);
+    void comparatorSubst(std::set<SQLConstraint> &where);
 
     /**
      * Initialize all the object members reading
      * from the source file this->get_real_name().
      * @return true if read is successfully done.
      */
-    virtual bool read() throw (BESError);
+    virtual bool read() throw(BESError);
 
     /**
      * Apply dataset's rules if a [TAG] row is found and set accordingly
@@ -389,8 +375,8 @@ private:
             std::bitset<_SQLH_DATASET_PARTS_NUM> &required,
             //actual section completion diary.
             std::bitset<_SQLH_DATASET_PARTS_NUM> &complete,
-            _SQLH_DATASET_PARTS &reading_part, string & row,
-            regmatch_t & tag);
+            _SQLH_DATASET_PARTS &reading_part, string &row,
+            regmatch_t &tag);
 
     /**
      * Check section requirements and (if satisfied) add the loaded
@@ -401,7 +387,7 @@ private:
      * @see SQLTextDefinitions
      */
     void addNewSection(
-    //section to add
+            //section to add
             SQLH_DATASET_SECTION &new_section,
             //minimum dataset requirements.
             std::bitset<_SQLH_DATASET_PARTS_NUM> &required,
@@ -419,10 +405,10 @@ private:
      * @see SQLTextDefinitions
      */
     void defineVariable(
-    //variable definitions container
-            std::map<string, string> & vars,
+            //variable definitions container
+            std::map<string, string> &vars,
             // row where definition is found
-            string & row,
+            string &row,
             //index of variable KEY
             regmatch_t &key,
             //index of variable VALUE
@@ -438,12 +424,12 @@ private:
      * @see SQLTextDefinitions
      */
     void variableSubstitution(
-    //variable definitions container
-            std::map<string, string> & vars,
+            //variable definitions container
+            std::map<string, string> &vars,
             // row to apply
-            string & row,
+            string &row,
             //index of variable to substitute
-            regmatch_t & key);
+            regmatch_t &key);
 
     /**
      * Apply dataset rules if a KEY=VAL row is found
@@ -468,7 +454,7 @@ private:
             std::bitset<_SQLH_DATASET_PARTS_NUM> &required,
             //actual section completion diary.
             std::bitset<_SQLH_DATASET_PARTS_NUM> &complete,
-            _SQLH_DATASET_PARTS &reading_part, string & row,
+            _SQLH_DATASET_PARTS &reading_part, string &row,
             regmatch_t &key, regmatch_t &val);
 
     /**
@@ -487,10 +473,10 @@ private:
      */
     void
     addFreeForm(
-    //section to add to
+            //section to add to
             SQLH_DATASET_SECTION &new_section,
             //actual section completion diary.
-            std::bitset<_SQLH_DATASET_PARTS_NUM> &complete, _SQLH_DATASET_PARTS &reading_part, string & row);
+            std::bitset<_SQLH_DATASET_PARTS_NUM> &complete, _SQLH_DATASET_PARTS &reading_part, string &row);
 
     /**
      * Temporary string to append ff string
@@ -517,4 +503,5 @@ private:
     DATASET::iterator d_actual_section;
     //std::shared_ptr<DATASET::iterator> d_actual_section;
 };
+
 #endif /* SQLTEXTCONTAINER_H_ */

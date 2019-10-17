@@ -35,75 +35,66 @@
  * This is useful when connector won't work any substitute
  * object should be created.
  */
-class SQLDummySimpleType:public libdap::Str{
-	SQLCastAction<void,string> _cast;
+class SQLDummySimpleType : public libdap::Str {
+    SQLCastAction<void, string> _cast;
 public:
 
-	/**
-	 * @brief Constructor for dummy SIMPLE type.
-	 * This is used to build dummy object when the connector is
-	 * unavailable.
-	 * @param name the name of the dummy SimpleType
-	 * @param cast_action is pointer to the cast action to use
-	 * @param reuse a boolean indicating if the casted pointer should
-	 * be deleted or is reused elsewhere
-	 */
-	SQLDummySimpleType(	string name,
-					SQLCastAction<void,string>::CAST cast_action,
-					bool reuse):
-		Str(name),
-		_cast(cast_action, reuse){
-TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLDummySimpleType"<<endl);
-	};
+    /**
+     * @brief Constructor for dummy SIMPLE type.
+     * This is used to build dummy object when the connector is
+     * unavailable.
+     * @param name the name of the dummy SimpleType
+     * @param cast_action is pointer to the cast action to use
+     * @param reuse a boolean indicating if the casted pointer should
+     * be deleted or is reused elsewhere
+     */
+    SQLDummySimpleType(string name,
+                       SQLCastAction<void, string>::CAST cast_action,
+                       bool reuse) :
+            Str(name),
+            _cast(cast_action, reuse) {
+    }
 
-	virtual ~SQLDummySimpleType(){};
+    virtual ~SQLDummySimpleType() {};
 
-	/**
-	 * WARNING suppose DAP_TYPE is a BaseType inherited object
-	 */
-	virtual bool read()
-	{
-	try {
-		if (this->read_p()){
-TESTDEBUG(SQL_NAME_TEST,"SQLDummySimpleType: skipping object"<<endl);
-			return false;
-		}
-		else
-		{
-TESTDEBUG(SQL_NAME_TEST,"SQLDummySimpleType: reading object"<<endl);
-				this->set_value( *(this->_cast.action(NULL)) ); //read dummy value
-				if (!_cast.reusable()) {
-					this->_cast.freeValue(); // deleting casted value
-				}
-TESTDEBUG(SQL_NAME_TEST,"SQLDummySimpleType: object copied to the buffer"<<endl);
-			return false;
-		}
-	}
-	catch (BESError &e){
-			BESDEBUG(SQL_NAME,
-						"SQLDummySimpleType: Unable to read variable"<<endl);
-			throw BESInternalFatalError(
-				"SQLDummySimpleType: Unable to read variable: "+e.get_message(),
-				e.get_file(),e.get_line());
-		}
-	};
+    /**
+     * WARNING suppose DAP_TYPE is a BaseType inherited object
+     */
+    virtual bool read() {
+        try {
+            if (this->read_p()) {
+                return false;
+            }
+            else {
+                this->set_value(*(this->_cast.action(NULL))); //read dummy value
+                if (!_cast.reusable()) {
+                    this->_cast.freeValue(); // deleting casted value
+                }
+                return false;
+            }
+        }
+        catch (BESError &e) {
+            BESDEBUG(SQL_NAME,
+                     "SQLDummySimpleType: Unable to read variable" << endl);
+            throw BESInternalFatalError(
+                    "SQLDummySimpleType: Unable to read variable: " + e.get_message(),
+                    e.get_file(), e.get_line());
+        }
+    }
 
-	virtual BaseType *ptr_duplicate()
-	{
-		return new SQLDummySimpleType(this);
-	};
+    virtual BaseType *ptr_duplicate() {
+        return new SQLDummySimpleType(this);
+    }
 
 
-	/**
-	 * @brief copy constructor (used by ptr_duplicate())
-	 * <br>WARNING suppose DAP_TYPE is a BaseType
-	 */
-	SQLDummySimpleType(SQLDummySimpleType *obj):
-		Str(obj->name()),
-		_cast(obj->_cast)
-	{
-TESTDEBUG(SQL_NAME_TEST,"COPING: SQLDummySimpleType"<<endl);
-	};
+    /**
+     * @brief copy constructor (used by ptr_duplicate())
+     * <br>WARNING suppose DAP_TYPE is a BaseType
+     */
+    SQLDummySimpleType(SQLDummySimpleType *obj) :
+            Str(obj->name()),
+            _cast(obj->_cast) {
+    }
 };
 
 

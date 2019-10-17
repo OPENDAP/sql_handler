@@ -69,22 +69,20 @@
  * @see SQLAction
  * @see SQLErrorManager
  */
-class SQLInternalError: public BESError {
+class SQLInternalError : public BESError {
 protected:
-    SQLInternalError()
-    {
-    }
-public:
-    SQLInternalError(const std::string &msg, const std::string &file, unsigned int line) :
-            BESError(msg, _SQLH_INTERNAL_ERROR, file, line)
-    {
-    }
-    virtual ~SQLInternalError()
-    {
+    SQLInternalError() {
     }
 
-    virtual void dump(std::ostream &strm) const
-    {
+public:
+    SQLInternalError(const std::string &msg, const std::string &file, unsigned int line) :
+            BESError(msg, _SQLH_INTERNAL_ERROR, file, line) {
+    }
+
+    virtual ~SQLInternalError() {
+    }
+
+    virtual void dump(std::ostream &strm) const {
         strm << "SQLInternalError::dump - (" << (void *) this << ")" << std::endl;
         BESIndent::Indent();
         BESError::dump(strm);

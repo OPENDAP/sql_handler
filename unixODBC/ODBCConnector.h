@@ -52,137 +52,136 @@ using std::string;
  * @see SQLErrorConnector
  *
  */
-class ODBCConnector :public SQLConnector<SQL_TYPE,ODBC_TYPE,ERROR_TYPE,MSG_TYPE>{
+class ODBCConnector : public SQLConnector<SQL_TYPE, ODBC_TYPE, ERROR_TYPE, MSG_TYPE> {
 
 #define _buf_size 1024
 
-	/**
-	 * @brief Connect to DB
-	 * @returns true if d_status can be settled to isReady()
-	 */
-	bool connect();
+    /**
+     * @brief Connect to DB
+     * @returns true if d_status can be settled to isReady()
+     */
+    bool connect();
 
-	MSG_TYPE * getMsg(ERROR_TYPE * error_code);
+    MSG_TYPE *getMsg(ERROR_TYPE *error_code);
 
-	/**
-	 * return the maximum size of a column data type
-	 *
-	 * if column paramether is 0 returns the row size;
-	 */
-	SQLLEN & getColSize(size_t column);
+    /**
+     * return the maximum size of a column data type
+     *
+     * if column paramether is 0 returns the row size;
+     */
+    SQLLEN &getColSize(size_t column);
 
 public:
 #if 0
-	/**
-	 * this method could be called by a BES Command
-	 * to get available drivers to use in dataset
-	 */
-	void getSQLDrivers();
+    /**
+     * this method could be called by a BES Command
+     * to get available drivers to use in dataset
+     */
+    void getSQLDrivers();
 
-	/**
-	 * this method could be called by a BES Command
-	 * to get available datasources for a dataset
-	 */
-	void getSQLDataSources();
+    /**
+     * this method could be called by a BES Command
+     * to get available datasources for a dataset
+     */
+    void getSQLDataSources();
 #endif
 
-	SQL_TYPE getCType(SQLLEN /* jhrg &*/ sql_type);
+    SQL_TYPE getCType(SQLLEN /* jhrg &*/ sql_type);
 
-	/**
-	 * should be usable with getCol() which returns:
-	 * 0 - (n-1) 	column index	n=getCols()
-	 * ODBC uses
-	 * 1 - n 		column index
-	 */
-	virtual SQL_TYPE * getType(size_t column);
+    /**
+     * should be usable with getCol() which returns:
+     * 0 - (n-1) 	column index	n=getCols()
+     * ODBC uses
+     * 1 - n 		column index
+     */
+    virtual SQL_TYPE *getType(size_t column);
 
-	virtual const string & getColName(const size_t &column);
+    virtual const string &getColName(const size_t &column);
 
-	virtual const string & getColDesc(const size_t& column);
+    virtual const string &getColDesc(const size_t &column);
 
 
-	virtual ERROR_TYPE * getError();
+    virtual ERROR_TYPE *getError();
 
-	/**
-	 * @brief Get the number of rows in the response
-	 * Use SQL's COUNT() function to get the number of rows that will be returned by
-	 * the SELECT statement returned by the query() method of this class.
-	 * @return the number of rows
-	 */
+    /**
+     * @brief Get the number of rows in the response
+     * Use SQL's COUNT() function to get the number of rows that will be returned by
+     * the SELECT statement returned by the query() method of this class.
+     * @return the number of rows
+     */
     unsigned long getRowCount();
 
-	/**
-	 * @brief Query
-	 * NOTE: this is also a good place to
-	 * update QUERY size limit using
-	 * setCols(nFiled) and setRows(nRows)
-	 */
-	bool query();
+    /**
+     * @brief Query
+     * NOTE: this is also a good place to
+     * update QUERY size limit using
+     * setCols(nFiled) and setRows(nRows)
+     */
+    bool query();
 
-	/**
-	 * @brief Returns a value of ODBC_TYPE type containing
-	 * the next value in this result set.
-	 * <br>It is pointed by the ACTUAL position:
-	 * - column 	-> getCol()
-	 * - row		-> getRow()
-	 * <br>In a Sequence the NEXT value should be:
-	 * - The NEXT COLUMN value of the actual row
-	 * <br>OR
-	 * - The first value of the NEXT ROW
-	 * @note This method should also update cursors to the
-	 * next position using setNext:
-	 * - setNext(size_t increment)
-	 * @note The first time it is called should return object in
-	 * position 0,0 and set cursors to col:1 and row:0 (or
-	 * row:1 if only 1 column), if limits are reached
-	 * (col==getCols() && row==getRows()) this method
-	 * can throw an exception or an
-	 * SQLInternalException
-	 * @note use notEnd to check end condition
-	 */
-	ODBC_TYPE * getNext(size_t next=1);
+    /**
+     * @brief Returns a value of ODBC_TYPE type containing
+     * the next value in this result set.
+     * <br>It is pointed by the ACTUAL position:
+     * - column 	-> getCol()
+     * - row		-> getRow()
+     * <br>In a Sequence the NEXT value should be:
+     * - The NEXT COLUMN value of the actual row
+     * <br>OR
+     * - The first value of the NEXT ROW
+     * @note This method should also update cursors to the
+     * next position using setNext:
+     * - setNext(size_t increment)
+     * @note The first time it is called should return object in
+     * position 0,0 and set cursors to col:1 and row:0 (or
+     * row:1 if only 1 column), if limits are reached
+     * (col==getCols() && row==getRows()) this method
+     * can throw an exception or an
+     * SQLInternalException
+     * @note use notEnd to check end condition
+     */
+    ODBC_TYPE *getNext(size_t next = 1);
 
-	void fetch();
+    void fetch();
 
-	/**
-	 * @brief Set error factory used by this connector.
-	 */
-	void setErrorFactory(SQLErrorFactory<ERROR_TYPE,MSG_TYPE> &ef);
+    /**
+     * @brief Set error factory used by this connector.
+     */
+    void setErrorFactory(SQLErrorFactory<ERROR_TYPE, MSG_TYPE> &ef);
 
-	/**
-	 * @brief Close connection
-	 */
-	bool close();
+    /**
+     * @brief Close connection
+     */
+    bool close();
 
-	ODBCConnector():
-		SQLConnector<SQL_TYPE,ODBC_TYPE,ERROR_TYPE,MSG_TYPE>(),
-		stmt(NULL),		//!< statement handle
-		env(NULL),		//!< environment handle
-		conn(NULL),		//!< connection handle
-		rc(0),			//!< d_status
-		toFetchRows(0),	//!< number of rows to fetch
-		strMsg(""), 	//!< error message
-		msgEnvSeq(1),		//!< Env error sequence number // read API documentation
-		msgConnSeq(1),		//!< Conn error sequence number // read API documentation
-		msgStmtSeq(1),		//!< Stmt error sequence number // read API documentation
-		sef(NULL),		//!< error factory
-		d_buf(NULL),		//!< buffer
+    ODBCConnector() :
+            SQLConnector<SQL_TYPE, ODBC_TYPE, ERROR_TYPE, MSG_TYPE>(),
+            stmt(NULL),        //!< statement handle
+            env(NULL),        //!< environment handle
+            conn(NULL),        //!< connection handle
+            rc(0),            //!< d_status
+            toFetchRows(0),    //!< number of rows to fetch
+            strMsg(""),    //!< error message
+            msgEnvSeq(1),        //!< Env error sequence number // read API documentation
+            msgConnSeq(1),        //!< Conn error sequence number // read API documentation
+            msgStmtSeq(1),        //!< Stmt error sequence number // read API documentation
+            sef(NULL),        //!< error factory
+            d_buf(NULL),        //!< buffer
 //SQLLEN d_status[_buf_size];//[bufferRows];
-		types(NULL),	//!< buffer
-		sizes(NULL),	//!< buffer
-		row_size(0),	//!< buffer
-		descs(NULL),	//!< buffer (column descriptions)
-		names(NULL)	//!< buffer
-	{
-        TESTDEBUG(ODBC_NAME,"CREATING: ODBCConnector"<<endl);
+            types(NULL),    //!< buffer
+            sizes(NULL),    //!< buffer
+            row_size(0),    //!< buffer
+            descs(NULL),    //!< buffer (column descriptions)
+            names(NULL)    //!< buffer
+    {
         strMsg = new char[_buf_size];
-	};
+    }
 
-	virtual ~ODBCConnector() {
-	};
+    virtual ~ODBCConnector() {
+    }
 
 private:
-	void clean() {
+    void clean() {
 
         // set d_status to NOT READY
         setReady(false);
@@ -211,37 +210,37 @@ private:
             d_buf = 0;
         }
 
-		msgEnvSeq=1;	//!< Env error sequence number // read API documentation
-		msgStmtSeq=1;	//!< Stmt error sequence number // read API documentation
-		msgConnSeq=1;	//!< Conn error sequence number // read API documentation
-	}
+        msgEnvSeq = 1;    //!< Env error sequence number // read API documentation
+        msgStmtSeq = 1;    //!< Stmt error sequence number // read API documentation
+        msgConnSeq = 1;    //!< Conn error sequence number // read API documentation
+    }
 
-	SQLHSTMT stmt;//!< statement handle
+    SQLHSTMT stmt;//!< statement handle
 
-	SQLHENV env;//!< environment handle
+    SQLHENV env;//!< environment handle
 
-	SQLHDBC conn;//!< connection handle
+    SQLHDBC conn;//!< connection handle
 
-	SQLRETURN rc;//!< global d_status
-	size_t toFetchRows; //!<number of rows to fetch or skip
+    SQLRETURN rc;//!< global d_status
+    size_t toFetchRows; //!<number of rows to fetch or skip
 
-	// errors
-	MSG_TYPE strMsg; //!< error message (argument)
-	SQLSMALLINT msgEnvSeq,msgConnSeq,msgStmtSeq; //!< error index sequence
+    // errors
+    MSG_TYPE strMsg; //!< error message (argument)
+    SQLSMALLINT msgEnvSeq, msgConnSeq, msgStmtSeq; //!< error index sequence
 
-	SQLErrorFactory<ERROR_TYPE,MSG_TYPE> *sef; //!<this is passed not rebuilt
+    SQLErrorFactory<ERROR_TYPE, MSG_TYPE> *sef; //!<this is passed not rebuilt
 
-	SQLCHAR **d_buf;	//!< buffer
-	SQLLEN d_status[_buf_size];	//!< buffer d_status
+    SQLCHAR **d_buf;    //!< buffer
+    SQLLEN d_status[_buf_size];    //!< buffer d_status
 
-	// temporary vars
-	SQL_TYPE * types;//!< types buffer
+    // temporary vars
+    SQL_TYPE *types;//!< types buffer
 
-	SQLLEN * sizes, row_size; //!< sizes buffer
+    SQLLEN *sizes, row_size; //!< sizes buffer
 
-	string * descs; //!< descriptions buffer
+    string *descs; //!< descriptions buffer
 
-	string * names; //!< column names buffer
+    string *names; //!< column names buffer
 };
 
 #endif /* ODBCCONNECTOR_H_ */

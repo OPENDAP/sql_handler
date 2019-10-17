@@ -26,6 +26,7 @@
 
 #ifndef SQLCONTAINERSTORAGE_H_
 #define SQLCONTAINERSTORAGE_H_
+
 #include <BESContainerStorage.h>
 #include "SQLContainer.h"
 
@@ -33,24 +34,24 @@
  * @brief Interface to implement SQLContainer persistence
  * to pass to the SQLContainerFactory.
  */
-class SQLContainerStorage{
+class SQLContainerStorage {
 
 public:
-	/**
-	 * @brief Constructor
-	 */
-	SQLContainerStorage(){};
+    /**
+     * @brief Constructor
+     */
+    SQLContainerStorage() {};
 
-	/**
-	 * @brief Dtor
-	 */
-	virtual ~SQLContainerStorage(){}
+    /**
+     * @brief Dtor
+     */
+    virtual ~SQLContainerStorage() {}
 
-	/**
-	 * @brief add a container to the storage
-	 * @param a pointer to the SQLContainer to store
-	 */
-	virtual void add_container(SQLContainer *c)=0;
+    /**
+     * @brief add a container to the storage
+     * @param a pointer to the SQLContainer to store
+     */
+    virtual void add_container(SQLContainer *c) = 0;
 
     /**
      * @brief removes all container
@@ -61,7 +62,7 @@ public:
      *
      * @return true if successfully removed and false otherwise
      */
-    virtual bool del_containers()=0;
+    virtual bool del_containers() = 0;
 
     /**
      * @brief removes a container with the given symbolic name
@@ -72,27 +73,27 @@ public:
      * @param s_name symbolic name for the container
      * @return true if successfully removed and false otherwise
      */
-    virtual bool del_container(const string &s_name)=0 ;
+    virtual bool del_container(const string &s_name) = 0;
 
-	/**
-	 * @brief look_for method to implement
-	 * checks on modification time and rebuild
-	 * mechanisms of the SQLContainers before
-	 * returning.
-	 * <br>Can return NULL pointer
-	 * @param name the symbolic name of the container
-	 * @return an updated SQLContainer pointer if
-	 * passed name match a container in the list
-	 * or NULL if no container with that name is found
-	 */
-	virtual SQLContainer * look_for(const string &name)=0;
+    /**
+     * @brief look_for method to implement
+     * checks on modification time and rebuild
+     * mechanisms of the SQLContainers before
+     * returning.
+     * <br>Can return NULL pointer
+     * @param name the symbolic name of the container
+     * @return an updated SQLContainer pointer if
+     * passed name match a container in the list
+     * or NULL if no container with that name is found
+     */
+    virtual SQLContainer *look_for(const string &name) = 0;
 
-	/**
-	 * @brief Update the content of the ContainerStorage with
-	 * the passed SQLContainer object.
-	 * @note: You have to pass a copy.
-	 */
-	virtual bool update(SQLContainer *c)=0;
+    /**
+     * @brief Update the content of the ContainerStorage with
+     * the passed SQLContainer object.
+     * @note: You have to pass a copy.
+     */
+    virtual bool update(SQLContainer *c) = 0;
 };
 
 #endif /* SQLCONTAINERSTORAGE_H_ */

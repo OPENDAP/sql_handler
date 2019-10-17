@@ -43,129 +43,114 @@
 
 #include <BESInternalError.h>
 #include <BESInternalFatalError.h>
+
 /**
  * @brief This is a DynamicActionFactory useful to dynamically add
  * Actions to a map.
  */
-template <class CODE_TYPE, class ARGS_TYPE, class OUT_TYPE=void>
-class SQLDynamicActionFactory :public SQLActionFactory<CODE_TYPE,ARGS_TYPE,OUT_TYPE>{
+template<class CODE_TYPE, class ARGS_TYPE, class OUT_TYPE=void>
+class SQLDynamicActionFactory : public SQLActionFactory<CODE_TYPE, ARGS_TYPE, OUT_TYPE> {
 
 protected:
-#if __CLONE__==1
+#if __CLONE__ == 1
 
-	// using SmartValueMap (to speed up search keys)
-	typedef smart::SmartValueMap<
-						// key type
-						CODE_TYPE ,
-						// Value type
-						SQLDynamicActionList<ARGS_TYPE,OUT_TYPE>,
-						// override default SMART layer forcing to use the CLONE_LAYER
-						// using SMART LAYER:
+    // using SmartValueMap (to speed up search keys)
+    typedef smart::SmartValueMap<
+                        // key type
+                        CODE_TYPE ,
+                        // Value type
+                        SQLDynamicActionList<ARGS_TYPE,OUT_TYPE>,
+                        // override default SMART layer forcing to use the CLONE_LAYER
+                        // using SMART LAYER:
 //@todo check why SmartValueMap don't use clone to instantiate SQLDynamicActionList
-						std::shared_ptr<
-							// ON CONTAINER
-						SQLDynamicActionList<ARGS_TYPE,OUT_TYPE>,
-							// WITH CLONE LAYER
-							typename SmartValueMap<
-								CODE_TYPE,
-								SQLDynamicActionList<ARGS_TYPE,OUT_TYPE> >::CLONE_VMAP_INT >
-		> action_map;
+                        std::shared_ptr<
+                            // ON CONTAINER
+                        SQLDynamicActionList<ARGS_TYPE,OUT_TYPE>,
+                            // WITH CLONE LAYER
+                            typename SmartValueMap<
+                                CODE_TYPE,
+                                SQLDynamicActionList<ARGS_TYPE,OUT_TYPE> >::CLONE_VMAP_INT >
+        > action_map;
 private:
 
-	std::shared_ptr<
-		action_map,
-		typename SmartValueMap<
-			CODE_TYPE,
-			action_map >::CLONE_VMAP_INT> _action_map;
+    std::shared_ptr<
+        action_map,
+        typename SmartValueMap<
+            CODE_TYPE,
+            action_map >::CLONE_VMAP_INT> _action_map;
 #else
 private:
 
-	typedef smart::SmartValueMap<CODE_TYPE ,
-					SQLDynamicActionList<ARGS_TYPE,OUT_TYPE> > action_map;
+    typedef smart::SmartValueMap<CODE_TYPE,
+            SQLDynamicActionList<ARGS_TYPE, OUT_TYPE> > action_map;
 
-	std::shared_ptr<action_map> _action_map;
+    std::shared_ptr<action_map> _action_map;
 
 #endif
 
-	SQLActionList<ARGS_TYPE,OUT_TYPE> &
-		getActions(CODE_TYPE * code)
-			throw (SQLInternalError)
-	{
-		if (_action_map) {
-			typename action_map::iterator i = (_action_map)->find(*code);
+    SQLActionList<ARGS_TYPE, OUT_TYPE> &
+    getActions(CODE_TYPE *code)
+    throw(SQLInternalError) {
+        if (_action_map) {
+            typename action_map::iterator i = (_action_map)->find(*code);
 
-TESTDEBUG(SQL_NAME_TEST,"SQLDynamicActionFactory: SEARCHING ACTION"<<endl);
-
-			if (i!=(_action_map)->end()){
-TESTDEBUG(SQL_NAME_TEST,"SQLDynamicActionFactory: ACTION LOCATED"<<endl);
-				(*(i->second)).reset();
-				return (*(i->second));
-				// I can't print the error since I don't know its type!
-			}
-			else
-				throw SQLInternalError(
-					"SQLDynamicActionFactory: Cannot get the action."
-					" Be sure to map this code correctly.",
-						__FILE__,__LINE__);
-		}
-		else
-			throw SQLInternalError(
-				"SQLDynamicActionFactory: Cannot get an action from a "
-				"not initialized SQLDynamicActionRunner map.",
-					__FILE__,__LINE__);
-	}
+            if (i != (_action_map)->end()) {
+                (*(i->second)).reset();
+                return (*(i->second));
+                // I can't print the error since I don't know its type!
+            }
+            else
+                throw SQLInternalError(
+                        "SQLDynamicActionFactory: Cannot get the action."
+                        " Be sure to map this code correctly.",
+                        __FILE__, __LINE__);
+        }
+        else
+            throw SQLInternalError(
+                    "SQLDynamicActionFactory: Cannot get an action from a "
+                    "not initialized SQLDynamicActionRunner map.",
+                    __FILE__, __LINE__);
+    }
 
 public:
 
 
-	void addAction(CODE_TYPE code, SQLAction<ARGS_TYPE,OUT_TYPE>* action)
-		throw (BESInternalError)
-	{
-		if (!action)
-			throw SQLInternalError(
-				"SQLDynamicActionFactory: Cannot store a NULL object"
-				" into the action map.",__FILE__,__LINE__);
+    void addAction(CODE_TYPE code, SQLAction<ARGS_TYPE, OUT_TYPE> *action)
+    throw(BESInternalError) {
+        if (!action)
+            throw SQLInternalError(
+                    "SQLDynamicActionFactory: Cannot store a NULL object"
+                    " into the action map.", __FILE__, __LINE__);
 
-		typename action_map::iterator i = _action_map->find(code);
-		if (i!=_action_map->end()){
-			BESDEBUG(SQL_NAME,"SQLDynamicActionFactory: Pushing "
-					"into an existing ActionLIST"<<endl);
-			((*i).second)->push_back(action);
-			// I can't print the error since I don't know its type!
-		}
-		else {
+        typename action_map::iterator i = _action_map->find(code);
+        if (i != _action_map->end()) {
+            BESDEBUG(SQL_NAME, "SQLDynamicActionFactory: Pushing "
+                               "into an existing ActionLIST" << endl);
+            ((*i).second)->push_back(action);
+            // I can't print the error since I don't know its type!
+        }
+        else {
+            SQLDynamicActionList<ARGS_TYPE, OUT_TYPE> *action_list =
+                    new SQLDynamicActionList<ARGS_TYPE, OUT_TYPE>();
 
-TESTDEBUG(SQL_NAME_TEST,
-	"SQLDynamicActionFactory: INSERTING NEW DynamicActionList"<<endl);
+            action_list->push_back(action);
 
-			SQLDynamicActionList<ARGS_TYPE,OUT_TYPE> *action_list=
-					new SQLDynamicActionList<ARGS_TYPE,OUT_TYPE>();
+            // store a NEW Smart[list]
+            _action_map->insert(code, action_list);
+        }
+    }
 
-			action_list->push_back(action);
-
-			// store a NEW Smart[list]
-			_action_map->insert(code,action_list);
-
-
-TESTDEBUG(SQL_NAME_TEST,
-	"SQLDynamicActionFactory: DynamicActionList successfully inserted"<<endl);
-		}
-	};
-
-	/**
-	 * @brief Default constructor
-	 */
-	SQLDynamicActionFactory<CODE_TYPE,ARGS_TYPE,OUT_TYPE>():
-			_action_map(new action_map()),
-			SQLActionFactory<CODE_TYPE,ARGS_TYPE,OUT_TYPE>()
-	{
-TESTDEBUG(SQL_NAME_TEST,"CREATING: DynamicActionFactory"<<endl);
-	};
+    /**
+     * @brief Default constructor
+     */
+    SQLDynamicActionFactory<CODE_TYPE, ARGS_TYPE, OUT_TYPE>() :
+            _action_map(new action_map()),
+            SQLActionFactory<CODE_TYPE, ARGS_TYPE, OUT_TYPE>() {
+    }
 
 
-	virtual ~SQLDynamicActionFactory(){
-TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLDynamicActionFactory"<<endl);
-	};
+    virtual ~SQLDynamicActionFactory() {
+    }
 };
 
 #endif /* SQLDYNAMICACTIONFACTORY_H_ */

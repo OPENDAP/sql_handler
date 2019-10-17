@@ -29,21 +29,20 @@
 
 extern "C"
 {
-	/**
-	 * This method is needed to make the class
-	 * correctly loaded by the BES
-	 * @return a pointer to an instance of this class
-	 */
-    BESAbstractModule *maker()
-    {
-    	return new OPENDAP_CLASSPluginLoader;
-    }
+/**
+ * This method is needed to make the class
+ * correctly loaded by the BES
+ * @return a pointer to an instance of this class
+ */
+BESAbstractModule *maker() {
+    return new OPENDAP_CLASSPluginLoader;
+}
 }
 
 void
-OPENDAP_CLASSPluginLoader::initialize( const string &modname ){
-    BESDEBUG( modname, "Initializing SQLPlugin "
-		       << modname << endl ) ;
+OPENDAP_CLASSPluginLoader::initialize(const string &modname) {
+    BESDEBUG(modname, "Initializing SQLPlugin "
+            << modname << endl);
 #COMPLETE#
     /**
 	 *  re-initialize check point reading
@@ -55,62 +54,61 @@ OPENDAP_CLASSPluginLoader::initialize( const string &modname ){
     /**
 	 * Add OPENDAP_CLASSPlugin to RequestHandler list
 	 */
-	SQLPluginList *pl=NULL;
-	if ((pl=SQLPlugin::findTheList())!=NULL){
-		BESDEBUG(modname,"    adding " << modname <<
-					" SQLPlugin handler to the list"<<endl);
-		if (pl->add_sql_handler(modname,new OPENDAP_CLASSPlugin(modname))){
+    SQLPluginList *pl = NULL;
+    if ((pl = SQLPlugin::findTheList()) != NULL) {
+        BESDEBUG(modname, "    adding " << modname <<
+                                        " SQLPlugin handler to the list" << endl);
+        if (pl->add_sql_handler(modname, new OPENDAP_CLASSPlugin(modname))) {
 
-			BESDEBUG( modname, "Done Initializing SQLPlugin "<< modname << endl ) ;
+            BESDEBUG(modname, "Done Initializing SQLPlugin " << modname << endl);
 
-			BESDEBUG( modname, "    adding "<<modname<<" debug context" << endl ) ;
-			BESDebug::Register( modname ) ;
-		}
-		else {
-			throw BESInternalError(
-				"Unable to load the OPENDAP_CLASSPlugin into the SQLRequestHandler list",
-				__FILE__,__LINE__);
-		}
-	}
-	else {
-		BESDEBUG(modname,
-			"SQLRequestHandler not found, SQLPlugin "<<modname
-			<<" initialization aborted"<<endl);
-	}
+            BESDEBUG(modname, "    adding " << modname << " debug context" << endl);
+            BESDebug::Register(modname);
+        }
+        else {
+            throw BESInternalError(
+                    "Unable to load the OPENDAP_CLASSPlugin into the SQLRequestHandler list",
+                    __FILE__, __LINE__);
+        }
+    }
+    else {
+        BESDEBUG(modname,
+                 "SQLRequestHandler not found, SQLPlugin " << modname
+                                                           << " initialization aborted" << endl);
+    }
 }
 
 void
-OPENDAP_CLASSPluginLoader::terminate( const string &modname ){
-    BESDEBUG(modname,"Cleaning SQLPlugin "<<modname<<endl);
+OPENDAP_CLASSPluginLoader::terminate(const string &modname) {
+    BESDEBUG(modname, "Cleaning SQLPlugin " << modname << endl);
 
-    BESDEBUG(modname,"    removing " << modname <<
-    		" SQLPlugin handler from the list"<<endl);
+    BESDEBUG(modname, "    removing " << modname <<
+                                      " SQLPlugin handler from the list" << endl);
     /**
 	 * Remove OPENDAP_CLASSPlugin from RequestHandler list
 	 */
-    SQLPluginList *pl=NULL;
-	if ((pl=SQLPlugin::findTheList())){
-		BESDEBUG(modname,"    removing " << modname <<
-					" SQLPlugin handler from the list"<<endl);
-		if (pl->remove_sql_handler(modname)){
-			BESDEBUG(modname,"Done Cleaning SQLPlugin module "<<modname<<endl);
-		}
-		else {
-			throw BESInternalError(
-				"Unable to un-load the OPENDAP_CLASSPlugin from the SQLRequestHandler list",
-				__FILE__,__LINE__);
-		}
-	}
-	else
-		BESDEBUG(modname,
-			"SQLRequestHandler not found, SQLPlugin "<<modname
-			<<" termination aborted"<<endl);
+    SQLPluginList *pl = NULL;
+    if ((pl = SQLPlugin::findTheList())) {
+        BESDEBUG(modname, "    removing " << modname <<
+                                          " SQLPlugin handler from the list" << endl);
+        if (pl->remove_sql_handler(modname)) {
+            BESDEBUG(modname, "Done Cleaning SQLPlugin module " << modname << endl);
+        }
+        else {
+            throw BESInternalError(
+                    "Unable to un-load the OPENDAP_CLASSPlugin from the SQLRequestHandler list",
+                    __FILE__, __LINE__);
+        }
+    }
+    else
+        BESDEBUG(modname,
+                 "SQLRequestHandler not found, SQLPlugin " << modname
+                                                           << " termination aborted" << endl);
 }
 
 
 void
-OPENDAP_CLASSPluginLoader::dump( ostream &strm ) const
-{
+OPENDAP_CLASSPluginLoader::dump(ostream &strm) const {
     strm << BESIndent::LMarg << "OPENDAP_CLASSPluginLoader::dump - ("
-			     << (void *)this << ")" << endl ;
+         << (void *) this << ")" << endl;
 }

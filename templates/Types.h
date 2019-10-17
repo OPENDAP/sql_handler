@@ -52,6 +52,7 @@ typedef int ERROR_TYPE;
  * error design
  */
 #include <string>
+
 typedef std::string MSG_TYPE;
 #COMPLETE#
 

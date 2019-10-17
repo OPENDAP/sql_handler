@@ -25,8 +25,10 @@
  */
 #ifndef SQLLINKER_H_
 #define SQLLINKER_H_
+
 #include <BESRequestHandler.h>
 #include "SQLPluginList.h"
+
 class SQLPluginList;
 
 /**
@@ -37,21 +39,21 @@ class SQLPluginList;
  * @see SQLPlugin
  * @see SQLRequestHandler
  */
-class SQLLinker:public BESRequestHandler,public SQLPluginList {
+class SQLLinker : public BESRequestHandler, public SQLPluginList {
 public:
-	SQLLinker(const string &name):
-		BESRequestHandler(name){};
+    SQLLinker(const string &name) :
+            BESRequestHandler(name) {};
 
-	virtual ~SQLLinker(){};
+    virtual ~SQLLinker() {};
 
-	/**
-	 * @brief Method to implement to return an instance
-	 * of the SQLPluginList implementing class.
-	 * @return the instance of the class implementing the
-	 * SQLPluginList interface
-	 * @see SQLRequestHandler
-	 */
-	virtual SQLPluginList *theLink()=0;
+    /**
+     * @brief Method to implement to return an instance
+     * of the SQLPluginList implementing class.
+     * @return the instance of the class implementing the
+     * SQLPluginList interface
+     * @see SQLRequestHandler
+     */
+    virtual SQLPluginList *theLink() = 0;
 };
 
 #endif /* SQLLINKER_H_ */

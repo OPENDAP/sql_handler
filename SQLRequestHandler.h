@@ -25,6 +25,7 @@
 
 #ifndef I_SQLRequestHandler_H
 #define I_SQLRequestHandler_H
+
 #include "sql_config.h"
 #include "SQLResponseNames.h"
 
@@ -70,12 +71,12 @@
 /**
  * @brief type definition of the list of SQLPlugin
  */
-typedef smart::SmartValueMap<const string,SQLPlugin> sql_handler_map;
+typedef smart::SmartValueMap<const string, SQLPlugin> sql_handler_map;
 
 /**
  * @brief type definition of the list of wrapped functions
  */
-typedef std::map<string,size_t> sql_wrap_count_map;
+typedef std::map<string, size_t> sql_wrap_count_map;
 
 /**
  * @brief SQLHandler base RequestHandler which is the main SQL
@@ -92,50 +93,50 @@ typedef std::map<string,size_t> sql_wrap_count_map;
  * @see BESRequestHandler
  * @see SQLPlugin
  */
-class SQLRequestHandler :public SQLLinker {
+class SQLRequestHandler : public SQLLinker {
 private:
-	/**
-	 * instance_mutex is used to ensure that only one instance is created.
-	 * It protects the body of the theXXX methods. This mutex is initialized
-	 * from within the static function once_init_routine() and the call to
-	 * that takes place using pthread_once_init() where the mutex once_block
-	 * is used to protect that call. All of this ensures that no matter how
-	 * many threads call the instance() method, only one instance is ever made.
-	 */
-	static pthread_mutex_t _mutex;
-	static pthread_once_t _block;
+    /**
+     * instance_mutex is used to ensure that only one instance is created.
+     * It protects the body of the theXXX methods. This mutex is initialized
+     * from within the static function once_init_routine() and the call to
+     * that takes place using pthread_once_init() where the mutex once_block
+     * is used to protect that call. All of this ensures that no matter how
+     * many threads call the instance() method, only one instance is ever made.
+     */
+    static pthread_mutex_t _mutex;
+    static pthread_once_t _block;
 
 
-	/**
-	 * @brief mutex initialization routine
-	 */
-	static void
-	once_init_routine(){
-		if (INIT(&_mutex)!= 0)
-			throw BESInternalError(
-				"Could not initialize mutex. Exiting.",__FILE__, __LINE__);
-	}
+    /**
+     * @brief mutex initialization routine
+     */
+    static void
+    once_init_routine() {
+        if (INIT(&_mutex) != 0)
+            throw BESInternalError(
+                    "Could not initialize mutex. Exiting.", __FILE__, __LINE__);
+    }
 
-	/**
-	 * @brief self referred to implement the Singleton pattern
-	 */
-	static SQLRequestHandler *_rh;
+    /**
+     * @brief self referred to implement the Singleton pattern
+     */
+    static SQLRequestHandler *_rh;
 
 
-	typedef sql_handler_map::iterator SQLHandler_iterator;
-	typedef sql_handler_map::const_iterator	SQLHandler_citer;
+    typedef sql_handler_map::iterator SQLHandler_iterator;
+    typedef sql_handler_map::const_iterator SQLHandler_citer;
 
-	/**
-	 * @brief list of loaded SQLPlugin
-	 *  implements the Singleton pattern
-	 */
-	static sql_handler_map *_theList;
+    /**
+     * @brief list of loaded SQLPlugin
+     *  implements the Singleton pattern
+     */
+    static sql_handler_map *_theList;
 
-	/**
-	 * @brief track how many (value) SQLPlugins are using a
+    /**
+     * @brief track how many (value) SQLPlugins are using a
      * wrap function (the key is the command name).
-	 * @note: implements the Singleton pattern)
-	 */
+     * @note: implements the Singleton pattern)
+     */
     static sql_wrap_count_map *_theWrapCount;
 
     /**
@@ -146,10 +147,10 @@ private:
      * @return true only if the function handler
      * (named 'name') should be deleted.
      */
-	bool update_wrap_count(const string & name, bool add)
-			throw (BESInternalFatalError);
+    bool update_wrap_count(const string &name, bool add)
+    throw(BESInternalFatalError);
 
-	/**
+    /**
  * @todo when an incoming request fails due to bad query, the
  * same constraints are applied to the next section of the dataset
  * which may has (probably) different column and tables names
@@ -163,86 +164,86 @@ private:
  * tells if sections are homogeneous or not, in this case (not
  * homogeneous) we use only the fist 'working' (can connect) section.
  *
-	 * @brief function used to implement recursive calls through
-	 * available servers listed into the dataset.
-	 * This function look at the actual container in the 'dhi' and
-	 * load the corresponding SQLContainer (using setupContainer).
-	 * For each server listed into the container lastChanceRunner
-	 * tries to load corresponding API SQLPlugin
-	 * (using find_sql_plugin), if plugin is found it tries to run
-	 * the passed command argument.
-	 * This is done until:
-	 *  - (OR) server list ends
-	 *  - (OR) called handler returns true.
-	 *  @param dhi the BESDataHandlerInterface
-	 *  @param the requested command (may differ from 'dhi.command')
-	 *  @return bool true if response object is correctly built,
-	 *  false otherwise.
-	 */
-	bool lastChanceRunner(SQLDataHandlerInterface &dhi, const string &command);
+     * @brief function used to implement recursive calls through
+     * available servers listed into the dataset.
+     * This function look at the actual container in the 'dhi' and
+     * load the corresponding SQLContainer (using setupContainer).
+     * For each server listed into the container lastChanceRunner
+     * tries to load corresponding API SQLPlugin
+     * (using find_sql_plugin), if plugin is found it tries to run
+     * the passed command argument.
+     * This is done until:
+     *  - (OR) server list ends
+     *  - (OR) called handler returns true.
+     *  @param dhi the BESDataHandlerInterface
+     *  @param the requested command (may differ from 'dhi.command')
+     *  @return bool true if response object is correctly built,
+     *  false otherwise.
+     */
+    bool lastChanceRunner(SQLDataHandlerInterface &dhi, const string &command);
 
-	/**
-	 * @brief search into the BESRequestHandler list the SQLPlugin
-	 * corresponding to the actual api in the dataset server list.
-	 * @param a SQLContainer reference which represents the dataset.
-	 * @return a SQLPlugin instance ready called
-	 * as c.getApi() returned string or NULL pointer if not found.
-	 *
-	 */
-	SQLPlugin *	find_sql_plugin(SQLContainer &c);
+    /**
+     * @brief search into the BESRequestHandler list the SQLPlugin
+     * corresponding to the actual api in the dataset server list.
+     * @param a SQLContainer reference which represents the dataset.
+     * @return a SQLPlugin instance ready called
+     * as c.getApi() returned string or NULL pointer if not found.
+     *
+     */
+    SQLPlugin *find_sql_plugin(SQLContainer &c);
 
-	/**
-	 * @brief default constructor
-	 * This constructor uses add_handler to add default command handler
-	 * functionalities to the list. (This is default behaviour for a
-	 * BESRequestHandler plugin).
-	 * @param name the name of this handler
-	 */
-	SQLRequestHandler(const string &name);
+    /**
+     * @brief default constructor
+     * This constructor uses add_handler to add default command handler
+     * functionalities to the list. (This is default behaviour for a
+     * BESRequestHandler plugin).
+     * @param name the name of this handler
+     */
+    SQLRequestHandler(const string &name);
 
-	SQLRequestHandler(const SQLRequestHandler &); // not defined
-	SQLRequestHandler & operator=(const SQLRequestHandler &); // not defined
+    SQLRequestHandler(const SQLRequestHandler &); // not defined
+    SQLRequestHandler &operator=(const SQLRequestHandler &); // not defined
 
 public:
-	/**
-	 * @brief destructor
-	 * @note do not destruct this class, only its members,
-	 * you have to delete the SQLRequestHandler instance outside.
-	 */
+    /**
+     * @brief destructor
+     * @note do not destruct this class, only its members,
+     * you have to delete the SQLRequestHandler instance outside.
+     */
     ~SQLRequestHandler(void);
 
 // SINGLETON
-	/**
-	 * @brief Lazy initialization of _theList singleton
-	 * @return the singleton sql_handler_map
-	 * @note: thread safe
-	 */
-	static sql_handler_map & theList();
+    /**
+     * @brief Lazy initialization of _theList singleton
+     * @return the singleton sql_handler_map
+     * @note: thread safe
+     */
+    static sql_handler_map &theList();
 
 // SINGLETON
-	/**
-	 * @brief Lazy initialization of _theWrapCount singleton
-	 * @return the singleton sql_wrap_count_map
-	 * @note: thread safe
-	 */
-	static sql_wrap_count_map &	theWrapCount();
+    /**
+     * @brief Lazy initialization of _theWrapCount singleton
+     * @return the singleton sql_wrap_count_map
+     * @note: thread safe
+     */
+    static sql_wrap_count_map &theWrapCount();
 
 // SINGLETON
-	/**
-	 * @brief Lazy initialization of the class
-	 * @return the singleton of this class
-	 * @note: thread safe
-	 */
-	static SQLRequestHandler * theSQLRequestHandler(const string &name);
+    /**
+     * @brief Lazy initialization of the class
+     * @return the singleton of this class
+     * @note: thread safe
+     */
+    static SQLRequestHandler *theSQLRequestHandler(const string &name);
 
 
 // The SQLLink interface implementation
-	/**
-	 * @brief Implementation of 'SQLLink' interface
-	 * @return pointer to the this instance (singleton)
-	 */
-    virtual SQLPluginList *theLink(){
-    	return theSQLRequestHandler(get_name());
+    /**
+     * @brief Implementation of 'SQLLink' interface
+     * @return pointer to the this instance (singleton)
+     */
+    virtual SQLPluginList *theLink() {
+        return theSQLRequestHandler(get_name());
     }
 
 
@@ -253,42 +254,44 @@ public:
      *
      *  @see SQLPlugin
      */
-    static bool wrapper(BESDataHandlerInterface &dhi ) {
-    	// build the SQLDataHandlerInterface
-    	SQLDataHandlerInterface sql_dhi(dhi);
-		// call the last chance algorithm
-    	return theSQLRequestHandler(SQL_NAME)->
-    			lastChanceRunner(sql_dhi,dhi.action);
+    static bool wrapper(BESDataHandlerInterface &dhi) {
+        // build the SQLDataHandlerInterface
+        SQLDataHandlerInterface sql_dhi(dhi);
+        // call the last chance algorithm
+        return theSQLRequestHandler(SQL_NAME)->
+                lastChanceRunner(sql_dhi, dhi.action);
     };
-	/**
-	 * @brief Run version on the Base handler
-	 * and on all the SQLPlugins registered
-	 */
-    static bool version(BESDataHandlerInterface &dhi );
+
+    /**
+     * @brief Run version on the Base handler
+     * and on all the SQLPlugins registered
+     */
+    static bool version(BESDataHandlerInterface &dhi);
+
     /**
      * @brief Run help version on the SQLRequestHandler
      * and on all the SQLPlugins registered
      */
-    static bool help(BESDataHandlerInterface &dhi );
+    static bool help(BESDataHandlerInterface &dhi);
 
 
 // BESRequestHandler override
-	/**
-	 * @brief Dump a text representation of this handler
-	 * and all registered SQLPlugin(s).
-	 */
-	virtual void
-	dump( ostream &strm ) const;
+    /**
+     * @brief Dump a text representation of this handler
+     * and all registered SQLPlugin(s).
+     */
+    virtual void
+    dump(ostream &strm) const;
 
 
 //SQLPluginList methods implementation
-	/**
+    /**
      * @brief Used to find an SQLPlugin into the list
      * @param name the name of the SQLPlugin to find
      * @return a pointer to the found plugin or NULL
      * if no SQLPlugin is found.
      */
-    SQLPlugin* find_sql_handler(const string& name);
+    SQLPlugin *find_sql_handler(const string &name);
 
     /**
      * @brief Remove an SQLPlugin from the list.
@@ -301,7 +304,7 @@ public:
     /**
 	 * @brief Remove all the SQLPlugin from the list.
 	 */
-	void
+    void
     remove_sql_handlers();
 
     /**
@@ -312,7 +315,7 @@ public:
      * @return true if add is correctly completed
      */
     bool
-    add_sql_handler(const string& name,	SQLPlugin* handler);
+    add_sql_handler(const string &name, SQLPlugin *handler);
 
     /**
      * @brief Add wrapper for this command, this will enable
@@ -325,7 +328,7 @@ public:
      * 'false' otherwise.
      */
     bool
-    add_sql_wrapper(const string& command);
+    add_sql_wrapper(const string &command);
 
     /**
      * @brief test deletion of the wrapper for this command,
@@ -339,7 +342,7 @@ public:
      * 'false' otherwise.
      */
     bool
-    remove_sql_wrapper(const string& command);
+    remove_sql_wrapper(const string &command);
 };
 
 #endif // SQLRequestHandler.h

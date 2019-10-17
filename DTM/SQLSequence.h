@@ -32,6 +32,7 @@
 #include <Sequence.h>
 
 #include <memory>
+
 #if 0
 #include "utils/SharedPtr.h"
 #endif
@@ -45,7 +46,7 @@
  */
 template<class SQL_TYPE, //connector TypeFactory
         class ODBC_TYPE> //connector TypeFactory
-class SQLSequence: public libdap::Sequence {
+class SQLSequence : public libdap::Sequence {
 #if USE_AUTO_PTR
     /**
      * We use auto_ptr to make possible transfer the connector
@@ -66,15 +67,14 @@ public:
     /**
      * @brief default constructor
      */
-    SQLSequence(const string &name, const string &dataset, SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> * conn) :
-            Sequence(name, dataset), _conn(conn)
-    {
-        if ( _conn /* _conn.get() see USE_AUTO_PTR jhrg 10/7/19 */ ) {
+    SQLSequence(const string &name, const string &dataset, SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> *conn) :
+            Sequence(name, dataset), _conn(conn) {
+        if (_conn /* _conn.get() see USE_AUTO_PTR jhrg 10/7/19 */ ) {
             if (_conn->isReady()) {
                 _conn->reset();
             }
             else {
-                BESDEBUG(SQL_NAME, "SQLSequence: The passed connector should be ready to read."<<endl);
+                BESDEBUG(SQL_NAME, "SQLSequence: The passed connector should be ready to read." << endl);
 #if 0
                 // we should return empty sequence, not fail
                 throw BESInternalFatalError(
@@ -86,22 +86,20 @@ public:
         else
             BESDEBUG(SQL_NAME, "SQLSequence: The passed connector is NULL");
 
-        BESDEBUG(SQL_NAME, "CREATING: SQLSequence"<< endl);
-    }
-    ;
+        BESDEBUG(SQL_NAME, "CREATING: SQLSequence" << endl);
+    };
 
     /**
      * @brief copy constructor
      */
-    SQLSequence(SQLSequence & seq) :
-            Sequence(seq), _conn(seq._conn)
-    {
-        if ( _conn /* _conn.get() see USE_AUTO_PTR jhrg 10/7/19 */) {
+    SQLSequence(SQLSequence &seq) :
+            Sequence(seq), _conn(seq._conn) {
+        if (_conn /* _conn.get() see USE_AUTO_PTR jhrg 10/7/19 */) {
             if (_conn->isReady()) {
                 _conn->reset();
             }
             else {
-                BESDEBUG(SQL_NAME, "SQLSequence: The passed connector should be ready to read."<<endl);
+                BESDEBUG(SQL_NAME, "SQLSequence: The passed connector should be ready to read." << endl);
 #if 0
                 // we should return empty sequence, not fail
                 throw BESInternalFatalError(
@@ -113,7 +111,7 @@ public:
         else
             BESDEBUG(SQL_NAME, "SQLSequence: The passed connector is NULL");
 
-        BESDEBUG(SQL_NAME, "COPING: SQLSequence"<<endl);
+        BESDEBUG(SQL_NAME, "COPING: SQLSequence" << endl);
     }
     /**
      *  @note For most of the types the default implementation of this method is
@@ -180,26 +178,29 @@ public:
      * Implement inherited BaseType::read() method reading
      * all the element of this SQLSequence.
      */
-    virtual bool read()
-    {
+    virtual bool read() {
         try {
             if (this->read_p()) // if already read
             { // Nothing to do
-                BESDEBUG(SQL_NAME, "SQLSequence:read() SEQUENCE ALREADY READ"<< endl);
+                BESDEBUG(SQL_NAME, "SQLSequence:read() SEQUENCE ALREADY READ" << endl);
                 return true;
             }
 
             if (!this->_conn->isReady()) {
                 // not ready to read, return
-                BESDEBUG(SQL_NAME, "SQLSequence:read() SEQUENCE EMPTY or not READY"<< endl);
+                BESDEBUG(SQL_NAME, "SQLSequence:read() SEQUENCE EMPTY or not READY" << endl);
                 return true;
             }
 
             if (_conn->notEnd()) {
-                BESDEBUG(SQL_NAME, "SQLSequence:read()  TotalRows " <<_conn->getRows()<<" TotalColumns: "<<_conn->getCols()<< endl);
+                BESDEBUG(SQL_NAME,
+                         "SQLSequence:read()  TotalRows " << _conn->getRows() << " TotalColumns: " << _conn->getCols()
+                                                          << endl);
 
                 BESDEBUG(SQL_NAME,
-                        "SQLSequence:read() READING SEQUENCE "<< name() << " ProcessingPosition: row: " << _conn->getRow()<<" col: "<<_conn->getCol()<< endl);
+                         "SQLSequence:read() READING SEQUENCE " << name() << " ProcessingPosition: row: "
+                                                                << _conn->getRow() << " col: " << _conn->getCol()
+                                                                << endl);
 
                 for (Vars_iter p = var_begin(); p != var_end(); ++p) {
                     if ((*p)->send_p() || (*p)->is_in_selection()) {
@@ -216,7 +217,8 @@ public:
                 return false;
             }
             else { // End of sequence
-                BESDEBUG(SQL_NAME, "SQLSequence:read() STOPPED.  Position row: " <<_conn->getRows()<<" col: "<<_conn->getCols()<< endl);
+                BESDEBUG(SQL_NAME, "SQLSequence:read() STOPPED.  Position row: " << _conn->getRows() << " col: "
+                                                                                 << _conn->getCols() << endl);
                 //set_read_p(true); // done by read_row
                 //set_send_p(true); // done by read_row
 
@@ -234,8 +236,7 @@ public:
     }
 
     BaseType *
-    ptr_duplicate()
-    {
+    ptr_duplicate() {
         return new SQLSequence<SQL_TYPE, ODBC_TYPE>(*this);
     }
 
@@ -243,9 +244,8 @@ public:
      * @brief Dtor which close connection if this is
      * the last SQLSequence instance alive
      */
-    virtual ~SQLSequence()
-    {
-        BESDEBUG(SQL_NAME, "DELETING: SQLSequence"<< endl);
+    virtual ~SQLSequence() {
+        BESDEBUG(SQL_NAME, "DELETING: SQLSequence" << endl);
 #if 0
         /**
          * If you have called ptr_duplicate this instance does

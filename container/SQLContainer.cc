@@ -37,19 +37,18 @@ using std::string;
  * container ready to use.
  */
 bool
-SQLContainer::init(){
-	// setting time modification
-	struct stat buf;
-	if (!stat(this->get_real_name().c_str(),&buf)){
-		_time=buf.st_mtime;
-	}
-	else
-	{
-		BESDEBUG(SQL_NAME,"SQLContainer: Unable to get time/date modification "
-				"setting to local time"<<endl);
-		time(&_time);
-	}
-	return true;
+SQLContainer::init() {
+    // setting time modification
+    struct stat buf;
+    if (!stat(this->get_real_name().c_str(), &buf)) {
+        _time = buf.st_mtime;
+    }
+    else {
+        BESDEBUG(SQL_NAME, "SQLContainer: Unable to get time/date modification "
+                           "setting to local time" << endl);
+        time(&_time);
+    }
+    return true;
 
 }
 
@@ -59,35 +58,33 @@ SQLContainer::init(){
  * timestamp of the file modification time.
  */
 bool
-SQLContainer::isUpToDate()const {
-	struct stat buf;
-	if (!stat(this->get_real_name().c_str(),&buf)){
-#if __TESTS__==1
-		char timeStr[100];
-		strftime(timeStr, 100, "%d-%m-%Y %H:%M:%S", localtime( &buf.st_mtime));
-		BESDEBUG(SQL_NAME,"SQLContainer: Last modified date and time: "<<timeStr<<endl);
-		strftime(timeStr, 100, "%d-%m-%Y %H:%M:%S", localtime( &_time));
-		BESDEBUG(SQL_NAME,"SQLContainer: this container date and time: "<<timeStr<<endl);
-		BESDEBUG(SQL_NAME,"SQLContainer: Time difference in seconds: "<<
-				fabs(difftime(_time,buf.st_mtime))<<endl);
+SQLContainer::isUpToDate() const {
+    struct stat buf;
+    if (!stat(this->get_real_name().c_str(), &buf)) {
+#if __TESTS__ == 1
+        char timeStr[100];
+        strftime(timeStr, 100, "%d-%m-%Y %H:%M:%S", localtime( &buf.st_mtime));
+        BESDEBUG(SQL_NAME,"SQLContainer: Last modified date and time: "<<timeStr<<endl);
+        strftime(timeStr, 100, "%d-%m-%Y %H:%M:%S", localtime( &_time));
+        BESDEBUG(SQL_NAME,"SQLContainer: this container date and time: "<<timeStr<<endl);
+        BESDEBUG(SQL_NAME,"SQLContainer: Time difference in seconds: "<<
+                fabs(difftime(_time,buf.st_mtime))<<endl);
 #endif
-		if (fabs(difftime(_time,buf.st_mtime)) < _SQLH_CONT_TIME_DIF){
-			BESDEBUG(SQL_NAME,"SQLContainer: Cached file is up to date"<<endl);
-			return true;
-		}
-		else
-		{
-			BESDEBUG(SQL_NAME,
-				"SQLContainer: Cached file is old and should be updated"<<endl);
-			return false;
-		}
-	}
-	else
-	{
-		BESDEBUG(SQL_NAME,
-			"SQLContainer: Unable to get time/date modification"<<endl);
-		return false;
-	}
+        if (fabs(difftime(_time, buf.st_mtime)) < _SQLH_CONT_TIME_DIF) {
+            BESDEBUG(SQL_NAME, "SQLContainer: Cached file is up to date" << endl);
+            return true;
+        }
+        else {
+            BESDEBUG(SQL_NAME,
+                     "SQLContainer: Cached file is old and should be updated" << endl);
+            return false;
+        }
+    }
+    else {
+        BESDEBUG(SQL_NAME,
+                 "SQLContainer: Unable to get time/date modification" << endl);
+        return false;
+    }
 }
 
 /**
@@ -97,13 +94,11 @@ SQLContainer::isUpToDate()const {
  * container ready to use.
  */
 SQLContainer::SQLContainer(const string &name,
-							const string &real_name,
-							const string &type):
-	BESFileContainer(name,real_name,type)
-{
-	TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainer"<<endl);
-	// initialize members
-	_isReady=false; // you have to run setup()
+                           const string &real_name,
+                           const string &type) :
+        BESFileContainer(name, real_name, type) {
+    // initialize members
+    _isReady = false; // you have to run setup()
 }
 
 /**
@@ -113,19 +108,17 @@ SQLContainer::SQLContainer(const string &name,
  * implementing class to make this
  * container ready to use.
  */
-SQLContainer::SQLContainer(const BESFileContainer *c):
-		BESFileContainer(*c)
-{
-	TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainer"<<endl);
-	if (c) {
-		// initialize members
-		set_attributes(c->get_attributes());
-		set_constraint(c->get_constraint());
-		_isReady=false; // you have to run setup()
-	}
-	else
-		throw BESInternalError("SQLContainer: Unable to create an SQLContainer "
-				"using a NULL BESContainer pointer",__FILE__,__LINE__);
+SQLContainer::SQLContainer(const BESFileContainer *c) :
+        BESFileContainer(*c) {
+    if (c) {
+        // initialize members
+        set_attributes(c->get_attributes());
+        set_constraint(c->get_constraint());
+        _isReady = false; // you have to run setup()
+    }
+    else
+        throw BESInternalError("SQLContainer: Unable to create an SQLContainer "
+                               "using a NULL BESContainer pointer", __FILE__, __LINE__);
 }
 
 /**
@@ -135,16 +128,14 @@ SQLContainer::SQLContainer(const BESFileContainer *c):
  * implementing class to make this
  * container ready to use.
  */
-SQLContainer::SQLContainer(const BESContainer &c):
-	BESFileContainer(c.get_symbolic_name(),
-					c.get_real_name(),
-					c.get_container_type())
-{
-	TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainer"<<endl);
-	// initialize members
-	set_constraint(c.get_constraint());
-	set_attributes(c.get_attributes());
-	_isReady=false; // you have to run setup()
+SQLContainer::SQLContainer(const BESContainer &c) :
+        BESFileContainer(c.get_symbolic_name(),
+                         c.get_real_name(),
+                         c.get_container_type()) {
+    // initialize members
+    set_constraint(c.get_constraint());
+    set_attributes(c.get_attributes());
+    _isReady = false; // you have to run setup()
 }
 
 /**
@@ -152,26 +143,24 @@ SQLContainer::SQLContainer(const BESContainer &c):
  * which may be a not Ready object; You need to check and
  * eventually run init().
  */
-SQLContainer::SQLContainer(const SQLContainer *c):
-	BESFileContainer(*c)
-{
-	if (c) {
-		if (c->isReady() && c->isUpToDate()){
-			TESTDEBUG(SQL_NAME_TEST,"COPYING: SQLContainer"<<endl);
-			clone(*c);
-			// status
-			_isReady=true;
-		}
-		else {
-			BESDEBUG(SQL_NAME,"SQLContainer: IS NOT READY"<<endl);
-			clone(*c);
-			// status
-			_isReady=false;
-		}
-	}
-	else
-		throw BESInternalError("SQLContainer: Unable to create an SQLContainer "
-				"using a NULL SQLContainer pointer",__FILE__,__LINE__);
+SQLContainer::SQLContainer(const SQLContainer *c) :
+        BESFileContainer(*c) {
+    if (c) {
+        if (c->isReady() && c->isUpToDate()) {
+            clone(*c);
+            // status
+            _isReady = true;
+        }
+        else {
+            BESDEBUG(SQL_NAME, "SQLContainer: IS NOT READY" << endl);
+            clone(*c);
+            // status
+            _isReady = false;
+        }
+    }
+    else
+        throw BESInternalError("SQLContainer: Unable to create an SQLContainer "
+                               "using a NULL SQLContainer pointer", __FILE__, __LINE__);
 }
 
 /**
@@ -179,28 +168,25 @@ SQLContainer::SQLContainer(const SQLContainer *c):
  * which may be a not Ready object; You need to check and
  * eventually run init().
  */
-SQLContainer::SQLContainer(const SQLContainer &c):
-	BESFileContainer(c.get_symbolic_name(),
-					c.get_real_name(),
-					c.get_container_type())
-{
-	if (c.isReady() && c.isUpToDate()){
-		TESTDEBUG(SQL_NAME_TEST,"COPYING: SQLContainer"<<endl);
-		clone(c);
-		// status
-		_isReady=true;
-	}
-	else {
-		BESDEBUG(SQL_NAME,"SQLContainer: IS NOT READY"<<endl);
-		clone(c);
-		// status
-		_isReady=false;
-	}
+SQLContainer::SQLContainer(const SQLContainer &c) :
+        BESFileContainer(c.get_symbolic_name(),
+                         c.get_real_name(),
+                         c.get_container_type()) {
+    if (c.isReady() && c.isUpToDate()) {
+        clone(c);
+        // status
+        _isReady = true;
+    }
+    else {
+        BESDEBUG(SQL_NAME, "SQLContainer: IS NOT READY" << endl);
+        clone(c);
+        // status
+        _isReady = false;
+    }
 
 }
 
-SQLContainer::~SQLContainer(){
-	TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLContainer"<<endl);
+SQLContainer::~SQLContainer() {
 }
 
 /**
@@ -208,10 +194,10 @@ SQLContainer::~SQLContainer(){
  * ready or upToDate check is performed
  */
 void
-SQLContainer::clone(const SQLContainer &c){
-	//cloning
-	set_attributes(c.get_attributes());
-	set_constraint(c.get_constraint());
-	// timestamp
-	_time=c._time;
+SQLContainer::clone(const SQLContainer &c) {
+    //cloning
+    set_attributes(c.get_attributes());
+    set_constraint(c.get_constraint());
+    // timestamp
+    _time = c._time;
 }

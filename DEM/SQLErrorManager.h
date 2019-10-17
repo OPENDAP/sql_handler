@@ -45,12 +45,11 @@
  *
  */
 template<class JOIN = void>
-class SQLErrorManager: public /* Removed jhrg 10/1/14 protected */ SQLActionManager<JOIN, JOIN, JOIN> {
+class SQLErrorManager : public /* Removed jhrg 10/1/14 protected */ SQLActionManager<JOIN, JOIN, JOIN> {
 public:
 
     SQLErrorManager() :
-            SQLActionManager<JOIN, JOIN, JOIN>()
-    {
+            SQLActionManager<JOIN, JOIN, JOIN>() {
 #if 0
         /**
          *  This is done by the SQLModule::initialize
@@ -60,8 +59,7 @@ public:
          */
         //SQLCheckPoint::init();
 #endif
-    }
-    ;
+    };
 
     /**
      * @brief Act as a trigger starting Actions only
@@ -72,8 +70,7 @@ public:
      * @throw @see SQLActionManager::doActions
      */
     template<class ERROR_TYPE, class ARGS_TYPE>
-    static JOIN *trigger(_SQLH_CHECKS check, SQLActionFactory<ERROR_TYPE, ARGS_TYPE, JOIN> &error_factory)
-    {
+    static JOIN *trigger(_SQLH_CHECKS check, SQLActionFactory<ERROR_TYPE, ARGS_TYPE, JOIN> &error_factory) {
         // trigger activation
         if (check == _SQLH_ON_ALWAYS) {
             BESDEBUG(SQL_NAME, "SQLErrorManager: This check point is forced, running error checks." << std::endl);
@@ -107,9 +104,8 @@ public:
     /**
      * @brief SQLActionManager<...>::JOIN type function
      */
-    static JOIN * join(JOIN * prev, JOIN * actual)
-    {
-#if __TESTS__==1
+    static JOIN *join(JOIN *prev, JOIN *actual) {
+#if __TESTS__ == 1
         if (actual)
         BESDEBUG(SQL_NAME,"_JOIN: "<<std::endl);
         else
@@ -122,9 +118,8 @@ public:
     /**
      * @brief SQLActionManager<libdap::BaseType>::MERGE type function
      */
-    static JOIN * merge(JOIN * prev, JOIN * actual)
-    {
-#if __TESTS__==1
+    static JOIN *merge(JOIN *prev, JOIN *actual) {
+#if __TESTS__ == 1
         if (actual)
         BESDEBUG(SQL_NAME,"_MERGE: "<<std::endl);
         else

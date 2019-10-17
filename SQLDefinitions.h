@@ -31,12 +31,17 @@
 // DEBUG
 #include "SQLResponseNames.h"
 #include <BESDebug.h>
+
 #ifdef __TESTS__
+
+#if 0
+
 #define TESTDEBUG(X,Y) BESDEBUG(X,Y)
 #else
 #define TESTDEBUG(X,Y)
 #endif
 
+#endif
 
 
 
@@ -48,18 +53,6 @@
 #define _SQLH_CATALOG "catalog" // FIXME jhrg 8/23/18
 #define _SQLH_STORAGE "sqlstorage"
 
-#if 0
-/**
- * NO MORE NEEDED
- *
- * SQLPlugin
- */
-#define _SQLH_DAS_RESPONSE "get.sql.das"
-#define _SQLH_DDS_RESPONSE "get.sql.dds"
-#define _SQLH_DATA_RESPONSE "get.sql.data"
-#define _SQLH_HELP_RESPONSE "show.sql.help"
-#define _SQLH_VERS_RESPONSE "show.sql.vers"
-#endif
 /**
  * SQLCheckPoint
  */

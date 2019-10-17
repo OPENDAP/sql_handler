@@ -63,115 +63,93 @@
  * @see SQLFactoryComponent::action()
  * @see SQLActionFactory
  */
-template <class SQL_TYPE,				// connector && ActionFactory
-			class ODBC_TYPE>			// connector && ActionFactory
+template<class SQL_TYPE,                // connector && ActionFactory
+        class ODBC_TYPE>            // connector && ActionFactory
 //			class DAP_TYPE	= libdap::BaseType> // FIXED
 class SQLObjectTypeFactory :
-	public SQLActionFactory<SQL_TYPE,SQL_TYPE,libdap::BaseType> {
+        public SQLActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType> {
 public:
 
-	/**
-	 * @brief get the list of actions to do
-	 * corresponding to the passed error code.
-	 * @param the code
-	 * @return the list of SQLActions to do
-	 */
-	virtual SQLActionList<SQL_TYPE,libdap::BaseType> &
-		getActions(SQL_TYPE * code) throw (SQLInternalError){
-		/**
-		 * returns the same action for each error
-		 * since mapping is done into the action
-		 */
-		_al.reset();
-		return _al;
+    /**
+     * @brief get the list of actions to do
+     * corresponding to the passed error code.
+     * @param the code
+     * @return the list of SQLActions to do
+     */
+    virtual SQLActionList<SQL_TYPE, libdap::BaseType> &
+    getActions(SQL_TYPE *code) throw(SQLInternalError) {
+        /**
+         * returns the same action for each error
+         * since mapping is done into the action
+         */
+        _al.reset();
+        return _al;
 
-	}
+    }
 
-	/**
-	 * @brief no argument mapping needed since this is
-	 * statically coded into the getDapType action.
-	 */
-	virtual SQL_TYPE * getArgs(SQL_TYPE *code){
-		return code;
-	};
+    /**
+     * @brief no argument mapping needed since this is
+     * statically coded into the getDapType action.
+     */
+    virtual SQL_TYPE *getArgs(SQL_TYPE *code) {
+        return code;
+    };
 
-	/**
-	 * @brief returns the actual column type as SQL_TYPE.
-	 */
-	virtual SQL_TYPE * getCode(){
-#if 0
-		/**
-		 *  we don't have to check this here
-		 *  getType should throw its error
-		 *  probably a BESInternalError
-		 *  which is not fatal.
-		 */
-		if (!_connector.isReady())
-			throw SQLInternalError(
-					"SQLObjectTypeFactory: Unable to getType. "
-					"Check connector's READY status.",__FILE__,__LINE__);
-#endif
-TESTDEBUG(SQL_NAME_TEST,"SQLObjectTypeFactory: getCode()"
-	" from connector for column "<<_connector.getCol()<<" row "
-		<<_connector.getRow()<<endl);
+    /**
+     * @brief returns the actual column type as SQL_TYPE.
+     */
+    virtual SQL_TYPE *getCode() {
+        return _connector.getType(_connector.getCol());
+    }
 
-		return _connector.getType(_connector.getCol());
-	};
+    /**
+     * @brief Stop condition.
+     * Actually objects are requested once at time
+     */
+    virtual bool stop(SQL_TYPE *code) {
+        return true;
+    }
 
-	/**
-	 * @brief Stop condition.
-	 * Actually objects are requested once at time
-	 */
-	virtual bool stop(SQL_TYPE * code){
-#if 0
-// code may not be <<able
-TESTDEBUG(SQL_NAME_TEST,"SQLObjectTypeFactory: stop( "<<*code<<" ) == true"<<endl);
-#endif
-		return true;
-	}
+    /**
+     * @brief constructor
+     * @param factComp is a stateful SQLAction object which extends
+     * SQLTypeFactoryComponent.
+     */
+    SQLObjectTypeFactory(SQLTypeFactoryComponent<SQL_TYPE, ODBC_TYPE> &factComp) :
+            SQLActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType>(),
+            _action(factComp), // copy constructor
+            _al(_action), // action list of 1 action
+            _connector(factComp.getConnector()) // store & connector for local use
+    {
+    }
 
-	/**
-	 * @brief constructor
-	 * @param factComp is a stateful SQLAction object which extends
-	 * SQLTypeFactoryComponent.
-	 */
-	SQLObjectTypeFactory(SQLTypeFactoryComponent<SQL_TYPE,ODBC_TYPE> &factComp):
-		SQLActionFactory<SQL_TYPE,SQL_TYPE,libdap::BaseType>(),
-		_action(factComp), // copy constructor
-		_al(_action), // action list of 1 action
-		_connector(factComp.getConnector()) // store & connector for local use
-	{
-TESTDEBUG(SQL_NAME_TEST,"CREATED: OBJECT TYPE FACTORY"<<endl);
-	}
+    /**
+     * @brief copy constructor
+     * @param a reference
+     */
+    SQLObjectTypeFactory(const SQLObjectTypeFactory<SQL_TYPE, ODBC_TYPE> &of) :
+            SQLActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType>(),
+            _action(of._action), // copy constructor
+            _al(of._action), // action list of 1 action
+            _connector(of._connector) // store & connector for local use
+    {
+    }
 
-	/**
-	 * @brief copy constructor
-	 * @param a reference
-	 */
-	SQLObjectTypeFactory(const SQLObjectTypeFactory<SQL_TYPE,ODBC_TYPE> &of):
-		SQLActionFactory<SQL_TYPE,SQL_TYPE,libdap::BaseType>(),
-		_action(of._action), // copy constructor
-		_al(of._action), // action list of 1 action
-		_connector(of._connector) // store & connector for local use
-	{
-TESTDEBUG(SQL_NAME_TEST,"COPING: OBJECT TYPE FACTORY"<<endl);
-	}
+    virtual ~SQLObjectTypeFactory() {
+    }
 
-	virtual ~SQLObjectTypeFactory(){
-TESTDEBUG(SQL_NAME_TEST,"DELETED: OBJECT TYPE FACTORY"<<endl);
-	}
-
-	SQLTypeConnector<SQL_TYPE,ODBC_TYPE> & getConnector(){
-		return _connector;
-	}
+    SQLTypeConnector<SQL_TYPE, ODBC_TYPE> &getConnector() {
+        return _connector;
+    }
 
 private:
-	// single ojbect (stateful) action used...
-	SQLAction<SQL_TYPE,libdap::BaseType> &_action;
-	// to build an ActionList
-	SQLObjectActionList<SQL_TYPE,libdap::BaseType> _al;
-	SQLTypeConnector<SQL_TYPE,ODBC_TYPE> &_connector;
-	SQLObjectTypeFactory(){};
+    // single ojbect (stateful) action used...
+    SQLAction<SQL_TYPE, libdap::BaseType> &_action;
+    // to build an ActionList
+    SQLObjectActionList<SQL_TYPE, libdap::BaseType> _al;
+    SQLTypeConnector<SQL_TYPE, ODBC_TYPE> &_connector;
+
+    SQLObjectTypeFactory() {};
 };
 
 #endif /* SQLOBJECTTYPEFACTORY_H_ */

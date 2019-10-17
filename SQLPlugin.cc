@@ -38,16 +38,14 @@ using std::string;
 SQLPluginList *SQLPlugin::_pl=SQLPlugin::findTheList();
 #endif
 
-SQLPlugin::~SQLPlugin(void)
-{
+SQLPlugin::~SQLPlugin(void) {
 #if 0
     // THIS IS DONE BY THE SQLRequestHandler::remove_sql_handler
     remove_handlers();
 #endif
 }
 
-void SQLPlugin::remove_handlers()
-{
+void SQLPlugin::remove_handlers() {
     if (!_handler_list.empty()) {
         if (_pl) {
             Handler_iter i = _handler_list.begin();
@@ -57,12 +55,11 @@ void SQLPlugin::remove_handlers()
         }
         else
             throw BESInternalFatalError("The base SQLRequestHandler is not loaded into the List!",
-            __FILE__, __LINE__);
+                                        __FILE__, __LINE__);
     }
 }
 
-bool SQLPlugin::add_handler(const string &command, sql_request_handler handler_method)
-{
+bool SQLPlugin::add_handler(const string &command, sql_request_handler handler_method) {
     if (this->find_handler(command) == NULL) {
         /**
          *  search into the wrapper for a caller
@@ -75,20 +72,19 @@ bool SQLPlugin::add_handler(const string &command, sql_request_handler handler_m
             }
             else {
                 throw BESInternalFatalError("Cannot wrap correctly this command!",
-                __FILE__, __LINE__);
+                                            __FILE__, __LINE__);
             }
             return true;
         }
         else
             throw BESInternalFatalError("The base SQLRequestHandler is not loaded!",
-            __FILE__, __LINE__);
+                                        __FILE__, __LINE__);
     }
     else
         return false;
 }
 
-bool SQLPlugin::remove_handler(const string &command)
-{
+bool SQLPlugin::remove_handler(const string &command) {
     SQLPlugin::Handler_iter i = this->_handler_list.find(command);
     if (i != this->_handler_list.end()) {
         /**
@@ -106,7 +102,7 @@ bool SQLPlugin::remove_handler(const string &command)
             //update the SQLRequestHandler wrapper usage counter
             if (!_pl->remove_sql_wrapper(command)) {
                 // report the error but can be a not fatal error
-                BESDEBUG(SQL_NAME, "This command was not correctly wrapped!"<<endl);
+                BESDEBUG(SQL_NAME, "This command was not correctly wrapped!" << endl);
             }
             // erase the function
             this->_handler_list.erase(i);
@@ -114,14 +110,13 @@ bool SQLPlugin::remove_handler(const string &command)
         }
         else
             throw BESInternalFatalError("The base SQLRequestHandler is not loaded!",
-            __FILE__, __LINE__);
+                                        __FILE__, __LINE__);
     }
     else
         return false;
 }
 
-string SQLPlugin::get_handler_names()
-{
+string SQLPlugin::get_handler_names() {
     string ret;
     bool first_name = true;
     SQLPlugin::Handler_citer i = this->_handler_list.begin();
@@ -135,8 +130,7 @@ string SQLPlugin::get_handler_names()
     return ret;
 }
 
-void SQLPlugin::dump(ostream &strm) const
-{
+void SQLPlugin::dump(ostream &strm) const {
     strm << BESIndent::LMarg << "SQLPlugin::dump - (" << (void *) this << ")" << endl;
     BESIndent::Indent();
     strm << BESIndent::LMarg << "name: " << _name << endl;
@@ -156,8 +150,7 @@ void SQLPlugin::dump(ostream &strm) const
     BESIndent::UnIndent();
 }
 
-sql_request_handler SQLPlugin::find_handler(const string &handler_name)
-{
+sql_request_handler SQLPlugin::find_handler(const string &handler_name) {
     SQLPlugin::Handler_citer i = this->_handler_list.find(handler_name);
     if (i != this->_handler_list.end()) {
         return (*i).second;
@@ -167,8 +160,7 @@ sql_request_handler SQLPlugin::find_handler(const string &handler_name)
 }
 
 SQLPluginList *
-SQLPlugin::findTheList()
-{
+SQLPlugin::findTheList() {
 #if 0
     // NOT SAFE instance can be deleted by SQLRequestHandler dtor
     // try cached position
@@ -192,15 +184,15 @@ SQLPlugin::findTheList()
          * @note the first option need to add the flag to:
          * BESPlugin.h:123
          */
-        BESDEBUG(SQL_NAME, "SQLPlugin: SQLRequestHandler found has ptr: "<<bes_pl<<endl);
+        BESDEBUG(SQL_NAME, "SQLPlugin: SQLRequestHandler found has ptr: " << bes_pl << endl);
 //dynamic_cast<SQLPluginList*>(bes__pl)->dump(std::cerr);
-        SQLLinker *l = static_cast<SQLLinker*>(bes_pl);
+        SQLLinker *l = static_cast<SQLLinker *>(bes_pl);
         if (l) {
-            BESDEBUG(SQL_NAME, "SQLPlugin: SQLRequestHandler THE LINK WORKS!!"<<endl);
+            BESDEBUG(SQL_NAME, "SQLPlugin: SQLRequestHandler THE LINK WORKS!!" << endl);
             return l->theLink();
         }
         else {
-            BESDEBUG(SQL_NAME, "SQLPlugin: SQLRequestHandler THE LINK <<DO NOT>> WORKS!!"<<endl);
+            BESDEBUG(SQL_NAME, "SQLPlugin: SQLRequestHandler THE LINK <<DO NOT>> WORKS!!" << endl);
             return NULL;
         }
         //return dynamic_cast<SQLPluginList*>(bes_pl);

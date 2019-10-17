@@ -31,6 +31,7 @@
 
 #include "SQLHandleConnector.h"
 #include "SQLTypeConnector.h"
+
 /**
  * @brief this interface do not use the
  * Error Part of the Connector.
@@ -41,7 +42,7 @@
  *
  */
 template<class SQL_TYPE, class ODBC_TYPE>
-class SQLSimpleConnector: public SQLHandleConnector, public SQLTypeConnector<SQL_TYPE, ODBC_TYPE> {
+class SQLSimpleConnector : public SQLHandleConnector, public SQLTypeConnector<SQL_TYPE, ODBC_TYPE> {
 protected:
     /**
      * @brief You should set READY status
@@ -51,8 +52,7 @@ protected:
      * (default), false otherwise.
      *
      */
-    virtual void setReady(bool state = true)
-    {
+    virtual void setReady(bool state = true) {
         SQLHandleConnector::setReady(state);
 
         /**
@@ -64,6 +64,7 @@ protected:
          * @endcode
          */
     }
+
 public:
     /**
      * @brief Tell the ActionFactory
@@ -73,8 +74,7 @@ public:
      * @return true if connector is
      * ready, false otherwise
      */
-    virtual const bool & isReady() const
-    {
+    virtual const bool &isReady() const {
         return SQLHandleConnector::isReady();
         /**
          * If you implement separately Type and Error
@@ -89,11 +89,11 @@ public:
          * @endcode
          */
     }
-    virtual ~SQLSimpleConnector()
-    {
+
+    virtual ~SQLSimpleConnector() {
         BESDEBUG(SQL_NAME, "DELETING: SQLSimpleConnector" << std::endl);
-    }
-    ;
+    };
+
     /**
      * @brief Constructor
      * @param an SQLContainer containing
@@ -101,11 +101,10 @@ public:
      * connections and to build the SQL query.
      */
     SQLSimpleConnector() :
-            SQLHandleConnector(), SQLTypeConnector<SQL_TYPE, ODBC_TYPE>()
-    {
+            SQLHandleConnector(), SQLTypeConnector<SQL_TYPE, ODBC_TYPE>() {
         BESDEBUG(SQL_NAME, "CREATING: SQLSimpleConnector" << std::endl);
-    }
-    ;
+    };
+
     /**
      * @brief Constructor
      * @param an SQLContainer containing
@@ -113,8 +112,7 @@ public:
      * connections and to build the SQL query.
      */
     SQLSimpleConnector(SQLContainer *c) :
-            SQLHandleConnector(c), SQLTypeConnector<SQL_TYPE, ODBC_TYPE>()
-    {
+            SQLHandleConnector(c), SQLTypeConnector<SQL_TYPE, ODBC_TYPE>() {
         BESDEBUG(SQL_NAME, "CREATING: SQLSimpleConnector" << std::endl);
     }
 };

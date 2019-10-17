@@ -59,8 +59,7 @@ private:
      * @return number of skipped rows or getRows() if
      * actual row+increment put cursor to the end
      */
-    size_t setRow(size_t increment = 1)
-    {
+    size_t setRow(size_t increment = 1) {
         size_t sum = _row_position + increment;
 #if 0
         // size_t is unsigned
@@ -80,20 +79,20 @@ private:
             // set the end condition
             _not_end = false; //!< GLOBAL ENDING CONDITION
 
-            BESDEBUG(SQL_NAME, "--ENDING------> getRow: "<<getRow() <<" getCol:" << getCol() << std::endl);
+            BESDEBUG(SQL_NAME, "--ENDING------> getRow: " << getRow() << " getCol:" << getCol() << std::endl);
 
             //returning maximum for skipped rows
             return getRows(); //!< FUNCTION ENDING CONDITION
         }
     }
+
 protected:
 
     /**
      * @brief Set the row size resulting
      * from of the QUERY
      */
-    inline void setRows(size_t rows)
-    {
+    inline void setRows(size_t rows) {
         _rows = rows;
     }
 
@@ -101,8 +100,7 @@ protected:
      * @brief Set the column size resulting
      * from of the QUERY
      */
-    inline void setCols(size_t columns)
-    {
+    inline void setCols(size_t columns) {
         _columns = columns;
     }
 
@@ -115,7 +113,7 @@ protected:
      *
      *
      */
-    virtual void setReady(bool state = true)=0;
+    virtual void setReady(bool state = true) = 0;
 
 public:
     /**
@@ -130,7 +128,7 @@ public:
      * 1 - n 		column index
      * @see ODBCConnector
      */
-    virtual SQL_TYPE * getType(size_t column)=0;
+    virtual SQL_TYPE *getType(size_t column) = 0;
 
     /**
      * @brief Returns a value of ODBC_TYPE type containing
@@ -153,7 +151,7 @@ public:
      * SQLInternalException
      * @note use notEnd to check end condition
      */
-    virtual ODBC_TYPE * getNext(size_t next = 1)=0;
+    virtual ODBC_TYPE *getNext(size_t next = 1) = 0;
 
     /**
      * @brief returns a string representation of the
@@ -165,7 +163,7 @@ public:
      * 1 - n 		column index
      * @see ODBCConnector
      */
-    virtual const string & getColName(const size_t & column)=0;
+    virtual const string &getColName(const size_t &column) = 0;
 
     /**
      * @brief returns a string representation of the
@@ -177,7 +175,7 @@ public:
      * 1 - n 		column index
      * @see ODBCConnector
      */
-    virtual const string & getColDesc(const size_t & column)=0;
+    virtual const string &getColDesc(const size_t &column) = 0;
 
     /**
      * @brief return the status of this connector
@@ -187,23 +185,21 @@ public:
      * Anyway you may implement this method if you want
      * to implement separately Type and Handle Connector
      */
-    virtual const bool & isReady() const=0;
+    virtual const bool &isReady() const = 0;
 
     /**
      * @brief indicate the status of the cursors
      * @return false if the end is reached and no
      * more element are available.
      */
-    const bool & notEnd()
-    {
+    const bool &notEnd() {
         return _not_end;
     }
 
     /**
      * returns the number of rows of the result set
      */
-    const size_t & getRows()
-    {
+    const size_t &getRows() {
         return _rows;
     }
 
@@ -212,8 +208,7 @@ public:
      * return value.
      * interval 0 to (getRows()-1)
      */
-    const size_t & getRow() const
-    {
+    const size_t &getRow() const {
         return _row_position;
     }
 
@@ -223,8 +218,7 @@ public:
      * used the getNext() since ODBC cursors (usually)
      * can't go back.
      */
-    void reset()
-    {
+    void reset() {
         _row_position = 0;
         _column_position = 0;
         // check for end condition
@@ -238,8 +232,7 @@ public:
      * @brief returns the number of columns of the result set
      *
      */
-    const size_t & getCols() const
-    {
+    const size_t &getCols() const {
         return _columns;
     }
 
@@ -248,8 +241,7 @@ public:
      * return value;
      * @note interval 0 to (getCols()-1)
      */
-    const size_t & getCol() const
-    {
+    const size_t &getCol() const {
         return _column_position;
     }
 
@@ -276,8 +268,7 @@ public:
      * if limits are reached
      * @note column start from 0 to getCols()-1
      */
-    size_t setNext(size_t increment = 1)
-    {
+    size_t setNext(size_t increment = 1) {
 #if 0
         // column_position is unsigned
         // first element should be tracked using setNext(0)
@@ -310,14 +301,13 @@ public:
             _column_position = sum - getCols();
         }
 
-        BESDEBUG(SQL_NAME, "-------------> getRow: "<<getRow() <<" getCol:" << getCol() << std::endl);
-        BESDEBUG(SQL_NAME, "-------------> rows: "<<rows <<" increment:" << increment << std::endl);
+        BESDEBUG(SQL_NAME, "-------------> getRow: " << getRow() << " getCol:" << getCol() << std::endl);
+        BESDEBUG(SQL_NAME, "-------------> rows: " << rows << " increment:" << increment << std::endl);
 
         return rows;
     }
 
-    virtual ~SQLTypeConnector()
-    {
+    virtual ~SQLTypeConnector() {
         BESDEBUG(SQL_NAME, "DELETING: SQLTypeConnector" << std::endl);
     }
 
@@ -325,8 +315,7 @@ public:
      * @brief Constructor
      */
     SQLTypeConnector() :
-            _column_position(0), _row_position(0), _columns(0), _rows(0), _not_end(true)
-    {
+            _column_position(0), _row_position(0), _columns(0), _rows(0), _not_end(true) {
         BESDEBUG(SQL_NAME, "CREATING: SQLTypeConnector" << std::endl);
     }
 

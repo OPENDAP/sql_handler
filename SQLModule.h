@@ -31,7 +31,7 @@
 #include <BESAbstractModule.h>
 #include <iostream>
 
-using std::endl ;
+using std::endl;
 
 #include <BESDebug.h>
 #include <BESDapService.h>
@@ -58,16 +58,15 @@ using std::endl ;
  * @brief The module of the SQLHandler it
  * load the main components of the handler.
  */
-class SQLModule : public BESAbstractModule
-{
+class SQLModule : public BESAbstractModule {
 public:
-	/**
-	 * SQLRequestHandler is a wrapper for ALL Requests of
-	 * type sql.
-	 * It is build at the SQLModule load and deleted when
-	 * it is unloaded.
-	 */
-	static SQLRequestHandler *rh;
+    /**
+     * SQLRequestHandler is a wrapper for ALL Requests of
+     * type sql.
+     * It is build at the SQLModule load and deleted when
+     * it is unloaded.
+     */
+    static SQLRequestHandler *rh;
 
     /**
      *  load and update instances of SQLContainer(s)
@@ -87,27 +86,30 @@ public:
     // store instances of loaded SQLContainer(s)
     static SQLContainerStorage *cs;
 
-	/**
-	 * @brief ctor
-	 */
-	SQLModule() {}
+    /**
+     * @brief ctor
+     */
+    SQLModule() {}
+
     /**
      * @brief dtor
      */
-	virtual	~SQLModule() {}
-	/**
-	 * @brief initialize BES components.
-	 * Register SQLHandler components into the BES environment
-	 */
-    virtual void		initialize( const string &modname ) ;
+    virtual    ~SQLModule() {}
+
+    /**
+     * @brief initialize BES components.
+     * Register SQLHandler components into the BES environment
+     */
+    virtual void initialize(const string &modname);
+
     /**
      * @brief de-register SQLHandler components from the
      * BES environment
      */
-    virtual void		terminate( const string &modname ) ;
+    virtual void terminate(const string &modname);
 
-    virtual void		dump( ostream &strm ) const ;
-} ;
+    virtual void dump(ostream &strm) const;
+};
 
 #endif // I_SQLModule_H
 

@@ -50,58 +50,55 @@
  * SQLActionManager<OUT_TYPE,MERGE_TYPE,JOIN_TYPE>
  */
 
-class SQLTypeManager: public SQLActionManager<libdap::BaseType>{
+class SQLTypeManager : public SQLActionManager<libdap::BaseType> {
 private:
-	// abstract  class
-	SQLTypeManager():SQLActionManager<libdap::BaseType>(){};
+    // abstract  class
+    SQLTypeManager() : SQLActionManager<libdap::BaseType>() {};
 public:
 
-	// wrap the doActions method to pass JOIN and MERGE functions
-	template <class CODE_TYPE, class ARGS_TYPE>
-	static libdap::BaseType* doActions(
-		SQLActionFactory<CODE_TYPE,ARGS_TYPE,libdap::BaseType> &_af)
-		{
-		/*
-		 *  run using:
-		 *  - passed action_factory
-		 *  - implemented merge result function
-		 *  - implemented join result function
-		 *  - do not call getArgs for each action of the list
-		 *  @see SQLActionManager class
-		 */
-		return SQLActionManager<libdap::BaseType>::doActions(_af,
-															&merge,
-															&join,
-															false);
-	}
+    // wrap the doActions method to pass JOIN and MERGE functions
+    template<class CODE_TYPE, class ARGS_TYPE>
+    static libdap::BaseType *doActions(
+            SQLActionFactory<CODE_TYPE, ARGS_TYPE, libdap::BaseType> &_af) {
+        /*
+         *  run using:
+         *  - passed action_factory
+         *  - implemented merge result function
+         *  - implemented join result function
+         *  - do not call getArgs for each action of the list
+         *  @see SQLActionManager class
+         */
+        return SQLActionManager<libdap::BaseType>::doActions(_af,
+                                                             &merge,
+                                                             &join,
+                                                             false);
+    }
 
-	// SQLActionManager<...>::JOIN type function
-	static libdap::BaseType * join(libdap::BaseType * prev, libdap::BaseType * actual)
-		{
-#if __TESTS__==1
-		if (actual)
-			BESDEBUG(SQL_NAME,"_JOIN: "<<std::endl);
-		else
-			BESDEBUG(SQL_NAME,"!_JOIN: "<<std::endl);
+    // SQLActionManager<...>::JOIN type function
+    static libdap::BaseType *join(libdap::BaseType *prev, libdap::BaseType *actual) {
+#if __TESTS__ == 1
+        if (actual)
+            BESDEBUG(SQL_NAME,"_JOIN: "<<std::endl);
+        else
+            BESDEBUG(SQL_NAME,"!_JOIN: "<<std::endl);
 #endif
-		return actual;
+        return actual;
 //		no delete since address pointer is used
 //			smart::Delete::smartDelete<libdap::BaseType*>(actual);
-	}
+    }
 
-	// SQLActionManager<libdap::BaseType>::MERGE type function
-	static libdap::BaseType * merge(libdap::BaseType * prev, libdap::BaseType * actual)
-		{
-#if __TESTS__==1
-		if (actual)
-			BESDEBUG(SQL_NAME,"_MERGE: "<<std::endl);
-		else
-			BESDEBUG(SQL_NAME,"!_MERGE: "<<std::endl);
+    // SQLActionManager<libdap::BaseType>::MERGE type function
+    static libdap::BaseType *merge(libdap::BaseType *prev, libdap::BaseType *actual) {
+#if __TESTS__ == 1
+        if (actual)
+            BESDEBUG(SQL_NAME,"_MERGE: "<<std::endl);
+        else
+            BESDEBUG(SQL_NAME,"!_MERGE: "<<std::endl);
 #endif
-		return actual;
+        return actual;
 //		no delete since address pointer is used
 //			smart::Delete::smartDelete<libdap::BaseType*>(actual);
-	}
+    }
 
 };
 

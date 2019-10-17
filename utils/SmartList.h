@@ -28,6 +28,7 @@
 #define SMARTLIST_H_
 
 #include <memory>
+
 #if 0
 #include "SharedPtr.h"
 #endif
@@ -50,164 +51,147 @@ namespace smart {
  * @see smart::SmartMap
  * @see smart::SmartValueMap
  */
-template<class K, class T = std::shared_ptr<K> >
-class SmartList
-#if __CLONE__==1
-:public smart::Clone< smart::SmartList<K,T> > {
-public:
-	typedef smart::Clone<K > CLONE_LIST_INT;
+    template<class K, class T = std::shared_ptr<K> >
+    class SmartList
+#if __CLONE__ == 1
+        :public smart::Clone< smart::SmartList<K,T> > {
+        public:
+            typedef smart::Clone<K > CLONE_LIST_INT;
 
-	SmartList<K,T>* clone() {
-		return new SmartList<K,T>(this);
-	}
+            SmartList<K,T>* clone() {
+                return new SmartList<K,T>(this);
+            }
 
-	SmartList<K,T>* create()throw (std::bad_alloc) {
-		return new SmartList<K,T>();
-	}
+            SmartList<K,T>* create()throw (std::bad_alloc) {
+                return new SmartList<K,T>();
+            }
 #else
-{
-public:
+    {
+    public:
 #endif
-	typedef typename std::list<T>::const_iterator const_iterator;
-	typedef typename std::list<T>::iterator iterator;
+        typedef typename std::list<T>::const_iterator const_iterator;
+        typedef typename std::list<T>::iterator iterator;
 
-	SmartList(smart::SmartList<K, T> * the_list) :
-			_list(the_list->getList())
-	{
-		//if (SmartCheck::isPtr<K>())
-		//	throw new std::exception();
-	}
-	;
+        SmartList(smart::SmartList<K, T> *the_list) :
+                _list(the_list->getList()) {
+            //if (SmartCheck::isPtr<K>())
+            //	throw new std::exception();
+        };
 
-	SmartList(smart::SmartList<K, T> & the_list) :
-			_list(the_list.getList())
-	{
-	}
-	;
+        SmartList(smart::SmartList<K, T> &the_list) :
+                _list(the_list.getList()) {
+        };
 
-	SmartList() :
-			_list(std::list<T>())
-	{
-	}
-	;
+        SmartList() :
+                _list(std::list<T>()) {
+        };
 
 #if 1
-	inline void push_back(K* k)
-	{
-		_list.push_back(T(k));
-	}
+
+        inline void push_back(K *k) {
+            _list.push_back(T(k));
+        }
+
 #endif
 #if 1
-	inline void push_back(K &k)
-	{
-		_list.push_back(T(k));
-	}			//T(k)); }
+
+        inline void push_back(K &k) {
+            _list.push_back(T(k));
+        }            //T(k)); }
 #endif
-	inline void push_front(K *k)
-	{
-		_list.push_front(T(k));
-	}
 
-	inline void push_front(K &k)
-	{
-		_list.push_front(T(k));
-	}
+        inline void push_front(K *k) {
+            _list.push_front(T(k));
+        }
 
-	inline void pop_back()
-	{
-		_list.pop_back();
-	}
+        inline void push_front(K &k) {
+            _list.push_front(T(k));
+        }
 
-	inline void pop_front()
-	{
-		_list.pop_front();
-	}
+        inline void pop_back() {
+            _list.pop_back();
+        }
+
+        inline void pop_front() {
+            _list.pop_front();
+        }
 
 #if 0
-	inline void push_back(K &k)
-	{   _list.push_back(T(WhatIs::getPtr<K>(k)));}
+        inline void push_back(K &k)
+        {   _list.push_back(T(WhatIs::getPtr<K>(k)));}
 #endif
 
 #if 0
-	void push_front(K &k) {
-		_list.push_front(T(WhatIs::getPtr<K>(k)));
-	}
+        void push_front(K &k) {
+            _list.push_front(T(WhatIs::getPtr<K>(k)));
+        }
 #endif
-	inline iterator begin()
-	{
-		return _list.begin();
-	}
 
-	inline const_iterator begin() const
-	{
-		return _list.begin();
-	}
+        inline iterator begin() {
+            return _list.begin();
+        }
 
-	inline iterator end()
-	{
-		return _list.end();
-	}
+        inline const_iterator begin() const {
+            return _list.begin();
+        }
 
-	inline const_iterator end() const
-	{
-		return _list.end();
-	}
+        inline iterator end() {
+            return _list.end();
+        }
 
-	inline bool empty()
-	{
-		return _list.empty();
-	}
+        inline const_iterator end() const {
+            return _list.end();
+        }
 
-	inline size_t size()
-	{
-		return _list.size();
-	}
+        inline bool empty() {
+            return _list.empty();
+        }
 
-	virtual ~SmartList()
-	{
-	}
-	;
+        inline size_t size() {
+            return _list.size();
+        }
 
-	inline const std::list<T>& getList()
-	{
-		return _list;
-	}
+        virtual ~SmartList() {
+        };
 
-protected:
-	std::list<T> _list;
-};
+        inline const std::list<T> &getList() {
+            return _list;
+        }
+
+    protected:
+        std::list<T> _list;
+    };
 
 #if 1
+
 /**
  * @brief Please avoid using templates with & or *
  */
-template<class K>
-class SmartList<K&, std::shared_ptr<K&> > {
-	SmartList();
-public:
-	virtual ~SmartList()
-	{
-	}
-	;
-};
+    template<class K>
+    class SmartList<K &, std::shared_ptr<K &> > {
+        SmartList();
+
+    public:
+        virtual ~SmartList() {
+        };
+    };
+
 #endif
 
 #if 1
+
 /**
  * @brief Please avoid using templates with & or *
  */
-template<class K>
-class SmartList<const K*, std::shared_ptr<const K*> > {
-	SmartList()
-	{
-	}
-	;
-public:
-	virtual ~SmartList()
-	{
-	}
-	;
-};
+    template<class K>
+    class SmartList<const K *, std::shared_ptr<const K *> > {
+        SmartList() {
+        };
+    public:
+        virtual ~SmartList() {
+        };
+    };
+
 #endif
 
 } // namespace smart

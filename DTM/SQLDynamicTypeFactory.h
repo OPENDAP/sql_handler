@@ -66,84 +66,64 @@
  * @see SQLDynamicActionFactory
  * @see SQLActionFactory
  */
-template <class SQL_TYPE,				// connector && ActionFactory
-			class ODBC_TYPE>			// connector && ActionFactory
+template<class SQL_TYPE,                // connector && ActionFactory
+        class ODBC_TYPE>            // connector && ActionFactory
 //			class DAP_TYPE	= libdap::BaseType> // FIXED
 class SQLDynamicTypeFactory :
-	public SQLDynamicActionFactory<SQL_TYPE,SQL_TYPE,libdap::BaseType> {
+        public SQLDynamicActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType> {
 public:
-	/**
-	 * @brief no argument mapping needed since this is
-	 * statically coded into the getDapType action.
-	 */
-	virtual SQL_TYPE * getArgs(SQL_TYPE *code){
-		return code;
-	};
+    /**
+     * @brief no argument mapping needed since this is
+     * statically coded into the getDapType action.
+     */
+    virtual SQL_TYPE *getArgs(SQL_TYPE *code) {
+        return code;
+    };
 
-	/**
-	 * @brief returns the actual column type as SQL_TYPE.
-	 */
-	virtual SQL_TYPE * getCode(){
-#if 0
-		/**
-		 *  we don't have to check this here
-		 *  getType should throw its error
-		 *  probably a BESInternalError
-		 *  which is not fatal.
-		 */
-		if (!_connector.isReady())
-			throw SQLInternalError(
-					"SQLObjectTypeFactory: Unable to getType. "
-					"Check connector's READY status.",__FILE__,__LINE__);
-#endif
-TESTDEBUG(SQL_NAME_TEST,"DynamicTypeFactory: getCode() from connector for column "
-		<<_connector.getCol()<<" row "<<_connector.getRow()<<endl);
+    /**
+     * @brief returns the actual column type as SQL_TYPE.
+     */
+    virtual SQL_TYPE *getCode() {
+        return _connector.getType(_connector.getCol());
+    }
 
-		return _connector.getType(_connector.getCol());
-	};
+    /**
+     * @brief Stop condition.
+     * Actually objects are requested once at time
+     * @todo I'm planning to use this factory to build entire row/object.
+     *  May we use the multiple request to automatically build DAS elements?
+     *  getCode(){getType(col++)}
+     */
+    virtual bool stop(SQL_TYPE *code) {
+        return true;
+    }
 
-	/**
-	 * @brief Stop condition.
-	 * Actually objects are requested once at time
-	 * @todo I'm planning to use this factory to build entire row/object.
-	 *  May we use the multiple request to automatically build DAS elements?
-	 *  getCode(){getType(col++)}
-	 */
-	virtual bool stop(SQL_TYPE * code){
-#if 0
-// code may not be <<able
-TESTDEBUG(SQL_NAME_TEST,"SQLObjectTypeFactory: stop( "<<*code<<" ) == true"<<endl);
-#endif
-		return true;
-	}
-	/**
-	 * @brief constructor
-	 * @param connector a reference to the SQLTypeConnector to use.
-	 */
-	SQLDynamicTypeFactory(SQLTypeConnector<SQL_TYPE,ODBC_TYPE> &connector):
-		SQLDynamicActionFactory<SQL_TYPE,SQL_TYPE,libdap::BaseType>(),
-		_connector(connector)
-		{
-TESTDEBUG(SQL_NAME_TEST,"CREATED: DynamicTypeFactory"<<endl);
-	}
+    /**
+     * @brief constructor
+     * @param connector a reference to the SQLTypeConnector to use.
+     */
+    SQLDynamicTypeFactory(SQLTypeConnector<SQL_TYPE, ODBC_TYPE> &connector) :
+            SQLDynamicActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType>(),
+            _connector(connector) {
+    }
 
-	/**
-	 * @brief dtor
-	 */
-	virtual ~SQLDynamicTypeFactory(){
-TESTDEBUG(SQL_NAME_TEST,"DELETED: DynamicTypeFactory"<<endl);
-	}
+    /**
+     * @brief dtor
+     */
+    virtual ~SQLDynamicTypeFactory() {
+    }
 
-	/**
-	 * @brief return a reference to the connector
-	 */
-	SQLTypeConnector<SQL_TYPE,ODBC_TYPE> & getConnector(){
-		return _connector;
-	}
+    /**
+     * @brief return a reference to the connector
+     */
+    SQLTypeConnector<SQL_TYPE, ODBC_TYPE> &getConnector() {
+        return _connector;
+    }
 
 private:
-	SQLTypeConnector<SQL_TYPE,ODBC_TYPE> &_connector;
-	SQLDynamicTypeFactory(){};
+    SQLTypeConnector<SQL_TYPE, ODBC_TYPE> &_connector;
+
+    SQLDynamicTypeFactory() {};
 };
 
 #endif /* SQLDYNAMICTYPEFACTORY_H_ */

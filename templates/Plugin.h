@@ -42,13 +42,17 @@
 #include "container/SQLContainer.h"
 
 #COMPLETE#
+
 #include "connector/SQLConnector.h"
 #include "OPENDAP_CLASSConnector.h"
 #include "OPENDAP_CLASSErrorFactoryComponent.h"
+
 #COMPLETE#
 #SIMPLE#
+
 #include "connector/SQLSimpleConnector.h"
 #include "OPENDAP_CLASSSimpleConnector.h"
+
 #SIMPLE#
 
 #include "OPENDAP_CLASSTypes.h"
@@ -65,14 +69,17 @@
 #DAS#
 //DAS
 #include "handler/SQLBuildDAS.h"
+
 #DAS#
 #DDS#
 //DDS
 #include "handler/SQLBuildDDS.h"
+
 #DDS#
 #DATA#
 //DATA
 #include "handler/SQLBuildDATA.h"
+
 #DATA#
 
 
@@ -122,118 +129,126 @@
  * that some example are provided into the code.
  *
  */
-class OPENDAP_CLASSPlugin : public SQLPlugin	{
+class OPENDAP_CLASSPlugin : public SQLPlugin {
 public:
 #DAS#
-	/**
-	 * setting DAS builder types
-	 * @see ODBCTypes
-	 * @see SQLBuildDAS
-	 */
-	typedef	SQLBuildDAS< SQL_TYPE,			// SQLTypeFactory && connector
+    /**
+     * setting DAS builder types
+     * @see ODBCTypes
+     * @see SQLBuildDAS
+     */
+    typedef SQLBuildDAS<SQL_TYPE,            // SQLTypeFactory && connector
 #SIMPLE#
-					ODBC_TYPE>			// SQLTypeFactory && connector
+            ODBC_TYPE>            // SQLTypeFactory && connector
 #SIMPLE#
 #COMPLETE#
-					ODBC_TYPE,			// SQLTypeFactory && connector
-					ERROR_TYPE,		// SQLErrorFactory(IN) && connector
-					MSG_TYPE,			// SQLErrorFactory(ARG) && connector
-void>				// SQLErrorFactory(OUT)
+            ODBC_TYPE,            // SQLTypeFactory && connector
+            ERROR_TYPE,        // SQLErrorFactory(IN) && connector
+            MSG_TYPE,            // SQLErrorFactory(ARG) && connector
+    void>                // SQLErrorFactory(OUT)
 #COMPLETE#
-								DASBuilder;
+    DASBuilder;
 #DAS#
 #DDS#
-	/**
-	 * setting DATA builder types
-	 * @see ODBCTypes
-	 * @see SQLBuildDATA
-	 */
-	typedef	SQLBuildDDS< SQL_TYPE,			// SQLTypeFactory && connector
+    /**
+     * setting DATA builder types
+     * @see ODBCTypes
+     * @see SQLBuildDATA
+     */
+    typedef SQLBuildDDS<SQL_TYPE,            // SQLTypeFactory && connector
 #SIMPLE#
-					ODBC_TYPE>			// SQLTypeFactory && connector
+            ODBC_TYPE>            // SQLTypeFactory && connector
 #SIMPLE#
 #COMPLETE#
-					ODBC_TYPE,			// SQLTypeFactory && connector
-					ERROR_TYPE,		// SQLErrorFactory(IN) && connector
-					MSG_TYPE,			// SQLErrorFactory(ARG) && connector
-					void>				// SQLErrorFactory(OUT)
+            ODBC_TYPE,            // SQLTypeFactory && connector
+            ERROR_TYPE,        // SQLErrorFactory(IN) && connector
+            MSG_TYPE,            // SQLErrorFactory(ARG) && connector
+    void>                // SQLErrorFactory(OUT)
 #COMPLETE#
-								DDSBuilder;
+    DDSBuilder;
 #DDS#
 #DATA#
-	/**
-	 * setting DATA builder types
-	 * @see ODBCTypes
-	 * @see SQLBuildDATA
-	 */
-	typedef	SQLBuildDATA<SQL_TYPE,			// SQLTypeFactory && connector
+    /**
+     * setting DATA builder types
+     * @see ODBCTypes
+     * @see SQLBuildDATA
+     */
+    typedef SQLBuildDATA<SQL_TYPE,            // SQLTypeFactory && connector
 #SIMPLE#
-					ODBC_TYPE>			// SQLTypeFactory && connector
+            ODBC_TYPE>            // SQLTypeFactory && connector
 #SIMPLE#
 #COMPLETE#
-					ODBC_TYPE,			// SQLTypeFactory && connector
-					ERROR_TYPE,		// SQLErrorFactory(IN) && connector
-					MSG_TYPE,			// SQLErrorFactory(ARG) && connector
-					void>				// SQLErrorFactory(OUT)
+            ODBC_TYPE,            // SQLTypeFactory && connector
+            ERROR_TYPE,        // SQLErrorFactory(IN) && connector
+            MSG_TYPE,            // SQLErrorFactory(ARG) && connector
+    void>                // SQLErrorFactory(OUT)
 #COMPLETE#
-								DATABuilder;
+    DATABuilder;
 #DATA#
-		/**
-		 * @brief Default constructor
-		 */
-	OPENDAP_CLASSPlugin(const string &name):
-		SQLPlugin(name)
-	{
-#DAS#
-		SQLPlugin::add_handler(DAS_RESPONSE, OPENDAP_CLASSPlugin::build_das ) ;
-#DAS#
-#DDS#
-		SQLPlugin::add_handler(DDS_RESPONSE, OPENDAP_CLASSPlugin::build_dds ) ;
-#DDS#
-#DATA#
-		SQLPlugin::add_handler(DATA_RESPONSE, OPENDAP_CLASSPlugin::build_data ) ;
-#DATA#
-		SQLPlugin::add_handler(VERS_RESPONSE, OPENDAP_CLASSPlugin::build_vers ) ;
 
-	}
+    /**
+     * @brief Default constructor
+     */
+    OPENDAP_CLASSPlugin(const string &name) :
+            SQLPlugin(name) {
+#DAS#
+        SQLPlugin::add_handler(DAS_RESPONSE, OPENDAP_CLASSPlugin::build_das);
+#DAS#
+#DDS#
+        SQLPlugin::add_handler(DDS_RESPONSE, OPENDAP_CLASSPlugin::build_dds);
+#DDS#
+#DATA#
+        SQLPlugin::add_handler(DATA_RESPONSE, OPENDAP_CLASSPlugin::build_data);
+#DATA#
+        SQLPlugin::add_handler(VERS_RESPONSE, OPENDAP_CLASSPlugin::build_vers);
 
-	virtual ~OPENDAP_CLASSPlugin(){}
+    }
+
+    virtual ~OPENDAP_CLASSPlugin() {}
+
 #DAS#
-	/**
-	 * @brief method to build DAS
-	 * @param dhi reference to SQLDataHandlerInterface
-	 * @see comments in code for detailed explanation
-	 */
-	static bool	build_das( SQLDataHandlerInterface &c );
+
+    /**
+     * @brief method to build DAS
+     * @param dhi reference to SQLDataHandlerInterface
+     * @see comments in code for detailed explanation
+     */
+    static bool build_das(SQLDataHandlerInterface &c);
+
 #DAS#
 #DDS#
-	/**
-	 * @brief method to build DDS
-	 * @param dhi reference to SQLDataHandlerInterface
-	 * @see comments in code for detailed explanation
-	 */
-	static bool	build_dds( SQLDataHandlerInterface &c );
+
+    /**
+     * @brief method to build DDS
+     * @param dhi reference to SQLDataHandlerInterface
+     * @see comments in code for detailed explanation
+     */
+    static bool build_dds(SQLDataHandlerInterface &c);
+
 #DDS#
 #DATA#
-	/**
-	 * @brief method to build DATA
-	 * @param dhi reference to SQLDataHandlerInterface
-	 * @see comments in code for detailed explanation
-	 */
-	static bool build_data( SQLDataHandlerInterface &c );
+
+    /**
+     * @brief method to build DATA
+     * @param dhi reference to SQLDataHandlerInterface
+     * @see comments in code for detailed explanation
+     */
+    static bool build_data(SQLDataHandlerInterface &c);
+
 #DATA#
-	/**
-	 * @brief Override default SQLPlugin::version
-	 * static version (passing its address to the constructor).
-	 * <br>Usually you don't need to do so. Here we have to
-	 * use different PACKAGE_NAME and PACKAGE_VERSION variables
-	 * since unixODBC is bundled in the same package of the
-	 * SQLHandler.
-	 * @param SQLDataHandlerInterface &c
-	 * @see SQLPlugin::version()
-	 * @see ODBCPlugin::version()
-	 */
-	static bool	build_vers( SQLDataHandlerInterface &c );
+
+    /**
+     * @brief Override default SQLPlugin::version
+     * static version (passing its address to the constructor).
+     * <br>Usually you don't need to do so. Here we have to
+     * use different PACKAGE_NAME and PACKAGE_VERSION variables
+     * since unixODBC is bundled in the same package of the
+     * SQLHandler.
+     * @param SQLDataHandlerInterface &c
+     * @see SQLPlugin::version()
+     * @see ODBCPlugin::version()
+     */
+    static bool build_vers(SQLDataHandlerInterface &c);
 
 };
 

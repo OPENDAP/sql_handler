@@ -61,45 +61,45 @@
 /**
  * @brief implementation of the SQLFactoryComponent
  */
-class OPENDAP_CLASSTypeFactoryComponent :public SQLTypeFactoryComponent<SQL_TYPE,ODBC_TYPE>{
+class OPENDAP_CLASSTypeFactoryComponent : public SQLTypeFactoryComponent<SQL_TYPE, ODBC_TYPE> {
 public:
-#if __CLONE__==1
+#if __CLONE__ == 1
 
-	/**
-	 * @brief This is the implementation of the
-	 * Clone interface.
-	 * @return a pointer to a clone of this object
-	 */
-	virtual SQLAction<SQL_TYPE,libdap::BaseType> *clone(){
-		return new OPENDAP_CLASSTypeFactoryComponent(*this);
-	}
+    /**
+     * @brief This is the implementation of the
+     * Clone interface.
+     * @return a pointer to a clone of this object
+     */
+    virtual SQLAction<SQL_TYPE,libdap::BaseType> *clone(){
+        return new OPENDAP_CLASSTypeFactoryComponent(*this);
+    }
 #endif
 
-	/**
-	 * @brief default constructor
-	 * @param conn a reference to a SimpleConnector
-	 */
-	OPENDAP_CLASSTypeFactoryComponent(SQLSimpleConnector<SQL_TYPE,ODBC_TYPE> &conn) :
-		SQLTypeFactoryComponent<SQL_TYPE,ODBC_TYPE>(conn){};
+    /**
+     * @brief default constructor
+     * @param conn a reference to a SimpleConnector
+     */
+    OPENDAP_CLASSTypeFactoryComponent(SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> &conn) :
+            SQLTypeFactoryComponent<SQL_TYPE, ODBC_TYPE>(conn) {};
 
-	/**
-	 * @brief copy constructor
-	 * @param t is a reference to a constant instance of this class
-	 */
-	OPENDAP_CLASSTypeFactoryComponent(const OPENDAP_CLASSTypeFactoryComponent &t) :
-		SQLTypeFactoryComponent<SQL_TYPE,ODBC_TYPE>(t){
-		/**
-		 * @todo if you add members update the copy constructor
-		 */
-	};
+    /**
+     * @brief copy constructor
+     * @param t is a reference to a constant instance of this class
+     */
+    OPENDAP_CLASSTypeFactoryComponent(const OPENDAP_CLASSTypeFactoryComponent &t) :
+            SQLTypeFactoryComponent<SQL_TYPE, ODBC_TYPE>(t) {
+        /**
+         * @todo if you add members update the copy constructor
+         */
+    };
 
-	virtual ~OPENDAP_CLASSTypeFactoryComponent(){};
+    virtual ~OPENDAP_CLASSTypeFactoryComponent() {};
 
-	/**
-	 * @brief Provide action method implementation using DTM components.
-	 */
-	libdap::BaseType *
-	action(SQL_TYPE *type) throw (SQLInternalError,SQLInternalFatalError);
+    /**
+     * @brief Provide action method implementation using DTM components.
+     */
+    libdap::BaseType *
+    action(SQL_TYPE *type) throw(SQLInternalError, SQLInternalFatalError);
 
 };
 

@@ -29,56 +29,47 @@
 using std::endl;
 using std::string;
 
-SQLTextContainer::SQLTextContainer(const string &name, const string & real_name, const string &type) :
-        SQLContainer(name, real_name, type), _dataset(new DATASET()), d_actual_section(_dataset->begin())
-{
-    TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLTextContainer"<<endl);
+SQLTextContainer::SQLTextContainer(const string &name, const string &real_name, const string &type) :
+        SQLContainer(name, real_name, type), _dataset(new DATASET()), d_actual_section(_dataset->begin()) {
     /**
      * @note this is already done by the SQLContainerFactory
      * this is here in the case you want to use this
      * constructor manually.
      */
     if (!setup()) {
-        BESDEBUG(SQL_NAME, "ERROR: SQLTextContainer"<<endl);
+        BESDEBUG(SQL_NAME, "ERROR: SQLTextContainer" << endl);
         throw BESInternalError("SQLTextContainer: Failed to setup sql dataset", __FILE__, __LINE__);
     }
 }
 
-SQLTextContainer::SQLTextContainer(const BESContainer & c) :
-        SQLContainer(c), _dataset(new DATASET()), d_actual_section(_dataset->begin())
-{
-    TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLTextContainer from BESContainer"<<endl);
+SQLTextContainer::SQLTextContainer(const BESContainer &c) :
+        SQLContainer(c), _dataset(new DATASET()), d_actual_section(_dataset->begin()) {
     /**
      * @note: this is already done by the SQLContainerFactory
      * this is here in the case you want to use this
      * constructor manually.
      */
-    BESDEBUG(SQL_NAME, "SQLTextContainer: NOT READY"<<endl);
+    BESDEBUG(SQL_NAME, "SQLTextContainer: NOT READY" << endl);
     if (!setup()) {
-        BESDEBUG(SQL_NAME, "ERROR: SQLTextContainer"<<endl);
+        BESDEBUG(SQL_NAME, "ERROR: SQLTextContainer" << endl);
         throw BESInternalError("SQLTextContainer: Failed to setup sql dataset", __FILE__, __LINE__);
     }
 }
 
-SQLTextContainer::SQLTextContainer(const SQLTextContainer & c) :
-        SQLContainer(c), _dataset(new DATASET(*c._dataset)), d_actual_section(_dataset->begin())
-{
-    TESTDEBUG(SQL_NAME_TEST,"COPYING: SQLTextContainer"<<endl);
+SQLTextContainer::SQLTextContainer(const SQLTextContainer &c) :
+        SQLContainer(c), _dataset(new DATASET(*c._dataset)), d_actual_section(_dataset->begin()) {
 }
 
-SQLTextContainer::~SQLTextContainer()
-{
+SQLTextContainer::~SQLTextContainer() {
     if (_dataset) {
         delete _dataset;
     }
     _dataset = 0;
-    TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLTextContainer"<<endl);
 }
 
 
-void SQLTextContainer::comparatorSubst(SQL_CONSTRAINT_SET& where)
-{
-    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::comparatorSubstring start with size: "<<where.size()<<endl );
+void SQLTextContainer::comparatorSubst(SQL_CONSTRAINT_SET &where) {
+    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::comparatorSubstring start with size: " << where.size() << endl);
     // for each constraint
     SQL_CONSTRAINT_SET::iterator wi = where.begin();
     while (wi != where.end()) {
@@ -97,21 +88,21 @@ void SQLTextContainer::comparatorSubst(SQL_CONSTRAINT_SET& where)
              * applying spaces for safe append
              */
             c.setSubstitute(" " + comparator + " "); // to standard SQL
-            BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::comparatorSubstring: "<<c.toString()<<endl );
+            BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::comparatorSubstring: " << c.toString() << endl);
             where.erase(wi);
             where.insert(c);
         }
-        /**
-         *  do we have optional keys which set comparator?
-         *  for ex:
-         *  ~= = LIKE
-         *  != = <>
-         */
+            /**
+             *  do we have optional keys which set comparator?
+             *  for ex:
+             *  ~= = LIKE
+             *  != = <>
+             */
         else if (comparator.compare("!=") == 0) {
             // from standard dap
             SQLConstraint c = (*wi);
             c.setSubstitute("<>"); // to standard SQL
-            BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::comparatorSubstring: "<<c.toString()<<endl );
+            BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::comparatorSubstring: " << c.toString() << endl);
             where.erase(wi);
             where.insert(c);
         }
@@ -119,17 +110,17 @@ void SQLTextContainer::comparatorSubst(SQL_CONSTRAINT_SET& where)
             // from standard dap
             SQLConstraint c = (*wi);
             c.setSubstitute(" LIKE "); // to standard SQL
-            BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::comparatorSubstring: "<<c.toString()<<endl );
+            BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::comparatorSubstring: " << c.toString() << endl);
             where.erase(wi);
             where.insert(c);
         }
         wi++;
-    } BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::comparatorSubstring DONE"<<endl );
+    }
+    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::comparatorSubstring DONE" << endl);
 }
 
-string SQLTextContainer::buildQuery()
-{
-    BESDEBUG(SQL_NAME, "SQLTextContainer: Building SELECT query: "<<endl);
+string SQLTextContainer::buildQuery() {
+    BESDEBUG(SQL_NAME, "SQLTextContainer: Building SELECT query: " << endl);
     SQLQuery &q = getQuery();
 
     /**
@@ -154,7 +145,7 @@ string SQLTextContainer::buildQuery()
      */
     size_t split = buf.find("&");
 
-    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer split is: "<<split<< "\nBuf: "<<buf<<endl );
+    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer split is: " << split << "\nBuf: " << buf << endl);
 
     string attributes;
     string constraints;
@@ -182,17 +173,17 @@ string SQLTextContainer::buildQuery()
     buf.clear();
     if (!attrs->empty()) {
         SQL_ATTRIBUTE_SET_BYPOS::iterator i = attrs->begin();
-        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer:: Attrs:"<<(*i).getAttribute()<<endl);
+        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer:: Attrs:" << (*i).getAttribute() << endl);
         buf = (*i).getAttribute();
         while (++i != attrs->end()) {
-            BESDEBUG(SQL_NAME_TEST, "SQLTextContainer:: Attrs:"<<(*i).getName()<<endl);
+            BESDEBUG(SQL_NAME_TEST, "SQLTextContainer:: Attrs:" << (*i).getName() << endl);
             buf += _SQLH_CONT_ATTR_JOIN + (*i).getAttribute();
         }
     }
 
     if (!buf.empty()) {
         // use this as select clause
-        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer:: QUERY APPENDING:"<<buf<<endl);
+        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer:: QUERY APPENDING:" << buf << endl);
         query += buf;
         buf.clear();
     }
@@ -223,8 +214,9 @@ string SQLTextContainer::buildQuery()
      *
      */
 
-    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::WHERE starting with:"<<
-            "\nOnTheFly  constraints ->"<<constraints<<"<-"<<endl );
+    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::WHERE starting with:" <<
+                                                                     "\nOnTheFly  constraints ->" << constraints << "<-"
+                                                                     << endl);
 
     // where is optional and could be empty
     if (!q.getWhere().empty()) {
@@ -245,7 +237,7 @@ string SQLTextContainer::buildQuery()
 
     // ON THE FLY SPECIFIED CONSTRAINTS
 
-    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::constrToWhere mid: "<<buf<<endl );
+    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::constrToWhere mid: " << buf << endl);
     if (!constraints.empty()) {
 
         // on the fly constraints are not empty
@@ -329,13 +321,12 @@ string SQLTextContainer::buildQuery()
      * @todo ADD some 'ORDER BY' other funny options
      */
 
-    BESDEBUG(SQL_NAME, "SQLTextContainer: QUERY: "<<query<<endl);
+    BESDEBUG(SQL_NAME, "SQLTextContainer: QUERY: " << query << endl);
     return query;
 }
 
-string SQLTextContainer::buildCountQuery()
-{
-    BESDEBUG(SQL_NAME, "SQLTextContainer: Building COUNT query: "<<endl);
+string SQLTextContainer::buildCountQuery() {
+    BESDEBUG(SQL_NAME, "SQLTextContainer: Building COUNT query: " << endl);
     SQLQuery &q = getQuery();
 
     /**
@@ -459,7 +450,7 @@ string SQLTextContainer::buildCountQuery()
      * @todo ADD some 'ORDER BY' other funny options
      */
 
-    BESDEBUG(SQL_NAME, "SQLTextContainer: QUERY: "<<query<<endl);
+    BESDEBUG(SQL_NAME, "SQLTextContainer: QUERY: " << query << endl);
     return query;
 }
 
@@ -481,8 +472,7 @@ string SQLTextContainer::buildCountQuery()
  *  so we have to check 7 values as needed.
  *
  */
-std::bitset<_SQLH_DATASET_PARTS_NUM> SQLTextContainer::requirements()
-{
+std::bitset<_SQLH_DATASET_PARTS_NUM> SQLTextContainer::requirements() {
     std::bitset<_SQLH_DATASET_PARTS_NUM> complete;
     complete.set(section_tag);
     complete.set(api);
@@ -492,9 +482,8 @@ std::bitset<_SQLH_DATASET_PARTS_NUM> SQLTextContainer::requirements()
     return complete;
 }
 
-bool SQLTextContainer::read() throw (BESError)
-{
-    BESDEBUG(SQL_NAME, "SQLTextContainer: start reading dataset"<<endl);
+bool SQLTextContainer::read() throw(BESError) {
+    BESDEBUG(SQL_NAME, "SQLTextContainer: start reading dataset" << endl);
     // to read the accessed file
     std::fstream file;
     // FIXME Move the compiles inside the try/catch
@@ -532,10 +521,10 @@ bool SQLTextContainer::read() throw (BESError)
     try {
         regex_t _reg_v, _reg_c, _reg_t, _reg_k, _reg_d;
         if (regcomp(&_reg_v, _SQLH_DATASET_REG_VAR, REG_EXTENDED) != 0
-                || regcomp(&_reg_c, _SQLH_DATASET_REG_COMMENTS, REG_EXTENDED) != 0
-                || regcomp(&_reg_t, _SQLH_DATASET_REG_TAGS, REG_EXTENDED) != 0
-                || regcomp(&_reg_k, _SQLH_DATASET_REG_KEY_VAL, REG_EXTENDED) != 0
-                || regcomp(&_reg_dv, _SQLH_DATASET_REG_DEFVAR, REG_EXTENDED) != 0) {
+            || regcomp(&_reg_c, _SQLH_DATASET_REG_COMMENTS, REG_EXTENDED) != 0
+            || regcomp(&_reg_t, _SQLH_DATASET_REG_TAGS, REG_EXTENDED) != 0
+            || regcomp(&_reg_k, _SQLH_DATASET_REG_KEY_VAL, REG_EXTENDED) != 0
+            || regcomp(&_reg_dv, _SQLH_DATASET_REG_DEFVAR, REG_EXTENDED) != 0) {
             throw BESInternalError("SQLTextContainer: Unable to compile the REGEX", __FILE__, __LINE__);
         }
 
@@ -564,33 +553,33 @@ bool SQLTextContainer::read() throw (BESError)
         while (!file.eof()) {
             std::string row; // line buffer
             getline(file, row);
-            BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: READING ROW->"<<row<<"<-"<<endl );
+            BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: READING ROW->" << row << "<-" << endl);
 
             if (!row.empty()) {
                 // index of matched regex groups
                 regmatch_t indexes[_SQLH_DATASET_MAX_REG_GROUPS];
                 // search for COMMENTS
                 if (regexec(&_reg_c, row.c_str(), (size_t) _SQLH_DATASET_REG_COMMENTS_GROUPS, indexes, 0) == 0) {
-                    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: Comment->"<<row<<"<-"<<endl );
+                    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: Comment->" << row << "<-" << endl);
                 }
 
-                // variable definition
+                    // variable definition
                 else if (regexec(&_reg_dv, row.c_str(), (size_t) _SQLH_DATASET_REG_DEFVAR_GROUPS, indexes, 0) == 0) {
-                    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: defineVariable->"<<row<<"<-"<<endl );
+                    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: defineVariable->" << row << "<-" << endl);
                     defineVariable(vars, row, indexes[_SQLH_DATASET_REG_DEFVAR_KEY_GROUP],
                                    indexes[_SQLH_DATASET_REG_DEFVAR_VAL_GROUP]);
                 }
 
-                // TAGS (which delimit parts)
+                    // TAGS (which delimit parts)
                 else if (regexec(&_reg_t, row.c_str(), (size_t) _SQLH_DATASET_REG_TAGS_GROUPS, indexes, 0) == 0) {
-                    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: partTracking->"<<row<<"<-"<<endl );
+                    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: partTracking->" << row << "<-" << endl);
                     partTracking(_start, new_section, required, complete, reading_part, row,
                                  indexes[_SQLH_DATASET_REG_TAGS_GROUP]);
                 }
 
-                // scan for all other lines
+                    // scan for all other lines
                 else {
-                    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: variableSubstitution->"<<row<<"<-"<<endl );
+                    BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: variableSubstitution->" << row << "<-" << endl);
                     // variable substitution; substitute $NAME$ everywhere on this row.
                     while (regexec(&_reg_v, row.c_str(), (size_t) _SQLH_DATASET_REG_VAR_GROUPS, indexes, 0) == 0) {
                         variableSubstitution(vars, row, indexes[_SQLH_DATASET_REG_VAR_GROUP]);
@@ -598,16 +587,16 @@ bool SQLTextContainer::read() throw (BESError)
 
                     // KEY=VALUE lines
                     if (regexec(&_reg_k, row.c_str(), (size_t) _SQLH_DATASET_REG_KEY_VAL_GROUPS, indexes, 0) == 0) {
-                        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: addKeyValue->"<<row<<"<-"<<endl );
+                        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: addKeyValue->" << row << "<-" << endl);
                         addKeyValue(new_section, required, complete, reading_part, row,
                                     indexes[_SQLH_DATASET_REG_KEY_GROUP], indexes[_SQLH_DATASET_REG_VAL_GROUP]);
                     }
 
-                    // all other lines (free form line)
+                        // all other lines (free form line)
                     else {
-                        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: addFreeForm->"<<row<<"<-"<<endl );
+                        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: addFreeForm->" << row << "<-" << endl);
                         addFreeForm(
-                        //section to add to
+                                //section to add to
                                 new_section,
                                 //actual section completion diary.
                                 complete, reading_part, row);
@@ -626,12 +615,12 @@ bool SQLTextContainer::read() throw (BESError)
         regfree(&_reg_dv);
 
         if (_start) {
-            BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: empty dataset"<<endl );
+            BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: empty dataset" << endl);
             // empty dataset?
             return false;
         }
         else {
-            BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: last addNewSection"<<endl );
+            BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: last addNewSection" << endl);
             addNewSection(new_section, required, complete);
             return true;
         } //final if
@@ -682,11 +671,10 @@ bool SQLTextContainer::read() throw (BESError)
 void SQLTextContainer::partTracking(bool &start, SQLH_DATASET_SECTION &new_section,
                                     std::bitset<_SQLH_DATASET_PARTS_NUM> &required,
                                     std::bitset<_SQLH_DATASET_PARTS_NUM> &complete,
-                                    _SQLH_DATASET_PARTS &reading_part, string & row,
-                                    regmatch_t & tag)
-{
+                                    _SQLH_DATASET_PARTS &reading_part, string &row,
+                                    regmatch_t &tag) {
     BESDEBUG(SQL_NAME_TEST, "Found a tag. row: " << row << " Tag start: "
-            << tag.rm_so << "Tag end: " << tag.rm_eo << endl);
+                                                 << tag.rm_so << "Tag end: " << tag.rm_eo << endl);
 
     // SECTION TAG
     if (row.compare(tag.rm_so, tag.rm_eo - tag.rm_so, _SQLH_DATASET_SECTION_TAG) == 0) {
@@ -698,7 +686,7 @@ void SQLTextContainer::partTracking(bool &start, SQLH_DATASET_SECTION &new_secti
         if (start) //starting condition
             start = false;
         else {
-            BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: addNewSection->"<<row<<"<-"<<endl );
+            BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: addNewSection->" << row << "<-" << endl);
             /**
              * Add the read section to the dataset list
              */
@@ -712,27 +700,27 @@ void SQLTextContainer::partTracking(bool &start, SQLH_DATASET_SECTION &new_secti
 
         reading_part = section_tag; // where we are
 
-        BESDEBUG( SQL_NAME, "SQLTextContainer: Start reading a [section]:"<<endl);
+        BESDEBUG(SQL_NAME, "SQLTextContainer: Start reading a [section]:" << endl);
     }
-    // SELECT TAG
+        // SELECT TAG
     else if (row.compare(tag.rm_so, tag.rm_eo - tag.rm_so, _SQLH_DATASET_SELECT_TAG) == 0) {
         reading_part = select_tag;
-        BESDEBUG( SQL_NAME, "Entering a [select] part: "<<endl);
+        BESDEBUG(SQL_NAME, "Entering a [select] part: " << endl);
     }
-    // FROM TAG
+        // FROM TAG
     else if (row.compare(tag.rm_so, tag.rm_eo - tag.rm_so, _SQLH_DATASET_FROM_TAG) == 0) {
         reading_part = from_tag;
-        BESDEBUG( SQL_NAME, "Entering a [from] part: "<<endl);
+        BESDEBUG(SQL_NAME, "Entering a [from] part: " << endl);
     }
-    // WHERE TAG
+        // WHERE TAG
     else if (row.compare(tag.rm_so, tag.rm_eo - tag.rm_so, _SQLH_DATASET_WHERE_TAG) == 0) {
         reading_part = where_tag;
-        BESDEBUG( SQL_NAME, "Entering a [where] part: "<<endl);
+        BESDEBUG(SQL_NAME, "Entering a [where] part: " << endl);
     }
-    // OTHER TAG
+        // OTHER TAG
     else if (row.compare(tag.rm_so, tag.rm_eo - tag.rm_so, _SQLH_DATASET_OTHER_TAG) == 0) {
         reading_part = other_tag;
-        BESDEBUG( SQL_NAME, "Entering a [other] part: "<<endl);
+        BESDEBUG(SQL_NAME, "Entering a [other] part: " << endl);
     }
 }
 
@@ -748,11 +736,10 @@ void SQLTextContainer::partTracking(bool &start, SQLH_DATASET_SECTION &new_secti
  */
 void SQLTextContainer::addNewSection(SQLH_DATASET_SECTION &new_section,
                                      std::bitset<_SQLH_DATASET_PARTS_NUM> &required,
-                                     std::bitset<_SQLH_DATASET_PARTS_NUM> &complete)
-{
+                                     std::bitset<_SQLH_DATASET_PARTS_NUM> &complete) {
     if (complete.test(where_tag)) {
-        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::addNewSection() Processing WHERE tag"<<endl );
-       // load constraints into the query
+        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::addNewSection() Processing WHERE tag" << endl);
+        // load constraints into the query
         SQL_CONSTRAINT_SET cs = SQLQuery::loadConstraints(_where);
         new_section.query.setWhere(cs);
         //clear _where buffer
@@ -763,7 +750,7 @@ void SQLTextContainer::addNewSection(SQLH_DATASET_SECTION &new_section,
     }
 
     if (complete.test(select_tag)) {
-        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::addNewSection() Processing SELECT tag."<<endl );
+        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::addNewSection() Processing SELECT tag." << endl);
         /**
          * load attribute into the query
          * set is ordered by attribute name to permit search by name
@@ -781,21 +768,22 @@ void SQLTextContainer::addNewSection(SQLH_DATASET_SECTION &new_section,
 
     if (required == (required & complete)) {
         // completion match requirements
-        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer::addNewSection() push_back complete section->"<<new_section.api<<"<-"<<endl );
+        BESDEBUG(SQL_NAME_TEST,
+                 "SQLTextContainer::addNewSection() push_back complete section->" << new_section.api << "<-" << endl);
         // push a copy of the last parsed section
         _dataset->push_back(new_section);
     }
     else {
         BESDEBUG(SQL_NAME_TEST,
-                "SQLTextContainer: Unable to complete dataset scan. "
-                "\nNOTE: could be BigEndian or LittleEndian:"<<
-                "\nCOMPLETITION MAP: "<<complete.to_string()<<
-                "\nREQUIRED MAP:     "<<required.to_string()<<
-                "\nINDEX: \nsection_tag=0\napi=1\nserver=2\nport=3\ndbname=4"
-                "\nuser=5\npass=6\nselect_tag=7\nfrom_tag=8\nwhere_tag=9"
-                "\nother_tag=10"<<endl);
+                 "SQLTextContainer: Unable to complete dataset scan. "
+                 "\nNOTE: could be BigEndian or LittleEndian:" <<
+                                                               "\nCOMPLETITION MAP: " << complete.to_string() <<
+                                                               "\nREQUIRED MAP:     " << required.to_string() <<
+                                                               "\nINDEX: \nsection_tag=0\napi=1\nserver=2\nport=3\ndbname=4"
+                                                               "\nuser=5\npass=6\nselect_tag=7\nfrom_tag=8\nwhere_tag=9"
+                                                               "\nother_tag=10" << endl);
         throw BESError("SQL Handler: Unable to complete dataset scan. Section has missing elements.",
-                BES_SYNTAX_USER_ERROR, __FILE__, __LINE__);
+                       BES_SYNTAX_USER_ERROR, __FILE__, __LINE__);
     }
 }
 
@@ -809,18 +797,19 @@ void SQLTextContainer::addNewSection(SQLH_DATASET_SECTION &new_section,
  * @param val a regmatch_t indexing the variable VALUE limits
  * @see SQLTextDefinitions
  */
-void SQLTextContainer::defineVariable(std::map<string, string> & vars, string & row,
-                                      regmatch_t &key, regmatch_t &val)
-{
-    BESDEBUG(SQL_NAME_TEST, "Storing variable definition: "<<row<<endl);
+void SQLTextContainer::defineVariable(std::map<string, string> &vars, string &row,
+                                      regmatch_t &key, regmatch_t &val) {
+    BESDEBUG(SQL_NAME_TEST, "Storing variable definition: " << row << endl);
 
     BESDEBUG(SQL_NAME_TEST, "Indexes (K for Key, V for Value):" <<
-             " [K start: " << key.rm_so << " end: " << key.rm_eo << "]" <<
-             " [V start: " << val.rm_so << " end: " << val.rm_eo << "]" << endl);
+                                                                " [K start: " << key.rm_so << " end: " << key.rm_eo
+                                                                << "]" <<
+                                                                " [V start: " << val.rm_so << " end: " << val.rm_eo
+                                                                << "]" << endl);
 
     if (key.rm_so == -1 || val.rm_so == -1)
         throw BESInternalError("SQLTextContainer: row doesn't contain a valid variable definition: "
-                + row, __FILE__, __LINE__);
+                               + row, __FILE__, __LINE__);
 
     string var = row.substr(key.rm_so, key.rm_eo - key.rm_so);
     string value = row.substr(val.rm_so, val.rm_eo - val.rm_so);
@@ -828,7 +817,7 @@ void SQLTextContainer::defineVariable(std::map<string, string> & vars, string & 
     // check for malformed declarations (i.e., $VAR$=$VAR$)
     if (var.compare(value) == 0)
         throw BESError("SQL Handler: Unable to define variable with its declaration: " + row,
-                        BES_SYNTAX_USER_ERROR, __FILE__, __LINE__);
+                       BES_SYNTAX_USER_ERROR, __FILE__, __LINE__);
 
     vars.insert(std::make_pair(var, value));
 
@@ -844,11 +833,10 @@ void SQLTextContainer::defineVariable(std::map<string, string> & vars, string & 
  * @param key a regmatch_t indexing the variable
  * @see SQLTextDefinitions
  */
-void SQLTextContainer::variableSubstitution(std::map<string, string> & vars, string & row, regmatch_t &key)
-{
+void SQLTextContainer::variableSubstitution(std::map<string, string> &vars, string &row, regmatch_t &key) {
     BESDEBUG(SQL_NAME_TEST, "Row before substitution: " << row <<
-//		" start: "<< indexes[0].rm_so << " end: " << indexes[0].rm_eo <<
-            " V start: " << key.rm_so << " V end: " << key.rm_eo << endl);
+                                                        //		" start: "<< indexes[0].rm_so << " end: " << indexes[0].rm_eo <<
+                                                        " V start: " << key.rm_so << " V end: " << key.rm_eo << endl);
     string var;
     if (key.rm_so != -1) {
         var = row.substr(key.rm_so, key.rm_eo - key.rm_so);
@@ -857,7 +845,7 @@ void SQLTextContainer::variableSubstitution(std::map<string, string> & vars, str
         throw BESInternalError("SQLTextContainer: row doesn't match->" + row, __FILE__, __LINE__);
     std::map<string, string>::iterator i = vars.find(var);
     if (i != vars.end()) { // variable is defined
-            //substitute
+        //substitute
         string row_buf = row;
         row = row_buf.substr(0, key.rm_so);
         row.append((*i).second);
@@ -865,7 +853,8 @@ void SQLTextContainer::variableSubstitution(std::map<string, string> & vars, str
     }
     else {
         throw BESInternalError("SQLTextContainer: Variable not defined: " + var, __FILE__, __LINE__);
-    } BESDEBUG(SQL_NAME_TEST, "Row  after substitution: " << row <<endl );
+    }
+    BESDEBUG(SQL_NAME_TEST, "Row  after substitution: " << row << endl);
 }
 
 /**
@@ -887,9 +876,8 @@ void SQLTextContainer::variableSubstitution(std::map<string, string> & vars, str
  */
 void SQLTextContainer::addFreeForm(SQLH_DATASET_SECTION &new_section,
                                    std::bitset<_SQLH_DATASET_PARTS_NUM> &complete,
-                                   _SQLH_DATASET_PARTS &reading_part, string & row)
-{
-    BESDEBUG(SQL_NAME_TEST, "FreeForm row: "<<row<<endl);
+                                   _SQLH_DATASET_PARTS &reading_part, string &row) {
+    BESDEBUG(SQL_NAME_TEST, "FreeForm row: " << row << endl);
     /**
      * Reading the dataset:
      * # 7
@@ -904,23 +892,23 @@ void SQLTextContainer::addFreeForm(SQLH_DATASET_SECTION &new_section,
 
     if (reading_part == other_tag) {
         BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: bad string format in OTHER part, skipping "
-        "line: "<<row<<" should be in KEY=VALUE format."<<endl);
+                                "line: " << row << " should be in KEY=VALUE format." << endl);
     }
-    /**
-     * Reading the dataset:
-     * # 3
-     * ...
-     * # Note that all the lines into the
-     * # [section] part are in the form:
-     * # RESERVED_KEY = VALUE
-     * ...
-     */
-    // if reading part [section]
+        /**
+         * Reading the dataset:
+         * # 3
+         * ...
+         * # Note that all the lines into the
+         * # [section] part are in the form:
+         * # RESERVED_KEY = VALUE
+         * ...
+         */
+        // if reading part [section]
     else if (reading_part == section_tag) {
         throw BESError("SQLTextContainer: free form lines in section part are not "
-                "permitted. Error on row: " + row, BES_SYNTAX_USER_ERROR, __FILE__, __LINE__);
+                       "permitted. Error on row: " + row, BES_SYNTAX_USER_ERROR, __FILE__, __LINE__);
     }
-    // if reading part [select]
+        // if reading part [select]
     else if (reading_part == select_tag) {
         /**
          * The check is done at the end
@@ -935,7 +923,7 @@ void SQLTextContainer::addFreeForm(SQLH_DATASET_SECTION &new_section,
          */
         complete.set(select_tag, true);
     }
-    // if reading part [from]
+        // if reading part [from]
     else if (reading_part == from_tag) {
         new_section.query.addFrom(" " + row);
         /**
@@ -944,7 +932,7 @@ void SQLTextContainer::addFreeForm(SQLH_DATASET_SECTION &new_section,
          */
         complete.set(from_tag, true);
     }
-    // if reading part [where]
+        // if reading part [where]
     else if (reading_part == where_tag) {
         /**
          * The check is done at the end
@@ -962,7 +950,7 @@ void SQLTextContainer::addFreeForm(SQLH_DATASET_SECTION &new_section,
     else {
         // this is not a trivial error
         // SKIP this line
-        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: bad string format, skipping: "<<row<<endl);
+        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: bad string format, skipping: " << row << endl);
     }
 }
 
@@ -981,14 +969,15 @@ void SQLTextContainer::addFreeForm(SQLH_DATASET_SECTION &new_section,
 void SQLTextContainer::addKeyValue(SQLH_DATASET_SECTION &new_section,
                                    std::bitset<_SQLH_DATASET_PARTS_NUM> &required,
                                    std::bitset<_SQLH_DATASET_PARTS_NUM> &complete,
-                                   _SQLH_DATASET_PARTS &reading_part, string & row,
-                                   regmatch_t &_key, regmatch_t &_val)
-{
-    BESDEBUG(SQL_NAME_TEST, "Found line in the form KEY=VALUE: "<<row<<endl);
+                                   _SQLH_DATASET_PARTS &reading_part, string &row,
+                                   regmatch_t &_key, regmatch_t &_val) {
+    BESDEBUG(SQL_NAME_TEST, "Found line in the form KEY=VALUE: " << row << endl);
 
     BESDEBUG(SQL_NAME_TEST, "Indexes (K for Key, V for Value):" <<
-             "[K start: " << _key.rm_so << " end: " << _key.rm_eo << "]" <<
-             "[V start: " << _val.rm_so << " end: " << _val.rm_eo << "]" << endl);
+                                                                "[K start: " << _key.rm_so << " end: " << _key.rm_eo
+                                                                << "]" <<
+                                                                "[V start: " << _val.rm_so << " end: " << _val.rm_eo
+                                                                << "]" << endl);
 
     string key;
     string val;
@@ -1001,9 +990,9 @@ void SQLTextContainer::addKeyValue(SQLH_DATASET_SECTION &new_section,
 
     // if reading part [section]
     if (reading_part == section_tag) {
-        BESDEBUG(SQL_NAME_TEST, "API"<<endl);
+        BESDEBUG(SQL_NAME_TEST, "API" << endl);
         if (key.compare(_SQLH_DATASET_API) == 0) {
-            BESDEBUG(SQL_NAME_TEST, "NEW API key=val found->"<<row<<endl);
+            BESDEBUG(SQL_NAME_TEST, "NEW API key=val found->" << row << endl);
             new_section.api = val;
             complete.set(api, true);
 
@@ -1052,30 +1041,31 @@ void SQLTextContainer::addKeyValue(SQLH_DATASET_SECTION &new_section,
         }
         else {
             // is this a trivial error ?
-            throw BESError("SQL Handler: Only reserved keywords are allowed in the 'section' part of the dataset file. \n"
+            throw BESError(
+                    "SQL Handler: Only reserved keywords are allowed in the 'section' part of the dataset file. \n"
                     + string("The line where the error occurred: ") + row, BES_SYNTAX_USER_ERROR, __FILE__, __LINE__);
         }
     }
-    /**
-     * Reading the dataset rules:
-     * # 7
-     * # optionally each section may contain:
-     * ...
-     * # [OTHER]
-     * # all the entries in this tag should
-     * # be in this form:
-     * # key = value
-     * # They are inserted into a map which
-     * # the driver may handle.
-     * # Here you can specify connection
-     * # parameters or sql query string.
-     */
-    // if reading part [other]
+        /**
+         * Reading the dataset rules:
+         * # 7
+         * # optionally each section may contain:
+         * ...
+         * # [OTHER]
+         * # all the entries in this tag should
+         * # be in this form:
+         * # key = value
+         * # They are inserted into a map which
+         * # the driver may handle.
+         * # Here you can specify connection
+         * # parameters or sql query string.
+         */
+        // if reading part [other]
     else if (reading_part == other_tag) {
         new_section.other.insert(std::make_pair(key, val));
         complete.set(other_tag, true);
     }
-    // if reading part [select]
+        // if reading part [select]
     else if (reading_part == select_tag) {
         /**
          * Is strange
@@ -1093,7 +1083,7 @@ void SQLTextContainer::addKeyValue(SQLH_DATASET_SECTION &new_section,
          */
         complete.set(select_tag, true);
     }
-    // if reading part [from]
+        // if reading part [from]
     else if (reading_part == from_tag) {
         /**
          * @todo check if could be strange
@@ -1108,7 +1098,7 @@ void SQLTextContainer::addKeyValue(SQLH_DATASET_SECTION &new_section,
          */
         complete.set(from_tag, true);
     }
-    // if reading part [where]
+        // if reading part [where]
     else if (reading_part == where_tag) {
         //new_section->where.insert(row);
         /**
@@ -1128,6 +1118,6 @@ void SQLTextContainer::addKeyValue(SQLH_DATASET_SECTION &new_section,
         complete.set(where_tag, true);
     }
     else {
-        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: String outside of parts, skipping: "<<row<<endl);
+        BESDEBUG(SQL_NAME_TEST, "SQLTextContainer: String outside of parts, skipping: " << row << endl);
     }
 }

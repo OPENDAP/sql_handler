@@ -45,6 +45,7 @@
 
 // _SQLH_CONT_TIME_DIF && regex
 #include "SQLContainerDefinitions.h"
+
 #if 0
 // FREE SQLContainer by the SQLQuery
 #include <string>
@@ -57,6 +58,7 @@
 #endif
 
 #include <utils/Clone.h>
+
 /**
  * @brief Abstract class which defines methods used by the
  * SQLHandler to explore and get data from a dataset.
@@ -89,7 +91,7 @@
  * functionality into whatever concrete classes use it.
  *
  */
-class SQLContainer: public BESFileContainer, smart::Clone<SQLContainer> {
+class SQLContainer : public BESFileContainer, smart::Clone<SQLContainer> {
 public:
 
     /**
@@ -97,8 +99,7 @@ public:
      * to a SharedPtr<>
      * @see SQLDataHandlerInterface
      */
-    virtual SQLContainer* clone()
-    {
+    virtual SQLContainer *clone() {
         return ptr_duplicate();
     }
 
@@ -107,10 +108,10 @@ public:
      * to a SharedPtr<>
      * @see SQLDataHandlerInterface
      */
-    virtual SQLContainer* create() throw (std::bad_alloc)
-    {
+    virtual SQLContainer *create() throw(std::bad_alloc) {
         return ptr_duplicate();
     }
+
 #if 0
     /**
      * moved into the SQLTextContainer Implementation
@@ -126,6 +127,7 @@ public:
      */
     virtual SQLQuery & getQuery()=0;
 #endif
+
     /**
      * @brief effectively build the query string
      *
@@ -133,7 +135,7 @@ public:
      * attributes order
      * @see SQLTextContainer
      */
-    virtual string buildQuery()=0;
+    virtual string buildQuery() = 0;
 
     /**
       * @brief Build a COUNT query
@@ -141,7 +143,7 @@ public:
       * returned by buildQuery().
       * @return Use this query to get the row count
       */
-    virtual string buildCountQuery()=0;
+    virtual string buildCountQuery() = 0;
 
     /**
      * Index other (optional) strings.
@@ -156,13 +158,13 @@ public:
      * your own 'buf' modification method.
      * @see SQLTextContainer::getOther()
      */
-    virtual bool getOther(string & buf)=0;
+    virtual bool getOther(string &buf) = 0;
 
     /**
      * @brief return the actual API
      * from the dataset's API list.
      */
-    virtual string &getApi()=0;
+    virtual string &getApi() = 0;
 
     /**
      * @brief get the string representing
@@ -170,28 +172,31 @@ public:
      * to the actual selected DB
      * @return a string reference
      */
-    virtual string &getUser()=0;
+    virtual string &getUser() = 0;
+
     /**
      * @brief get the string representing
      * the password which should be used to
      * access to the actual selected DB
      * @return a string reference
      */
-    virtual string &getPass()=0;
+    virtual string &getPass() = 0;
+
     /**
      * @brief get the string representing
      * the server which should be used to
      * access to the actual selected DB
      * @return a string reference
      */
-    virtual string &getServer()=0;
+    virtual string &getServer() = 0;
+
     /**
      * @brief get the string representing
      * the password which should be used to
      * access to the actual selected DB
      * @return a string reference
      */
-    virtual string &getPort()=0;
+    virtual string &getPort() = 0;
 
     /**
      * @brief get the string representing
@@ -200,7 +205,7 @@ public:
      * selected DB
      * @return a string reference
      */
-    virtual string &getDBName()=0;
+    virtual string &getDBName() = 0;
 
     /**
      * CURSOR/LIST OPERATIONs
@@ -212,7 +217,7 @@ public:
      * <br>In a list from 0 to (n-1)
      * - reset() put cursor to 0
      */
-    virtual void reset()=0;
+    virtual void reset() = 0;
 
     /**
      * Clear the internal structures used
@@ -222,7 +227,7 @@ public:
      * called again.
      * @see setup()
      */
-    virtual void clear()=0;
+    virtual void clear() = 0;
 
     /**
      * Tell if the end of the list is reached.
@@ -234,12 +239,12 @@ public:
      * - empty() return true
      * @see setNext()
      */
-    virtual bool end()=0;
+    virtual bool end() = 0;
 
     /**
      * @brief Tell if the section list is empty.
      */
-    virtual bool empty()=0;
+    virtual bool empty() = 0;
 
     /**
      * @brief returns true if there is next section
@@ -253,7 +258,7 @@ public:
      * - ALL the successive calls to the setNext()
      * must return false until reset() is call
      */
-    virtual bool setNext()=0;
+    virtual bool setNext() = 0;
 
     /**
      * CONTAINER OPERATIONs
@@ -267,8 +272,7 @@ public:
      * file and set to the initial status the 'cursor'.
      * @return true if setup is successfully done.
      */
-    bool setup()
-    {
+    bool setup() {
         if (!empty())
             clear(); // clear before update
         if ((_isReady = (read() && init()))) { // read
@@ -281,8 +285,7 @@ public:
         return _isReady;
     }
 
-    bool isReady() const
-    {
+    bool isReady() const {
         return _isReady;
     }
 
@@ -322,7 +325,7 @@ public:
 
     /** @brief pure abstract method to duplicate this instances of BESContainer
      */
-    virtual SQLContainer * ptr_duplicate()=0;
+    virtual SQLContainer *ptr_duplicate() = 0;
 
 private:
     /**
@@ -332,7 +335,7 @@ private:
      * @throws BESInternalError if parse encounter
      * unrecoverable syntax errors
      */
-    virtual bool read() throw (BESError)=0;
+    virtual bool read() throw(BESError) = 0;
 
     /**
      * @brief Initialize time modification of the

@@ -64,8 +64,7 @@ protected:
      * outside of this class
      * @param SQLContainer *
      */
-    inline void setParams(SQLContainer *c)
-    {
+    inline void setParams(SQLContainer *c) {
 #if 0
         // connector don't have to handle SQLContainer
         if (_container)
@@ -80,8 +79,7 @@ protected:
      * values using getNext() (or getType).
      *
      */
-    void setReady(bool state = true)
-    {
+    void setReady(bool state = true) {
         _isReady = state;
     }
 
@@ -95,14 +93,14 @@ protected:
      *
      * @see connect(SQLContainer)
      */
-    virtual bool connect()=0;
+    virtual bool connect() = 0;
 
 public:
 
     /**
      * @brief Close connection
      */
-    virtual bool close()=0;
+    virtual bool close() = 0;
 
     /**
      * @brief Uses informations obtained by
@@ -116,7 +114,7 @@ public:
      * @see SQLTypeConnector::setCols()
      * @see SQLTypeConnector::setRows()
      */
-    virtual bool query()=0;
+    virtual bool query() = 0;
 
     /**
      * @brief Tell the ActionFactory
@@ -126,8 +124,7 @@ public:
      * @return true if connector is
      * ready, false otherwise
      */
-    virtual const bool & isReady() const
-    {
+    virtual const bool &isReady() const {
         return _isReady;
     }
 
@@ -136,22 +133,20 @@ public:
      * the SQLContainer passed to
      * connect(SQLContainer &)
      */
-    inline SQLContainer & getParams()
-    {
+    inline SQLContainer &getParams() {
 #if 1
         if (_container)
             return *_container;
         else
             throw BESInternalError("Unable to get NULL reference to paramethers",
-            __FILE__, __LINE__);
+                                   __FILE__, __LINE__);
 #endif
     }
 
     /**
      * @brief Connect to DB
      */
-    bool connect(SQLContainer *c)
-    {
+    bool connect(SQLContainer *c) {
 #if 0
         // connector don't have to handle SQLContainer
         if (_container)
@@ -161,8 +156,7 @@ public:
         return connect();
     }
 
-    virtual ~SQLHandleConnector()
-    {
+    virtual ~SQLHandleConnector() {
 #if 0
         // connector don't have to handle SQLContainer
         if (_container)
@@ -170,8 +164,7 @@ public:
         _container=0;
 #endif
         BESDEBUG(SQL_NAME, "DELETING: SQLHandleConnector" << std::endl);
-    }
-    ;
+    };
 
     /**
      * @brief Constructor
@@ -180,11 +173,9 @@ public:
      * connections and to build the SQL query.
      */
     SQLHandleConnector() :
-            _isReady(false), _container(NULL)
-    {
+            _isReady(false), _container(NULL) {
         BESDEBUG(SQL_NAME, "CREATING: SQLHandleConnector" << std::endl);
-    }
-    ;
+    };
 
     /**
      * @brief Constructor
@@ -193,8 +184,7 @@ public:
      * connections and to build the SQL query.
      */
     SQLHandleConnector(SQLContainer *c) :
-            _isReady(false), _container(c)
-    {
+            _isReady(false), _container(c) {
         BESDEBUG(SQL_NAME, "CREATING: SQLHandleConnector" << std::endl);
     }
 };

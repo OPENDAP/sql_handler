@@ -26,6 +26,7 @@
 
 #ifndef SQLINTERNALFATALERROR_H_
 #define SQLINTERNALFATALERROR_H_
+
 #include "SQLDefinitions.h"
 
 #include <BESError.h>
@@ -69,22 +70,20 @@
  * @see SQLAction
  * @see SQLErrorManager
  */
-class SQLInternalFatalError: public BESError {
+class SQLInternalFatalError : public BESError {
 protected:
-    SQLInternalFatalError()
-    {
-    }
-public:
-    SQLInternalFatalError(const std::string &msg, const std::string &file, unsigned int line) :
-            BESError(msg, _SQLH_INTERNAL_FATAL_ERROR, file, line)
-    {
-    }
-    virtual ~SQLInternalFatalError()
-    {
+    SQLInternalFatalError() {
     }
 
-    virtual void dump(std::ostream &strm) const
-    {
+public:
+    SQLInternalFatalError(const std::string &msg, const std::string &file, unsigned int line) :
+            BESError(msg, _SQLH_INTERNAL_FATAL_ERROR, file, line) {
+    }
+
+    virtual ~SQLInternalFatalError() {
+    }
+
+    virtual void dump(std::ostream &strm) const {
         strm << "SQLInternalFatalError::dump - (" << (void *) this << ")" << std::endl;
         BESIndent::Indent();
         BESError::dump(strm);

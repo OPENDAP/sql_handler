@@ -80,109 +80,109 @@
  * @see getErrorFactory
  *
  */
-class OPENDAP_CLASSErrorFactoryComponent :public SQLErrorFactory<ERROR_TYPE,MSG_TYPE>{
+class OPENDAP_CLASSErrorFactoryComponent : public SQLErrorFactory<ERROR_TYPE, MSG_TYPE> {
 public:
 #if 0
-	/**
-	 * @brief utility function which return a copy of an ErrorFactory
-	 * @param conn a reference to the OPENDAP_CLASSConnector
-	 * @return a copy of a SQLErrorFactory of this driver
-	 */
-	static SQLErrorFactory<ERROR_TYPE,MSG_TYPE>
-	getErrorFactory(OPENDAP_CLASSConnector &conn){
-		return SQLErrorFactory<ERROR_TYPE,MSG_TYPE>(conn,&_getActions,&_stop);
-	}
+    /**
+     * @brief utility function which return a copy of an ErrorFactory
+     * @param conn a reference to the OPENDAP_CLASSConnector
+     * @return a copy of a SQLErrorFactory of this driver
+     */
+    static SQLErrorFactory<ERROR_TYPE,MSG_TYPE>
+    getErrorFactory(OPENDAP_CLASSConnector &conn){
+        return SQLErrorFactory<ERROR_TYPE,MSG_TYPE>(conn,&_getActions,&_stop);
+    }
 #endif
 
-	OPENDAP_CLASSErrorFactoryComponent(OPENDAP_CLASSConnector &conn):
-		SQLErrorFactory<ERROR_TYPE,MSG_TYPE>(conn,&_getActions,&_stop){}
+    OPENDAP_CLASSErrorFactoryComponent(OPENDAP_CLASSConnector &conn) :
+            SQLErrorFactory<ERROR_TYPE, MSG_TYPE>(conn, &_getActions, &_stop) {}
 
-	/**
-	 * @brief copy constructor
-	 * @param a reference to an OPENDAP_CLASSErrorFactoryComponent
-	 */
-	OPENDAP_CLASSErrorFactoryComponent(OPENDAP_CLASSErrorFactoryComponent &c):
-			SQLErrorFactory<ERROR_TYPE,MSG_TYPE>(c.getConnector(),
-					&c._getActions,
-					&c._stop){}
+    /**
+     * @brief copy constructor
+     * @param a reference to an OPENDAP_CLASSErrorFactoryComponent
+     */
+    OPENDAP_CLASSErrorFactoryComponent(OPENDAP_CLASSErrorFactoryComponent &c) :
+            SQLErrorFactory<ERROR_TYPE, MSG_TYPE>(c.getConnector(),
+                                                  &c._getActions,
+                                                  &c._stop) {}
 
-	virtual ~OPENDAP_CLASSErrorFactoryComponent(){};
+    virtual ~OPENDAP_CLASSErrorFactoryComponent() {};
 
 private:
 
-	/**
-	 * @brief This is the getActions method implementation
-	 *
-	 * This method will be passed to the SQLErrorFactory
-	 * constructor.
-	 * It returns the statically defined list of actions
-	 * (ActionsLists) to do on the incoming error code.
-	 * Defined template parameters indicates the types used
-	 * by the actions in the lists:
-	 * - MSG_TYPE is the type passed as IN (as input argument
-	 * of the action)
-	 * - void is the returned type of the action
-	 * <br>NOTE: default actions defined in SQLDefaultErrorAction
-	 * returns void
-	 *
-	 * @see SQLDefaultErrorAction
-	 * @see OUT* SQLAction<IN,OUT>::action(IN*)
-	 *
-	 * @param error the error code representing the actual
-	 * status.
-	 * @return SQLActionList
-	 *
-	 */
-	static SQLActionList<MSG_TYPE,void>& _getActions(ERROR_TYPE * error);
+    /**
+     * @brief This is the getActions method implementation
+     *
+     * This method will be passed to the SQLErrorFactory
+     * constructor.
+     * It returns the statically defined list of actions
+     * (ActionsLists) to do on the incoming error code.
+     * Defined template parameters indicates the types used
+     * by the actions in the lists:
+     * - MSG_TYPE is the type passed as IN (as input argument
+     * of the action)
+     * - void is the returned type of the action
+     * <br>NOTE: default actions defined in SQLDefaultErrorAction
+     * returns void
+     *
+     * @see SQLDefaultErrorAction
+     * @see OUT* SQLAction<IN,OUT>::action(IN*)
+     *
+     * @param error the error code representing the actual
+     * status.
+     * @return SQLActionList
+     *
+     */
+    static SQLActionList<MSG_TYPE, void> &_getActions(ERROR_TYPE *error);
 
-	/**
-	 * @brief The method which represent the stop condition
-	 * of the ActionFactory execution flow it usually return
-	 * true when the input error code represents a no_error
-	 * condition.
-	 *
-	 * @param error the actual status code
-	 * @return bool 'true' if ActionFactory should stop to
-	 * call ERROR_CODE getCode(), this will result in:
-	 * At the end of the actual executing ActionList exit.
-	 */
-	static bool _stop(ERROR_TYPE * error);
+    /**
+     * @brief The method which represent the stop condition
+     * of the ActionFactory execution flow it usually return
+     * true when the input error code represents a no_error
+     * condition.
+     *
+     * @param error the actual status code
+     * @return bool 'true' if ActionFactory should stop to
+     * call ERROR_CODE getCode(), this will result in:
+     * At the end of the actual executing ActionList exit.
+     */
+    static bool _stop(ERROR_TYPE *error);
 
-	/**
-	 * @note THESE ARE ONLY EXAMPLES WHICH YOU MAY
-	 * SAFELY DELETE.
-	 *
-	 * @note Be sure to read this class comments
-	 * to chose your best class base.
-	 * This example uses static actions which may
-	 * be difficult to use, if so, try Dynamic or
-	 * Object base class as explained on top of this
-	 * component.
-	 */
+    /**
+     * @note THESE ARE ONLY EXAMPLES WHICH YOU MAY
+     * SAFELY DELETE.
+     *
+     * @note Be sure to read this class comments
+     * to chose your best class base.
+     * This example uses static actions which may
+     * be difficult to use, if so, try Dynamic or
+     * Object base class as explained on top of this
+     * component.
+     */
 
-	/**
-	 * defines the type of ACTION which will be used to
-	 * build static action lists.
-	 * <br>Note: this defines a function pointer.
-	 */
-	typedef SQLStaticAction<MSG_TYPE>::ACTION _list_type;
+    /**
+     * defines the type of ACTION which will be used to
+     * build static action lists.
+     * <br>Note: this defines a function pointer.
+     */
+    typedef SQLStaticAction<MSG_TYPE>::ACTION _list_type;
 
-	static _list_type __error[];
+    static _list_type __error[];
 
-	// 1 SUCCESS,
-	static SQLStaticActionList<MSG_TYPE,void> _success;
+    // 1 SUCCESS,
+    static SQLStaticActionList<MSG_TYPE, void> _success;
 
-	// 2 SUCCESS_WITH_INFO,
-	static SQLStaticActionList<MSG_TYPE,void> _info;
+    // 2 SUCCESS_WITH_INFO,
+    static SQLStaticActionList<MSG_TYPE, void> _info;
 
-	// 3 NO_DATA,
-	static SQLStaticActionList<MSG_TYPE,void> _no_data;
+    // 3 NO_DATA,
+    static SQLStaticActionList<MSG_TYPE, void> _no_data;
 
-	// 4 ERROR,
-	static SQLStaticActionList<MSG_TYPE,void> _error;
+    // 4 ERROR,
+    static SQLStaticActionList<MSG_TYPE, void> _error;
 
-	// 5 INVALID
-	static SQLStaticActionList<MSG_TYPE,void> _invalid;
+    // 5 INVALID
+    static SQLStaticActionList<MSG_TYPE, void> _invalid;
 };
 
 #endif /* OPENDAP_CLASSERRORFACTORYCOMPONENT_H_ */

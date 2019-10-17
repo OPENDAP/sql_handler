@@ -31,6 +31,7 @@
 #include <string>
 // check()
 #include <typeinfo>
+
 #if 0
 // libdap
 #include <Byte.h>
@@ -50,6 +51,7 @@
 #include <Sequence.h>
 #include <Grid.h>
 #endif
+
 #include <BaseType.h>
 
 // BES
@@ -61,7 +63,7 @@
 #include "SQLCastAction.h"
 #include "connector/SQLSimpleConnector.h"
 
-#if __CLONE__==1
+#if __CLONE__ == 1
 #include "utils/Clone.h"
 #endif
 // FIXME Removed jhrg 10/1/14 using namespace libdap;
@@ -86,31 +88,31 @@ template<class SQL_TYPE, class ODBC_TYPE = void, class DAP_TYPE = libdap::BaseTy
         class OUT = void> // the cast output type
 // default is 'void' which use buf2val
 // change this if you want to use set_val
-class SQLBaseType: public DAP_TYPE
-#if __CLONE__==1
-,public smart::Clone<SQLBaseType<SQL_TYPE,ODBC_TYPE,DAP_TYPE,OUT> >
-{
-public:
-
-    /**
-     * @brief This is the implementation of the
-     * Clone interface.
-     * @return a pointer to a clone of this object
-     */
-    virtual SQLBaseType<SQL_TYPE,ODBC_TYPE,DAP_TYPE,OUT>* create()
-    throw (std::bad_alloc)
+class SQLBaseType : public DAP_TYPE
+#if __CLONE__ == 1
+    ,public smart::Clone<SQLBaseType<SQL_TYPE,ODBC_TYPE,DAP_TYPE,OUT> >
     {
-        return this->clone();
-    };
+    public:
 
-    /**
-     * @brief This is the implementation of the
-     * Clone interface.
-     * @return a pointer to a clone of this object
-     */
-    virtual SQLBaseType<SQL_TYPE,ODBC_TYPE,DAP_TYPE,OUT> *clone() {
-        return new SQLBaseType<SQL_TYPE,ODBC_TYPE,DAP_TYPE,OUT>(*this);
-    }
+        /**
+         * @brief This is the implementation of the
+         * Clone interface.
+         * @return a pointer to a clone of this object
+         */
+        virtual SQLBaseType<SQL_TYPE,ODBC_TYPE,DAP_TYPE,OUT>* create()
+        throw (std::bad_alloc)
+        {
+            return this->clone();
+        };
+
+        /**
+         * @brief This is the implementation of the
+         * Clone interface.
+         * @return a pointer to a clone of this object
+         */
+        virtual SQLBaseType<SQL_TYPE,ODBC_TYPE,DAP_TYPE,OUT> *clone() {
+            return new SQLBaseType<SQL_TYPE,ODBC_TYPE,DAP_TYPE,OUT>(*this);
+        }
 #else
 {
 public:
@@ -120,15 +122,14 @@ public:
      * @brief this method applies the member
      * action to cast the getNext coming value
      */
-    OUT * cast()
-    {
+    OUT *cast() {
         if (_connector.isReady()) {
             ODBC_TYPE *t = _connector.getNext();
             return _cast.action(t);
         }
         else
             throw BESInternalFatalError("Unable to cast the next object using a NOT READY connector",
-            __FILE__, __LINE__);
+                                        __FILE__, __LINE__);
     }
 
     /**
@@ -139,7 +140,7 @@ public:
      * copy
      *
      */
-    SQLBaseType(SQLBaseType<SQL_TYPE, ODBC_TYPE, DAP_TYPE, OUT> & obj) :
+    SQLBaseType(SQLBaseType<SQL_TYPE, ODBC_TYPE, DAP_TYPE, OUT> &obj) :
             DAP_TYPE(obj), _connector(obj.getConnector()), // initialize the connector reference
             _col(obj.getCol()), // initialize position
             _cast(obj.getCast()) // initialize the CastAction
@@ -160,10 +161,12 @@ public:
          * that column!
          */
         BESDEBUG(SQL_NAME,
-                "COPING: SQLBaseType with:\n" "\n using connector: "<< "\n on column: "<<obj.getConnector().getCol()<< "\n using passed position:" "\n name: "<<obj.getConnector().getColName(obj.getCol())<< "\n on column: "<<obj.getCol()<<endl);
+                 "COPING: SQLBaseType with:\n" "\n using connector: " << "\n on column: " << obj.getConnector().getCol()
+                                                                      << "\n using passed position:" "\n name: "
+                                                                      << obj.getConnector().getColName(obj.getCol())
+                                                                      << "\n on column: " << obj.getCol() << endl);
 
-    }
-    ;
+    };
 
     /**
      * @brief Constructor for complex/compound type.
@@ -175,7 +178,7 @@ public:
      * reused or can be deleted.
      * @note this should be used to build complex or compound types
      */
-    SQLBaseType(SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> &conn, libdap::BaseType * obj,
+    SQLBaseType(SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> &conn, libdap::BaseType *obj,
                 typename SQLCastAction<ODBC_TYPE, OUT>::CAST cast_function, bool reuse = true) :
             DAP_TYPE(conn.getColName(conn.getCol()), obj), _connector(conn), // initialize the connector reference
             _col(conn.getCol()), // initialize position
@@ -185,10 +188,10 @@ public:
         check();
 
         BESDEBUG(SQL_NAME,
-                "SQLBaseType: CLONING ComplexObject with:\n" "\n name: "<<conn.getColName(_col)<<"\n on column: "<<_col<<endl);
+                 "SQLBaseType: CLONING ComplexObject with:\n" "\n name: " << conn.getColName(_col) << "\n on column: "
+                                                                          << _col << endl);
 
-    }
-    ;
+    };
 
     /**
      * @brief Constructor for simple type.
@@ -208,13 +211,12 @@ public:
         check();
 
         BESDEBUG(SQL_NAME,
-                "SQLBaseType: Creating SimpleObject with:\n name: " <<conn.getColName(conn.getCol())<<"\n on column: "<<conn.getCol()<<endl);
-    }
-    ;
+                 "SQLBaseType: Creating SimpleObject with:\n name: " << conn.getColName(conn.getCol())
+                                                                     << "\n on column: " << conn.getCol() << endl);
+    };
 
-    virtual ~SQLBaseType()
-    {
-        BESDEBUG(SQL_NAME, "DELETING: SQLBaseType"<<endl);
+    virtual ~SQLBaseType() {
+        BESDEBUG(SQL_NAME, "DELETING: SQLBaseType" << endl);
     }
 
 private:
@@ -246,30 +248,25 @@ private:
 
     // not usable
     SQLBaseType() :
-            _col(0), _connector(0)
-    {
+            _col(0), _connector(0) {
         throw BESInternalFatalError("Trying to instantiate using a not permitted constructor!",
-        __FILE__, __LINE__);
-    }
-    ;
+                                    __FILE__, __LINE__);
+    };
 
 protected:
 
     /**
      * @brief returns a reference to the CastAction
      */
-    SQLCastAction<ODBC_TYPE, OUT> & getCast()
-    {
+    SQLCastAction<ODBC_TYPE, OUT> &getCast() {
         return _cast;
     }
 
-    SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> & getConnector()
-    {
+    SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> &getConnector() {
         return _connector;
     }
 
-    size_t getCol()
-    {
+    size_t getCol() {
         return _col;
     }
 
@@ -294,36 +291,37 @@ protected:
 #if 0
     throw(BESError)
 #endif
-{    try {
-        // NOTE:
-        // IF PARENT of DAP_TYPE is 'BaseType'
+    {
+        try {
+            // NOTE:
+            // IF PARENT of DAP_TYPE is 'BaseType'
 #if 0
-        // I think that the RTTI information may not be present in some
-        // cases - some compiler/OS combinations. This seems to fail
-        // on Linux. jhrg 9/4/12
-        // FIXME
-        if (!typeid(BaseType).before(typeid(DAP_TYPE)))
-        throw BESInternalFatalError(
-                "Trying to instantiate a NOT BaseType derived object!",
-                __FILE__,__LINE__);
+            // I think that the RTTI information may not be present in some
+            // cases - some compiler/OS combinations. This seems to fail
+            // on Linux. jhrg 9/4/12
+            // FIXME
+            if (!typeid(BaseType).before(typeid(DAP_TYPE)))
+            throw BESInternalFatalError(
+                    "Trying to instantiate a NOT BaseType derived object!",
+                    __FILE__,__LINE__);
 #endif
+        }
+        catch (bad_typeid) {
+            BESDEBUG(SQL_NAME, "BadTypeID");
+            throw BESInternalFatalError(
+                    "Trying to instantiate a BadTypeID pointer!",
+                    __FILE__, __LINE__);
+        }
+        catch (BESInternalFatalError &e) {
+            BESDEBUG(SQL_NAME, "BESInternalFatalError");
+            throw e;
+        }
+        catch (...) {
+            BESDEBUG(SQL_NAME, "Generic exception");
+            throw BESInternalFatalError("Generic exception!",
+                                        __FILE__, __LINE__);
+        }
     }
-    catch (bad_typeid) {
-        BESDEBUG(SQL_NAME,"BadTypeID");
-        throw BESInternalFatalError(
-                "Trying to instantiate a BadTypeID pointer!",
-                __FILE__,__LINE__);
-    }
-    catch (BESInternalFatalError &e) {
-        BESDEBUG(SQL_NAME,"BESInternalFatalError");
-        throw e;
-    }
-    catch (...) {
-        BESDEBUG(SQL_NAME,"Generic exception");
-        throw BESInternalFatalError("Generic exception!",
-                __FILE__,__LINE__);
-    }
-}
 
 };
 

@@ -63,14 +63,11 @@ template<class SQL_TYPE, // connector
         class OUT_TYPE2 = libdap::BaseType> // SQLTypeFactory
 class SQLBuildDAS {
 private:
-    SQLBuildDAS()
-    {
-    }
-    ;
-    virtual ~SQLBuildDAS()
-    {
-    }
-    ;
+    SQLBuildDAS() {
+    };
+
+    virtual ~SQLBuildDAS() {
+    };
 public:
 #if 0
     static bool
@@ -143,14 +140,11 @@ class SQLBuildDAS<SQL_TYPE, // connector
         SQL_TYPE, // SPECIALIZED
         libdap::BaseType> { // SPECIALIZED
 private:
-    SQLBuildDAS()
-    {
-    }
-    ;
-    virtual ~SQLBuildDAS()
-    {
-    }
-    ;
+    SQLBuildDAS() {
+    };
+
+    virtual ~SQLBuildDAS() {
+    };
 public:
 
     /**
@@ -174,9 +168,8 @@ public:
      * @see SQLObjectTypeFactory
      * @see ODBCFactoryComponent
      */
-    static bool sql_build_das(SQLDataHandlerInterface &dhi, SQLTypeFactoryComponent<SQL_TYPE, ODBC_TYPE>& fc,
-                              SQLSimpleConnector<SQL_TYPE, ODBC_TYPE>& connector)
-    {
+    static bool sql_build_das(SQLDataHandlerInterface &dhi, SQLTypeFactoryComponent<SQL_TYPE, ODBC_TYPE> &fc,
+                              SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> &connector) {
         /**
          * Build the TypeFactory which will be our
          * BaseType factory.
@@ -213,10 +206,9 @@ public:
      * @see ODBCFactoryComponent
      */
     static bool sql_build_das(SQLDataHandlerInterface &dhi,
-                              SQLActionFactory<ERROR_TYPE, MSG_TYPE, OUT_TYPE1>& error_factory,
-                              SQLTypeFactoryComponent<SQL_TYPE, ODBC_TYPE>& fc,
-                              SQLSimpleConnector<SQL_TYPE, ODBC_TYPE>& connector)
-    {
+                              SQLActionFactory<ERROR_TYPE, MSG_TYPE, OUT_TYPE1> &error_factory,
+                              SQLTypeFactoryComponent<SQL_TYPE, ODBC_TYPE> &fc,
+                              SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> &connector) {
         /**
          * Build the TypeFactory which will be our
          * BaseType factory.
@@ -250,13 +242,12 @@ public:
      * @see ODBCFactoryComponent
      */
     static bool sql_build_das(SQLDataHandlerInterface &dhi,
-                              SQLActionFactory<ERROR_TYPE, MSG_TYPE, OUT_TYPE1>& error_factory,
-                              SQLActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType>& type_factory,
-                              SQLConnector<SQL_TYPE, ODBC_TYPE, ERROR_TYPE, MSG_TYPE>& connector)
-    {
+                              SQLActionFactory<ERROR_TYPE, MSG_TYPE, OUT_TYPE1> &error_factory,
+                              SQLActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType> &type_factory,
+                              SQLConnector<SQL_TYPE, ODBC_TYPE, ERROR_TYPE, MSG_TYPE> &connector) {
 
         return sql_build_das(dhi, &error_factory, // pass as !NULL pointer
-                type_factory, connector);
+                             type_factory, connector);
     }
 
 private:
@@ -269,11 +260,10 @@ private:
      *
      */
     static bool sql_build_das(SQLDataHandlerInterface &dhi,
-                              SQLActionFactory<ERROR_TYPE, MSG_TYPE, OUT_TYPE1>* error_factory,
-                              SQLActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType>& type_factory,
-                              SQLSimpleConnector<SQL_TYPE, ODBC_TYPE>& connector)
-    {
-        BESDEBUG(SQL_NAME, "SQLBuildDAS: Start build_das"<<endl);
+                              SQLActionFactory<ERROR_TYPE, MSG_TYPE, OUT_TYPE1> *error_factory,
+                              SQLActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType> &type_factory,
+                              SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> &connector) {
+        BESDEBUG(SQL_NAME, "SQLBuildDAS: Start build_das" << endl);
         BESResponseObject *response = dhi.getResponseObject();
 
         BESDASResponse *bdas = dynamic_cast<BESDASResponse *>(response);
@@ -284,19 +274,19 @@ private:
 
         libdap::DAS *das = bdas->get_das();
 
-        BESDEBUG(SQL_NAME, "SQLBuildDAS: Connecting "<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDAS: Connecting " << endl);
         SQLConnectAction<ERROR_TYPE, MSG_TYPE, OUT_TYPE1>::connect(
-        // SQLHandleConnector
+                // SQLHandleConnector
                 connector,
                 // get container from storage
                 dhi.getSQLContainer(),
                 // check action to do on errors
                 error_factory); // try to connect
-        BESDEBUG(SQL_NAME, "SQLBuildDAS: Connected"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDAS: Connected" << endl);
 
-        BESDEBUG(SQL_NAME, "SQLBuildDAS: Executing query"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDAS: Executing query" << endl);
         SQLQueryAction<ERROR_TYPE, MSG_TYPE, OUT_TYPE1>::query(connector, error_factory);
-        BESDEBUG(SQL_NAME, "SQLBuildDAS: Query successfully done"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDAS: Query successfully done" << endl);
 
         // This code was using dhi.getBesContainer()->get_symbolic_name()
         // for the attribute table name. I changed the name of the Sequence
@@ -315,15 +305,16 @@ private:
          * @note No value is read here, only DAP object build.
          */
         for (size_t i = 0; i < connector.getCols(); i++) {
-            BESDEBUG(SQL_NAME, "SQLBuildDAS: Doing actions on column: "<<i<< " of: "<<connector.getCols()<<endl);
+            BESDEBUG(SQL_NAME, "SQLBuildDAS: Doing actions on column: " << i << " of: " << connector.getCols() << endl);
             libdap::BaseType *bt = NULL;
 
-            BESDEBUG(SQL_NAME, "SQLBuildDAS: getting next object"<<endl);
+            BESDEBUG(SQL_NAME, "SQLBuildDAS: getting next object" << endl);
             bt = SQLNextTypeAction<SQL_TYPE, ODBC_TYPE, ERROR_TYPE, MSG_TYPE, OUT_TYPE1>::nextType(connector,
-                    type_factory, error_factory);
+                                                                                                   type_factory,
+                                                                                                   error_factory);
 
             if (bt) { // if 'bt' is created
-                BESDEBUG(SQL_NAME, "SQLBuildDAS: done"<<endl);
+                BESDEBUG(SQL_NAME, "SQLBuildDAS: done" << endl);
                 // connector.getColDesc(i) returns a string that contains information
                 // about the value of the column. Since it has spaces, I think it
                 // needed double quotes. Below is the original code which was assigning
@@ -348,9 +339,9 @@ private:
             }
         }
         // closing connection
-        BESDEBUG(SQL_NAME, "SQLBuildDAS: Closing connection"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDAS: Closing connection" << endl);
         SQLCloseAction<ERROR_TYPE, MSG_TYPE, OUT_TYPE1>::close(connector, error_factory);
-        BESDEBUG(SQL_NAME, "SQLBuildDAS: Successfully closed"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDAS: Successfully closed" << endl);
 
         return true;
     }

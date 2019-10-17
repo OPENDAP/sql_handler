@@ -30,17 +30,17 @@
 #include <exception>
 
 namespace smart {
-	/**
-	 * @brief The template interface to implement
-	 * to make clone of objects.
-	 * @see SQLAction
-	 */
-	template <class T>
-	struct Clone{
-		virtual T* clone() =0;//throw (std::bad_alloc)=0;
+    /**
+     * @brief The template interface to implement
+     * to make clone of objects.
+     * @see SQLAction
+     */
+    template<class T>
+    struct Clone {
+        virtual T *clone() = 0;//throw (std::bad_alloc)=0;
 
-		virtual T* create()throw (std::bad_alloc)=0;
-	};
+        virtual T *create() throw(std::bad_alloc) = 0;
+    };
 } // namespace smart
 
 #endif /* CLONE_H_ */

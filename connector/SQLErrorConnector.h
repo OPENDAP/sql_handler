@@ -44,55 +44,53 @@
  * @see SQLDefaultErrorFactory
  *
  */
-template <class ERROR_TYPE, class MSG_TYPE/*=ERROR_TYPE*/>
+template<class ERROR_TYPE, class MSG_TYPE/*=ERROR_TYPE*/>
 class SQLErrorConnector {
-	public:
-		/**
-		 * @brief set the actual connection status
-		 * and return the related code.
-		 * @return an object representing status.
-		 * NOTE: consider that you can make
-		 * ERROR_TYPE==MSG_TYPE if the ODBC driver
-		 * in use don't use coded error status.
-		 */
-		virtual ERROR_TYPE * getError()=0;
+public:
+    /**
+     * @brief set the actual connection status
+     * and return the related code.
+     * @return an object representing status.
+     * NOTE: consider that you can make
+     * ERROR_TYPE==MSG_TYPE if the ODBC driver
+     * in use don't use coded error status.
+     */
+    virtual ERROR_TYPE *getError() = 0;
 
-		/**
-		 * @brief Given an error code this method
-		 * should return a MSG_TYPE object which
-		 * represent a decoded informative object;
-		 * Typically this object is a string.
-		 * @param a coded error given by getError()
-		 * @return a decoded error message which will
-		 * be passed as argument to the ErrorList
-		 * actions.
-		 * @see SQLErrorManager
-		 */
-		virtual MSG_TYPE * getMsg(ERROR_TYPE * error_code)=0;
+    /**
+     * @brief Given an error code this method
+     * should return a MSG_TYPE object which
+     * represent a decoded informative object;
+     * Typically this object is a string.
+     * @param a coded error given by getError()
+     * @return a decoded error message which will
+     * be passed as argument to the ErrorList
+     * actions.
+     * @see SQLErrorManager
+     */
+    virtual MSG_TYPE *getMsg(ERROR_TYPE *error_code) = 0;
 
-		/**
-		 * NOTE: this method has its implementation
-		 * in the SQLHandleConnector sister abstract class.
-		 * Anyway you may implement this method if you want
-		 * to implement separated Type and Handle Connector
-		 * @see SQLHandleConnector::setReady()
-		 * @see SQLHandleConnector::isReady()
-		 */
-		virtual const bool & isReady()const=0;
+    /**
+     * NOTE: this method has its implementation
+     * in the SQLHandleConnector sister abstract class.
+     * Anyway you may implement this method if you want
+     * to implement separated Type and Handle Connector
+     * @see SQLHandleConnector::setReady()
+     * @see SQLHandleConnector::isReady()
+     */
+    virtual const bool &isReady() const = 0;
 
-		/**
-		 * @brief dtor
-		 */
-		virtual ~SQLErrorConnector(){
-TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLErrorConnector"<<endl);
-		}
+    /**
+     * @brief dtor
+     */
+    virtual ~SQLErrorConnector() {
+    }
 
-		/**
-		 * @brief Constructor
-		 */
-		SQLErrorConnector(){
-TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLErrorConnector"<<endl);
-		}
-	};
+    /**
+     * @brief Constructor
+     */
+    SQLErrorConnector() {
+    }
+};
 
 #endif /* SQLERRORCONNECTOR_H_ */

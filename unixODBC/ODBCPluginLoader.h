@@ -35,31 +35,31 @@
  * @brief SQLPluginLoader is the SQL counterpart of a BESAbstractModule
  * and is used to load, initialize and terminate an SQLPlugin.
  */
-class ODBCPluginLoader : public BESAbstractModule{
+class ODBCPluginLoader : public BESAbstractModule {
 public:
-	/**
-	 * @brief ctor
-	 */
-	ODBCPluginLoader():BESAbstractModule(){};
+    /**
+     * @brief ctor
+     */
+    ODBCPluginLoader() : BESAbstractModule() {};
 
-	/**
-	 * @brief dtor
-	 */
-	virtual ~ODBCPluginLoader(){};
+    /**
+     * @brief dtor
+     */
+    virtual ~ODBCPluginLoader() {};
 
-	/**
-	 * @brief initialize SQL components.
-	 * Register ODBCPlugin into the SQLRequestHandler
-	 */
-    virtual void		initialize( const string &modname );
+    /**
+     * @brief initialize SQL components.
+     * Register ODBCPlugin into the SQLRequestHandler
+     */
+    virtual void initialize(const string &modname);
 
     /**
      * @brief de-register SQLHandler components from the
      * De-register ODBCPlugin from the SQLRequestHandler
      */
-    virtual void		terminate( const string &modname );
+    virtual void terminate(const string &modname);
 
-    virtual void		dump( ostream &strm ) const ;
+    virtual void dump(ostream &strm) const;
 };
 
 #endif /* ODBCPLUGINLOADER_H_ */

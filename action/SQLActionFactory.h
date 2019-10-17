@@ -61,110 +61,108 @@
  * @see SQLDynamicActionFactory
  * @see SQLActionManager
  */
-template <class CODE_TYPE, class ARGS_TYPE, class OUT_TYPE=void>
+template<class CODE_TYPE, class ARGS_TYPE, class OUT_TYPE=void>
 class SQLActionFactory {
 
 public:
-	/**
-	 * @brief get the list of actions to do
-	 * corresponding to the passed error code.
-	 * @param the error code
-	 * @return the list of SQLActions to do
-	 */
-	virtual SQLActionList<ARGS_TYPE,OUT_TYPE> &
-		getActions(CODE_TYPE * code)
-			throw (SQLInternalError)=0;
+    /**
+     * @brief get the list of actions to do
+     * corresponding to the passed error code.
+     * @param the error code
+     * @return the list of SQLActions to do
+     */
+    virtual SQLActionList<ARGS_TYPE, OUT_TYPE> &
+    getActions(CODE_TYPE *code)
+    throw(SQLInternalError) = 0;
 
-	/**
-	 * @brief This method have to be implemented
-	 * using the specific ODBC API in use.
-	 * This should return a result (typically a
-	 * string) from an error code (typically an
-	 * int).
-	 * @param the error code
-	 * @return the message object returned by
-	 * the DB corresponding to the error code
-	 * (passed in 'err').
-	 *
-	 * The resulting MSG_TYPE will be passed to
-	 * the ActionList as argument so if you want
-	 * to implement actions by your self, be sure
-	 * to set:
-	 * SQLAction<IN == MSG_TYPE,
-	 * 						[OUT is optional]>
-	 * Note also that for each MSG_TYPE returned
-	 * an entire ActionList is executed using the
-	 * same MSG_TYPE message.
-	 *
-	 * You could also use your own MSG_TYPE
-	 * type passing to Actions an object to work
-	 * on. In this case you can implement
-	 * your own Actions starting from SQLAction.
-	 * NOTE: this is not a need since
-	 * SQLxxxAction accept MSG_TYPE.
-	 *
-	 * NOTE: if your ODBC API don't use this
-	 * method you could use an ERROR_TYPE
-	 * equals to the MSG_TYPE implementing
-	 * this method simply returning the input
-	 * 'err' variable.
-	 */
-	virtual ARGS_TYPE * getArgs(CODE_TYPE *code) =0;
+    /**
+     * @brief This method have to be implemented
+     * using the specific ODBC API in use.
+     * This should return a result (typically a
+     * string) from an error code (typically an
+     * int).
+     * @param the error code
+     * @return the message object returned by
+     * the DB corresponding to the error code
+     * (passed in 'err').
+     *
+     * The resulting MSG_TYPE will be passed to
+     * the ActionList as argument so if you want
+     * to implement actions by your self, be sure
+     * to set:
+     * SQLAction<IN == MSG_TYPE,
+     * 						[OUT is optional]>
+     * Note also that for each MSG_TYPE returned
+     * an entire ActionList is executed using the
+     * same MSG_TYPE message.
+     *
+     * You could also use your own MSG_TYPE
+     * type passing to Actions an object to work
+     * on. In this case you can implement
+     * your own Actions starting from SQLAction.
+     * NOTE: this is not a need since
+     * SQLxxxAction accept MSG_TYPE.
+     *
+     * NOTE: if your ODBC API don't use this
+     * method you could use an ERROR_TYPE
+     * equals to the MSG_TYPE implementing
+     * this method simply returning the input
+     * 'err' variable.
+     */
+    virtual ARGS_TYPE *getArgs(CODE_TYPE *code) = 0;
 
-	/**
-	 * Pointer to the method used to get
-	 * codes.
-	 * This is probably a function coming from
-	 * your ODBC API implementation of the
-	 * ERROR_TYPE SQLConnector::getError()
-	 *
-	 * NOTE:
-	 * Never return a NULL pointer.
-	 * NOTE:
-	 * ERROR_TYPE shouldn't contain *
-	 *
-	 *
-	 * We can change this behavior but we will
-	 * lost the possibility to run the 'last'
-	 * application_list associated to the stop
-	 * error code.
-	 * @see STOP_ACTION() method for details.
-	 * carlo cancellieri 06-06-2010
-	 *
-	 */
-	virtual CODE_TYPE *getCode() =0;
+    /**
+     * Pointer to the method used to get
+     * codes.
+     * This is probably a function coming from
+     * your ODBC API implementation of the
+     * ERROR_TYPE SQLConnector::getError()
+     *
+     * NOTE:
+     * Never return a NULL pointer.
+     * NOTE:
+     * ERROR_TYPE shouldn't contain *
+     *
+     *
+     * We can change this behavior but we will
+     * lost the possibility to run the 'last'
+     * application_list associated to the stop
+     * error code.
+     * @see STOP_ACTION() method for details.
+     * carlo cancellieri 06-06-2010
+     *
+     */
+    virtual CODE_TYPE *getCode() = 0;
 
-	/**
-	 * @brief This method is used by the
-	 * SQLExceptionManager to stop requesting
-	 * for next error to the DB server.
-	 *
-	 * Note that you can still apply an
-	 * action_list to this error code.
-	 * Actions execution will stop at the and
-	 * of that list.
-	 *
-	 * @param the error code corresponding
-	 * to the normal status (or equivalent).
-	 * @return true if next call of getCode
-	 * shouldn't be done, stopping actions.
-	 *
-	 */
-	virtual bool stop(CODE_TYPE * code) =0;
+    /**
+     * @brief This method is used by the
+     * SQLExceptionManager to stop requesting
+     * for next error to the DB server.
+     *
+     * Note that you can still apply an
+     * action_list to this error code.
+     * Actions execution will stop at the and
+     * of that list.
+     *
+     * @param the error code corresponding
+     * to the normal status (or equivalent).
+     * @return true if next call of getCode
+     * shouldn't be done, stopping actions.
+     *
+     */
+    virtual bool stop(CODE_TYPE *code) = 0;
 
-	/**
-	 * @brief Dtor
-	 */
-	virtual ~SQLActionFactory(){
-TESTDEBUG(SQL_NAME_TEST,"DELETED: SQLActionFactory"<<endl);
-	};
+    /**
+     * @brief Dtor
+     */
+    virtual ~SQLActionFactory() {
+    };
 
-	/**
-	 * @brief Constructor
-	 */
-	SQLActionFactory<CODE_TYPE,ARGS_TYPE,OUT_TYPE>(){
-TESTDEBUG(SQL_NAME_TEST,"CREATED: SQLActionFactory"<<endl);
-	};
+    /**
+     * @brief Constructor
+     */
+    SQLActionFactory<CODE_TYPE, ARGS_TYPE, OUT_TYPE>() {
+    }
 
 };
 

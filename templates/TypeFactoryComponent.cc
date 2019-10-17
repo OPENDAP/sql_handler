@@ -27,6 +27,7 @@
 #include "OPENDAP_CLASSTypeFactoryComponent.h"
 
 #include <BESInternalError.h>
+
 /**
  * THIS IS ONLY AN EXAMPLE
  * YOU MAY WANT TO DELETE THIS
@@ -42,24 +43,24 @@
  * read from the Connector and
  * convert in the right format.
  */
-static void*
-cast_func(void*val){
+static void *
+cast_func(void *val) {
 
-	BESDEBUG(OPENDAP_CLASS_NAME,"casting a VOID"<<endl);
-	/**
-	 * if OPENDAP_CLASS connector directly
-	 * bind fields to variables and no
-	 * conversion is needed.
-	 *
-	 * @note: if val is reused for example
-	 * if it is the connector buffer the
-	 * SimpleType reuse constructor flag
-	 * should be set to true (as default).
-	 *
-	 * @see ODBCConnector
-	 * @see ODBCTypeFactoryComponent
-	 */
-	return val;
+    BESDEBUG(OPENDAP_CLASS_NAME, "casting a VOID" << endl);
+    /**
+     * if OPENDAP_CLASS connector directly
+     * bind fields to variables and no
+     * conversion is needed.
+     *
+     * @note: if val is reused for example
+     * if it is the connector buffer the
+     * SimpleType reuse constructor flag
+     * should be set to true (as default).
+     *
+     * @see ODBCConnector
+     * @see ODBCTypeFactoryComponent
+     */
+    return val;
 }
 
 /**
@@ -78,20 +79,17 @@ cast_func(void*val){
  * convert to the right format.
  *
  */
-static string*
-cast_string(void*val){
-
-	TESTDEBUG(OPENDAP_CLASS_NAME,"casting a STRING"<<endl);
-
-	string *ret=new string();
-	ret->assign(((char*)val));
-	/**
-	 *  val is reused so we don't delete it
-	 *  instead 'ret' is a new copy which can
-	 *  be safely deleted (once used) so we call
-	 *  constructor with reuse==false;
-	 */
-	return ret;
+static string *
+cast_string(void *val) {
+    string *ret = new string();
+    ret->assign(((char *) val));
+    /**
+     *  val is reused so we don't delete it
+     *  instead 'ret' is a new copy which can
+     *  be safely deleted (once used) so we call
+     *  constructor with reuse==false;
+     */
+    return ret;
 }
 
 /**
@@ -101,46 +99,45 @@ cast_string(void*val){
  */
 libdap::BaseType *
 OPENDAP_CLASSTypeFactoryComponent::action(SQL_TYPE *type)
-		throw (SQLInternalError,SQLInternalFatalError)
-{
-	/**
-	 * THIS IS ONLY AN EXAMPLE YOU MAY WANT TO DELETE THIS CONSTRUCT IF NOT USED
-	 *
-	 * @note: YOU DON'T HAVE TO READ THE VALUE FROM THE CONNECTOR HERE.
-	 *
-	 * THIS FUNCTION ONLY PROVIDES CAST FACTORY FUNCTIONALITY.
-	 */
-	switch(*type){
-	case 1:	// assume 1 represent a string
-		/**
-		 * the template parameter 'string' indicates the
-		 * output type of the cast function and should be
-		 * set to the internal libdap::BaseType derived object
-		 * type.
-		 * F.e.: Here libdap::Str uses a buffer of string type
-		 */
-		return new SQLSimpleType<SQL_TYPE,ODBC_TYPE,Str,string>(getConnector(),&cast_string,false);
-	case 2: // assume 2 represent an integer
-		/**
-		 * the default template parameter void (here not added
-		 * since it is the default one) indicates the
-		 * output type of the cast function and should be
-		 * set to the internal libdap::BaseType derived object
-		 * type.
-		 * F.e.: Here libdap::Int uses a buffer of int type
-		 * So the cast function should return an int* casted
-		 * to a void*.
-		 * The SQLSimpleType will use the val2buf(void*)
-		 * function to set the internal buffer
-		 */
-		return new SQLSimpleType<SQL_TYPE,ODBC_TYPE,Int32>(getConnector(),&cast_func,true);
-		/**
-		 * ...
-		 */
-	default:
-		throw SQLInternalFatalError(
-			"SQLTypeFactory not recognized the SQL_TYPE is searching for",
-				__FILE__,__LINE__);
-	}
-	return NULL; // to avoid warning
+throw(SQLInternalError, SQLInternalFatalError) {
+    /**
+     * THIS IS ONLY AN EXAMPLE YOU MAY WANT TO DELETE THIS CONSTRUCT IF NOT USED
+     *
+     * @note: YOU DON'T HAVE TO READ THE VALUE FROM THE CONNECTOR HERE.
+     *
+     * THIS FUNCTION ONLY PROVIDES CAST FACTORY FUNCTIONALITY.
+     */
+    switch (*type) {
+        case 1:    // assume 1 represent a string
+            /**
+             * the template parameter 'string' indicates the
+             * output type of the cast function and should be
+             * set to the internal libdap::BaseType derived object
+             * type.
+             * F.e.: Here libdap::Str uses a buffer of string type
+             */
+            return new SQLSimpleType<SQL_TYPE, ODBC_TYPE, Str, string>(getConnector(), &cast_string, false);
+        case 2: // assume 2 represent an integer
+            /**
+             * the default template parameter void (here not added
+             * since it is the default one) indicates the
+             * output type of the cast function and should be
+             * set to the internal libdap::BaseType derived object
+             * type.
+             * F.e.: Here libdap::Int uses a buffer of int type
+             * So the cast function should return an int* casted
+             * to a void*.
+             * The SQLSimpleType will use the val2buf(void*)
+             * function to set the internal buffer
+             */
+            return new SQLSimpleType<SQL_TYPE, ODBC_TYPE, Int32>(getConnector(), &cast_func, true);
+            /**
+             * ...
+             */
+        default:
+            throw SQLInternalFatalError(
+                    "SQLTypeFactory not recognized the SQL_TYPE is searching for",
+                    __FILE__, __LINE__);
+    }
+    return NULL; // to avoid warning
 }

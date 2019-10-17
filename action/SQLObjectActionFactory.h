@@ -59,92 +59,88 @@
  * @see SQLFactoryComponent::action()
  * @see SQLActionFactory
  */
-template <class CODE_TYPE,				// connector && ActionFactory
-			class ARGS_TYPE			// connector && ActionFactory
-			class OUT_TYPE	= void >
+template<class CODE_TYPE,                // connector && ActionFactory
+        class ARGS_TYPE            // connector && ActionFactory
+        class OUT_TYPE    = void>
 class SQLObjectActionFactory :
-	public SQLActionFactory<CODE_TYPE,ARGS_TYPE,OUT_TYPE> {
+        public SQLActionFactory<CODE_TYPE, ARGS_TYPE, OUT_TYPE> {
 public:
 
-	/**
-	 * @brief get the list of actions to do
-	 * corresponding to the passed error code.
-	 * @param the code
-	 * @return the list of SQLActions to do
-	 */
-	virtual SQLActionList<CODE_TYPE,ARGS_TYPE> &
-		getActions(CODE_TYPE * code) throw (SQLInternalError){
-		return (*_getActions.action(code));
+    /**
+     * @brief get the list of actions to do
+     * corresponding to the passed error code.
+     * @param the code
+     * @return the list of SQLActions to do
+     */
+    virtual SQLActionList<CODE_TYPE, ARGS_TYPE> &
+    getActions(CODE_TYPE *code) throw(SQLInternalError) {
+        return (*_getActions.action(code));
 
-	}
+    }
 
-	/**
-	 * @brief no argument mapping needed since this is
-	 * statically coded into the getDapType action.
-	 */
-	virtual ARGS_TYPE * getArgs(CODE_TYPE *code){
-		return _getArgs.action(code);
-	};
+    /**
+     * @brief no argument mapping needed since this is
+     * statically coded into the getDapType action.
+     */
+    virtual ARGS_TYPE *getArgs(CODE_TYPE *code) {
+        return _getArgs.action(code);
+    };
 
-	/**
-	 * @brief returns the actual column type as SQL_TYPE.
-	 */
-	virtual CODE_TYPE * getCode(){
-		return _getCode.action(NULL);
-	};
+    /**
+     * @brief returns the actual column type as SQL_TYPE.
+     */
+    virtual CODE_TYPE *getCode() {
+        return _getCode.action(NULL);
+    };
 
-	/**
-	 * @brief Stop condition.
-	 * Actually objects are requested once at time
-	 */
-	virtual bool stop(CODE_TYPE * code){
-		return _stop.action(code);
-	}
+    /**
+     * @brief Stop condition.
+     * Actually objects are requested once at time
+     */
+    virtual bool stop(CODE_TYPE *code) {
+        return _stop.action(code);
+    }
 
-	/**
-	 * @brief constructor
-	 * @param a reference to a SQLObjectAction
-	 * 	implementing the getArgs function
-	 * @param a reference to a SQLObjectAction
-	 * 	implementing the getCode function
-	 * @param a reference to a SQLObjectAction
-	 * 	implementing the getActions function
-	 * @param a reference to a SQLObjectAction
-	 * 	implementing the stop function
-	 *
-	 * SQLTypeFactoryComponent.
-	 */
-	SQLObjectActionFactory(
-			SQLObjectAction<CODE_TYPE,ARGS_TYPE> &_getArgs,
-			SQLObjectAction<void,CODE_TYPE> &getCode,
-			SQLObjectAction<CODE_TYPE,SQLActionList<CODE_TYPE,ARGS_TYPE> > &getActions,
-			SQLObjectAction<CODE_TYPE,bool> &stop):
-		SQLActionFactory<CODE_TYPE,ARGS_TYPE,OUT_TYPE>(),
-		_getArgs(getArgs),
-		_getCode(getCode),
-		_getActions(getActions),
-		_stop(stop)
-	{
-TESTDEBUG(SQL_NAME_TEST,"CREATED: OBJECT TYPE FACTORY"<<endl);
-	}
+    /**
+     * @brief constructor
+     * @param a reference to a SQLObjectAction
+     * 	implementing the getArgs function
+     * @param a reference to a SQLObjectAction
+     * 	implementing the getCode function
+     * @param a reference to a SQLObjectAction
+     * 	implementing the getActions function
+     * @param a reference to a SQLObjectAction
+     * 	implementing the stop function
+     *
+     * SQLTypeFactoryComponent.
+     */
+    SQLObjectActionFactory(
+            SQLObjectAction <CODE_TYPE, ARGS_TYPE> &_getArgs,
+            SQLObjectAction<void, CODE_TYPE> &getCode,
+            SQLObjectAction <CODE_TYPE, SQLActionList<CODE_TYPE, ARGS_TYPE>> &getActions,
+            SQLObjectAction<CODE_TYPE, bool> &stop) :
+            SQLActionFactory<CODE_TYPE, ARGS_TYPE, OUT_TYPE>(),
+            _getArgs(getArgs),
+            _getCode(getCode),
+            _getActions(getActions),
+            _stop(stop) {
+    }
 
-	virtual ~SQLObjectTypeFactory(){
-TESTDEBUG(SQL_NAME_TEST,"DELETED: OBJECT TYPE FACTORY"<<endl);
-	}
+    virtual ~SQLObjectTypeFactory() {
+    }
 
-	SQLConnector<CODE_TYPE,ARGS_TYPE,OUT_TYPE> & getConnector(){
-		return _connector;
-	}
+    SQLConnector <CODE_TYPE, ARGS_TYPE, OUT_TYPE> &getConnector() {
+        return _connector;
+    }
 
 private:
-	SQLAction<CODE_TYPE,ARGS_TYPE> &_getArgs;
-	SQLAction<void,CODE_TYPE> &_getCode;
-	SQLAction<CODE_TYPE,size_t> &_getActions;
-	SQLAction<CODE_TYPE,bool> &_stop;
+    SQLAction<CODE_TYPE, ARGS_TYPE> &_getArgs;
+    SQLAction<void, CODE_TYPE> &_getCode;
+    SQLAction<CODE_TYPE, size_t> &_getActions;
+    SQLAction<CODE_TYPE, bool> &_stop;
 
-	SQLObjectActionFactory(){};
+    SQLObjectActionFactory() {};
 };
-
 
 
 #endif /* SQLOBJECTACTIONFACTORY_H_ */

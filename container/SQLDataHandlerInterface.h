@@ -26,12 +26,14 @@
 
 #ifndef SQLDATAHANDLERINTERFACE_H_
 #define SQLDATAHANDLERINTERFACE_H_
+
 #include <BESDataHandlerInterface.h>
 #include <BESInternalFatalError.h>
 
 #include "SQLContainerFactory.h"
 
 #include <BESResponseHandler.h>
+
 class BESResponseHandler;
 
 /**
@@ -61,24 +63,18 @@ private:
 #endif
 
     SQLDataHandlerInterface() :
-            _dhi(NULL), _sql_container(NULL)
-    {
-    }
-    ;
+            _dhi(NULL), _sql_container(NULL) {
+    };
 public:
 
     /**
      * @brief Constructor
      */
     SQLDataHandlerInterface(BESDataHandlerInterface &dhi) :
-            _dhi(&dhi), _sql_container(SQLContainerFactory::getContainer(dhi))
-    {
-        TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLDataHandlerInterface"<<endl);
+            _dhi(&dhi), _sql_container(SQLContainerFactory::getContainer(dhi)) {
     }
-    ;
 
 #if 0
-
     /**
      * WORKING BUT DANGEROUS
      * (with command "show version" BES set a null dhi.container
@@ -98,38 +94,31 @@ public:
             throw BESInternalFatalError(
                     "Unable to build SQLDataHandlerInterface with a NULL SQLContainer",
                     __FILE__,__LINE__)) {
-        TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLDataHandlerInterface"<<endl);
     };
 #endif
 
-    virtual ~SQLDataHandlerInterface()
-    {
+    virtual ~SQLDataHandlerInterface() {
         if (_sql_container)
             delete _sql_container;
         _sql_container = 0;
-        TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLDataHandlerInterface"<<endl);
     }
 
-    BESDataHandlerInterface &getBesHandler()
-    {
+    BESDataHandlerInterface &getBesHandler() {
         return *_dhi;
     }
 
-    BESContainer *getBesContainer()
-    {
+    BESContainer *getBesContainer() {
         return _dhi->container;
     }
 
-    BESResponseObject *getResponseObject()
-    {
+    BESResponseObject *getResponseObject() {
         return _dhi->response_handler->get_response_object();
     }
 
     /**
      * @brief returns the SQLContainer
      */
-    SQLContainer *getSQLContainer()
-    {
+    SQLContainer *getSQLContainer() {
         return _sql_container;
     }
 

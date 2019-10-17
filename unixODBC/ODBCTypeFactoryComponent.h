@@ -60,43 +60,44 @@
 /**
  * @brief unixODBC implementation of the SQLTypeFactoryComponent
  */
-class ODBCTypeFactoryComponent :public SQLTypeFactoryComponent<SQL_TYPE,ODBC_TYPE>{
+class ODBCTypeFactoryComponent : public SQLTypeFactoryComponent<SQL_TYPE, ODBC_TYPE> {
 public:
-#if __CLONE__==1
+#if __CLONE__ == 1
 
-	/**
-	 * @brief This is the implementation of the
-	 * Clone interface.
-	 * @return a pointer to a clone of this object
-	 */
-	virtual SQLAction<SQL_TYPE,libdap::BaseType> *clone(){
-		return new ODBCTypeFactoryComponent(*this);
-	}
+    /**
+     * @brief This is the implementation of the
+     * Clone interface.
+     * @return a pointer to a clone of this object
+     */
+    virtual SQLAction<SQL_TYPE,libdap::BaseType> *clone(){
+        return new ODBCTypeFactoryComponent(*this);
+    }
 #endif
 
-	/**
-	 * @brief default constructor
-	 * @param conn a reference to a SimpleConnector
-	 */
-	ODBCTypeFactoryComponent(SQLSimpleConnector<SQL_TYPE,ODBC_TYPE> &conn) :
-		SQLTypeFactoryComponent<SQL_TYPE,ODBC_TYPE>(conn){};
+    /**
+     * @brief default constructor
+     * @param conn a reference to a SimpleConnector
+     */
+    ODBCTypeFactoryComponent(SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> &conn) :
+            SQLTypeFactoryComponent<SQL_TYPE, ODBC_TYPE>(conn) {};
 
-	/**
-	 * @brief copy constructor
-	 * @param t is a reference to a constant instance of this class
-	 */
-	ODBCTypeFactoryComponent(const ODBCTypeFactoryComponent &t) :
-		SQLTypeFactoryComponent<SQL_TYPE,ODBC_TYPE>(t){};
+    /**
+     * @brief copy constructor
+     * @param t is a reference to a constant instance of this class
+     */
+    ODBCTypeFactoryComponent(const ODBCTypeFactoryComponent &t) :
+            SQLTypeFactoryComponent<SQL_TYPE, ODBC_TYPE>(t) {};
 
 
-	virtual ~ODBCTypeFactoryComponent(){};
+    virtual ~ODBCTypeFactoryComponent() {};
 
-	/**
-	 * @brief Provide action method implementation using DTM components.
-	 */
-	libdap::BaseType *action(SQL_TYPE *type);
+    /**
+     * @brief Provide action method implementation using DTM components.
+     */
+    libdap::BaseType *action(SQL_TYPE *type);
+
 #if 0
-	// throw (SQLInternalError,SQLInternalFatalError);
+    // throw (SQLInternalError,SQLInternalFatalError);
 #endif
 };
 
