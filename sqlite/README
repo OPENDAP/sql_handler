@@ -1,0 +1,35 @@
+
+This is a skeleton implementation for a SQLite interface for the
+hyrax sql handler. This code was made using the bin/besCreateSQLPlugin
+script in the sql handler sources. The script makes headers only,
+but it's easy to see how these should be implemented by comparing
+them with the ODBC code in unixODBC (see the note below, however).
+
+The sql handler can load a number of APIs and select between them
+using a parameter in the 'data' file it uses to define the database.
+For example, for the ODBC API used to connect with postgres, the
+data file looks like (with some editing - original is data/postgresql.sql):
+
+    [section]
+    api=odbc
+    server=test
+
+    [select]
+    a, b, c
+
+    [from]
+    sqlh_table
+
+To choose an API other than 'odbc', change the line 'api=odbc' to
+'api=sqlite', et cetera. NB: The database is 'test' and the table
+is 'sqlh_table.' The database for ODBC is defined in the odbc.ini
+file.
+
+Note: The besCreateSQLPlugin script will make two kinds of 'API plugins.'
+One supports the 'error factory' system that queries the database for
+various errors. That's what the unixODBC plugin code uses for errors.
+The sqlite code, however, using the 'simple' error reporting scheme,
+so it lacks some of the classes and some have a slightly different root
+name. The 'simple' error reporting scheme relies on the connector code
+testing return codes and reporting errors. The complete (I think it's
+called that) make separate queries to the database.

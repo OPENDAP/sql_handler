@@ -1,0 +1,33 @@
+#---------------OPeNDAP BES DAP Module Configuration file---------------#
+#                                                                       #
+#       National Center for Atmospheric Research (NCAR)                 #
+#       High Altitude Observatory (HAO)                                 #
+#       Key entries for OPeNDAP BES DAP Module                          #
+#                                                                       #
+#-----------------------------------------------------------------------#
+
+#-----------------------------------------------------------------------#
+# Require dap configuration to be loaded first                          #
+#-----------------------------------------------------------------------#
+# NOTE: this is commented out due to incompatibility with old BES
+#		version. You may un-comment this if you are running BES >3.8.4
+
+BES.Include=sql.conf
+
+#-----------------------------------------------------------------------#
+# modules to load, includes data modules and command modules            #
+#-----------------------------------------------------------------------#
+
+BES.modules+=sqlite
+BES.module.sqlite=@bes_modules_dir@/libsqlite_module.so
+
+#-----------------------------------------------------------------------#
+# Setting the data information
+#-----------------------------------------------------------------------#
+
+# The TypeMatch should NEVER be set for SQLPlugin handler
+
+#-----------------------------------------------------------------------#
+# SQL handler specific parameters
+#-----------------------------------------------------------------------#
+# No specific parameters for simple type SQLPlugin
