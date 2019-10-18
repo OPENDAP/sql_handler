@@ -25,6 +25,9 @@ To choose an API other than 'odbc', change the line 'api=odbc' to
 is 'sqlh_table.' The database for ODBC is defined in the odbc.ini
 file.
 
+Information about the sqlite API: https://www.sqlite.org/cintro.html
+The list of functions also looks interesting: https://www.sqlite.org/c3ref/funclist.html
+
 Note: The besCreateSQLPlugin script will make two kinds of 'API plugins.'
 One supports the 'error factory' system that queries the database for
 various errors. That's what the unixODBC plugin code uses for errors.
