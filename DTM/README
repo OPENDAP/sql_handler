@@ -1,0 +1,4 @@
+
+DTM == Dynamic Type Mapping
+
+This is how the handler maps a SQL type to a DAP type.

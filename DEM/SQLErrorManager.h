@@ -50,16 +50,7 @@ public:
 
     SQLErrorManager() :
             SQLActionManager<JOIN, JOIN, JOIN>() {
-#if 0
-        /**
-         *  This is done by the SQLModule::initialize
-         *
-         *  initialize check point reading
-         *  configuration file.
-         */
-        //SQLCheckPoint::init();
-#endif
-    };
+    }
 
     /**
      * @brief Act as a trigger starting Actions only

@@ -62,7 +62,7 @@ template<class SQL_TYPE, class ODBC_TYPE,    // TypeConnector && FactoryComponen
 class SQLNextTypeAction : public SQLAction<SQL_TYPE, libdap::BaseType> {
 private:
     SQLNextTypeAction() {
-    };
+    }
     SQLSimpleConnector<SQL_TYPE, ODBC_TYPE> &tc;
     SQLActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType> &tf;
     /**
@@ -119,7 +119,7 @@ public:
                       SQLActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType> &tf,
                       SQLActionFactory<ERROR_TYPE, ARGS_TYPE, OUT> *error_factory, bool force = false) :
             tc(connector), tf(tf), ef(error_factory), _force(force), SQLAction<ARGS_TYPE, OUT>() {
-    };
+    }
 
     /**
      * @brief Manual connecting
@@ -187,7 +187,7 @@ public:
 
             return bt;
         }
-        catch (SQLInternalError ie) {
+        catch (SQLInternalError &ie) {
             /**
              *  if ErrorManager throws an SQLInternalException
              *  we have to 'continue' the loop

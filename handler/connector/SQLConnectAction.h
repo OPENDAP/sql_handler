@@ -170,12 +170,12 @@ public:
 
             BESDEBUG(SQL_NAME, "SQLConnectAction: Connected" << std::endl);
         }
-        catch (SQLInternalError ie) {
+        catch (SQLInternalError &ie) {
             // don't forget to close the connector
             connector.close();
             /**
              *  This exception here (applied to connect) should be fatal.
-             *  It will be throw as fatal.
+             *  It will be thrown as fatal.
              */
             throw SQLInternalFatalError(ie.get_message(),
                                         ie.get_file(), ie.get_line());
@@ -196,13 +196,12 @@ public:
             // don't forget to close the connector
             connector.close();
             throw SQLInternalFatalError(
-                    "SQLConnectAction: Unknow error while connecting",
+                    "SQLConnectAction: Unknown error while connecting",
                     __FILE__, __LINE__);
         }
         return NULL; // to avoid warning
     }
 
 };
-
 
 #endif /* SQLOPENACTION_H_ */
