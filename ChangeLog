@@ -1,3 +1,376 @@
+2019-10-18  James Gallagher  <jgallagher@opendap.org>
+
+	Added a bit of documentation on SQLite API calls.
+
+	Made a skelelton sqlite API plugin; no implementation, though
+
+	Added some README files to supply a (tiny) bit more context
+	Also cleaned up some minor syntax goofs and spelling mistakes.
+
+2019-10-17  James Gallagher  <jgallagher@opendap.org>
+
+	ERROR_TYPE -> error_t and MSG_TYPE --> message_t
+	This makes it easier to see where the template arguments and
+	typedefs are used.
+
+	Removed #if 0 .. #endif and #if __TESTS__
+
+	Removed awkward TESTDEBUG macro calls
+
+	Fixed data access for SQLite with ODBC
+
+2019-10-16  James Gallagher  <jgallagher@opendap.org>
+
+	checkpoint
+
+	Merge branch 'master' into sqlite-fix
+
+	Merge branch 'master' of https://github.com/opendap/sql_handler
+
+	Added a test for sql.h
+
+	Starting on the fix for sqlite w/odbc
+
+2019-10-11  Nathan Potter  <ndp@opendap.org>
+
+	Update README.md
+
+2019-10-10  The-Robot-Travis  <npotter@opendap.org>
+
+	More docs
+
+	More docs
+
+	Adding mysql test commands, no baselines
+
+	Adding mysql test commands, no baselines
+
+	Documentation
+
+2019-10-09  Nathan Potter  <ndp@opendap.org>
+
+	Merge pull request #5 from OPENDAP/tests-renamed-postgres
+	Tests renamed postgres
+
+2019-10-09  The-Robot-Travis  <npotter@opendap.org>
+
+	Trying to re-enable user and password usage
+
+	cleaning up ragged debugging output.
+
+	Merge branch 'tests-renamed-postgres' of https://github.com/OPENDAP/sql_handler into tests-renamed-postgres
+
+2019-10-08  James Gallagher  <jgallagher@opendap.org>
+
+	Small start on HK-501 - sql handler refactoring
+	I figures out that the template<... ERROR_TYPE, MSG_TYPE = ERROR_TYPE>
+	stuff is probably not used and the template default is definitely not
+	needed. I commented out the three places it was used.
+
+	Replaced the char[] used for MSG_TYPE with a std::string
+	Crashes do to malloc errors stopped and no more needless dynamic
+	memory allocations and management.
+
+	I renamed the tests to be 'postgresql.*' An ongoing effort.
+	This is part of an effort to make several sets of test for
+	different databases, including one for SQLite (where we can
+	include the DB in github and maybe automate the tests).
+
+2019-10-08  The-Robot-Travis  <npotter@opendap.org>
+
+	MySQL updates
+
+2019-10-04  The-Robot-Travis  <npotter@opendap.org>
+
+	More code cleanup
+
+	More clean up, extra ';' chars
+
+	Merge branch 'master' of https://github.com/OPENDAP/sql_handler
+
+	More cleanup... Somuch mess in here...
+
+	Repaired incorrect usages of std::string annd std::endl
+	throughout this project. Previously the code was relying on
+	BES include files to declare things like 'using namespace
+	std;' etc. Fixed now.
+
+2019-10-03  James Gallagher  <jgallagher@opendap.org>
+
+	Worked on adding an example using sqlite to README.md
+	It's not as simple as it seems... The metadata responses
+	differe in small ways and the data returns only one row.
+
+2019-10-02  James Gallagher  <jgallagher@opendap.org>
+
+	Removed the sqlite tar balls
+	Get this stuff from yum, brew
+
+	Edits to README.md
+
+	More hackery. The configure script should balk if unixODBC is not installed.
+	WRT unixODBC, to build the generic code is needed, but to _run_ the
+	handler a driver specific to a given DB will be needed.
+
+	Added baselines for three more tests
+	Also, updated tests to use the new(er) bes handler tests macros file.
+
+2019-08-26  Nathan Potter  <ndp@opendap.org>
+
+	Merge pull request #4 from OPENDAP/test_patch
+	Debugging changes
+
+	More reapir to read() semantics
+
+	Reformtting code, converting to BESDEBUG
+
+	Fixed the inverted return status in connector/SQLSimpleConnector::read() method
+
+	Typo management
+
+	More refined debugging.
+
+2019-07-27  Nathan Potter  <ndp@opendap.org>
+
+	Updated process documentation.
+
+2019-07-26  Nathan Potter  <ndp@opendap.org>
+
+	Updated process documentation. Added baselines for dds, das, ddx.
+
+	more debuggery
+
+	More debugging
+
+	More debugging
+
+	Debugging changes
+
+	Debugging changes
+
+2019-07-24  Nathan Potter  <ndp@opendap.org>
+
+	More notes in README.md
+
+2019-07-12  Nathan Potter  <ndp@opendap.org>
+
+	More README work.
+
+2019-07-11  Nathan Potter  <ndp@opendap.org>
+
+	Formatting issues with md.
+
+2019-07-01  Nathan Potter  <ndp@opendap.org>
+
+	small updates to code and comments
+
+2019-06-28  Nathan Potter  <ndp@opendap.org>
+
+	Fixing README.md
+
+	Fixing README.md
+
+	Fixing README.md
+
+	Fixing README.md
+
+	Fixing README.md
+
+	Fixing README.md
+
+	Fixing README.md
+
+	Fixing README.md
+
+	More .gitignore
+
+	Working on gitignore
+
+	Added readablity comments.
+
+	Switching README to README.md
+
+2019-06-08  James Gallagher  <jgallagher@opendap.org>
+
+	Merge pull request #3 from OPENDAP/odbc_fixes
+	Odbc fixes
+
+	Updated bes.conf.in to match newer pattern
+
+	Changes to the Makefile.am to link with -lodbc
+	Other changes to get the tests to run (but not necessarily work - there
+	were issues in BES changes that meant the tests were not running at all).
+
+2019-06-07  James Gallagher  <jgallagher@opendap.org>
+
+	Merge pull request #2 from OPENDAP/smart_ptr_fix
+	Removed the local shared pointer code in favor of std::shared_ptr
+
+	Removed the local shared pointer code in favor of std::shared_ptr
+
+	Merge branch 'kodi'
+	Made a change to the local copy after deleting this branch on github.
+	One small edit merged locally
+
+	Merge pull request #1 from OPENDAP/kodi
+	Merge this branch to the master
+
+	Added filter.awk back from master
+
+	Added to gitignore
+
+	README Updated
+
+	cleaning... ignore files, move generated files, etc.
+
+	namespace fixes; BES method update (tracking the latest BES code)
+
+2018-11-29  Kodi Neumiller  <kodi@Udays-MacBook-Pro.local>
+
+	Made edits and was able to get it to build on my machine.
+
+2018-07-30  James Gallagher  <jgallagher@opendap.org>
+
+	Added to gitignore
+
+2018-05-30  James Gallagher  <jgallagher@opendap.org>
+
+	Merge branch 'master' of https://github.com/OPENDAP/sql_handler
+
+	Refactor to match the BES command_mods refactor
+
+2017-11-01  James Gallagher  <jgallagher@opendap.org>
+
+	Added more docs to the sql handler
+
+	Added docs for the SQL handler
+
+2014-10-16  James Gallagher  <jgallagher@opendap.org>
+
+	Added some stuff regarding sqlite so we can use it for tests
+	AM   tests/sqlite-autoconf-3080600.tar.gz
+	AM   tests/sqliteodbc-0.999.tar.gz
+
+2014-10-01  James Gallagher  <jgallagher@opendap.org>
+
+	edits to fix compilation errors and warnings the showed up
+	with clang/gcc 4.2.1 (which is clang 6). I also removed all
+	instances of 'using namespace ...' in header files to reduce
+	odd namespace issues.
+
+2013-01-22  James Gallagher  <jgallagher@opendap.org>
+
+	Tiny update for newer autoconf; needs ODBC drivers to build
+	and those are not yet in the deps. M configure.ac
+
+2012-10-24  James Gallagher  <jgallagher@opendap.org>
+
+	Build fixes for OSX
+	M    configure.ac
+	M    Makefile.am
+
+2012-09-13  James Gallagher  <jgallagher@opendap.org>
+
+	Fixed the DAS response so that the types are correct - for the
+	attribute provided, always use Strings.
+
+2012-09-12  James Gallagher  <jgallagher@opendap.org>
+
+	I added the eclipse .project, .cproject and .settings files,
+	with what I hope are useful paths in them.
+
+2012-09-11  James Gallagher  <jgallagher@opendap.org>
+
+	Added two new tests that use constraints, both projections and selections.
+
+	Some refactoring of the SQLTextContainer class. Mostly that
+	user errors are not longer signaled by BESInteralError
+	exceptions (used BESError instead).
+
+2012-09-10  James Gallagher  <jgallagher@opendap.org>
+
+	The dataset name is no longer the full path to the file. I
+	also changed add_var() to add_var_nocopy() in SQLBuildDDS &
+	...Data. Added a README in the 'container' directory
+	explaining that SQLTextContainer is the parser for the dataset
+	file. That will be useful for some other issues.
+
+2012-09-09  James Gallagher  <jgallagher@opendap.org>
+
+	comments
+
+2012-09-07  James Gallagher  <jgallagher@opendap.org>
+
+	Minor edits plus some Linux -vs- OSX hackery.
+
+	Edits that remove some valgrind 'uninitialized value errors.
+	M    unixODBC/ODBCConnector.cc
+
+2012-09-04  James Gallagher  <jgallagher@opendap.org>
+
+	Hack to make the code work on Linux - Could RTTI information
+	not be making it in to the shared libs like odbc_module?
+
+	M    data/mysql_1.sql
+	M    handler/SQLBuildDDS.h
+	M    DTM/SQLBaseType.h
+	M    DTM/SQLTypeFactoryComponent.h
+	M    Makefile.am
+	M    unixODBC/ODBCConnector.cc
+	M    unixODBC/ODBCConnector.h
+	M    unixODBC/ODBCTypeFactoryComponent.cc
+
+	Fixes as I try to track down the errors on Linux...
+
+2012-08-31  James Gallagher  <jgallagher@opendap.org>
+
+	Linker hacks - will this be enough to make exceptions work across library boundaries?
+
+2012-08-30  James Gallagher  <jgallagher@opendap.org>
+
+	Modified the TESTDEBUG lines so that they are not only
+	controlled by a compile-time constant but also so they can be
+	switched off at run-time. That way we can build the handler
+	w/o all those statements when we make binaries for users, but
+	compile with them while we develop but not always have the
+	noise they generate even when we want to see the 'sql' debug
+	lines.
+
+	Modified configure to accept unixODBC 2.2.14 since this is the default on CentOS 6.
+	M    configure.ac
+
+	Back to ODBC version 3...
+
+2012-08-29  James Gallagher  <jgallagher@opendap.org>
+
+	Changed to match the 'test' DSN.
+	M    data/mysql_1.sql
+
+	MOre fixes for Mysql
+	M    install.dir/sqlh.sql
+
+	Fixed syntax for MySQL
+
+	Added tests. Downgraded to ODBC2 from ODBC version 3 (see unixODBC/ODBCConnector.cc).
+
+	Fixed regular expressions (at least for OS/X 10.7 which supplies a POSIX regex library).
+
+2011-09-20  James Gallagher  <jgallagher@opendap.org>
+
+	Updated...
+	M    Makefile.am
+
+2011-02-12  Patrick West  <pwest@opendap.org>
+
+	using .cc extension in stead of .cpp M    templates/Makefile.am
+
+	Moved all .cpp to .cc to be consistent with the rest of the
+	handlers. Removed un-needed files like bes.log.
+
+2010-10-06  James Gallagher  <jgallagher@opendap.org>
+
+	Added
+
 2010-08-17  ccancellieri
 
 	the external/images folder is included in the external.tar.gz package
