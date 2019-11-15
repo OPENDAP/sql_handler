@@ -4,7 +4,8 @@
 #
 # $Id: Makefile.am 12972 2006-01-05 15:41:07Z pwest $
 
-SUBDIRS = bin templates tests
+# bin Removed 10/21/19 jhrg 
+SUBDIRS = . templates tests
 
 AUTOMAKE_OPTIONS = foreign check-news subdir-objects
 
