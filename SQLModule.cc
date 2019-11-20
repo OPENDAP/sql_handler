@@ -26,6 +26,8 @@
  */
 #include "SQLModule.h"
 
+using namespace std;
+
 SQLContainerStorage *SQLModule::cs = NULL;
 
 SQLContainerFactory SQLModule::cf = SQLContainerFactory();

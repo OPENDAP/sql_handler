@@ -26,8 +26,7 @@
 
 #include "SQLPlugin.h"
 
-using std::endl;
-using std::string;
+using namespace std;
 
 SQLPlugin::~SQLPlugin(void) {
 }

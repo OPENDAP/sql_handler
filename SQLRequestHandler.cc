@@ -26,9 +26,7 @@
 
 #include "SQLRequestHandler.h"
 
-using std::endl;
-using std::string;
-
+using namespace std;
 
 SQLRequestHandler *SQLRequestHandler::_rh = NULL;
 
@@ -40,8 +38,7 @@ pthread_mutex_t SQLRequestHandler::_mutex;
 
 pthread_once_t SQLRequestHandler::_block = PTHREAD_ONCE_INIT;
 
-SQLRequestHandler::SQLRequestHandler(const string &name) :
-        SQLLinker(name) {
+SQLRequestHandler::SQLRequestHandler(const string &name) : SQLLinker(name) {
     /**
      * initialize unique instance of the block mutex
      */

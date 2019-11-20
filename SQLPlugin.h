@@ -62,19 +62,19 @@ typedef bool (*sql_request_handler)(SQLDataHandlerInterface &);
 class SQLPlugin {
 private:
     // handle handler's function map
-    map<string, sql_request_handler> _handler_list;
+    std::map<std::string, sql_request_handler> _handler_list;
 
     // SQLPlugin name
-    string _name;
+    std::string _name;
 
     // Pointer to the SQLRequestHandler
     SQLPluginList *_pl; // do not delete
 
 public:
-    typedef map<string, sql_request_handler>::const_iterator Handler_citer;
-    typedef map<string, sql_request_handler>::iterator Handler_iter;
+    typedef std::map<std::string, sql_request_handler>::const_iterator Handler_citer;
+    typedef std::map<std::string, sql_request_handler>::iterator Handler_iter;
 
-    virtual const string &get_name() const { return _name; }
+    virtual const std::string &get_name() const { return _name; }
 
     /**
 	 * @brief Find the SQLRequestHandler instance that should be
@@ -100,7 +100,7 @@ public:
      * @see BESResponseObject
      * @see BESResponseNames
      */
-    virtual sql_request_handler find_handler(const string &handler_name);
+    virtual sql_request_handler find_handler(const std::string &handler_name);
 
     /**
      * @brief return a comma separated list of response object types handled by
@@ -110,7 +110,7 @@ public:
      * @see BESResponseObject
      * @see BESResponseNames
      */
-    virtual string get_handler_names();
+    virtual std::string get_handler_names();
 
     /**
      * @brief dumps information about this object
@@ -120,12 +120,12 @@ public:
      *
      * @param strm C++ i/o stream to dump the information to
      */
-    virtual void dump(ostream &strm) const;
+    virtual void dump(std::ostream &strm) const;
 
     /**
      * @brief Default constructor.
      */
-    SQLPlugin(const string &name) :
+    SQLPlugin(const std::string &name) :
             _handler_list(),
             _name(name),
             _pl(SQLPlugin::findTheList()) {
@@ -164,7 +164,7 @@ public:
      * @see BESResponseObject
      * @see BESResponseNames
      */
-    virtual bool add_handler(const string &handler_name,
+    virtual bool add_handler(const std::string &handler_name,
                              sql_request_handler handler_method);
 
     /**
@@ -174,7 +174,7 @@ public:
      * @return true if successfully removed, false if not found
      * @see SQLResponseNames
      */
-    virtual bool remove_handler(const string &handler_name);
+    virtual bool remove_handler(const std::string &handler_name);
 
     /**
 	 * @brief remove all the handler method from this SQLPlugin
@@ -186,7 +186,7 @@ public:
     virtual void remove_handlers();
 
     /**
-	 * @brief If some handler are still in the map,
+	 * @brief If some handler are still in the std::map,
 	 * call remove.
 	 * This is done to keep
 	 * SQLRequestHandler::_wrap_count updated.

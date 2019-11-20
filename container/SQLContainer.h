@@ -109,7 +109,7 @@ public:
      * attributes order
      * @see SQLTextContainer
      */
-    virtual string buildQuery() = 0;
+    virtual std::string buildQuery() = 0;
 
     /**
       * @brief Build a COUNT query
@@ -117,7 +117,7 @@ public:
       * returned by buildQuery().
       * @return Use this query to get the row count
       */
-    virtual string buildCountQuery() = 0;
+    virtual std::string buildCountQuery() = 0;
 
     /**
      * Index other (optional) strings.
@@ -132,13 +132,13 @@ public:
      * your own 'buf' modification method.
      * @see SQLTextContainer::getOther()
      */
-    virtual bool getOther(string &buf) = 0;
+    virtual bool getOther(std::string &buf) = 0;
 
     /**
      * @brief return the actual API
      * from the dataset's API list.
      */
-    virtual string &getApi() = 0;
+    virtual std::string &getApi() = 0;
 
     /**
      * @brief get the string representing
@@ -146,7 +146,7 @@ public:
      * to the actual selected DB
      * @return a string reference
      */
-    virtual string &getUser() = 0;
+    virtual std::string &getUser() = 0;
 
     /**
      * @brief get the string representing
@@ -154,7 +154,7 @@ public:
      * access to the actual selected DB
      * @return a string reference
      */
-    virtual string &getPass() = 0;
+    virtual std::string &getPass() = 0;
 
     /**
      * @brief get the string representing
@@ -162,7 +162,7 @@ public:
      * access to the actual selected DB
      * @return a string reference
      */
-    virtual string &getServer() = 0;
+    virtual std::string &getServer() = 0;
 
     /**
      * @brief get the string representing
@@ -170,7 +170,7 @@ public:
      * access to the actual selected DB
      * @return a string reference
      */
-    virtual string &getPort() = 0;
+    virtual std::string &getPort() = 0;
 
     /**
      * @brief get the string representing
@@ -179,7 +179,7 @@ public:
      * selected DB
      * @return a string reference
      */
-    virtual string &getDBName() = 0;
+    virtual std::string &getDBName() = 0;
 
     /**
      * CURSOR/LIST OPERATIONs
@@ -293,7 +293,7 @@ public:
      * @brief constructor
      * <br>Note that no attribute nor constraints will be settled
      */
-    SQLContainer(const string &name, const string &real_name, const string &type);
+    SQLContainer(const std::string &name, const std::string &real_name, const std::string &type);
 
     virtual ~SQLContainer();
 

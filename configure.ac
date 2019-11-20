@@ -106,5 +106,7 @@ AC_CONFIG_TESTDIR(tests, [.])
 
 AC_CONFIG_FILES([tests/Makefile tests/atlocal tests/package.m4])
 
+AC_CONFIG_FILES([doxy.conf])
+
 AC_OUTPUT
 

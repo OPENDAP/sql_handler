@@ -163,7 +163,7 @@ public:
      * 1 - n 		column index
      * @see ODBCConnector
      */
-    virtual const string &getColName(const size_t &column) = 0;
+    virtual const std::string &getColName(const size_t &column) = 0;
 
     /**
      * @brief returns a string representation of the
@@ -175,7 +175,7 @@ public:
      * 1 - n 		column index
      * @see ODBCConnector
      */
-    virtual const string &getColDesc(const size_t &column) = 0;
+    virtual const std::string &getColDesc(const size_t &column) = 0;
 
     /**
      * @brief return the status of this connector

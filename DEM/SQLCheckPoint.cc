@@ -38,6 +38,8 @@
 
 #include "SQLDefinitions.h"
 
+using namespace std;
+
 std::bitset<_SQLH_CHECK_SIZE> SQLCheckPoint::function;
 unsigned long SQLCheckPoint::last_type_checked;
 bool SQLCheckPoint::last_status;
@@ -50,7 +52,7 @@ bool SQLCheckPoint::init() throw(BESError) {
     if (!isSet) {
         last_status = false; // false by default
         last_type_checked = _SQLH_CHECK_SIZE + 1; // never checked
-        std::vector<std::string> _set_check_p;
+        vector<string> _set_check_p;
         const string &key = string(_SQLH_CHECK_KEY);
         bool found = false;
         TheBESKeys::TheKeys()->get_values(key, _set_check_p, found);

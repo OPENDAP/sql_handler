@@ -138,7 +138,7 @@ public:
     /**
      * @brief Default constructor
      */
-    ODBCPlugin(const string &name) : SQLPlugin(name) {
+    ODBCPlugin(const std::string &name) : SQLPlugin(name) {
 
         SQLPlugin::add_handler(DAS_RESPONSE, ODBCPlugin::build_das);
         SQLPlugin::add_handler(DDS_RESPONSE, ODBCPlugin::build_dds);

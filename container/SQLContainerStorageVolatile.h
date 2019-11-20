@@ -47,7 +47,7 @@ class SQLContainerStorageVolatile :
         public BESContainerStorageVolatile, public SQLContainerStorage {
 
 public:
-    SQLContainerStorageVolatile(const string &name) :
+    SQLContainerStorageVolatile(const std::string &name) :
             BESContainerStorageVolatile(name),
             SQLContainerStorage() {
     };
@@ -62,7 +62,7 @@ public:
     /**
      * Simply wrap the inherited del_container
      */
-    bool del_container(const string &name) {
+    bool del_container(const std::string &name) {
         return BESContainerStorageVolatile::del_container(name);
     }
 
@@ -84,7 +84,7 @@ public:
      * passed name match a container in the list
      * or NULL if no container with that name is found
      */
-    SQLContainer *look_for(const string &name);
+    SQLContainer *look_for(const std::string &name);
 
     /**
      * @brief Update the content of the ContainerStorage with

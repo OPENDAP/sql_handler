@@ -41,7 +41,7 @@ class SQLPluginList;
  */
 class SQLLinker : public BESRequestHandler, public SQLPluginList {
 public:
-    SQLLinker(const string &name) :
+    SQLLinker(const std::string &name) :
             BESRequestHandler(name) {};
 
     virtual ~SQLLinker() {};

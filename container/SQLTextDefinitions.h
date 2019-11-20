@@ -37,14 +37,14 @@
  * @brief The dataset definition
  */
 typedef struct dataset_section {
-    string api; //!< name of the SQLPlugin
-    string server; //!< server name or DSN
-    string port; //!< server port
-    string dbname; //!< database name
-    string user; //!< user name
-    string pass; //!< password
+    std::string api; //!< name of the SQLPlugin
+    std::string server; //!< server name or DSN
+    std::string port; //!< server port
+    std::string dbname; //!< database name
+    std::string user; //!< user name
+    std::string pass; //!< password
     SQLQuery query; //!< SQLQuery object
-    std::map<string, string> other; //!< optional rows
+    std::map<std::string, std::string> other; //!< optional rows
 
     /*
      * @brief copy constructor

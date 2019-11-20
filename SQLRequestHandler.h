@@ -73,12 +73,12 @@
 /**
  * @brief type definition of the list of SQLPlugin
  */
-typedef smart::SmartValueMap<const string, SQLPlugin> sql_handler_map;
+typedef smart::SmartValueMap<const std::string, SQLPlugin> sql_handler_map;
 
 /**
  * @brief type definition of the list of wrapped functions
  */
-typedef std::map<string, size_t> sql_wrap_count_map;
+typedef std::map<std::string, size_t> sql_wrap_count_map;
 
 /**
  * @brief SQLHandler base RequestHandler which is the main SQL
@@ -145,7 +145,7 @@ private:
      * @return true only if the function handler
      * (named 'name') should be deleted.
      */
-    bool update_wrap_count(const string &name, bool add) throw(BESInternalFatalError);
+    bool update_wrap_count(const std::string &name, bool add) throw(BESInternalFatalError);
 
     /**
      * @todo when an incoming request fails due to bad query, the
@@ -177,7 +177,7 @@ private:
      *  @return bool true if response object is correctly built,
      *  false otherwise.
      */
-    bool lastChanceRunner(SQLDataHandlerInterface &dhi, const string &command);
+    bool lastChanceRunner(SQLDataHandlerInterface &dhi, const std::string &command);
 
     /**
      * @brief search into the BESRequestHandler list the SQLPlugin
@@ -196,7 +196,7 @@ private:
      * BESRequestHandler plugin).
      * @param name the name of this handler
      */
-    SQLRequestHandler(const string &name);
+    SQLRequestHandler(const std::string &name);
 
     SQLRequestHandler(const SQLRequestHandler &); // not defined
     SQLRequestHandler &operator=(const SQLRequestHandler &); // not defined
@@ -231,7 +231,7 @@ public:
      * @return the singleton of this class
      * @note: thread safe
      */
-    static SQLRequestHandler *theSQLRequestHandler(const string &name);
+    static SQLRequestHandler *theSQLRequestHandler(const std::string &name);
 
 
 // The SQLLink interface implementation
@@ -278,7 +278,7 @@ public:
      * and all registered SQLPlugin(s).
      */
     virtual void
-    dump(ostream &strm) const;
+    dump(std::ostream &strm) const;
 
 
 //SQLPluginList methods implementation
@@ -288,7 +288,7 @@ public:
      * @return a pointer to the found plugin or NULL
      * if no SQLPlugin is found.
      */
-    SQLPlugin *find_sql_handler(const string &name);
+    SQLPlugin *find_sql_handler(const std::string &name);
 
     /**
      * @brief Remove an SQLPlugin from the list.
@@ -296,7 +296,7 @@ public:
      * @return true if remove is correctly completed
      */
     bool
-    remove_sql_handler(const string &name);
+    remove_sql_handler(const std::string &name);
 
     /**
 	 * @brief Remove all the SQLPlugin from the list.
@@ -312,7 +312,7 @@ public:
      * @return true if add is correctly completed
      */
     bool
-    add_sql_handler(const string &name, SQLPlugin *handler);
+    add_sql_handler(const std::string &name, SQLPlugin *handler);
 
     /**
      * @brief Add wrapper for this command, this will enable
@@ -325,7 +325,7 @@ public:
      * 'false' otherwise.
      */
     bool
-    add_sql_wrapper(const string &command);
+    add_sql_wrapper(const std::string &command);
 
     /**
      * @brief test deletion of the wrapper for this command,
@@ -339,7 +339,7 @@ public:
      * 'false' otherwise.
      */
     bool
-    remove_sql_wrapper(const string &command);
+    remove_sql_wrapper(const std::string &command);
 };
 
 #endif // SQLRequestHandler.h

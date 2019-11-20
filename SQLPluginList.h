@@ -50,7 +50,7 @@ public:
      * (named 'name') should be deleted.
      */
     virtual bool
-    update_wrap_count(const string &name, bool add)
+    update_wrap_count(const std::string &name, bool add)
     throw(BESInternalFatalError) = 0;
 
     /**
@@ -60,7 +60,7 @@ public:
      * if no SQLPlugin is found.
      */
     virtual SQLPlugin *
-    find_sql_handler(const string &name) = 0;
+    find_sql_handler(const std::string &name) = 0;
 
     /**
      * @brief Remove an SQLPlugin from the list.
@@ -68,7 +68,7 @@ public:
      * @return true if remove is correctly completed
      */
     virtual bool
-    remove_sql_handler(const string &name) = 0;
+    remove_sql_handler(const std::string &name) = 0;
 
     /**
      * @brief Remove all the SQLPlugin from the list.
@@ -84,7 +84,7 @@ public:
      * @return true if add is correctly completed
      */
     virtual bool
-    add_sql_handler(const string &name, SQLPlugin *handler) = 0;
+    add_sql_handler(const std::string &name, SQLPlugin *handler) = 0;
 
     /**
      * @brief Add wrapper for this command, this will enable
@@ -97,7 +97,7 @@ public:
      * 'false' otherwise.
      */
     virtual bool
-    add_sql_wrapper(const string &command) = 0;
+    add_sql_wrapper(const std::string &command) = 0;
 
     /**
      * @brief test deletion of the wrapper for this command,
@@ -111,7 +111,7 @@ public:
      * 'false' otherwise.
      */
     virtual bool
-    remove_sql_wrapper(const string &command) = 0;
+    remove_sql_wrapper(const std::string &command) = 0;
 
 };
 
