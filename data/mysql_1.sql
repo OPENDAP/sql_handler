@@ -8,7 +8,7 @@ define $DSN$=test
 api=odbc
 server=$DSN$
 # The user and pass keywords are not needed 
-# user=root
+user=root
 # pass=opendap
 
 [select]
