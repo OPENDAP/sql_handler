@@ -27,7 +27,8 @@
 #define SQLLINKER_H_
 #include <BESRequestHandler.h>
 #include "SQLPluginList.h"
-class SQLPluginList;
+
+// class SQLPluginList;
 
 /**
  * @brief Abstract class which define the link
@@ -37,9 +38,9 @@ class SQLPluginList;
  * @see SQLPlugin
  * @see SQLRequestHandler
  */
-class SQLLinker:public BESRequestHandler,public SQLPluginList {
+class SQLLinker:public BESRequestHandler, public SQLPluginList {
 public:
-	SQLLinker(const string &name):
+	SQLLinker(const std::string &name):
 		BESRequestHandler(name){};
 
 	virtual ~SQLLinker(){};

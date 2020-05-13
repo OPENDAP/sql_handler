@@ -37,7 +37,7 @@
 #include "SQLTextContainer.h"
 
 
-	typedef SQLContainer* (*SELECT_CONTAINER)(string name,string real_name, string type);
+typedef SQLContainer* (*SELECT_CONTAINER)(std::string name, std::string real_name, std::string type);
 
 /**
  * @brief Factory used to build SQLContainers, this factory
@@ -61,7 +61,7 @@ public:
 	SQLContainerFactory(SQLContainerStorage *container_storage=NULL,
 						SELECT_CONTAINER select_function=&selectContainer)
 	{
-		TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainerFactory"<<endl);
+		TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainerFactory"<<std::endl);
 		if (select_function)
 			_select_func=select_function;
 		else
@@ -71,13 +71,13 @@ public:
 			cs=container_storage;
 		else {
 			BESDEBUG(SQL_NAME,
-				"Building SQLContainerFactory without persistence"<<endl);
+				"Building SQLContainerFactory without persistence"<<std::endl);
 			cs=NULL;
 		}
 	}
 
 	virtual ~SQLContainerFactory(){
-		TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLContainerFactory"<<endl);
+		TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLContainerFactory"<<std::endl);
 	};
 
 	/**
@@ -85,7 +85,7 @@ public:
 	 * @param c reference to a container
 	 * @return a string containing a unique name for this container
 	 */
-	static string getName(BESContainer &c){
+	static std::string getName(BESContainer &c){
 		return getName(c.get_symbolic_name(),
 						c.get_real_name(),
 						c.get_container_type());
@@ -101,9 +101,9 @@ public:
 	 * @param type type of the container
 	 * @return a string containing a unique name for this container
 	 */
-	static string getName(const string &name,
-							const string &real_name,
-							const string &type){
+	static std::string getName(const std::string &name,
+							const std::string &real_name,
+							const std::string &type){
 		return real_name;
 	}
 
@@ -150,15 +150,15 @@ public:
 	 * @WARNING no way to set attributes and constraints use
 	 * this only if you want to build a container from scratch
 	 */
-	static SQLContainer* buildContainer(const string &name,const string &real_name,
-									const string &type)throw (BESInternalError);
+	static SQLContainer* buildContainer(const std::string &name,const std::string &real_name,
+									const std::string &type)throw (BESInternalError);
 
 protected:
 	/**
 	 * @brief implements logic to choose the
 	 * SQLContainer to use.
 	 */
-	static SQLContainer* selectContainer(string name,string real_name, string type){
+	static SQLContainer* selectContainer(std::string name,std::string real_name, std::string type){
 #if 0
 		//if we get an XML file use
 		return SQLXMLContainer(name,real_name,type);

@@ -98,7 +98,7 @@ public:
 	 */
 	virtual ~SQLObjectAction()
 	{
-		TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLObjectAction"<<endl);
+		TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLObjectAction"<<std::endl);
 		if (!_reuse) freeValue();
 	}
 	;
@@ -137,7 +137,7 @@ public:
 	void freeValue()
 	{
 		if (_val) {
-			TESTDEBUG(SQL_NAME_TEST,"SQLObjectAction: deleting val"<<endl);
+			TESTDEBUG(SQL_NAME_TEST,"SQLObjectAction: deleting val"<<std::endl);
 			delete (_val);
 			_val = 0;
 		}
@@ -229,7 +229,7 @@ public:
 	 */
 	virtual ~SQLObjectAction()
 	{
-		TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLObjectAction"<<endl);
+		TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLObjectAction"<<std::endl);
 		if (!_reuse) freeValue();
 	}
 	;
@@ -254,7 +254,7 @@ public:
 	void freeValue()
 	{
 		if (_val) {
-			TESTDEBUG(SQL_NAME_TEST,"SQLObjectAction: freeing val"<<endl);
+			TESTDEBUG(SQL_NAME_TEST,"SQLObjectAction: freeing val"<<std::endl);
 			free(_val);
 			_val = 0;
 		}

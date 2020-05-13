@@ -163,7 +163,7 @@ public:
 			delete _container;
 		_container=0;
 #endif
-TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLHandleConnector"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLHandleConnector"<<std::endl);
 	};
 
 	/**
@@ -175,7 +175,7 @@ TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLHandleConnector"<<endl);
 	SQLHandleConnector():
 		_isReady(false),
 		_container(NULL){
-TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLHandleConnector"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLHandleConnector"<<std::endl);
 	};
 
 	/**
@@ -187,7 +187,7 @@ TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLHandleConnector"<<endl);
 	SQLHandleConnector(SQLContainer *c):
 		_isReady(false),
 		_container(c){
-TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLHandleConnector"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLHandleConnector"<<std::endl);
 	}
 };
 

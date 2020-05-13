@@ -156,7 +156,7 @@ public:
 			if ((code = _af.getCode())) {
 				// do actions for that code
 				SQLActionList<ARGS_TYPE, OUT_TYPE> &actions = _af.getActions(code);
-				TESTDEBUG(SQL_NAME_TEST,"ActionManager: ActionList size: "<<(actions).getSize()<<endl);
+				TESTDEBUG(SQL_NAME_TEST,"ActionManager: ActionList size: "<<(actions).getSize()<<std::endl);
 				// Used to initialize first time 'args'
 				bool first_time = true;
 				/**
@@ -192,7 +192,7 @@ public:
 					}
 				}
 				catch (SQLInternalError &ie) {
-					BESDEBUG(SQL_NAME, "SQLInternalError handled"<<endl);
+					BESDEBUG(SQL_NAME, "SQLInternalError handled"<<std::endl);
 				}
 			} // if code
 			else

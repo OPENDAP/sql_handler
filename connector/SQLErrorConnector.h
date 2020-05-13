@@ -84,14 +84,14 @@ class SQLErrorConnector {
 		 * @brief dtor
 		 */
 		virtual ~SQLErrorConnector(){
-TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLErrorConnector"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLErrorConnector"<<std::endl);
 		}
 
 		/**
 		 * @brief Constructor
 		 */
 		SQLErrorConnector(){
-TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLErrorConnector"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLErrorConnector"<<std::endl);
 		}
 	};
 

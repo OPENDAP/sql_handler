@@ -273,7 +273,7 @@ private:
                               SQLActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType>& type_factory,
                               SQLSimpleConnector<SQL_TYPE, ODBC_TYPE>& connector)
     {
-        BESDEBUG(SQL_NAME, "SQLBuildDAS: Start build_das"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDAS: Start build_das"<<std::endl);
         BESResponseObject *response = dhi.getResponseObject();
 
         BESDASResponse *bdas = dynamic_cast<BESDASResponse *>(response);
@@ -284,7 +284,7 @@ private:
 
         libdap::DAS *das = bdas->get_das();
 
-        BESDEBUG(SQL_NAME, "SQLBuildDAS: Connecting "<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDAS: Connecting "<<std::endl);
         SQLConnectAction<ERROR_TYPE, MSG_TYPE, OUT_TYPE1>::connect(
         // SQLHandleConnector
                 connector,
@@ -292,11 +292,11 @@ private:
                 dhi.getSQLContainer(),
                 // check action to do on errors
                 error_factory); // try to connect
-        BESDEBUG(SQL_NAME, "SQLBuildDAS: Connected"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDAS: Connected"<<std::endl);
 
-        BESDEBUG(SQL_NAME, "SQLBuildDAS: Executing query"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDAS: Executing query"<<std::endl);
         SQLQueryAction<ERROR_TYPE, MSG_TYPE, OUT_TYPE1>::query(connector, error_factory);
-        BESDEBUG(SQL_NAME, "SQLBuildDAS: Query successfully done"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDAS: Query successfully done"<<std::endl);
 
         // This code was using dhi.getBesContainer()->get_symbolic_name()
         // for the attribute table name. I changed the name of the Sequence
@@ -315,15 +315,15 @@ private:
          * @note No value is read here, only DAP object build.
          */
         for (size_t i = 0; i < connector.getCols(); i++) {
-            BESDEBUG(SQL_NAME, "SQLBuildDAS: Doing actions on column: "<<i<< " of: "<<connector.getCols()<<endl);
+            BESDEBUG(SQL_NAME, "SQLBuildDAS: Doing actions on column: "<<i<< " of: "<<connector.getCols()<<std::endl);
             libdap::BaseType *bt = NULL;
 
-            BESDEBUG(SQL_NAME, "SQLBuildDAS: getting next object"<<endl);
+            BESDEBUG(SQL_NAME, "SQLBuildDAS: getting next object"<<std::endl);
             bt = SQLNextTypeAction<SQL_TYPE, ODBC_TYPE, ERROR_TYPE, MSG_TYPE, OUT_TYPE1>::nextType(connector,
                     type_factory, error_factory);
 
             if (bt) { // if 'bt' is created
-                BESDEBUG(SQL_NAME, "SQLBuildDAS: done"<<endl);
+                BESDEBUG(SQL_NAME, "SQLBuildDAS: done"<<std::endl);
                 // connector.getColDesc(i) returns a string that contains information
                 // about the value of the column. Since it has spaces, I think it
                 // needed double quotes. Below is the original code which was assigning
@@ -332,7 +332,7 @@ private:
                 // precision of the variables, it could be parsed and added as Int or
                 // Byte attributes. jhrg 9/13/12
                 //seq->append_attr(bt->name(), bt->type_name(), connector.getColDesc(i));
-                string attr("\"");
+                std::string attr("\"");
                 attr.append(connector.getColDesc(i));
                 attr.append("\"");
                 seq->append_attr(bt->name(), "String", attr);
@@ -342,15 +342,15 @@ private:
             }
             else // error occurred on 'bt' creation
             {
-                BESDEBUG(SQL_NAME, "SQLBuildDAS: Unrecognized NULL object, Adding default place-holder." << endl);
+                BESDEBUG(SQL_NAME, "SQLBuildDAS: Unrecognized NULL object, Adding default place-holder." << std::endl);
                 // FIXME BESLog
                 seq->append_attr(_SQLH_DEFAULT_DAS_NAME, _SQLH_DEFAULT_DAS_TYPE, _SQLH_DEFAULT_DAS_VAL);
             }
         }
         // closing connection
-        BESDEBUG(SQL_NAME, "SQLBuildDAS: Closing connection"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDAS: Closing connection"<<std::endl);
         SQLCloseAction<ERROR_TYPE, MSG_TYPE, OUT_TYPE1>::close(connector, error_factory);
-        BESDEBUG(SQL_NAME, "SQLBuildDAS: Successfully closed"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDAS: Successfully closed"<<std::endl);
 
         return true;
     }

@@ -147,7 +147,7 @@ public:
 			bool force=false)
 	{
 		// try to make a query
-		BESDEBUG(SQL_NAME,"SQLQueryAction: Executing query"<<endl);
+		BESDEBUG(SQL_NAME,"SQLQueryAction: Executing query"<<std::endl);
 		try{
 			/**
 			 * execute query and check status
@@ -165,7 +165,7 @@ public:
 				throw SQLInternalFatalError(
 					"SQLQueryAction: Query execution fails (returning false)",
 						__FILE__,__LINE__);
-			BESDEBUG(SQL_NAME,"SQLQueryAction: Query successfully done"<<endl);
+			BESDEBUG(SQL_NAME,"SQLQueryAction: Query successfully done"<<std::endl);
 		}
 		catch(SQLInternalError &ie){
 			connector.close();

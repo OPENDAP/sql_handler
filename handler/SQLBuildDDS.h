@@ -268,9 +268,9 @@ private:
     /**
      * used to return unrecognized object
      */
-    static string * dummy_cast(void *)
+    static std::string * dummy_cast(void *)
     {
-        return new string(_SQLH_DEFAULT_DAS_VAL);
+        return new std::string(_SQLH_DEFAULT_DAS_VAL);
     }
 
     /**
@@ -287,7 +287,7 @@ private:
                               SQLActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType>& type_factory,
                               SQLSimpleConnector<SQL_TYPE, ODBC_TYPE>* connector)
     {
-        BESDEBUG(SQL_NAME, "SQLBuildDDS: Connecting "<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDDS: Connecting "<<std::endl);
         SQLConnectAction<ERROR_TYPE, MSG_TYPE, OUT_TYPE1>::connect(
         // SQLHandleConnector
                 *connector,
@@ -295,11 +295,11 @@ private:
                 dhi.getSQLContainer(),
                 // check action to do on errors
                 error_factory); // try to connect
-        BESDEBUG(SQL_NAME, "SQLBuildDDS: Connected"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDDS: Connected"<<std::endl);
 
-        BESDEBUG(SQL_NAME, "SQLBuildDDS: Executing query"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDDS: Executing query"<<std::endl);
         SQLQueryAction<ERROR_TYPE, MSG_TYPE, OUT_TYPE1>::query(*connector, error_factory);
-        BESDEBUG(SQL_NAME, "SQLBuildDDS: Query successfully done"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDDS: Query successfully done"<<std::endl);
 
         BESResponseObject *response = dhi.getResponseObject();
 
@@ -335,13 +335,13 @@ private:
             libdap::BaseType *bt = NULL;
 
             try {
-                BESDEBUG(SQL_NAME, "SQLBuildDDS: getting next object"<<endl);
+                BESDEBUG(SQL_NAME, "SQLBuildDDS: getting next object"<<std::endl);
 
                 bt = SQLNextTypeAction<SQL_TYPE, ODBC_TYPE, ERROR_TYPE, MSG_TYPE, OUT_TYPE1>::nextType(*connector,
                         type_factory, error_factory);
 
                 if (bt) { // if 'bt' is created
-                    BESDEBUG(SQL_NAME, "SQLBuildDDS: done"<<endl);
+                    BESDEBUG(SQL_NAME, "SQLBuildDDS: done"<<std::endl);
                     // FIXME connector->getColDesc(i) is not teh correct type of value
                     // for most of the variables.
                     attr.append_attr(bt->name(), bt->type_name(), connector->getColDesc(i));
@@ -353,7 +353,7 @@ private:
                 }
                 else // error occurred on 'bt' creation
                 {
-                    BESDEBUG(SQL_NAME, "SQLBuildDDS: : Unrecognized NULL object, Adding default place-holder."<<endl);
+                    BESDEBUG(SQL_NAME, "SQLBuildDDS: : Unrecognized NULL object, Adding default place-holder."<<std::endl);
                     /**
                      * create new Str type and initialize it using
                      * the dummy_reader which simply returns a
@@ -381,12 +381,12 @@ private:
                 }
             } // end try
             catch (BESError &e) {
-                BESDEBUG(SQL_NAME, "SQLBuildDDS: Caught error: " << e.get_message() << endl);
+                BESDEBUG(SQL_NAME, "SQLBuildDDS: Caught error: " << e.get_message() << std::endl);
                 // FIXME BESLog
                 //cerr << "SQLBuildDDS: Caught error: " << e.get_message() << endl;
                 throw;
             } catch (...) {
-                BESDEBUG(SQL_NAME, "SQLBuildDDS: Caught something" << endl);
+                BESDEBUG(SQL_NAME, "SQLBuildDDS: Caught something" << std::endl);
                 // FIXME BESLog
                 //cerr << "caught something" << endl;
                 throw;
@@ -397,7 +397,7 @@ private:
         connector->reset(); // done by SQLSequence constructor
 
         if (seq) {
-            BESDEBUG(SQL_NAME, "SQLBuildDDS: Adding variable to dds"<<endl);
+            BESDEBUG(SQL_NAME, "SQLBuildDDS: Adding variable to dds"<<std::endl);
             dds->add_var_nocopy(seq);
 #if 0
             /**
@@ -414,9 +414,9 @@ private:
             // The BES is setting this to 'virtual'. This is a better
             // name because it is consistent with how other responses
             // are named. 9/10/12 jhrg
-            string name = connector->getParams().get_real_name();
+            std::string name = connector->getParams().get_real_name();
             size_t p = name.find_last_of('/');
-            if (p != string::npos && p+1 <= name.length())
+            if (p != std::string::npos && p+1 <= name.length())
                 name = name.substr(p + 1);
             dds->set_dataset_name(name);
 #if 0
@@ -425,9 +425,9 @@ private:
 #endif
 
 #if __TESTS__==1
-            TESTDEBUG(SQL_NAME_TEST,"--------------DATA DUMP---------------"<<endl);
+            TESTDEBUG(SQL_NAME_TEST,"--------------DATA DUMP---------------"<<std::endl);
             attr.dump(std::cerr);
-            TESTDEBUG(SQL_NAME_TEST,"------------SEQ DUMP DONE------------"<<endl);
+            TESTDEBUG(SQL_NAME_TEST,"------------SEQ DUMP DONE------------"<<std::endl);
 #endif
         }
         else
@@ -435,13 +435,13 @@ private:
 
         dhi.getBesHandler().data[POST_CONSTRAINT] = dhi.getBesContainer()->get_constraint();
 
-        BESDEBUG(SQL_NAME, "SQLBuildDDS: Set constraint"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDDS: Set constraint"<<std::endl);
         bdds->set_constraint(dhi.getBesHandler());
 
-        BESDEBUG(SQL_NAME, "SQLBuildDDS: Clear container"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDDS: Clear container"<<std::endl);
         bdds->clear_container();
 
-        BESDEBUG(SQL_NAME, "SQLBuildDDS: DDS is built"<<endl);
+        BESDEBUG(SQL_NAME, "SQLBuildDDS: DDS is built"<<std::endl);
         return true;
     }
 };

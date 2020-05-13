@@ -164,7 +164,7 @@ public:
 			SQLActionFactory<SQL_TYPE, SQL_TYPE, libdap::BaseType> &type_factory,
 			SQLActionFactory<ERROR_TYPE, ARGS_TYPE, OUT> *error_factory, bool force = false)
 	{
-		TESTDEBUG(SQL_NAME_TEST,"SQLNextTypeAction: getting nextType"<<endl);
+		TESTDEBUG(SQL_NAME_TEST,"SQLNextTypeAction: getting nextType"<<std::endl);
 		try {
 			libdap::BaseType *bt = SQLTypeManager::doActions(type_factory);
 
@@ -200,8 +200,8 @@ public:
 			 *  we have to 'continue' the loop
 			 *  @see SQLActionManager::tryNext
 			 */
-			BESDEBUG(SQL_NAME, ie.get_message()<< " file:"<<ie.get_file()<< " row:"<<ie.get_line()<<endl);
-			BESDEBUG(SQL_NAME, "SQLNextTypeAction: Element skipped"<<endl);
+			BESDEBUG(SQL_NAME, ie.get_message()<< " file:"<<ie.get_file()<< " row:"<<ie.get_line()<<std::endl);
+			BESDEBUG(SQL_NAME, "SQLNextTypeAction: Element skipped"<<std::endl);
 			return NULL;
 		}
 		catch (BESError &e) {

@@ -66,8 +66,8 @@ public:
 	 * @brief default constructor
 	 */
 	SQLSequence(
-			const string &name,
-			const string &dataset,
+			const std::string &name,
+			const std::string &dataset,
 			SQLSimpleConnector<SQL_TYPE,ODBC_TYPE> * conn):
 		Sequence(name,dataset),
 		_conn(conn)
@@ -78,7 +78,7 @@ public:
 			}
 			else {
 				BESDEBUG(SQL_NAME,
-					"SQLSequence: The passed connector should be ready to read."<<endl);
+					"SQLSequence: The passed connector should be ready to read."<<std::endl);
 #if 0
 				// we should return empty sequence, not fail
 				throw BESInternalFatalError(
@@ -91,7 +91,7 @@ public:
 			BESDEBUG(SQL_NAME,
 				"SQLSequence: The passed connector is NULL");
 
-TESTDEBUG( SQL_NAME,"CREATING: SQLSequence"<< endl );
+TESTDEBUG( SQL_NAME,"CREATING: SQLSequence"<< std::endl );
 	};
 
 	/**
@@ -107,7 +107,7 @@ TESTDEBUG( SQL_NAME,"CREATING: SQLSequence"<< endl );
 				}
 				else {
 					BESDEBUG(SQL_NAME,
-						"SQLSequence: The passed connector should be ready to read."<<endl);
+						"SQLSequence: The passed connector should be ready to read."<<std::endl);
 #if 0
 				// we should return empty sequence, not fail
 				throw BESInternalFatalError(
@@ -120,7 +120,7 @@ TESTDEBUG( SQL_NAME,"CREATING: SQLSequence"<< endl );
 				BESDEBUG(SQL_NAME,
 					"SQLSequence: The passed connector is NULL");
 
-TESTDEBUG( SQL_NAME,"COPING: SQLSequence"<<endl );
+TESTDEBUG( SQL_NAME,"COPING: SQLSequence"<<std::endl );
 	}
 /**
  *  @note For most of the types the default implementation of this method is
@@ -193,20 +193,20 @@ TESTDEBUG( SQL_NAME,"COPING: SQLSequence"<<endl );
 		try{
 			if (this->read_p()) // if already readed
 			{// Nothing to do
-TESTDEBUG( SQL_NAME, "SQLSequence: SEQUENCE ALREADY READ"<< endl );
+TESTDEBUG( SQL_NAME, "SQLSequence: SEQUENCE ALREADY READ"<< std::endl );
 				return false;
 			}
 
 			if (!this->_conn->isReady()){
 				// not ready to read, return
-TESTDEBUG( SQL_NAME, "SQLSequence: SEQUENCE EMPTY or not READY"<< endl );
+TESTDEBUG( SQL_NAME, "SQLSequence: SEQUENCE EMPTY or not READY"<< std::endl );
 				return false;
 			}
 
 			if (_conn->notEnd())
 			{
 TESTDEBUG( SQL_NAME, "SQLSequence: READING SEQUENCE\nRow: "
-	<<_conn->getRow()<<" Cols: "<<_conn->getCol()<< endl );
+	<<_conn->getRow()<<" Cols: "<<_conn->getCol()<< std::endl );
 				for (Vars_iter p = var_begin(); p != var_end(); ++p) {
 					if ((*p)->send_p() || (*p)->is_in_selection()) {
 						(*p)->read();
@@ -219,7 +219,7 @@ TESTDEBUG( SQL_NAME, "SQLSequence: READING SEQUENCE\nRow: "
 			}
 			else {// End of sequence
 				TESTDEBUG( SQL_NAME,"SQLSequence: STOP -> Row: "
-				<<_conn->getRows()<<" Cols: "<<_conn->getCols()<< endl );
+				<<_conn->getRows()<<" Cols: "<<_conn->getCols()<< std::endl );
 				//set_read_p(true); // done by read_row
 				//set_send_p(true); // done by read_row
 
@@ -248,7 +248,7 @@ TESTDEBUG( SQL_NAME, "SQLSequence: READING SEQUENCE\nRow: "
 	 * the last SQLSequence instance alive
 	 */
 	virtual ~SQLSequence(){
-TESTDEBUG( SQL_NAME,"DELETING: SQLSequence"<< endl );
+TESTDEBUG( SQL_NAME,"DELETING: SQLSequence"<< std::endl );
 #if 0
 	/**
 	 * If you have called ptr_duplicate this instance does

@@ -83,8 +83,8 @@ public:
 	 * @see reset()
 	 */
 	virtual OUT_TYPE* doNext(ARGS_TYPE *in){
-TESTDEBUG(SQL_NAME_TEST,"StaticActionList: doNext: "<<_iterator<<endl);
-TESTDEBUG(SQL_NAME_TEST,"StaticActionList: args: "<<*in<<endl);
+TESTDEBUG(SQL_NAME_TEST,"StaticActionList: doNext: "<<_iterator<<std::endl);
+TESTDEBUG(SQL_NAME_TEST,"StaticActionList: args: "<<*in<<std::endl);
 		return (_list[_iterator++])(in);
 	}
 
@@ -130,7 +130,7 @@ TESTDEBUG(SQL_NAME_TEST,"StaticActionList: args: "<<*in<<endl);
 		if (!list)
 			throw SQLInternalFatalError("Unable to store a NULL ActionList",
 					__FILE__,__LINE__);
-TESTDEBUG(SQL_NAME_TEST,"CREATED: SQLStaticActionList"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATED: SQLStaticActionList"<<std::endl);
 	};
 
 	/**
@@ -157,7 +157,7 @@ TESTDEBUG(SQL_NAME_TEST,"CREATED: SQLStaticActionList"<<endl);
 			if (_size == 1)
 				delete [] _list;
 
-TESTDEBUG(SQL_NAME_TEST,"DELETED: SQLStaticActionList"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETED: SQLStaticActionList"<<std::endl);
 	};
 
 };

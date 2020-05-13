@@ -51,13 +51,13 @@ public:
 	 * @brief initialize SQL components.
 	 * Register ODBCPlugin into the SQLRequestHandler
 	 */
-    virtual void		initialize( const string &modname );
+    virtual void		initialize( const std::string &modname );
 
     /**
      * @brief de-register SQLHandler components from the
      * De-register ODBCPlugin from the SQLRequestHandler
      */
-    virtual void		terminate( const string &modname );
+    virtual void		terminate( const std::string &modname );
 
     virtual void		dump( ostream &strm ) const ;
 };

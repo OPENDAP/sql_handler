@@ -26,6 +26,8 @@
 
 #include "SQLTextContainer.h"
 
+using namespace std;
+
 SQLTextContainer::SQLTextContainer(const string &name, const string & real_name, const string &type) :
         SQLContainer(name, real_name, type), _dataset(new DATASET()), d_actual_section(_dataset->begin())
 {

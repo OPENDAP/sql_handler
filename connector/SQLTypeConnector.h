@@ -80,7 +80,7 @@ private:
 			_not_end=false; //!< GLOBAL ENDING CONDITION
 
 TESTDEBUG(SQL_NAME_TEST,"--ENDING------> getRow: "<<getRow()
-<<" getCol:"<<getCol()<<endl);
+<<" getCol:"<<getCol()<<std::endl);
 
 			//returning maximum for skipped rows
 			return getRows(); //!< FUNCTION ENDING CONDITION
@@ -160,7 +160,7 @@ public:
 	 * 1 - n 		column index
 	 * @see ODBCConnector
 	 */
-	virtual const string & getColName(const size_t & column)=0;
+	virtual const std::string & getColName(const size_t & column)=0;
 
 	/**
 	 * @brief returns a string representation of the
@@ -172,7 +172,7 @@ public:
 	 * 1 - n 		column index
 	 * @see ODBCConnector
 	 */
-	virtual const string & getColDesc(const size_t & column)=0;
+	virtual const std::string & getColDesc(const size_t & column)=0;
 
 	/**
 	 * @brief return the status of this connector
@@ -289,9 +289,9 @@ public:
 		}
 
 TESTDEBUG(SQL_NAME_TEST,"-------------> getRow: "<<getRow()
-<<" getCol:"<<getCol()<<endl);
+<<" getCol:"<<getCol()<<std::endl);
 TESTDEBUG(SQL_NAME_TEST,"-------------> rows: "<<rows
-<<" increment:"<<increment<<endl);
+<<" increment:"<<increment<<std::endl);
 
 		return rows;
 	}
@@ -299,7 +299,7 @@ TESTDEBUG(SQL_NAME_TEST,"-------------> rows: "<<rows
 
 
 	virtual ~SQLTypeConnector(){
-TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLTypeConnector"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLTypeConnector"<<std::endl);
 	}
 
 	/**
@@ -311,7 +311,7 @@ TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLTypeConnector"<<endl);
 		_columns(0),
 		_rows(0),
 		_not_end(true){
-TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLTypeConnector"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLTypeConnector"<<std::endl);
 	}
 
 };

@@ -26,6 +26,8 @@
 
 #include "SQLQuery.h"
 
+using namespace std;
+
 /**
  * Load all attributes matching the regex and return
  * the loaded set of attributes ordered by attribute name.

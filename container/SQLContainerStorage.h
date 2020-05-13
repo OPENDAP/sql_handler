@@ -72,7 +72,7 @@ public:
      * @param s_name symbolic name for the container
      * @return true if successfully removed and false otherwise
      */
-    virtual bool del_container(const string &s_name)=0 ;
+    virtual bool del_container(const std::string &s_name)=0 ;
 
 	/**
 	 * @brief look_for method to implement
@@ -85,7 +85,7 @@ public:
 	 * passed name match a container in the list
 	 * or NULL if no container with that name is found
 	 */
-	virtual SQLContainer * look_for(const string &name)=0;
+	virtual SQLContainer * look_for(const std::string &name)=0;
 
 	/**
 	 * @brief Update the content of the ContainerStorage with

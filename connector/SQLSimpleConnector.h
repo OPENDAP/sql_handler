@@ -90,7 +90,7 @@ public:
 		 */
 	}
 	virtual ~SQLSimpleConnector(){
-TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLSimpleConnector"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLSimpleConnector"<<std::endl);
 	};
 	/**
 	 * @brief Constructor
@@ -101,7 +101,7 @@ TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLSimpleConnector"<<endl);
 	SQLSimpleConnector():
 		SQLHandleConnector(),
 		SQLTypeConnector<SQL_TYPE,ODBC_TYPE>(){
-TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLSimpleConnector"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLSimpleConnector"<<std::endl);
 	};
 	/**
 	 * @brief Constructor
@@ -112,7 +112,7 @@ TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLSimpleConnector"<<endl);
 	SQLSimpleConnector(SQLContainer *c):
 		SQLHandleConnector(c),
 		SQLTypeConnector<SQL_TYPE,ODBC_TYPE>(){
-TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLSimpleConnector"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLSimpleConnector"<<std::endl);
 	}
 };
 

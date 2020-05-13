@@ -27,6 +27,8 @@
 
 #include "ODBCPluginLoader.h"
 
+using namespace std;
+
 extern "C"
 {
 	/**

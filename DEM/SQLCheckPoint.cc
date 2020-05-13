@@ -38,6 +38,8 @@
 
 #include "SQLDefinitions.h"
 
+using namespace std;
+
 std::bitset<_SQLH_CHECK_SIZE> SQLCheckPoint::function;
 unsigned long SQLCheckPoint::last_type_checked;
 bool SQLCheckPoint::last_status;

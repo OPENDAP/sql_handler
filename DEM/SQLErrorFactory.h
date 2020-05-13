@@ -128,7 +128,7 @@ public:
 		_stop(ef._stop),
 		_connector(ef._connector)
 	{
-TESTDEBUG(SQL_NAME_TEST,"COPIED: SQLErrorFactory"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"COPIED: SQLErrorFactory"<<std::endl);
 	}
 
 	/**
@@ -151,11 +151,11 @@ TESTDEBUG(SQL_NAME_TEST,"COPIED: SQLErrorFactory"<<endl);
 			throw SQLInternalFatalError(
 				"Could not build an ErrorFactory using a NULL pointer for GETACTION",
 				__FILE__,__LINE__);
-TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLErrorFactory"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLErrorFactory"<<std::endl);
 	}
 
 	virtual ~SQLErrorFactory(){
-TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLErrorFactory"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLErrorFactory"<<std::endl);
 	}
 
 	SQLErrorConnector<ERROR_TYPE,MSG_TYPE> & getConnector(){

@@ -100,9 +100,9 @@ public:
 	 */
 	virtual SQL_TYPE * getType(size_t column);
 
-	virtual const string & getColName(const size_t &column);
+	virtual const std::string & getColName(const size_t &column);
 
-	virtual const string & getColDesc(const size_t& column);
+	virtual const std::string & getColDesc(const size_t& column);
 
 
 	virtual ERROR_TYPE * getError();
@@ -170,7 +170,7 @@ public:
 		descs(NULL),	//!< buffer (column descriptions)
 		names(NULL)	//!< buffer
 	{
-TESTDEBUG(ODBC_NAME,"CREATING: ODBCConnector"<<endl);
+TESTDEBUG(ODBC_NAME,"CREATING: ODBCConnector"<<std::endl);
 	};
 
 	virtual ~ODBCConnector(){
@@ -288,9 +288,9 @@ private:
 
 	SQLLEN * sizes, row_size; //!< sizes buffer
 
-	string * descs; //!< descriptions buffer
+	std::string * descs; //!< descriptions buffer
 
-	string * names; //!< column names buffer
+	std::string * names; //!< column names buffer
 };
 
 #endif /* ODBCCONNECTOR_H_ */

@@ -44,18 +44,18 @@ class SQLConstraint {
 	 * >=
 	 * @see SQLQueryDefinition for a list
 	 */
-	string comparator;
+	std::string comparator;
 	/**
 	 * @brief substitute is a string representation
 	 * of a valid SQL substitute for the stored
 	 * DAP comparator
 	 */
-	string substitute; // substitute for comparator
+	std::string substitute; // substitute for comparator
 	/**
 	 * @brief string representation of the value
 	 * of this constraint
 	 */
-	string value;
+	std::string value;
 public:
 	/**
 	 * @brief less comparison operator which will
@@ -76,8 +76,8 @@ public:
 	 * @brief print a string representation of this
 	 * SQLConstraint
 	 */
-	string toString()const{
-		string ret=attribute.getAttribute();
+	std::string toString()const{
+		std::string ret=attribute.getAttribute();
 		ret+=(!substitute.empty())?substitute:comparator;
 		ret+=value;
 		return ret;
@@ -100,42 +100,42 @@ public:
 	/**
 	 * @brief change the value of this constraint
 	 */
-	void setVal(string val){
+	void setVal(std::string val){
 		value=val;
 	}
 
 	/**
 	 * @brief return the value of this constraint
 	 */
-	const string & getVal()const {
+	const std::string & getVal()const {
 		return value;
 	}
 
 	/**
 	 * @brief change the comparator of this constraint
 	 */
-	void setComparator(string comp){
+	void setComparator(std::string comp){
 		comparator=comp;
 	}
 
 	/**
 	 * @brief return the comparator of this constraint
 	 */
-	const string &getComparator()const {
+	const std::string &getComparator()const {
 		return comparator;
 	}
 
 	/**
 	 * @brief set the substitute comparator for this constraint
 	 */
-	void setSubstitute(string subst){
+	void setSubstitute(std::string subst){
 		substitute=subst;
 	}
 
 	/**
 	 * @brief return the substitute comparator for this constraint
 	 */
-	const string &getSubstitute()const {
+	const std::string &getSubstitute()const {
 		return substitute;
 	}
 
@@ -146,13 +146,13 @@ public:
 	 * @param the value
 	 * @param an (optional) substitution string for comparator
 	 */
-	SQLConstraint(const SQLAttribute &attr,const string &comp,
-			const string &val, const string &subst=""):
+	SQLConstraint(const SQLAttribute &attr,const std::string &comp,
+			const std::string &val, const std::string &subst=""):
 		attribute(attr),
 		comparator(comp),
 		substitute(subst),
 		value(val){
-TESTDEBUG( SQL_NAME,"CREATING: SQLConstraint"<<endl );
+TESTDEBUG( SQL_NAME,"CREATING: SQLConstraint"<<std::endl );
 	};
 
 	/**
@@ -163,13 +163,13 @@ TESTDEBUG( SQL_NAME,"CREATING: SQLConstraint"<<endl );
 	 * @param the value
 	 * @param an (optional) substitution string for comparator
 	 */
-	SQLConstraint(const string &attr,const string &comp,
-			const string &val, const string &subst=""):
+	SQLConstraint(const std::string &attr,const std::string &comp,
+			const std::string &val, const std::string &subst=""):
 		attribute(attr,0),
 		comparator(comp),
 		substitute(subst),
 		value(val){
-TESTDEBUG( SQL_NAME,"CREATING: SQLConstraint"<<endl );
+TESTDEBUG( SQL_NAME,"CREATING: SQLConstraint"<<std::endl );
 	};
 
 	/**
@@ -180,14 +180,14 @@ TESTDEBUG( SQL_NAME,"CREATING: SQLConstraint"<<endl );
 		comparator(c.comparator),
 		substitute(c.substitute),
 		value(c.value){
-TESTDEBUG( SQL_NAME,"COPING: SQLConstraint"<<endl );
+TESTDEBUG( SQL_NAME,"COPING: SQLConstraint"<<std::endl );
 	};
 
 	/**
 	 * @brief dtor
 	 */
 	virtual ~SQLConstraint(){
-TESTDEBUG( SQL_NAME,"DELETING: SQLConstraint"<<endl );
+TESTDEBUG( SQL_NAME,"DELETING: SQLConstraint"<<std::endl );
 	};
 };
 

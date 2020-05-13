@@ -91,7 +91,7 @@ public:
 			throw BESInternalFatalError("Index out of bounds", __FILE__, __LINE__);
 	}
 
-	void setMatch(size_t i, string s)
+	void setMatch(size_t i, std::string s)
 	{
 		if (i < _sizeOn && match)
 			match[i] = s;
@@ -111,7 +111,7 @@ public:
 	{
 		TESTDEBUG( SQL_NAME,"CREATING: matched\nsize: "<<sz<<
 				"\nsizeOn: "<<_sizeOn<<
-				"\nmap: "<<map.to_string()<<endl );
+				"\nmap: "<<map.to_string()<<std::endl );
 	}
 
 	/**
@@ -120,7 +120,7 @@ public:
 	 * @note: group 0 represent the entire regex matching substring
 	 */
 	matched<sz>(const matched<sz> &m) :
-			_sizeOn(m._sizeOn), match(new string[m._sizeOn]), map(m.map)
+			_sizeOn(m._sizeOn), match(new std::string[m._sizeOn]), map(m.map)
 	{
 		// copy strings
 		for (size_t s = 0; s < _sizeOn; s++)
@@ -128,11 +128,11 @@ public:
 
 		TESTDEBUG( SQL_NAME,"CREATING: matched\nsize: "<<sz<<
 				"\nsizeOn: "<<_sizeOn<<
-				"\nmap: "<<map.to_string()<<endl );
+				"\nmap: "<<map.to_string()<<std::endl );
 	}
 #if 0
 	// not needed
-	void setMatch(bitset<sz> &bs, string a[]) {
+	void setMatch(bitset<sz> &bs, std::string a[]) {
 		map=bs;
 		if (match)
 		delete [] match;
@@ -141,12 +141,12 @@ public:
 #endif
 	virtual ~matched()
 	{
-		TESTDEBUG( SQL_NAME,"DELETING: matched"<<endl);
+		TESTDEBUG( SQL_NAME,"DELETING: matched"<<std::endl);
 		if (match) {
 			delete[] match;
 		}
 		match = 0;
-		TESTDEBUG( SQL_NAME,"DELETED: matched"<<endl);
+		TESTDEBUG( SQL_NAME,"DELETED: matched"<<std::endl);
 	}
 };
 
@@ -201,7 +201,7 @@ public:
 	 * @throws BESInternalFatalError (if regex is null),
 	 * BESInternalError if fails to compile regex_t
 	 */
-	static std::vector<std::vector<string> > match(const char * regex, size_t n_groups, std::vector<size_t> & groups,
+	static std::vector<std::vector<std::string> > match(const char * regex, size_t n_groups, std::vector<size_t> & groups,
 			std::string & row);
 
 	/**
@@ -237,7 +237,7 @@ public:
 		regex_t _reg_expr;
 		// compile regex
 		if (regcomp(&_reg_expr, regex, REG_EXTENDED) != 0) {
-			throw BESInternalError("StringMatch: Unable to compile the REGEX: " + (string) regex,
+			throw BESInternalError("StringMatch: Unable to compile the REGEX: " + (std::string) regex,
 			__FILE__, __LINE__);
 		}
 		// returned
@@ -267,18 +267,18 @@ public:
 						TESTDEBUG( SQL_NAME,"Group number "<<i<<" is found: "
 								"\nSubstring-> start:"<<indexes[i].rm_so<<
 								"\nSubstring-> size:"<<indexes[i].rm_eo-indexes[i].rm_so<<
-								"\nString-> size:"<<row.size()<<endl );
+								"\nString-> size:"<<row.size()<<std::endl );
 						gr.set(i, true);
 					}
 #if __TESTS__==1
 					else // no group found
 					TESTDEBUG( SQL_NAME,
-							"StringMatch: String matches but no group number "<<i<<" is found"<<endl);
+							"StringMatch: String matches but no group number "<<i<<" is found"<<std::endl);
 #endif
 				}
 				// if some group is found in the substring
 				if (gr.any()) {
-					TESTDEBUG( SQL_NAME,"StringMatch::Some group found, extracting: "<<endl );
+					TESTDEBUG( SQL_NAME,"StringMatch::Some group found, extracting: "<<std::endl );
 					/**
 					 * now we know how many groups are found
 					 * let's create and populate array
@@ -290,7 +290,7 @@ public:
 					for (size_t i = get_next(m.getMap(), 0); i < sz; i = get_next(m.getMap(), i)) {
 						m.setMatch(i_matched, row.substr(indexes[i].rm_so, indexes[i].rm_eo - indexes[i].rm_so));
 						TESTDEBUG( SQL_NAME,"StringMatch::match extracting: "<<
-								"\ngroup: "<<i<<"\nfound: "<<m.getMatch(i_matched)<<endl );
+								"\ngroup: "<<i<<"\nfound: "<<m.getMatch(i_matched)<<std::endl );
 						i_matched++;
 					}
 					// store found groups
@@ -300,7 +300,7 @@ public:
 				// delete matching string (entire string)
 				row.erase(indexes[0].rm_so, indexes[0].rm_eo - indexes[0].rm_so);
 
-				TESTDEBUG( SQL_NAME,"StringMatch::match remain: "<<row<<endl );
+				TESTDEBUG( SQL_NAME,"StringMatch::match remain: "<<row<<std::endl );
 
 			}
 			regfree(&_reg_expr);
@@ -308,7 +308,7 @@ public:
 		catch (...) {
 			regfree(&_reg_expr);
 			throw;
-		} TESTDEBUG( SQL_NAME,"StringMatch::match done"<<endl );
+		} TESTDEBUG( SQL_NAME,"StringMatch::match done"<<std::endl );
 		return ret;
 	}
 };

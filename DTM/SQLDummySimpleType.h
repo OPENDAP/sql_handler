@@ -36,7 +36,7 @@
  * object should be created.
  */
 class SQLDummySimpleType:public libdap::Str{
-	SQLCastAction<void,string> _cast;
+	SQLCastAction<void,std::string> _cast;
 public:
 
 	/**
@@ -48,12 +48,12 @@ public:
 	 * @param reuse a boolean indicating if the casted pointer should
 	 * be deleted or is reused elsewhere
 	 */
-	SQLDummySimpleType(	string name,
-					SQLCastAction<void,string>::CAST cast_action,
+	SQLDummySimpleType(	std::string name,
+					SQLCastAction<void, std::string>::CAST cast_action,
 					bool reuse):
 		Str(name),
 		_cast(cast_action, reuse){
-TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLDummySimpleType"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLDummySimpleType"<<std::endl);
 	};
 
 	virtual ~SQLDummySimpleType(){};
@@ -65,23 +65,23 @@ TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLDummySimpleType"<<endl);
 	{
 	try {
 		if (this->read_p()){
-TESTDEBUG(SQL_NAME_TEST,"SQLDummySimpleType: skipping object"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLDummySimpleType: skipping object"<<std::endl);
 			return false;
 		}
 		else
 		{
-TESTDEBUG(SQL_NAME_TEST,"SQLDummySimpleType: reading object"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLDummySimpleType: reading object"<<std::endl);
 				this->set_value( *(this->_cast.action(NULL)) ); //read dummy value
 				if (!_cast.reusable()) {
 					this->_cast.freeValue(); // deleting casted value
 				}
-TESTDEBUG(SQL_NAME_TEST,"SQLDummySimpleType: object copied to the buffer"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLDummySimpleType: object copied to the buffer"<<std::endl);
 			return false;
 		}
 	}
 	catch (BESError &e){
 			BESDEBUG(SQL_NAME,
-						"SQLDummySimpleType: Unable to read variable"<<endl);
+						"SQLDummySimpleType: Unable to read variable"<<std::endl);
 			throw BESInternalFatalError(
 				"SQLDummySimpleType: Unable to read variable: "+e.get_message(),
 				e.get_file(),e.get_line());
@@ -102,7 +102,7 @@ TESTDEBUG(SQL_NAME_TEST,"SQLDummySimpleType: object copied to the buffer"<<endl)
 		Str(obj->name()),
 		_cast(obj->_cast)
 	{
-TESTDEBUG(SQL_NAME_TEST,"COPING: SQLDummySimpleType"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"COPING: SQLDummySimpleType"<<std::endl);
 	};
 };
 

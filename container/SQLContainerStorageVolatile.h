@@ -47,11 +47,11 @@ class SQLContainerStorageVolatile:
 	public BESContainerStorageVolatile, public SQLContainerStorage{
 
 public:
-		SQLContainerStorageVolatile(const string & name):
+		SQLContainerStorageVolatile(const std::string & name):
 			BESContainerStorageVolatile(name),
 			SQLContainerStorage()
 		{
-TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainerStorageVolatile"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainerStorageVolatile"<<std::endl);
 		};
 
 		/**
@@ -65,7 +65,7 @@ TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainerStorageVolatile"<<endl);
 		/**
 		 * Simply wrap the inherited del_container
 		 */
-		bool del_container(const string &name){
+		bool del_container(const std::string &name){
 			return BESContainerStorageVolatile::del_container(name);
 		}
 
@@ -87,7 +87,7 @@ TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainerStorageVolatile"<<endl);
 		 * passed name match a container in the list
 		 * or NULL if no container with that name is found
 		 */
-		SQLContainer * look_for(const string &name);
+		SQLContainer * look_for(const std::string &name);
 
 		/**
 		 * @brief Update the content of the ContainerStorage with
@@ -97,16 +97,16 @@ TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLContainerStorageVolatile"<<endl);
 		bool update(SQLContainer *c);
 
 		virtual ~SQLContainerStorageVolatile(){
-TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLContainerStorageVolatile"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLContainerStorageVolatile"<<std::endl);
 			del_containers();
 		};
 
 
 #if 0
 		// commented out: not used && to update for use SQLContainerFactory
-		void add_container(const string & name,
-							const string & real_name,
-							const string & type)
+		void add_container(const std::string & name,
+							const std::string & real_name,
+							const std::string & type)
 		{
 //			if (_cf)
 				BESContainerStorageVolatile::add_container(

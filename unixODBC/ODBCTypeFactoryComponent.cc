@@ -30,6 +30,8 @@
 
 #include <util.h>
 
+using namespace std;
+
 /**
  * @brief The READ function used to
  * read from the Connector and

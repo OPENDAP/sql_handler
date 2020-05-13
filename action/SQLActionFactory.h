@@ -156,14 +156,14 @@ public:
 	 * @brief Dtor
 	 */
 	virtual ~SQLActionFactory(){
-TESTDEBUG(SQL_NAME_TEST,"DELETED: SQLActionFactory"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETED: SQLActionFactory"<<std::endl);
 	};
 
 	/**
 	 * @brief Constructor
 	 */
 	SQLActionFactory<CODE_TYPE,ARGS_TYPE,OUT_TYPE>(){
-TESTDEBUG(SQL_NAME_TEST,"CREATED: SQLActionFactory"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATED: SQLActionFactory"<<std::endl);
 	};
 
 };

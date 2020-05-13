@@ -76,7 +76,7 @@ public:
     {
         // trigger activation
         if (check == _SQLH_ON_ALWAYS) {
-            BESDEBUG(SQL_NAME, "SQLErrorManager: This check point is forced, running error checks."<<endl);
+            BESDEBUG(SQL_NAME, "SQLErrorManager: This check point is forced, running error checks."<<std::endl);
             /*
              *  run using:
              *  - passed error_factory
@@ -88,7 +88,7 @@ public:
             return SQLActionManager<JOIN, JOIN, JOIN>::doActions(error_factory, &merge, &join, false);
         }
         else if (SQLCheckPoint::check(check)) {
-            BESDEBUG(SQL_NAME, "SQLErrorManager: This check point is active, running error checks."<<endl);
+            BESDEBUG(SQL_NAME, "SQLErrorManager: This check point is active, running error checks."<<std::endl);
             /*
              *  run using:
              *  - passed error_factory
@@ -100,7 +100,7 @@ public:
             return SQLActionManager<JOIN, JOIN, JOIN>::doActions(error_factory, &merge, &join, false);
         }
         else
-            BESDEBUG(SQL_NAME, "SQLErrorManager: This check point isn't active"<<endl);
+            BESDEBUG(SQL_NAME, "SQLErrorManager: This check point isn't active"<<std::endl);
         return NULL;
     }
 

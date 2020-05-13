@@ -100,7 +100,7 @@ public:
 	 */
 	OUT *action(IN * val)
 	{
-		TESTDEBUG(SQL_NAME_TEST,"SQLCastAction: casting object"<<endl);
+		TESTDEBUG(SQL_NAME_TEST,"SQLCastAction: casting object"<<std::endl);
 		SQLObjectAction<IN,OUT>::setVal((*_cast)(val));
 		return this->getVal();
 	}
@@ -120,7 +120,7 @@ public:
 	 */
 	virtual ~SQLCastAction()
 	{
-		TESTDEBUG(SQL_NAME_TEST,"SQLCastAction: deleting object"<<endl);
+		TESTDEBUG(SQL_NAME_TEST,"SQLCastAction: deleting object"<<std::endl);
 	}
 
 private:

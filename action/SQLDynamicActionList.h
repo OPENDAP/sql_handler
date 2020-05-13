@@ -130,7 +130,7 @@ class SQLDynamicActionList:
 	};
 
 	virtual ~SQLDynamicActionList(){
-TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLDynamicActionList"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLDynamicActionList"<<std::endl);
 	};
 
 private:

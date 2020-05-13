@@ -37,14 +37,14 @@
  * @brief The dataset definition
  */
 typedef struct dataset_section {
-    string api; //!< name of the SQLPlugin
-    string server; //!< server name or DSN
-    string port; //!< server port
-    string dbname; //!< database name
-    string user; //!< user name
-    string pass; //!< password
+    std::string api; //!< name of the SQLPlugin
+    std::string server; //!< server name or DSN
+    std::string port; //!< server port
+    std::string dbname; //!< database name
+    std::string user; //!< user name
+    std::string pass; //!< password
     SQLQuery query; //!< SQLQuery object
-    std::map<string, string> other; //!< optional rows
+    std::map<std::string, std::string> other; //!< optional rows
 
     /*
      * @brief copy constructor
@@ -54,7 +54,7 @@ typedef struct dataset_section {
             api(ds.api), server(ds.server), port(ds.port), dbname(ds.dbname), user(ds.user), pass(ds.pass), query(
                     ds.query), other(ds.other)
     {
-        TESTDEBUG(SQL_NAME_TEST,"CREATE: DATASET_SECTION"<<endl);
+        TESTDEBUG(SQL_NAME_TEST,"CREATE: DATASET_SECTION"<<std::endl);
     }
 
     /**
@@ -62,14 +62,14 @@ typedef struct dataset_section {
      */
     dataset_section()
     {
-        TESTDEBUG(SQL_NAME_TEST,"CREATE: SQLH_DATASET_SECTION"<<endl);
+        TESTDEBUG(SQL_NAME_TEST,"CREATE: SQLH_DATASET_SECTION"<<std::endl);
     }
     /**
      * @brief dtor
      */
     virtual ~dataset_section()
     {
-        TESTDEBUG(SQL_NAME_TEST,"DELETE: SQLH_DATASET_SECTION ->api: "<<api<<endl);
+        TESTDEBUG(SQL_NAME_TEST,"DELETE: SQLH_DATASET_SECTION ->api: "<<api<<std::endl);
     }
 
 } SQLH_DATASET_SECTION;

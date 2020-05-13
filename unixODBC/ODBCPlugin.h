@@ -137,7 +137,7 @@ public:
 	/**
 	 * @brief Default constructor
 	 */
-	ODBCPlugin(const string &name):	SQLPlugin(name){
+	ODBCPlugin(const std::string &name):	SQLPlugin(name){
 
 		SQLPlugin::add_handler(DAS_RESPONSE, ODBCPlugin::build_das ) ;
 		SQLPlugin::add_handler(DDS_RESPONSE, ODBCPlugin::build_dds ) ;
@@ -145,11 +145,11 @@ public:
 		SQLPlugin::add_handler(HELP_RESPONSE, ODBCPlugin::build_help ) ;
 		SQLPlugin::add_handler(VERS_RESPONSE, ODBCPlugin::build_vers ) ;
 
-TESTDEBUG(SQL_NAME_TEST,"CREATED: unixODBC Plugin"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATED: unixODBC Plugin"<<std::endl);
 	};
 
 	virtual ~ODBCPlugin(){
-TESTDEBUG(SQL_NAME_TEST,"DELETED: unixODBC PLUGIN"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETED: unixODBC PLUGIN"<<std::endl);
 	};
 
 	/**

@@ -113,7 +113,7 @@ public:
 #endif
 TESTDEBUG(SQL_NAME_TEST,"SQLObjectTypeFactory: getCode()"
 	" from connector for column "<<_connector.getCol()<<" row "
-		<<_connector.getRow()<<endl);
+		<<_connector.getRow()<<std::endl);
 
 		return _connector.getType(_connector.getCol());
 	};
@@ -125,7 +125,7 @@ TESTDEBUG(SQL_NAME_TEST,"SQLObjectTypeFactory: getCode()"
 	virtual bool stop(SQL_TYPE * code){
 #if 0
 // code may not be <<able
-TESTDEBUG(SQL_NAME_TEST,"SQLObjectTypeFactory: stop( "<<*code<<" ) == true"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLObjectTypeFactory: stop( "<<*code<<" ) == true"<<std::endl);
 #endif
 		return true;
 	}
@@ -141,7 +141,7 @@ TESTDEBUG(SQL_NAME_TEST,"SQLObjectTypeFactory: stop( "<<*code<<" ) == true"<<end
 		_al(_action), // action list of 1 action
 		_connector(factComp.getConnector()) // store & connector for local use
 	{
-TESTDEBUG(SQL_NAME_TEST,"CREATED: OBJECT TYPE FACTORY"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATED: OBJECT TYPE FACTORY"<<std::endl);
 	}
 
 	/**
@@ -154,11 +154,11 @@ TESTDEBUG(SQL_NAME_TEST,"CREATED: OBJECT TYPE FACTORY"<<endl);
 		_al(of._action), // action list of 1 action
 		_connector(of._connector) // store & connector for local use
 	{
-TESTDEBUG(SQL_NAME_TEST,"COPING: OBJECT TYPE FACTORY"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"COPING: OBJECT TYPE FACTORY"<<std::endl);
 	}
 
 	virtual ~SQLObjectTypeFactory(){
-TESTDEBUG(SQL_NAME_TEST,"DELETED: OBJECT TYPE FACTORY"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETED: OBJECT TYPE FACTORY"<<std::endl);
 	}
 
 	SQLTypeConnector<SQL_TYPE,ODBC_TYPE> & getConnector(){

@@ -92,7 +92,7 @@ template <class IN>
 class SQLDefaultErrorAction {
 #if 0
 #define _SQLH_DEBUG(args); \
-	BESDEBUG( SQL_NAME, _SQLH_DEBUG_PREFIX<<args<< endl );
+	BESDEBUG( SQL_NAME, _SQLH_DEBUG_PREFIX<<args<< std::endl );
 #define _SQLH_EXCEPT(args); \
 	throw SQLInternalError(_SQLH_EXCEPTION_PREFIX+args,__FILE__,__LINE__);
 #define _SQLH_EXCEPT(args); \

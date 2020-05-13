@@ -96,7 +96,7 @@ private:
 	 * or its alias
 	 * @see AttrNameComp
 	 */
-	string name;
+	std::string name;
 
 	/**
 	 * @brief string representing the fullName of the
@@ -108,13 +108,13 @@ private:
 	 * - "attr "
 	 * - ""
 	 */
-	string fullName;
+	std::string fullName;
 
 	/**
 	 * we add this member to speed up ordering by
 	 * Attribute
 	 */
-	string attribute;
+	std::string attribute;
 
 	/**
 	 * @brief unsigned integer representing the position
@@ -128,14 +128,14 @@ protected:
 	/**
 	 * @brief change the value of the name
 	 */
-	void setName(string n){
+	void setName(std::string n){
 		name=n;
 	}
 
 	/**
 	 * @brief change the value of the fullName
 	 */
-	void setFullName(string n){
+	void setFullName(std::string n){
 		fullName=n;
 	}
 
@@ -144,21 +144,21 @@ public:
 	/**
 	 * @brief return a string representation of this class
 	 */
-	string toString()const{
+	std::string toString()const{
 		return attribute;
 	}
 
 	/**
 	 * @brief return the value of the name
 	 */
-	const string & getName()const {
+	const std::string & getName()const {
 		return name;
 	}
 
 	/**
 	 * @brief return the value of the fullName
 	 */
-	const string & getFullName()const {
+	const std::string & getFullName()const {
 		return fullName;
 	}
 
@@ -166,7 +166,7 @@ public:
 	 * @brief return the value of this attribute.
 	 *
 	 */
-	const string & getAttribute()const {
+	const std::string & getAttribute()const {
 		return attribute;
 	}
 
@@ -189,11 +189,11 @@ public:
 	 * name and fullName attributes.
 	 * @param the attribute string.
 	 */
-	virtual bool loadAttribute(const string & attr){
-TESTDEBUG( SQL_NAME,"SQLAttribute::loadAttribute starting-> attr: "<<attr<<endl );
+	virtual bool loadAttribute(const std::string & attr){
+TESTDEBUG( SQL_NAME,"SQLAttribute::loadAttribute starting-> attr: "<<attr<<std::endl );
 
 		// non const string
-		string buf=attr;
+		std::string buf=attr;
 		// filling groups to extract (see match())
 		std::bitset<_SQLH_ATTR_REG_GROUPS> groups;
 		/**
@@ -228,7 +228,7 @@ TESTDEBUG( SQL_NAME,"SQLAttribute::loadAttribute starting-> attr: "<<attr<<endl 
 				this->setFullName((*i).getMatch(i_matched++));
 			else
 				this->setFullName("");
-TESTDEBUG( SQL_NAME,"SQLAttribute::loadAttribute PREFIX:"<<getFullName()<<endl );
+TESTDEBUG( SQL_NAME,"SQLAttribute::loadAttribute PREFIX:"<<getFullName()<<std::endl );
 			if (bs.test(_SQLH_ATTR_REG_ATTR_GROUP_op1))
 				this->setName((*i).getMatch(i_matched++));
 			else if (bs.test(_SQLH_ATTR_REG_ATTR_GROUP_op2))
@@ -240,13 +240,13 @@ TESTDEBUG( SQL_NAME,"SQLAttribute::loadAttribute PREFIX:"<<getFullName()<<endl )
 					"Unable to match required attribute name.",
 					__FILE__,__LINE__);
 
-TESTDEBUG( SQL_NAME,"SQLAttribute::loadAttribute NAME:"<<getName()<<endl );
+TESTDEBUG( SQL_NAME,"SQLAttribute::loadAttribute NAME:"<<getName()<<std::endl );
 		}
 		else
 			throw BESInternalError(
 				"Unable to match the SQLAttributes parts",
 				__FILE__,__LINE__);
-TESTDEBUG( SQL_NAME,"SQLAttribute::loadAttribute done"<<endl );
+TESTDEBUG( SQL_NAME,"SQLAttribute::loadAttribute done"<<std::endl );
 	return true;
 	}
 
@@ -260,12 +260,12 @@ TESTDEBUG( SQL_NAME,"SQLAttribute::loadAttribute done"<<endl );
 	 * @param its reveled position
 	 * @see SQLAttribute
 	 */
-	SQLAttribute(const string &r, const string &n, const size_t &pos):
+	SQLAttribute(const std::string &r, const std::string &n, const size_t &pos):
 		name(n),
 		fullName(r),
 		attribute(r+n),
 		position(pos){
-TESTDEBUG( SQL_NAME,"CREATING: SQLAttribute"<<endl );
+TESTDEBUG( SQL_NAME,"CREATING: SQLAttribute"<<std::endl );
 	};
 #endif
 
@@ -276,7 +276,7 @@ TESTDEBUG( SQL_NAME,"CREATING: SQLAttribute"<<endl );
 	 * @param its reveled position
 	 * @see SQLAttribute
 	 */
-	SQLAttribute(const string &attr, const size_t &pos):
+	SQLAttribute(const std::string &attr, const size_t &pos):
 		attribute(attr),
 		position(pos)
 	{
@@ -284,7 +284,7 @@ TESTDEBUG( SQL_NAME,"CREATING: SQLAttribute"<<endl );
 			throw BESInternalError(
 				"Passed string is not recognized as SQLAttribute",
 				__FILE__,__LINE__);
-TESTDEBUG( SQL_NAME,"CREATING: SQLAttribute"<<endl );
+TESTDEBUG( SQL_NAME,"CREATING: SQLAttribute"<<std::endl );
 	};
 	/**
 	 * @brief copy constructor
@@ -294,14 +294,14 @@ TESTDEBUG( SQL_NAME,"CREATING: SQLAttribute"<<endl );
 		fullName(a.fullName),
 		attribute(a.attribute),
 		position(a.position){
-TESTDEBUG( SQL_NAME,"COPING: SQLAttribute"<<endl );
+TESTDEBUG( SQL_NAME,"COPING: SQLAttribute"<<std::endl );
 	};
 
 	/**
 	 * @brief dtor
 	 */
 	virtual ~SQLAttribute(){
-TESTDEBUG( SQL_NAME,"DELETING: SQLAttribute"<<endl );
+TESTDEBUG( SQL_NAME,"DELETING: SQLAttribute"<<std::endl );
 	};
 };
 
@@ -328,14 +328,14 @@ public:
 	 * @brief constructor
 	 */
 	SQLAttrNameComp ():SQLLessComp(){
-TESTDEBUG( SQL_NAME,"CREATING: SQLAttrNameComp::comparator"<<endl );
+TESTDEBUG( SQL_NAME,"CREATING: SQLAttrNameComp::comparator"<<std::endl );
 	}
 
 	/**
 	 * @brief dtor
 	 */
 	virtual ~SQLAttrNameComp(){
-TESTDEBUG( SQL_NAME,"DELETING: SQLAttrNameComp::comparator"<<endl );
+TESTDEBUG( SQL_NAME,"DELETING: SQLAttrNameComp::comparator"<<std::endl );
 	};
 
 	/**
@@ -347,7 +347,7 @@ TESTDEBUG( SQL_NAME,"DELETING: SQLAttrNameComp::comparator"<<endl );
 
 	// comparison of elements
 	bool less (const SQLAttribute& a1, const SQLAttribute& a2) const {
-TESTDEBUG( SQL_NAME,"SQLAttrComp::comparing using name"<<endl );
+TESTDEBUG( SQL_NAME,"SQLAttrComp::comparing using name"<<std::endl );
 			return ((a1.getName()).compare(a2.getName())<0);
 	}
 };
@@ -362,14 +362,14 @@ public:
 	 * @brief constructor
 	 */
 	SQLAttrAttrComp ():SQLLessComp(){
-TESTDEBUG( SQL_NAME,"CREATING: SQLAttrAttrComp::comparator"<<endl );
+TESTDEBUG( SQL_NAME,"CREATING: SQLAttrAttrComp::comparator"<<std::endl );
 	}
 
 	/**
 	 * @brief dtor
 	 */
 	virtual ~SQLAttrAttrComp(){
-TESTDEBUG( SQL_NAME,"DELETING: SQLAttrAttrComp::comparator"<<endl );
+TESTDEBUG( SQL_NAME,"DELETING: SQLAttrAttrComp::comparator"<<std::endl );
 	};
 
 	/**
@@ -381,7 +381,7 @@ TESTDEBUG( SQL_NAME,"DELETING: SQLAttrAttrComp::comparator"<<endl );
 
 	// comparison of elements
 	bool less (const SQLAttribute& a1, const SQLAttribute& a2) const {
-TESTDEBUG( SQL_NAME,"SQLAttrAttrComp::comparing using attribute"<<endl );
+TESTDEBUG( SQL_NAME,"SQLAttrAttrComp::comparing using attribute"<<std::endl );
 			return ((a1.getAttribute()).compare(a2.getAttribute())<0);
 	}
 };
@@ -397,14 +397,14 @@ public:
 	 * @brief constructor
 	 */
 	SQLAttrPosComp ():SQLLessComp() {
-TESTDEBUG( SQL_NAME,"CREATING: SQLAttrPosComp::comparator"<<endl );
+TESTDEBUG( SQL_NAME,"CREATING: SQLAttrPosComp::comparator"<<std::endl );
 	}
 
 	/**
 	 * @brief dtor
 	 */
 	virtual ~SQLAttrPosComp (){
-TESTDEBUG( SQL_NAME,"DELETING: SQLAttrPosComp::comparator"<<endl );
+TESTDEBUG( SQL_NAME,"DELETING: SQLAttrPosComp::comparator"<<std::endl );
 	};
 
 	/**
@@ -418,7 +418,7 @@ TESTDEBUG( SQL_NAME,"DELETING: SQLAttrPosComp::comparator"<<endl );
 	 * @brief comparison of elements
 	 */
 	bool less(const SQLAttribute& a1, const SQLAttribute& a2) const {
-TESTDEBUG( SQL_NAME,"SQLAttrComp::comparing using Position"<<endl );
+TESTDEBUG( SQL_NAME,"SQLAttrComp::comparing using Position"<<std::endl );
 		return (a1.getPosition() < a2.getPosition());
 	}
 };
@@ -439,7 +439,7 @@ public:
 	 * will be delete on dtor call.
 	 */
 	SQLAttrComp(SQLLessComp *c):comp(c){
-TESTDEBUG( SQL_NAME,"CREATING: SQLAttrComp::comparator"<<endl );
+TESTDEBUG( SQL_NAME,"CREATING: SQLAttrComp::comparator"<<std::endl );
 	}
 
 	// comparison of elements

@@ -26,6 +26,8 @@
 
 #include "SQLContainerFactory.h"
 
+using namespace std;
+
 SQLContainerStorage *SQLContainerFactory::cs=NULL;
 SELECT_CONTAINER SQLContainerFactory::_select_func=&selectContainer;
 

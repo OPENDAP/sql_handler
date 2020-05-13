@@ -166,7 +166,7 @@ TESTDEBUG(SQL_NAME_TEST,"COPING: SQLBaseType with:\n"
 		"\n on column: "<<obj.getConnector().getCol()<<
 		"\n using passed position:"
 		"\n name: "<<obj.getConnector().getColName(obj.getCol())<<
-		"\n on column: "<<obj.getCol()<<endl);
+		"\n on column: "<<obj.getCol()<<std::endl);
 
 	};
 
@@ -193,7 +193,7 @@ TESTDEBUG(SQL_NAME_TEST,"COPING: SQLBaseType with:\n"
 		check();
 
 TESTDEBUG(SQL_NAME_TEST,"SQLBaseType: CLONING ComplexObject with:\n"
-	"\n name: "<<conn.getColName(_col)<<"\n on column: "<<_col<<endl);
+	"\n name: "<<conn.getColName(_col)<<"\n on column: "<<_col<<std::endl);
 
 	};
 
@@ -217,11 +217,11 @@ TESTDEBUG(SQL_NAME_TEST,"SQLBaseType: CLONING ComplexObject with:\n"
 		check();
 
 TESTDEBUG(SQL_NAME_TEST,"SQLBaseType: Creating SimpleObject with:\n name: "
-	<<conn.getColName(conn.getCol())<<"\n on column: "<<conn.getCol()<<endl);
+	<<conn.getColName(conn.getCol())<<"\n on column: "<<conn.getCol()<<std::endl);
 	};
 
 	virtual ~SQLBaseType(){
-TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLBaseType"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"DELETING: SQLBaseType"<<std::endl);
 	}
 
 private:

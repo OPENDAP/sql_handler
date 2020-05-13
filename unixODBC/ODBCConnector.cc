@@ -26,7 +26,9 @@
 
 #include "ODBCConnector.h"
 
-bool
+using namespace std;
+
+ bool
 ODBCConnector::connect()
 {
 	BESDEBUG(ODBC_NAME,"ODBCConnector: Starting connection"<<endl);

@@ -26,6 +26,8 @@
 
 #include "ODBCPlugin.h"
 
+using namespace std;
+
 /**
  * @brief This is the build_das method which fill
  * DAS object using default unixODBC static structures.

@@ -24,7 +24,10 @@
  * Author: carlo cancellieri
  *
  */
+
 #include "SQLModule.h"
+
+using namespace std;
 
 SQLContainerStorage *SQLModule::cs=NULL;
 

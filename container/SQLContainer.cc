@@ -26,6 +26,8 @@
 
 #include "SQLContainer.h"
 
+using namespace std;
+
 /**
  * @brief Initialize time modification of the
  * referred file.

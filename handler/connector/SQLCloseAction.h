@@ -144,7 +144,7 @@ public:
 			bool force=false)
 	{
 		// closing connection
-		BESDEBUG(SQL_NAME,"SQLCloseAction: Closing connection"<<endl);
+		BESDEBUG(SQL_NAME,"SQLCloseAction: Closing connection"<<std::endl);
 		try
 		{
 			//if (connector.isReady()) no need
@@ -161,7 +161,7 @@ public:
 				throw SQLInternalFatalError(
 					"SQLCloseAction: close execution fails (returning false)",
 						__FILE__,__LINE__);
-			BESDEBUG(SQL_NAME,"SQLCloseAction: Successfully closed"<<endl);
+			BESDEBUG(SQL_NAME,"SQLCloseAction: Successfully closed"<<std::endl);
 		}
 		catch(SQLInternalError &ie){
 			/**

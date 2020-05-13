@@ -23,7 +23,10 @@
  *  Created on: 19/lug/2010
  *      Author: carlo cancellieri
  */
+
 #include "SQLContainerStorageVolatile.h"
+
+using namespace std;
 
 bool
 SQLContainerStorageVolatile::update(SQLContainer *c){

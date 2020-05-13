@@ -26,6 +26,8 @@
 
 #include "SQLRequestHandler.h"
 
+using namespace std;
+
 SQLRequestHandler *SQLRequestHandler::_rh=NULL;
 
 sql_handler_map *SQLRequestHandler::_theList=NULL;

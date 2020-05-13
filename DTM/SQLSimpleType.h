@@ -37,6 +37,7 @@
 #include <BESDebug.h>
 #include <BESError.h>
 
+//FIXME Remove? jhrg 5/13/20
 #include <string>
 
 // FIXME Removed jhrg 10/1/14 using namespace libdap;
@@ -88,7 +89,7 @@ public:
 						cast_function,
 						reuse),
 		_reuse(reuse){
-TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLSimpleType"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLSimpleType"<<std::endl);
 	};
 
 	virtual ~SQLSimpleType(){};
@@ -100,24 +101,24 @@ TESTDEBUG(SQL_NAME_TEST,"CREATING: SQLSimpleType"<<endl);
 	{
 	try {
 		if (this->read_p()){
-TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: skipping object"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: skipping object"<<std::endl);
 			return false;
 		}
 		else
 		{
-TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: reading object"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: reading object"<<std::endl);
 				this->set_value( *this->cast() );
 				//this->set_read_p(true); -> done by set_value()
 				if (!_reuse) {
 					this->getCast().freeValue(); // deleting casted value
 				}
-TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: object copied to the buffer"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: object copied to the buffer"<<std::endl);
 			return false;
 		}
 		}
 	catch (BESError &e){
 			BESDEBUG(SQL_NAME,
-						"SQLSimpleType: Unable to read variable"<<endl);
+						"SQLSimpleType: Unable to read variable"<<std::endl);
 			throw BESInternalFatalError(
 				"SQLSimpleType: Unable to read variable: "+e.get_message(),
 				e.get_file(),e.get_line());
@@ -136,7 +137,7 @@ TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: object copied to the buffer"<<endl);
 	SQLSimpleType(SQLSimpleType<SQL_TYPE,ODBC_TYPE,DAP_TYPE,OUT> &obj):
 			SQLBaseType<SQL_TYPE,ODBC_TYPE,DAP_TYPE,OUT>(obj),
 			_reuse(obj._reuse){
-	TESTDEBUG(SQL_NAME_TEST,"COPING: SQLSimpleType"<<endl);
+	TESTDEBUG(SQL_NAME_TEST,"COPING: SQLSimpleType"<<std::endl);
 		};
 };
 
@@ -195,16 +196,16 @@ public:
 	{
 	try {
 		if (this->read_p()){
-TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: skipping object"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: skipping object"<<std::endl);
 			return false;
 		}
 		else
 		{
-TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: reading object"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: reading object"<<std::endl);
 				this->val2buf(this->cast());// cast value to the new type
 				if (!_reuse)
 					this->getCast().freeValue(); // deleting casted value
-TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: object copied to the buffer"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: object copied to the buffer"<<std::endl);
 			// not usable!
 			// since we cannot know the argument type here
 			// this->set_value( this->doRead() );
@@ -234,7 +235,7 @@ TESTDEBUG(SQL_NAME_TEST,"SQLSimpleType: object copied to the buffer"<<endl);
 		SQLBaseType<SQL_TYPE,ODBC_TYPE,DAP_TYPE,void>(obj),
 		_reuse(obj._reuse)
 	{
-TESTDEBUG(SQL_NAME_TEST,"COPING: SQLSimpleType"<<endl);
+TESTDEBUG(SQL_NAME_TEST,"COPING: SQLSimpleType"<<std::endl);
 	};
 };
 
