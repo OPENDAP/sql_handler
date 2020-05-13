@@ -25,8 +25,9 @@ AUTOM4TE = $(SHELL) $(top_srcdir)/conf/missing --run autom4te
 AUTOTEST = $(AUTOM4TE) --language=autotest
 
 $(TESTSUITE): $(srcdir)/testsuite.at $(srcdir)/package.m4 bes.conf
-	$(AUTOTEST) -I '$(srcdir)' -o ${srcdir}/$@.tmp $@.at
-	mv ${srcdir}/$@.tmp ${srcdir}/$@
+	$(AUTOTEST) -I '$(srcdir)' -o $@ $@.at
+
+# mv ${srcdir}/$@.tmp ${srcdir}/$@
 
 bes.conf: bes.conf.in ../config.status
 	sed -e "s%[@]pkgdatadir[@]%${pkgdatadir}%" \
