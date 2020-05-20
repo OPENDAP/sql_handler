@@ -86,20 +86,20 @@ as well.
 - Install the sqliteodbc drivers using `brew install sqliteodbc`
 
 ## Configure the ODBC drvier and database
-There are some example `odbc.ini` and `odbc_inst.ini` files in the `install.dir`
+There are some example `odbc.ini` and `odbcinst.ini` files in the `install.dir`
 directory, including ones for sqlite's ODBC driver. These two files configure
 the unixODBC driver.
 
 * See [Command Line Shell For SQLite](https://sqlite.org/cli.html) for help with 
 the sqlite command shell.
-* `odbc_inst.ini` - Defines driver options; it creates an association between 
-an odbc driver and a dbms. Location: `/etc/odbc_inst.ini` or `/usr/local/etc/odbc_inst.ini`.
+* `odbcinst.ini` - Defines driver options; it creates an association between 
+an odbc driver and a dbms. Location: `/etc/odbcinst.ini` or `/usr/local/etc/odbcinst.ini`.
 * `odbc.ini` - Defines connection options; it creates view into the database
 and exposes it via the ODBC interface. Location: `/etc/odbc.ini` or `/usr/local/etc/odbc.ini`.
 
 Look in `sql_handler/install.dir/`
 
-The `sqlite_odbcinst.ini` should be renamed to `odbc_inst.ini` and copied to `/etc`
+The `sqlite_odbcinst.ini` should be renamed to `odbcinst.ini` and copied to `/etc`
 or `/usr/local/etc`. It holds the following: 
 ```shell script
 [SQLite]
@@ -109,7 +109,7 @@ Setup=/usr/local/lib/libsqlite3odbc.so
 Threading=2
 ```
 
-Note that one `odbc_inst.ini` can hold information for several database/driver combinations.
+Note that one `odbcinst.ini` can hold information for several database/driver combinations.
 Separate different sections of the file for different databases using [<name>]
 
 The `sqlite_odbc.ini` should be renamed to `odbc.ini` and also copied to /etc or /usr/local/etc. 
