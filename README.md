@@ -31,11 +31,11 @@ _Build Notes_
 * The `./configure` script must find both libdap and the BES. It will use the 
 pkgconfig package manager and, if that fails, look for dap-config and bes-config
 on the PATH.
-* **configure or make doesn't work**
+**configure or make doesn't work**
 * This will happen if unixODBC is not installed. Only the generic part of unixODBC 
 is needed to configure and build the handler. We suggest you use a binary package
 from yum, apt-get, or brew (for CentOS, Ubuntu or OSX, respectively).
-* **make check doesn't work**
+**make check doesn't work**
 * In order to run `make check` you will need to install the test database located 
 in `install.dir` 
   * Install DBMS as needed (See _Installing DBMS software on your server_ below).
@@ -43,9 +43,9 @@ in `install.dir`
   * **_how to configure odbc.ini etc._**
 
 ## Installing ODBC on your Hyrax server.
-The `sql_handler` (and by extension Hyrax) utilize 
+The `sql_handler` (and by extension Hyrax) uses 
 [Open Database Connectivity (ODBC)](https://en.wikipedia.org/wiki/Open_Database_Connectivity) 
-to access various DBMS systems. Drivers will need to be installed on the Hyrax host system. 
+drivers to access various DBMS systems. Drivers will need to be installed on the Hyrax host system. 
 
 **[unixODBC](http://www.unixodbc.org)** - This open source ODBC driver is available:
   - As a source distribution (utilizes gnu autotools to build)
@@ -57,7 +57,31 @@ Some DBMS producers provide their own ODBC drivers. _See the DBMS sections below
 ## Installing DBMS software on your server.
 In order to serve data from a database you need to have a database running to
 hold the data and respond to queries. If you haven't got that sorted already, 
-here's some info about how to go about it.
+here's some info about how to go about it. In the following, we describe how to
+configure sqlite for use with ODBC drivers. This is overkill in many ways, but 
+it is an almost universal example. In the appendix we include information about
+PostGreSQL and MySQL.
+
+## [SQLite](https://www.sqlite.org)
+The SQLite binaries are described as: 
+> A bundle of command-line tools for managing SQLite database files, including 
+the command-line shell program, the sqldiff program, and the sqlite3_analyzer 
+program.
+
+**Linux** 
+- **[Latest Binaries](https://www.sqlite.org/download.html)** (Current version 
+3.28.0)
+- Also available via: **yum** (_Current available version on CentOS-7 is 3.7.17_)
+
+**OSX** 
+- **[Latest Binaries](https://www.sqlite.org/download.html)** 
+- Also available via: **Homebrew** 
+- Use `brew install sqlite` but note that OSX already has sqlite3, which is an older 
+version of the code, so you need to modify the PATH environment variable like this:
+`export PATH="/usr/local/opt/sqlite/bin:$PATH"` and probably put that into `.bashrc`
+as well.
+- Install the sqliteodbc drivers using `brew install sqliteodbc`
+
 
 ## [PostGreSQL](https://www.enterprisedb.com)
 
@@ -92,25 +116,6 @@ Available as either as either a package installer or tar archive download.
 
 Also available via: **Homebrew** (Currently: 8.0.15)
 
-## [SQLite](https://www.sqlite.org)
-The SQLite binaries are described as: 
-> A bundle of command-line tools for managing SQLite database files, including 
-the command-line shell program, the sqldiff program, and the sqlite3_analyzer 
-program.
-
-**Linux** 
-- **[Latest Binaries](https://www.sqlite.org/download.html)** (Current version 
-3.28.0)
-- Also available via: **yum** (_Current available version on CentOS-7 is 3.7.17_)
-
-**OSX** 
-- **[Latest Binaries](https://www.sqlite.org/download.html)** 
-- Also available via: **Homebrew** 
-- Use `brew install sqlite` but note that OSX already has sqlite3, which is an older 
-version of the code, so you need to modify the PATH environment variable like this:
-`export PATH="/usr/local/opt/sqlite/bin:$PATH"` and probably put that into `.bashrc`
-as well.
-- Install the sqliteodbc drivers using `brew install sqliteodbc`
 
 ## Configuration
 
@@ -120,7 +125,7 @@ as well.
 * `odbc.ini` - Defines connection options; it creates view into the database
 and exposes it via the ODBC interface. Location: `/etc/odbc.ini`
 
-* `odbc_inst.ini` - Defines driver options; it creates a associate between 
+* `odbc_inst.ini` - Defines driver options; it creates an association between 
 an odbc driver and a dbms. Location: `/etc/odbc_inst.ini`
 
 ## Notes

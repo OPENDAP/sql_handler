@@ -441,7 +441,7 @@ bool SQLRequestHandler::lastChanceRunner(SQLDataHandlerInterface &dhi, const str
         else
 #endif
         throw BESInternalError("SQLRequestHandler: Error occurred, bad constraints specified "
-                               "or no active database server for this dataset. Please,"
+                               "or no active database server for this dataset. Please, "
                                "try a less restrictive constraint or contact the administrator.",
                                __FILE__, __LINE__);
     }
