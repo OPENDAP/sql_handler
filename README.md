@@ -54,7 +54,7 @@ drivers to access various DBMS systems. Drivers will need to be installed on the
   
 Some DBMS producers provide their own ODBC drivers. _See the DBMS sections below._
 
-## Installing DBMS software on your server.
+## Configure access to your DBMS
 In order to serve data from a database you need to have a database running to
 hold the data and respond to queries. If you haven't got that sorted already, 
 here's some info about how to go about it. In the following, we describe how to
@@ -62,7 +62,10 @@ configure sqlite for use with ODBC drivers. This is overkill in many ways, but
 it is an almost universal example. In the appendix we include information about
 PostGreSQL and MySQL.
 
-## [SQLite](https://www.sqlite.org)
+For this example, we assume you don't have the database installed. Folling these
+steps you should be able to get a working example.
+
+### Install [SQLite](https://www.sqlite.org) if needed
 The SQLite binaries are described as: 
 > A bundle of command-line tools for managing SQLite database files, including 
 the command-line shell program, the sqldiff program, and the sqlite3_analyzer 
@@ -82,6 +85,51 @@ version of the code, so you need to modify the PATH environment variable like th
 as well.
 - Install the sqliteodbc drivers using `brew install sqliteodbc`
 
+## Configure the ODBC drvier and database
+There are some example `odbc.ini` and `odbc_inst.ini` files in the `install.dir`
+directory, including ones for sqlite's ODBC driver. These two files configure
+the unixODBC driver.
+
+* See [Command Line Shell For SQLite](https://sqlite.org/cli.html) for help with 
+the sqlite command shell.
+* `odbc_inst.ini` - Defines driver options; it creates an association between 
+an odbc driver and a dbms. Location: `/etc/odbc_inst.ini` or `/usr/local/etc/odbc_inst.ini`.
+* `odbc.ini` - Defines connection options; it creates view into the database
+and exposes it via the ODBC interface. Location: `/etc/odbc.ini` or `/usr/local/etc/odbc.ini`.
+
+Look in `sql_handler/install.dir/`
+
+The `sqlite_odbcinst.ini` should be renamed to `odbc_inst.ini` and copied to `/etc`
+or `/usr/local/etc`. It holds the following: 
+```shell script
+[SQLite]
+Description=SQLite ODBC Driver
+Driver=/usr/local/lib/libsqlite3odbc.so
+Setup=/usr/local/lib/libsqlite3odbc.so
+Threading=2
+```
+
+Note that one `odbc_inst.ini` can hold information for several database/driver combinations.
+Separate different sections of the file for different databases using [<name>]
+
+The `sqlite_odbc.ini` should be renamed to `odbc.ini` and also copied to /etc or /usr/local/etc. 
+```shell script
+[sqlite_test]
+Description=My SQLite test database
+Driver=SQLite
+Database=/Users/jimg/src/opendap/hyrax_git/bes/modules/sql_handler/tests/sqlite_test.db
+# optional lock timeout in milliseconds
+Timeout=2000
+```
+
+* The name used in `odbc.ini` is used in a 'dataset' file that enables much
+of SQL to be used when connecting one or more tables from the database to 
+Hyrax via the sql_handler. 
+* Dataset files show up as 'data files' and can be browsed and accessed just
+like any other OPeNDAP data set.
+* There are sample 'dataset' files in the sql_hanlder/data directory
+
+# Appendix: Field notes on testing with PostGreSQL and MySQL
 
 ## [PostGreSQL](https://www.enterprisedb.com)
 
@@ -115,26 +163,6 @@ Available as either as either a package installer or tar archive download.
 * **[Version 8.0](https://dev.mysql.com/doc/refman/8.0/en/osx-installation.html)**
 
 Also available via: **Homebrew** (Currently: 8.0.15)
-
-
-## Configuration
-
-* The file `sql_handler/install.dir/odbc.TEMPLATES.ini` contains examples of 
- odbc_inst.ini files for various DBMS systems.
-
-* `odbc.ini` - Defines connection options; it creates view into the database
-and exposes it via the ODBC interface. Location: `/etc/odbc.ini`
-
-* `odbc_inst.ini` - Defines driver options; it creates an association between 
-an odbc driver and a dbms. Location: `/etc/odbc_inst.ini`
-
-## Notes
-
-Mac OSX package installers:
-- **Homebrew** (_Generally plays best with our production rules/ build system._)
-- **MacPorts** (_ymmv_)
-- **Fink** (_Please don't do this if you are building our software from source, 
-it will make you sad._)
 
 ## Examples
 
@@ -316,6 +344,7 @@ first three tests began to return valid content so I made baselines:
 
 All 3 tests were successful.
 ```
+
 ### MySQL Ver 8.0.17 for Linux on x86_64 (MySQL Community Server - GPL) 
 _Installed on CentOS-7 latest running in an AWS EC2 instance._
 > NOTE: I disabled SELinux on this system to simplify my installation/configuration experience.

@@ -1,4 +1,7 @@
-USE test;
+
+/* Use this to populate the test database with data */
+
+USE sqlite_test;
 CREATE TABLE sqlh_table 
 (a integer NOT NULL DEFAULT 0,
 b real NOT NULL DEFAULT 0,
