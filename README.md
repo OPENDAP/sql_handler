@@ -93,11 +93,12 @@ the unixODBC driver.
 * See [Command Line Shell For SQLite](https://sqlite.org/cli.html) for help with 
 the sqlite command shell.
 * `odbcinst.ini` - Defines driver options; it creates an association between 
-an odbc driver and a dbms. Location: `/etc/odbcinst.ini` or `/usr/local/etc/odbcinst.ini`.
+an odbc driver and a dbms. Location: `/etc/odbcinst.ini` or `/usr/local/etc/odbcinst.ini`
+* See the [odbcinst](https://www.systutorials.com/docs/linux/man/1-odbcinst/) tool for
+an alternative way to provide this information (i.e., no editing a config file).
 * `odbc.ini` - Defines connection options; it creates view into the database
-and exposes it via the ODBC interface. Location: `/etc/odbc.ini` or `/usr/local/etc/odbc.ini`.
-
-Look in `sql_handler/install.dir/`
+and exposes it via the ODBC interface. Location: `/etc/odbc.ini`, `/usr/local/etc/odbc.ini`,
+or `$HOME/.odbc.ini`
 
 The `sqlite_odbcinst.ini` should be renamed to `odbcinst.ini` and copied to `/etc`
 or `/usr/local/etc`. It holds the following: 
@@ -122,12 +123,59 @@ Database=/Users/jimg/src/opendap/hyrax_git/bes/modules/sql_handler/tests/sqlite_
 Timeout=2000
 ```
 
-* The name used in `odbc.ini` is used in a 'dataset' file that enables much
-of SQL to be used when connecting one or more tables from the database to 
+* The code includes the `sqlite_test.db` in the `sql_handler/tests/` directory. This 
+database is used for the sqlite-based tests.
+* There is a SQL script in `install.dir` named `sqlh.sql` that can build the needed 
+database if needed.
+* The name used in `odbc.ini` (e.g., `[sqlite_test]` above) is used in a 'dataset' file 
+that enables much of SQL to be used when connecting one or more tables from the database to 
 Hyrax via the sql_handler. 
 * Dataset files show up as 'data files' and can be browsed and accessed just
 like any other OPeNDAP data set.
-* There are sample 'dataset' files in the sql_hanlder/data directory
+* There are sample 'dataset' files in the sql_hanlder/data directory. Each ends in 
+the extension `.sql` even though they are not SQL program files. 
+* You can change the extensions used by the handler by editing the TypeMatch regular
+expression in the `sql.conf` file used to configure the handler.
+
+* See [isql](https://www.systutorials.com/docs/linux/man/1-isql/) for a command 
+line tool to help debug the ODBC driver configuration. 
+For the test database, `isql sqlite_test` should return the following:
+```shell script
++---------------------------------------+
+| Connected!                            |
+|                                       |
+| sql-statement                         |
+| help [tablename]                      |
+| quit                                  |
+|                                       |
++---------------------------------------+
+SQL> 
+```
+You can enter commands at teh `SQL>` prompt. The command `help sqlh_table` should print 
+information about the table in the test sqlite database.
+
+This is one of the sample 'dataset' files (`data/sqlite.sql`):
+```shell script
+# Test variable definitions
+
+# Set DSN to the name in square brackets in odbc.init.
+# For the sqlite example bundled with the handler, that is [sqlite_test].
+define $DSN$=sqlite_test
+
+[section]
+
+api=odbc
+server=$DSN$
+# The user and pass keywords are not needed 
+# user=root
+# pass=opendap
+
+[select]
+a, b, c
+
+[from]
+sqlh_table
+```
 
 # Appendix: Field notes on testing with PostGreSQL and MySQL
 
