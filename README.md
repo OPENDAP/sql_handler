@@ -1,7 +1,8 @@
 
 
 # Welcome to the Hyrax sql_handler
-This handler makes the happytimes with the RDBMS data. w00t.
+This handler reads data from a database suing an ODBC driver. There are many
+different database tools that support access using ODBC.
 
 ## Additional Required Software
 In addition to the Hyrax server, you will need a database that can be accessed using
@@ -12,7 +13,7 @@ as well as many other interesting tools, including NoSQL databases like MongoDB.
 If your computer does not have the unixODBC driver software installed, see 
 'Installing ODBC on your Hyrax server' below. To build the Hyrax sql handler, you
 only need the generic components of unixODBC to be installed. However, to actually
-serve data from a database, you will need the appropriate (specific) driver.
+serve data from a database, you will need the appropriate (database specific) driver.
 
 ## Building and Installing the sql_handler
 Unlike most of the BES modules, this handler for SQL data is a separate project.
@@ -33,12 +34,12 @@ on the PATH.
 * **configure or make doesn't work**
 * This will happen if unixODBC is not installed. Only the generic part of unixODBC 
 is needed to configure and build the handler. We suggest you use a binary package
-from yum, apt-get, or brew.
+from yum, apt-get, or brew (for CentOS, Ubuntu or OSX, respectively).
 * **make check doesn't work**
 * In order to run `make check` you will need to install the test database located 
 in `install.dir` 
   * Install DBMS as needed (See _Installing DBMS software on your server_ below).
-  * How to load database tables in install.dir into DBMS? (See _Creating the test database_ below)
+  * Load database tables in install.dir into DBMS? (See _Creating the test database_ below)
   * **_how to configure odbc.ini etc._**
 
 ## Installing ODBC on your Hyrax server.

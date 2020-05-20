@@ -13,8 +13,8 @@ AC_CONFIG_SRCDIR([SQLModule.h])
 AM_CONFIG_HEADER(config.h)
 AX_PREFIX_CONFIG_H(sql_config.h)
 
-dnl library visioning: Update these when the interface changes. Generally,
-dnl assume that the interface tracks the major and minor release numbers.
+# library visioning: Update these when the interface changes. Generally,
+# assume that the interface tracks the major and minor release numbers.
 LIB_BES_SQL_CURRENT=1
 LIB_BES_SQL_AGE=0
 LIB_BES_SQL_REVISION=1
@@ -105,8 +105,6 @@ AC_CONFIG_FILES([Makefile
 AC_CONFIG_TESTDIR(tests, [.])
 
 AC_CONFIG_FILES([tests/Makefile tests/atlocal tests/package.m4])
-
-AC_CONFIG_FILES([doxy.conf])
 
 AC_OUTPUT
 

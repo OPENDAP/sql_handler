@@ -31,8 +31,8 @@ The list of functions also looks interesting: https://www.sqlite.org/c3ref/funcl
 Note: The besCreateSQLPlugin script will make two kinds of 'API plugins.'
 One supports the 'error factory' system that queries the database for
 various errors. That's what the unixODBC plugin code uses for errors.
-The sqlite code, however, using the 'simple' error reporting scheme,
-so it lacks some of the classes and some have a slightly different root
+This sqlite code, however, was made using the 'simple' error reporting scheme,
+so it lacks some of the classes and some classes have a slightly different root
 name. The 'simple' error reporting scheme relies on the connector code
-testing return codes and reporting errors. The complete (I think it's
+testing return codes and reporting errors. The 'complete' error reporting scheme (I think it's
 called that) make separate queries to the database.

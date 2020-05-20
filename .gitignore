@@ -12,7 +12,14 @@ config.h
 config.h.in
 configure
 config.status
+config.guess
+config.sub
 aclocal.m4
+compile
+depcomp
+install-sh
+ltmain.sh
+missing
 libtool
 stamp-h*
 bin/Makefile.in

@@ -26,7 +26,7 @@
 
 #ifndef SQLACTIONFACTORY_H_
 #define SQLACTIONFACTORY_H_
-//debug
+
 #include "SQLDefinitions.h"
 
 #include "DEM/SQLInternalError.h"
@@ -34,7 +34,6 @@
 
 #include "SQLAction.h"
 #include "SQLActionList.h"
-
 
 /**
  * @brief Interface to provide a methods

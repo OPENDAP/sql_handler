@@ -27,7 +27,6 @@
 #ifndef SQLACTION_H_
 #define SQLACTION_H_
 
-// debug
 #include "SQLDefinitions.h"
 
 #include "DEM/SQLInternalError.h"

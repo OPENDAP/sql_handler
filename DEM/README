@@ -2,6 +2,6 @@
 DEM == Dynamic Error Matching
 
 Optional part of the SQL Handler that will query the database or ODBC driver
-to get information on errors. If this is not used by the code, the 'error factor'
+to get information on errors. If this is not used by the code, the 'error factory'
 objects will be NULL and the Connector and other calls must test for errors
 the normal way (by looking at codes and throwing exceptions.
