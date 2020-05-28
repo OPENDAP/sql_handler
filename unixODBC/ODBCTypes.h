@@ -49,7 +49,7 @@ typedef SQLRETURN ERROR_TYPE;
 typedef std::string MSG_TYPE;
 #endif
 
-typedef SQLRETURN error_t;
+typedef SQLRETURN error_type;
 typedef std::string message_t;
 
 /**

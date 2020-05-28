@@ -75,7 +75,7 @@
  * @see getErrorFactory
  *
  */
-class ODBCErrorFactoryComponent : public SQLErrorFactory<error_t, message_t> {
+class ODBCErrorFactoryComponent : public SQLErrorFactory<error_type, message_t> {
 public:
 #if 0
     /**
@@ -83,9 +83,9 @@ public:
      * @param conn a reference to the ODBCConnector
      * @return a copy of a SQLErrorFactory of this driver (unixODBC)
      */
-    static SQLErrorFactory<error_t,message_t>
+    static SQLErrorFactory<error_type,message_t>
     getErrorFactory(ODBCConnector &conn){
-        return SQLErrorFactory<error_t,message_t>(conn,&_getActions,&_stop);
+        return SQLErrorFactory<error_type,message_t>(conn,&_getActions,&_stop);
     }
 #endif
 
@@ -95,14 +95,14 @@ public:
      * SQLConnector
      */
     ODBCErrorFactoryComponent(ODBCConnector &conn) :
-            SQLErrorFactory<error_t, message_t>(conn, &_getActions, &_stop) {}
+            SQLErrorFactory<error_type, message_t>(conn, &_getActions, &_stop) {}
 
     /**
      * @brief copy constructor
      * @param a reference to an ODBCErrorFactoryComponent
      */
     ODBCErrorFactoryComponent(ODBCErrorFactoryComponent &c) :
-            SQLErrorFactory<error_t, message_t>(c.getConnector(),
+            SQLErrorFactory<error_type, message_t>(c.getConnector(),
                                                   &c._getActions,
                                                   &c._stop) {}
 
@@ -133,7 +133,7 @@ private:
      * @return SQLActionList
      *
      */
-    static SQLActionList<message_t, void> &_getActions(error_t *error);
+    static SQLActionList<message_t, void> &_getActions(error_type *error);
 
     /**
      * @brief The method which represent the stop condition
@@ -146,7 +146,7 @@ private:
      * call ERROR_CODE getCode(), this will result in:
      * At the end of the actual executing ActionList exit.
      */
-    static bool _stop(error_t *error);
+    static bool _stop(error_type *error);
 
     /**
      * defines the type of ACTION which will be used to

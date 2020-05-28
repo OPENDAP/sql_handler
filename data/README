@@ -1,0 +1,16 @@
+
+The handler uses files that end in '.sql' as definitions for a
+dataset that Hyrax will serve. The sqlite.sql file is used for
+the tests and references the 'sqlite_test.db' database. The
+connection between the information in the database and the sqlite.sql
+file is via the '[from] sqlh_table' entry at the end of the file
+and the definition of 'sqlh_table' in the sqlite_sdbc.ini here.
+
+The sqlite_odbc.ini and sqlite_odbcinst.ini files should be copied to
+/etc/ or /usr/local/etc/ and renamed odbc.ini and odbcinst.ini, resp.
+
+Other files that are here:
+odbc.TEMPLATES.ini: Templates for various databases
+sqlh.sql: SQL commands to generate the data in the sqlite_test.db file
+test_full.sql, test_full1, test_full2, test_int: These files
+show the full syntax supported by the handler.
