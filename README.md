@@ -37,9 +37,9 @@ is needed to configure and build the handler. We suggest you use a binary packag
 from yum, apt-get, or brew (for CentOS, Ubuntu or OSX, respectively).
 **make check doesn't work**
 * In order to run `make check` you will need to install the test database located 
-in `install.dir` 
+in `data` 
   * Install DBMS as needed (See _Installing DBMS software on your server_ below).
-  * Load database tables in install.dir into DBMS? (See _Creating the test database_ below)
+  * Load database tables in data into DBMS? (See _Creating the test database_ below)
   * **_how to configure odbc.ini etc._**
 
 ## Installing ODBC on your Hyrax server.
@@ -119,7 +119,7 @@ Also available via: **Homebrew** (Currently: 8.0.15)
 
 ## Configuration
 
-* The file `sql_handler/install.dir/odbc.TEMPLATES.ini` contains examples of 
+* The file `sql_handler/data/odbc.TEMPLATES.ini` contains examples of 
  odbc_inst.ini files for various DBMS systems.
 
 * `odbc.ini` - Defines connection options; it creates view into the database

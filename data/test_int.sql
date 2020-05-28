@@ -11,12 +11,12 @@ user=postgres
 lastcron
 [from]
 mdl_block
-#[where]
-#id_attore<10
+# [where]
+# id_attore<10
 [other]
-#No need since this is default
+# No need since this is default
 ~==LIKE
-#No need since this is default
+# No need since this is default
 !==<>
 
 #-----------------------DATASET v0.4--(END)---------------------

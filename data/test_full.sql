@@ -1,3 +1,7 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+
+-- noinspection LossyEncodingForFile
+
 #-----------------------DATASET v0.4-------------------------
 # 0
 # rows starting with '#' are comments
@@ -208,7 +212,7 @@ table_1 join table_2
 [where]
 # omitting AND will break the SQL predicate list!
 # This should be a valid where predicate.
-tab•e1.column_2 < '1000' AND
+tabï¿½e1.column_2 < '1000' AND
 table_1.column_2 <> '0'
 
 [other]

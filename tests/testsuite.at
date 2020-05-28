@@ -7,12 +7,12 @@ AT_INIT([sql_handler/tests testsuite])
 
 m4_include([handler_tests_macros.m4])
 
-AT_BESCMD_RESPONSE_TEST([sql/postgresql.das.bescmd], [pass])
-AT_BESCMD_RESPONSE_TEST([sql/postgresql.dds.bescmd], [pass])
-AT_BESCMD_RESPONSE_TEST([sql/postgresql.ddx.bescmd], [pass])
-AT_BESCMD_BINARY_DAP2_RESPONSE_TEST([sql/postgresql.data.bescmd], [pass])
-AT_BESCMD_BINARY_DAP2_RESPONSE_TEST([sql/postgresql.data_constraint.bescmd], [pass])
-AT_BESCMD_BINARY_DAP2_RESPONSE_TEST([sql/postgresql.data_constraint_2.bescmd], [pass])
+# AT_BESCMD_RESPONSE_TEST([sql/postgresql.das.bescmd], [pass])
+# AT_BESCMD_RESPONSE_TEST([sql/postgresql.dds.bescmd], [pass])
+# AT_BESCMD_RESPONSE_TEST([sql/postgresql.ddx.bescmd], [pass])
+# AT_BESCMD_BINARY_DAP2_RESPONSE_TEST([sql/postgresql.data.bescmd], [pass])
+# AT_BESCMD_BINARY_DAP2_RESPONSE_TEST([sql/postgresql.data_constraint.bescmd], [pass])
+# AT_BESCMD_BINARY_DAP2_RESPONSE_TEST([sql/postgresql.data_constraint_2.bescmd], [pass])
 
 AT_BESCMD_RESPONSE_TEST([sql/sqlite.das.bescmd], [pass])
 AT_BESCMD_RESPONSE_TEST([sql/sqlite.dds.bescmd], [pass])
