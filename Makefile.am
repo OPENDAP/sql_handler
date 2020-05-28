@@ -129,14 +129,18 @@ nobase_sql_HEADERS=$(SQL_HDRS)
 sample_datadir = $(datadir)/hyrax/data/sql
 sample_data_DATA = data/sqlite.sql
 
+BUILT_SOURCES = data/sqlite_odbc.ini
+
 moduledir = $(DESTDIR)$(sysconfdir)/bes/modules
 module_DATA = sql.conf
 
-sql.conf: sql.conf.in config.status
-	sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > sql.conf
+data/sqlite_odbc.ini: data/sqlite_odbc.ini.in config.status
+	@clean_abs_top_srcdir=`python -c "import os.path; print(os.path.abspath('${abs_top_srcdir}'))"`; \
+	sed -e "s%[@]abs_top_srcdir[@]%$$clean_abs_top_srcdir%" \
+		-e "s%[@]abs_top_builddir[@]%${abs_top_builddir}%" $< > $@
 
-odbc.conf: odbc.conf.in config.status
-	sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > odbc.conf
+sql.conf: sql.conf.in config.status
+	sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > $@
 
 HTML_DOCS=html
 DOXYGEN_CONF=doxy.conf

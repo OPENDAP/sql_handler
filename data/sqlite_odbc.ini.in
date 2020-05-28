@@ -1,6 +1,6 @@
 [sqlite_test]
 Description=My SQLite test database
 Driver=SQLite
-Database=@abs_top_srcdir@/tests/sqlite_test.db
+Database=@abs_top_srcdir@/data/sqlite_test.db
 # optional lock timeout in milliseconds
 Timeout=2000
