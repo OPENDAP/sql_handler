@@ -13,6 +13,10 @@ ACLOCAL_AMFLAGS = -I conf
 
 AM_CXXFLAGS= -std=c++11 --pedantic
 
+AM_CXXFLAGS=
+AM_LDFLAGS =
+include $(top_srcdir)/coverage.mk
+
 # -D__TESTS__
 
 SQL_SRCS = \

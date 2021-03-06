@@ -9,6 +9,10 @@ AUTOMAKE_OPTIONS = foreign check-news
 
 ACLOCAL_AMFLAGS = -I conf
 
+AM_CXXFLAGS=
+AM_LDFLAGS =
+include $(top_srcdir)/coverage.mk
+
 lib_besdir=$(libdir)/bes
 lib_bes_LTLIBRARIES = libsqlite_module.la
 
@@ -17,7 +21,7 @@ SQLITE_SRCS = \
 		SQLITEPlugin.cpp \
 		SQLITESimpleConnector.cpp \
 		SQLITETypeFactoryComponent.cpp
-		
+
 SQLITE_HDRS = \
 		SQLITEPluginLoader.h \
 		SQLITEPlugin.h \

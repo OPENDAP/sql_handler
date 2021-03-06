@@ -6,6 +6,10 @@
 
 AUTOMAKE_OPTIONS = foreign check-news
 
+AM_CXXFLAGS=
+AM_LDFLAGS =
+include $(top_srcdir)/coverage.mk
+
 pkgdata_templatesdir = $(pkgdatadir)/templates
 pkgdata_templates_DATA = \
 		PluginLoader.cc \
