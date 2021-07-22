@@ -4,16 +4,19 @@
 #
 # $Id: Makefile.am 12972 2006-01-05 15:41:07Z pwest $
 
-# bin Removed 10/21/19 jhrg 
-SUBDIRS = . templates tests
-
 AUTOMAKE_OPTIONS = foreign check-news subdir-objects
 
 ACLOCAL_AMFLAGS = -I conf
 
 AM_CXXFLAGS= -std=c++11 --pedantic
 
-# -D__TESTS__
+# bin Removed 10/21/19 jhrg
+SUBDIRS = . templates tests
+DISTDIRS = templates tests sqlite
+
+if BUILD_SQLITE
+SUBDIRS += sqlite
+endif
 
 SQL_SRCS = \
 		utils/StringMatch.cc \

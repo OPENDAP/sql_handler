@@ -57,6 +57,10 @@ AC_CHECK_BES([3.20.0],
 [ AC_MSG_ERROR([Could not find bes library and headers])
 ])
 
+AC_ARG_ENABLE([sqlite], [AC_HELP_STRING([--enable-sqlite], [Build the native SQLite components])],
+  [AM_CONDITIONAL([BUILD_SQLITE], [true])],
+  [AM_CONDITIONAL([BUILD_SQLITE], [false])])
+
 dnl libiodbc_ok="no"
 dnl AC_ARG_WITH([iodbc],
 dnl    AC_HELP_STRING([--with-iodbc=path], [Use the iodbc library/dirvers at this location.]),
@@ -100,7 +104,8 @@ AM_PATH_CPPUNIT(1.12.0,
 	
 AC_CONFIG_FILES([Makefile
 		 bin/Makefile
-		 templates/Makefile])
+		 templates/Makefile
+		 sqlite/Makefile])
 		 
 AC_CONFIG_TESTDIR(tests, [.])
 
