@@ -28,24 +28,24 @@
 #define OPENDAP_CLASSTYPEFACTORYCOMPONENT_H_
 
 
-#include <Byte.h>
-#include <Int16.h>
-#include <UInt16.h>
-#include <Int32.h>
-#include <UInt32.h>
-#include <Float32.h>
-#include <Float64.h>
-#include <Str.h>
-#include <Url.h>
+#include <libdap/Byte.h>
+#include <libdap/Int16.h>
+#include <libdap/UInt16.h>
+#include <libdap/Int32.h>
+#include <libdap/UInt32.h>
+#include <libdap/Float32.h>
+#include <libdap/Float64.h>
+#include <libdap/Str.h>
+#include <libdap/Url.h>
 
-#include <Array.h>
-#include <Vector.h>
+#include <libdap/Array.h>
+#include <libdap/Vector.h>
 
-#include <Structure.h>
-#include <Sequence.h>
-#include <Grid.h>
+#include <libdap/Structure.h>
+#include <libdap/Sequence.h>
+#include <libdap/Grid.h>
 
-#include <BaseType.h>
+#include <libdap/BaseType.h>
 
 #include "DTM/SQLSimpleType.h"
 #include "DTM/SQLTypeFactoryComponent.h"

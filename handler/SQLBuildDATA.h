@@ -27,7 +27,7 @@
 #ifndef SQLBUILDDATA_H_
 #define SQLBUILDDATA_H_
 
-#include <DDS.h>
+#include <libdap/DDS.h>
 #include <BESDataNames.h>
 #include <BESDebug.h>
 
@@ -45,7 +45,7 @@
 #include "DTM/SQLDummySimpleType.h"
 #include "DTM/SQLTypeFactoryComponent.h"
 #include "DTM/SQLObjectTypeFactory.h"
-#include <BaseType.h>
+#include <libdap/BaseType.h>
 #include <BESDataDDSResponse.h>
 
 #include "SQLDefinitions.h"

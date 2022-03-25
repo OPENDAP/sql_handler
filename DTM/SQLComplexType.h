@@ -27,9 +27,9 @@
 #ifndef SQLCOMPLEXTYPE_H_
 #define SQLCOMPLEXTYPE_H_
 
-#include <Vector.h>
-#include <Array.h>
-#include <BaseType.h>
+#include <libdap/Vector.h>
+#include <libdap/Array.h>
+#include <libdap/BaseType.h>
 #include <DEM/SQLInternalFatalError.h>
 
 #include "SQLBaseType.h"

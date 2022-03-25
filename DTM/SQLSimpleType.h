@@ -32,7 +32,7 @@
 #include "SQLBaseType.h"
 
 // BES
-#include <BaseType.h>
+#include <libdap/BaseType.h>
 
 #include <BESDebug.h>
 #include <BESError.h>

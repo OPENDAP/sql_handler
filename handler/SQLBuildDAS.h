@@ -37,12 +37,12 @@
 #include "DTM/SQLTypeFactoryComponent.h"
 #include "DTM/SQLTypeManager.h"
 #include "DTM/SQLObjectTypeFactory.h"
-#include <BaseType.h>
+#include <libdap/BaseType.h>
 #include <BESDASResponse.h>
 
 #include "SQLDefinitions.h"
 
-#include <DAS.h>
+#include <libdap/DAS.h>
 
 /**
  * @todo add Manager template arguments and wrapper to pass

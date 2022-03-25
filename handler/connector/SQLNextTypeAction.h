@@ -30,7 +30,7 @@
 #include "connector/SQLSimpleConnector.h"
 
 #include "DTM/SQLTypeManager.h"
-#include <BaseType.h>
+#include <libdap/BaseType.h>
 
 #include "DEM/SQLErrorManager.h"
 #include "DEM/SQLInternalError.h"

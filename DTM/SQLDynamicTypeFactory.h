@@ -37,7 +37,7 @@
 
 #include "DEM/SQLInternalError.h"
 
-#include <BaseType.h>
+#include <libdap/BaseType.h>
 
 /**
  * @brief SPECIALIZATION class which inherit SQLDynamicActionFactory
