@@ -72,8 +72,8 @@
  * types which will be used by template class of the SQLHandler:
  * 	-	SQL_TYPE						// SQLTypeConnector
  * 	-	ODBC_TYPE						// SQLTypeConnector
- * 	-	error_t						// SQLErrorFactory && SQLErrorConnector
- * 	-	message_t = error_t			// SQLErrorFactory && SQLErrorConnector
+ * 	-	error_type						// SQLErrorFactory && SQLErrorConnector
+ * 	-	message_t = error_type			// SQLErrorFactory && SQLErrorConnector
  * 	-	OUT_TYPE1 = void				// SQLErrorFactory
  * 	-	CODE_TYPE = SQL_TYPE			// SQLTypeFactory
  * 	-	ARGS_TYPE = SQL_TYPE			// SQLTypeFactory
@@ -107,7 +107,7 @@ public:
      */
     typedef SQLBuildDAS<SQL_TYPE,            // SQLTypeFactory && connector
             ODBC_TYPE,            // SQLTypeFactory && connector
-            error_t,        // SQLErrorFactory(IN) && connector
+            error_type,        // SQLErrorFactory(IN) && connector
             message_t,            // SQLErrorFactory(ARG) && connector
             void>                // SQLErrorFactory(OUT)
             DASBuilder;
@@ -119,7 +119,7 @@ public:
      */
     typedef SQLBuildDDS<SQL_TYPE,            // SQLTypeFactory && connector
             ODBC_TYPE,            // SQLTypeFactory && connector
-            error_t,        // SQLErrorFactory(IN) && connector
+            error_type,        // SQLErrorFactory(IN) && connector
             message_t,            // SQLErrorFactory(ARG) && connector
             void>                // SQLErrorFactory(OUT)
             DDSBuilder;
@@ -130,7 +130,7 @@ public:
      */
     typedef SQLBuildDATA<SQL_TYPE,            // SQLTypeFactory && connector
             ODBC_TYPE,            // SQLTypeFactory && connector
-            error_t,        // SQLErrorFactory(IN) && connector
+            error_type,        // SQLErrorFactory(IN) && connector
             message_t,            // SQLErrorFactory(ARG) && connector
             void>                // SQLErrorFactory(OUT)
             DATABuilder;

@@ -100,7 +100,7 @@ EXTRA_DIST = data doxy.conf COPYING sql_handler.spec \
 
 EXTRA_PROGRAMS = 
 
-CLEANFILES = *~ sql.conf odbc.conf _configs.sed
+CLEANFILES = *~ sql.conf
 
 DISTCLEANFILES = sql_config.h
 
@@ -111,57 +111,39 @@ DISTCLEANFILES = sql_config.h
 # Maybe because they are loaded with RTLD_LOCAL instead of ..._GLOBAL?
 # What about making just one module.
 
-# Not needed. jhrg 9/4/12 lib_LTLIBRARIES = libbes_sql.la
 lib_besdir=$(libdir)/bes
 lib_bes_LTLIBRARIES = libsql_module.la  libodbc_module.la
-#############################################################################
-#libbes_sql_la_SOURCES = $(SQL_SRCS) $(SQL_HDRS)
-#libbes_sql_la_CPPFLAGS =  $(BES_CPPFLAGS)
-#libbes_sql_la_LDFLAGS = -version-info $(LIBBES_SQL_VERSION)
-######################################################
+
 libsql_module_la_SOURCES = $(BES_SRCS) $(BES_HDRS) $(SQL_SRCS) $(SQL_HDRS)
-# Combinng these sources did not work. jhrg 9/4/12
-# $(ODBC_SRCS) $(ODBC_HDRS)
 libsql_module_la_CPPFLAGS =  $(BES_CPPFLAGS)
 libsql_module_la_LDFLAGS = -avoid-version -module
-# -Wl,-export-dynamic
 libsql_module_la_LIBADD = $(BES_DAP_LIBS)
-######################################################
+
 libodbc_module_la_SOURCES = $(ODBC_SRCS) $(ODBC_HDRS)
-# $(SQL_SRCS) $(SQL_HDRS) Removed 9/4/12 jhrg
 libodbc_module_la_CPPFLAGS =  $(BES_CPPFLAGS) $(ODBC_CPPFLAGS)
 libodbc_module_la_LDFLAGS = -avoid-version -module -lodbc
-# -Wl,-export-dynamic  
 libodbc_module_la_LIBADD = $(BES_DAP_LIBS) $(ODBC_LIBS)
-######################################################
+
 ## EXPORTING HEADERS
 
-#libsql_includedir=$(includedir)/sql/
 sqldir=$(includedir)/sql/
 nobase_sql_HEADERS=$(SQL_HDRS)
 
-###########################################################################
 sample_datadir = $(datadir)/hyrax/data/sql
-sample_data_DATA = data/test_full.sql data/test_full1.sql data/test_full2.sql
-###########################################################################
+sample_data_DATA = data/sqlite.sql
+
+BUILT_SOURCES = data/sqlite_odbc.ini
 
 moduledir = $(DESTDIR)$(sysconfdir)/bes/modules
-module_DATA = sql.conf odbc.conf
+module_DATA = sql.conf
+
+data/sqlite_odbc.ini: data/sqlite_odbc.ini.in config.status
+	@clean_abs_top_srcdir=`python -c "import os.path; print(os.path.abspath('${abs_top_srcdir}'))"`; \
+	sed -e "s%[@]abs_top_srcdir[@]%$$clean_abs_top_srcdir%" \
+		-e "s%[@]abs_top_builddir[@]%${abs_top_builddir}%" $< > $@
 
 sql.conf: sql.conf.in config.status
-	sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > sql.conf
-
-odbc.conf: odbc.conf.in config.status
-	sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > odbc.conf
-
-# Build a compile_commands.json.tmp file for use with CLion. This will emable
-# reasonable use for all the source that's compiled using either 'all' or
-# 'check' but other targets will have to be added by hand. See the compiledb
-# github site (https://github.com/nickdiego/compiledb) for more info.
-# jhrg 9/25/19
-.PHONY: compiledb
-compiledb:
-	make -nwk all check | compiledb
+	sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > $@
 
 HTML_DOCS=html
 DOXYGEN_CONF=doxy.conf

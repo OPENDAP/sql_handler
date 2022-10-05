@@ -355,13 +355,13 @@ ODBCConnector::getColDesc(const size_t &column) {
     }
 }
 
-error_t *
+error_type *
 ODBCConnector::getError() {
     return &rc;
 }
 
 message_t *
-ODBCConnector::getMsg(error_t *error_code) {
+ODBCConnector::getMsg(error_type *error_code) {
     char strState[_buf_size];
     SQLINTEGER errNum = 0;
     SQLSMALLINT msgLen = 0;
@@ -652,7 +652,7 @@ ODBCConnector::fetch() {
  * @brief Set error factory used by this connector.
  */
 void
-ODBCConnector::setErrorFactory(SQLErrorFactory<error_t, message_t> &ef) {
+ODBCConnector::setErrorFactory(SQLErrorFactory<error_type, message_t> &ef) {
     sef = &ef;    //!<DO NOT DELETE!
 }
 

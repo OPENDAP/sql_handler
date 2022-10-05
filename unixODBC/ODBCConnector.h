@@ -50,7 +50,7 @@
  * @see SQLErrorConnector
  *
  */
-class ODBCConnector : public SQLConnector<SQL_TYPE, ODBC_TYPE, error_t, message_t> {
+class ODBCConnector : public SQLConnector<SQL_TYPE, ODBC_TYPE, error_type, message_t> {
 
 #define _buf_size 1024
 
@@ -60,7 +60,7 @@ class ODBCConnector : public SQLConnector<SQL_TYPE, ODBC_TYPE, error_t, message_
      */
     bool connect();
 
-    message_t *getMsg(error_t *error_code);
+    message_t *getMsg(error_type *error_code);
 
     /**
      * return the maximum size of a column data type
@@ -99,7 +99,7 @@ public:
     virtual const std::string &getColDesc(const size_t &column);
 
 
-    virtual error_t *getError();
+    virtual error_type *getError();
 
     /**
      * @brief Get the number of rows in the response
@@ -145,7 +145,7 @@ public:
     /**
      * @brief Set error factory used by this connector.
      */
-    void setErrorFactory(SQLErrorFactory<error_t, message_t> &ef);
+    void setErrorFactory(SQLErrorFactory<error_type, message_t> &ef);
 
     /**
      * @brief Close connection
@@ -153,7 +153,7 @@ public:
     bool close();
 
     ODBCConnector() :
-            SQLConnector<SQL_TYPE, ODBC_TYPE, error_t, message_t>(),
+            SQLConnector<SQL_TYPE, ODBC_TYPE, error_type, message_t>(),
             stmt(NULL),        //!< statement handle
             env(NULL),        //!< environment handle
             conn(NULL),        //!< connection handle
@@ -226,7 +226,7 @@ private:
     message_t strMsg; //!< error message (argument)
     SQLSMALLINT msgEnvSeq, msgConnSeq, msgStmtSeq; //!< error index sequence
 
-    SQLErrorFactory<error_t, message_t> *sef; //!<this is passed not rebuilt
+    SQLErrorFactory<error_type, message_t> *sef; //!<this is passed not rebuilt
 
     SQLCHAR **d_buf;    //!< buffer
     SQLLEN d_status[_buf_size];    //!< buffer d_status

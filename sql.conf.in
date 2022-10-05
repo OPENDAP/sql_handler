@@ -6,21 +6,15 @@
 #                                                                       #
 #-----------------------------------------------------------------------#
 
-#-----------------------------------------------------------------------#
-# Require dap configuration to be loaded first                          #
-#-----------------------------------------------------------------------#
-# NOTE:
-# You may comment out this if you are running BES <3.8.4
-# In that case be sure that sql_module is loaded before SQLPlugins
-
 BES.Include=dap.conf
 
 #-----------------------------------------------------------------------#
 # modules to load, includes data modules and command modules            #
 #-----------------------------------------------------------------------#
 
-BES.modules+=sql
+BES.modules+=sql,odbc
 BES.module.sql=@bes_modules_dir@/libsql_module.so
+BES.module.odbc=@bes_modules_dir@/libodbc_module.so
 
 #-----------------------------------------------------------------------#
 # Setting the data information
@@ -35,7 +29,7 @@ BES.module.sql=@bes_modules_dir@/libsql_module.so
 # 'hdf', 'HDF' or 'eos' which may also end in '.gz' or '.bz2'. In the latter
 # case the file will be treated as a compressed file.
 
-BES.Catalog.default.TypeMatch+=sql:.*\.(SQL|sql)$;
+BES.Catalog.catalog.TypeMatch+=sql:.*\.(SQL|sql)$;
 
 # To test your TypeMatch regular expression you can use besregtest as
 # follows:
@@ -47,4 +41,28 @@ BES.Catalog.default.TypeMatch+=sql:.*\.(SQL|sql)$;
 # SQL handler specific parameters
 #-----------------------------------------------------------------------#
 
-# Nothing here
+# ----------------------------------------------------------------------#
+# 		CheckPoint:
+# ----------------------------------------------------------------------#
+# There are 6 check points that you can activate:
+# _SQLH_ON_CONNECT	=	1
+# _SQLH_ON_CLOSE	=	2
+# _SQLH_ON_QUERY	=	3
+# _SQLH_ON_GET_NEXT	=	4
+# _SQLH_ON_NEXT_ROW	=	5
+# _SQLH_ON_CUSTOM	=	6
+# Each check point correspond to a SQL phase in which handlers can perform
+# Actions.
+# Commons actions are (used by unixODBC):
+#  - print out debug info
+#  - throw a Fatal error if connection status is bad
+#  - throw a (recoverable) InternalError on get next object
+# Others actions could be:
+#  - mail me on error
+#  - dump on file
+#  - whatever you want
+# Each registered SQLPlugin module can register and use its list
+# of actions which will be activated or not depending on this option:
+# SQL.CheckPoint=1,2,3,4
+
+SQL.CheckPoint=1,2,3,4,5
