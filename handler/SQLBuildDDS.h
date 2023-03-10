@@ -43,7 +43,7 @@
 #include "DTM/SQLSequence.h"
 #include "DTM/SQLSimpleType.h"
 #include "DTM/SQLDummySimpleType.h"
-#include <BaseType.h>
+#include <libdap/BaseType.h>
 #include <BESDDSResponse.h>
 
 #include "SQLDefinitions.h"

@@ -83,7 +83,7 @@ ODBCConnector::connect() {
     SQLSMALLINT OutConnectionStringLength;
     rc = SQLDriverConnect(conn, NULL,
                   (SQLCHAR*)dsn.c_str(), SQL_NTS,
-                  &OutConnectionString[0], SQL_MAX_OPTION_STRING_LENGTH,
+                  OutConnectionString.data(), SQL_MAX_OPTION_STRING_LENGTH,
                   &OutConnectionStringLength, SQL_DRIVER_NOPROMPT);
 #endif
     BESDEBUG(ODBC_NAME, "ODBCConnector: Connection done with status: " << rc << endl);

@@ -52,7 +52,7 @@
 #include <Grid.h>
 #endif
 
-#include <BaseType.h>
+#include <libdap/BaseType.h>
 
 // BES
 #include <BESError.h>

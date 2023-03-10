@@ -45,7 +45,7 @@
 #include "DTM/SQLDummySimpleType.h"
 #include "DTM/SQLTypeFactoryComponent.h"
 #include "DTM/SQLObjectTypeFactory.h"
-#include <BaseType.h>
+#include <libdap/BaseType.h>
 #include <BESDataDDSResponse.h>
 
 #include "SQLDefinitions.h"

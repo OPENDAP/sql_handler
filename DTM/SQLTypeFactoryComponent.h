@@ -30,7 +30,7 @@
 #include "connector/SQLSimpleConnector.h"
 #include "action/SQLAction.h"
 
-#include <BaseType.h>
+#include <libdap/BaseType.h>
 
 /**
  * @brief Factory of libdap::BaseType objects.

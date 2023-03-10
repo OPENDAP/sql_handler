@@ -45,7 +45,7 @@
 #include <Sequence.h>
 #include <Grid.h>
 
-#include <BaseType.h>
+#include <libdap/BaseType.h>
 
 #include "DTM/SQLSimpleType.h"
 #include "DTM/SQLTypeFactoryComponent.h"
