@@ -48,7 +48,7 @@
 
 #include "SQLDefinitions.h"
 
-#include <DDS.h>
+#include <libdap/DDS.h>
 
 /**
  * @todo add Manager template arguments and wrapper to pass
@@ -332,7 +332,7 @@ private:
 
                 if (bt) { // if 'bt' is created
                     BESDEBUG(SQL_NAME, "SQLBuildDDS: done" << endl);
-                    // FIXME connector->getColDesc(i) is not teh correct type of value
+                    // FIXME connector->getColDesc(i) is not the correct type of value
                     // for most of the variables.
                     attr.append_attr(bt->name(), bt->type_name(), connector->getColDesc(i));
                     seq->add_var_nocopy(bt);

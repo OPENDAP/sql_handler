@@ -113,7 +113,7 @@ public:
 
     /**
       * @brief Build a COUNT query
-      * Use this query to get teh COUNT(*) of the rows for the query
+      * Use this query to get the COUNT(*) of the rows for the query
       * returned by buildQuery().
       * @return Use this query to get the row count
       */

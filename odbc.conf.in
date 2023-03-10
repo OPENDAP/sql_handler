@@ -6,12 +6,6 @@
 #                                                                       #
 #-----------------------------------------------------------------------#
 
-#-----------------------------------------------------------------------#
-# Require dap configuration to be loaded first                          #
-#-----------------------------------------------------------------------#
-# NOTE: this is commented out due to incompatibility with old BES
-#		version. You may un-comment this if you are running BES >3.8.4
-
 BES.Include=sql.conf
 
 #-----------------------------------------------------------------------#

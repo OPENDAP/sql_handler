@@ -28,7 +28,7 @@
 
 #include <BESInternalError.h>
 
-#include <util.h>
+#include <libdap/util.h>
 
 /**
  * @brief The READ function used to

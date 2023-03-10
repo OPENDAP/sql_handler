@@ -9,7 +9,7 @@
 
 2019-10-17  James Gallagher  <jgallagher@opendap.org>
 
-	ERROR_TYPE -> error_t and MSG_TYPE --> message_t
+	ERROR_TYPE -> error_type and MSG_TYPE --> message_t
 	This makes it easier to see where the template arguments and
 	typedefs are used.
 

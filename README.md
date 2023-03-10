@@ -37,9 +37,9 @@ is needed to configure and build the handler. We suggest you use a binary packag
 from yum, apt-get, or brew (for CentOS, Ubuntu or OSX, respectively).
 **make check doesn't work**
 * In order to run `make check` you will need to install the test database located 
-in `install.dir` 
+in `data` 
   * Install DBMS as needed (See _Installing DBMS software on your server_ below).
-  * Load database tables in install.dir into DBMS? (See _Creating the test database_ below)
+  * Load database tables in data into DBMS? (See _Creating the test database_ below)
   * **_how to configure odbc.ini etc._**
 
 ## Installing ODBC on your Hyrax server.

@@ -383,7 +383,7 @@ bool SQLRequestHandler::lastChanceRunner(SQLDataHandlerInterface &dhi, const str
         catch (BESError &e) {
 #if 0
             buf="SQLRequestHandler: Error: ";
-            buf+=e.get_error_type();
+            buf+=e.get_error_typeype();
             buf+=" Message: "+e.get_message();
             buf+=" File: "+e.get_file();
             buf+=" Line: "+e.get_line();

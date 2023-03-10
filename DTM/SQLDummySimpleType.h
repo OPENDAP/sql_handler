@@ -28,7 +28,7 @@
 #define SQLDUMMYSIMPLETYPE_H_
 
 #include "SQLCastAction.h"
-#include <Str.h>
+#include <libdap/Str.h>
 
 /**
  * @brief This is a implementation of a libdap::Str class

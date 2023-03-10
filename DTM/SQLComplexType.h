@@ -29,7 +29,7 @@
 
 #include <Vector.h>
 #include <Array.h>
-#include <libdap/BaseType.h>
+#include <BaseType.h>
 #include <DEM/SQLInternalFatalError.h>
 
 #include "SQLBaseType.h"

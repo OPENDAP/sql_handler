@@ -63,7 +63,7 @@
  *  typedef SQLBuildDAS<
  *  	SQL_TYPE,		// connector && SQLTypeFactory
  *		ODBC_TYPE,		// connector && SQLTypeFactory
- *		error_t,		// SQLErrorFactory(IN) && connector
+ *		error_type,		// SQLErrorFactory(IN) && connector
  *		message_t,		// SQLErrorFactory(ARG) && connector
  *		void>			// SQLErrorFactory(OUT)
  *				buildDAS;
@@ -88,7 +88,7 @@ ODBCPlugin::build_das(SQLDataHandlerInterface &dhi) {
      * @see ODBCErrorFactoryComponent
      */
     ODBCErrorFactoryComponent efc(conn);
-    SQLErrorFactory<error_t, message_t> ef = efc;
+    SQLErrorFactory<error_type, message_t> ef = efc;
 
     /**
      * Set the error factory into the ODBCConnector for internal
@@ -130,7 +130,7 @@ ODBCPlugin::build_dds(SQLDataHandlerInterface &dhi) {
      * @see ODBCErrorFactoryComponent
      */
     ODBCErrorFactoryComponent efc(*conn);
-    SQLErrorFactory<error_t, message_t> ef = efc;
+    SQLErrorFactory<error_type, message_t> ef = efc;
     /**
      * Set the error factory into the ODBCConnector for internal
      * use.
@@ -167,7 +167,7 @@ ODBCPlugin::build_data(SQLDataHandlerInterface &dhi) {
      * @see ODBCErrorFactoryComponent
      */
     ODBCErrorFactoryComponent efc(*conn);
-    SQLErrorFactory<error_t, message_t> ef = efc;
+    SQLErrorFactory<error_type, message_t> ef = efc;
     /**
      * Set the error factory into the ODBCConnector for internal
      * use.

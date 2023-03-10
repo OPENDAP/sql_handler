@@ -71,18 +71,16 @@
  */
 class SQLInternalError : public BESError {
 protected:
-    SQLInternalError() {
-    }
+    SQLInternalError() =default;
 
 public:
-    SQLInternalError(const std::string &msg, const std::string &file, unsigned int line) :
-            BESError(msg, _SQLH_INTERNAL_ERROR, file, line) {
-    }
+    SQLInternalError(std::string msg, std::string file, unsigned int line)
+        : BESError(std::move(msg), _SQLH_INTERNAL_ERROR, std::move(file), line) { }
 
-    virtual ~SQLInternalError() {
-    }
+    ~SQLInternalError() override = default;
 
-    virtual void dump(std::ostream &strm) const {
+    void dump(std::ostream &strm) const override
+    {
         strm << "SQLInternalError::dump - (" << (void *) this << ")" << std::endl;
         BESIndent::Indent();
         BESError::dump(strm);

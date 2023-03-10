@@ -27,7 +27,7 @@
 #ifndef SQLBUILDDATA_H_
 #define SQLBUILDDATA_H_
 
-#include <DDS.h>
+#include <libdap/DDS.h>
 #include <BESDataNames.h>
 #include <BESDebug.h>
 
