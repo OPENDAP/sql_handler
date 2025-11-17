@@ -59,7 +59,7 @@ public:
      */
     virtual void terminate(const std::string &modname);
 
-    virtual void dump(std::ostream &strm) const;
+    void dump(std::ostream &strm) const override;
 };
 
 #endif /* ODBCPLUGINLOADER_H_ */

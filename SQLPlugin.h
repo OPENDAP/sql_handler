@@ -120,7 +120,7 @@ public:
      *
      * @param strm C++ i/o stream to dump the information to
      */
-    virtual void dump(std::ostream &strm) const;
+    void dump(std::ostream &strm) const override;
 
     /**
      * @brief Default constructor.
